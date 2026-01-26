@@ -29,7 +29,7 @@ export default function App() {
       className="min-h-screen bg-cover bg-center font-sans text-white relative"
       style={{ backgroundImage: "url('./Background.jpg')" }}
     >
-      {/* Top Menu Bar — macOS style */}
+      {/* Top Menu Bar */}
       <div className="fixed top-0 left-0 right-0 z-50 h-10 bg-white/10 backdrop-blur-md flex items-center justify-end px-6 text-sm text-white shadow-sm">
         <div className="flex items-center gap-3">
           {[
@@ -48,7 +48,38 @@ export default function App() {
         </div>
       </div>
 
-      {/* Bottom Dock — ripple animation with tooltips */}
+{/* Left rail icons */}
+<div className="fixed top-12 left-4 z-40 flex flex-col gap-6 text-white text-xs font-medium">
+  {[
+    { label: "30 Seconds Mode", emoji: "🕒" },
+    { label: "Projects", emoji: "📁" },
+    { label: "Videos", emoji: "🎞️" },
+  ].map(({ label, emoji }) => (
+    <div
+      key={label}
+      className="flex flex-col items-start gap-1 cursor-pointer hover:scale-105 transition-transform duration-150 origin-top-left"
+    >
+      <div className="text-3xl leading-none">{emoji}</div>
+      <div className="bg-white/20 px-2 py-[3px] rounded-[6px] backdrop-blur-sm text-white text-[13px] whitespace-nowrap shadow-sm">
+        {label}
+      </div>
+    </div>
+  ))}
+</div>
+{/* Right-side resume.pdf */}
+<div className="fixed top-12 right-4 z-40 flex flex-col items-start gap-1 text-white text-xs font-medium cursor-pointer hover:scale-105 transition-transform duration-150 origin-top-right">
+  <div className="text-3xl leading-none">📄</div>
+  <div className="bg-white/20 px-2 py-[3px] rounded-[6px] backdrop-blur-sm text-white text-[13px] whitespace-nowrap shadow-sm">
+    resume.pdf
+  </div>
+</div>
+
+
+
+
+
+
+      {/* Bottom Dock */}
       <div
         className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg flex gap-6 z-50"
         onMouseMove={(e) => setMouseX(e.clientX)}
@@ -98,14 +129,13 @@ function DockItem({ item, index, mouseX, total }) {
         <div className="text-3xl">{item.emoji}</div>
       </motion.div>
 
-      {/* Tooltip label */}
+      {/* Tooltip */}
       <div
-  className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black text-[15px] px-3 py-[4px] rounded-[6px] shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap tracking-tight"
-  style={{ fontFamily: "Lustria" }}
->
-  {item.label}
-</div>
-
-        </div>
+        className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-black text-[15px] px-3 py-[4px] rounded-[6px] shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap tracking-tight"
+        style={{ fontFamily: "Lustria" }}
+      >
+        {item.label}
+      </div>
+    </div>
   );
 }
