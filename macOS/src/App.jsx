@@ -12,8 +12,13 @@ import aboutIcon from './imgs/me.png';
 import aiIcon from './imgs/bot.png';
 import funIcon from './imgs/games.png';
 
+// Import background images properly
+import bgLight from './imgs/Background.jpg';
+import bgDark from './imgs/Background-dark.png';
+
 export default function App() {
   const [mouseX, setMouseX] = useState(null);
+  const [theme, setTheme] = useState("light");
 
   const currentTime = new Date().toLocaleString("en-GB", {
     weekday: "short",
@@ -34,12 +39,23 @@ export default function App() {
   return (
     <div
       className="min-h-screen bg-cover bg-center font-sans text-white relative"
-      style={{ backgroundImage: "url('./Background.jpg')" }}
+      style={{
+        backgroundImage: `url(${theme === "light" ? bgLight : bgDark})`,
+      }}
     >
       {/* Top Menu Bar */}
       <div className="fixed top-0 left-0 right-0 z-50 h-10 bg-white/10 backdrop-blur-md flex items-center justify-end px-6 text-sm text-white shadow-sm">
         <div className="flex items-center gap-3">
-          {[moonIcon, gearIcon, notificationIcon].map((src, i) => (
+
+          {/* Moon = theme toggle */}
+          <div
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 cursor-pointer"
+          >
+            <img src={moonIcon} alt="Toggle theme" className="w-4 h-4" />
+          </div>
+
+          {[gearIcon, notificationIcon].map((src, i) => (
             <div
               key={i}
               className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 hover:-translate-y-[1px] hover:drop-shadow-sm"
@@ -47,6 +63,7 @@ export default function App() {
               <img src={src} alt={`icon-${i}`} className="w-4 h-4" />
             </div>
           ))}
+
           <span>{currentTime}</span>
         </div>
       </div>
@@ -92,6 +109,7 @@ export default function App() {
     </div>
   );
 }
+
 function DockItem({ item, index, mouseX, total }) {
   const distanceFactor = 180;
 
