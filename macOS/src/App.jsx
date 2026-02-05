@@ -1,33 +1,47 @@
-﻿// src/App.jsx
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import moonIcon from "./imgs/moon.png";
 import gearIcon from "./imgs/gear.png";
 import notificationIcon from "./imgs/notification.png";
-import projectsIcon from "./imgs/folders.png";
-import videosIcon from "./imgs/videos.png";
-import timerIcon from "./imgs/timer.png";
-import docIcon from "./imgs/doc.png";
-import aboutIcon from "./imgs/me.png";
-import aiIcon from "./imgs/bot.png";
-import funIcon from "./imgs/games.png";
 
-// Backgrounds
+// glass icon set (your current ones)
+import aboutIconGlass from "./imgs/me.png";
+import aiIconGlass from "./imgs/bot.png";
+import funIconGlass from "./imgs/games.png";
+
+import projectsIconGlass from "./imgs/folders.png";
+import videosIconGlass from "./imgs/videos.png";
+import timerIconGlass from "./imgs/timer.png";
+import docIconGlass from "./imgs/doc.png";
+
+// macos icon set
+import aboutIconMac from "./imgs/aboutMac.png";
+import aiIconMac from "./imgs/aiMac.png";
+import funIconMac from "./imgs/gamesMac.png";
+
+import projectsIconMac from "./imgs/foldersMac.png";
+import videosIconMac from "./imgs/videosMac.png";
+import timerIconMac from "./imgs/timerMac.png";
+import docIconMac from "./imgs/docMac.png";
+
 import bgLight from "./imgs/Background.jpg";
 import bgDark from "./imgs/Background-dark.png";
 
-// Windows system (from the architecture we discussed)
 import MacWindow from "./components/windows/MacWindow";
 import useWindowManager from "./components/windows/useWindowManager";
 
-// Window contents
 import SettingsWindow from "./components/windows/SettingsWindow";
 import AboutWindow from "./components/windows/AboutWindow";
 
 export default function App() {
   const [mouseX, setMouseX] = useState(null);
+
+  // wallpaper theme (background)
   const [theme, setTheme] = useState("light");
+
+  // UI theme (window/icon style)
+  const [uiTheme, setUiTheme] = useState("glass"); // "glass" | "macos"
 
   // Page load animation trigger
   const [loaded, setLoaded] = useState(false);
@@ -36,9 +50,14 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
-  // Window manager
-  const { openWindows, activeWindow, zMap, openWindow, closeWindow, focusWindow } =
-    useWindowManager();
+  const {
+    openWindows,
+    activeWindow,
+    zMap,
+    openWindow,
+    closeWindow,
+    focusWindow,
+  } = useWindowManager();
 
   const currentTime = new Date().toLocaleString("en-GB", {
     weekday: "short",
@@ -50,7 +69,38 @@ export default function App() {
     timeZone: "Europe/Stockholm",
   });
 
-  // Window definitions (kept inside App for now; can move to /data/windows.js later)
+  // Dock icons by UI theme
+  const icons = useMemo(() => {
+    if (uiTheme === "macos") {
+      return {
+        about: aboutIconMac || aboutIconGlass,
+        ai: aiIconMac || aiIconGlass,
+        fun: funIconMac || funIconGlass,
+      };
+    }
+    return { about: aboutIconGlass, ai: aiIconGlass, fun: funIconGlass };
+  }, [uiTheme]);
+
+  // Desktop (left rail) icons by UI theme
+  const desktopIcons = useMemo(() => {
+    if (uiTheme === "macos") {
+      return {
+        timer: timerIconMac,
+        projects: projectsIconMac,
+        videos: videosIconMac,
+      };
+    }
+    return {
+      timer: timerIconGlass,
+      projects: projectsIconGlass,
+      videos: videosIconGlass,
+    };
+  }, [uiTheme]);
+
+  // ✅ Resume icon by UI theme (THIS fixes your crash)
+  const docIcon = uiTheme === "macos" ? docIconMac : docIconGlass;
+
+  // Window definitions
   const WINDOW_DEFS = useMemo(
     () => ({
       settings: {
@@ -72,9 +122,9 @@ export default function App() {
   );
 
   const dockItems = [
-    { label: "About me", icon: aboutIcon, windowId: "about" },
-    { label: "AI assistant", icon: aiIcon, windowId: null }, // later: "ai"
-    { label: "Extras & Fun", icon: funIcon, windowId: null }, // later: "fun"
+    { label: "About me", icon: icons.about, windowId: "about" },
+    { label: "AI assistant", icon: icons.ai, windowId: null },
+    { label: "Extras & Fun", icon: icons.fun, windowId: null },
   ];
 
   return (
@@ -95,26 +145,29 @@ export default function App() {
         transition={{ delay: 0.15, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="flex items-center gap-3">
-          {/* Moon = theme toggle */}
+          {/* Moon = wallpaper toggle */}
           <div
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 cursor-pointer"
           >
-            <img src={moonIcon} alt="Toggle theme" className="w-4 h-4" />
+            <img src={moonIcon} alt="Toggle wallpaper" className="w-4 h-4" />
           </div>
 
           {/* Gear = Settings window */}
           <div
-            onClick={() => {             
-              openWindow("settings")}}
+            onClick={() => openWindow("settings")}
             className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 cursor-pointer"
           >
             <img src={gearIcon} alt="Settings" className="w-4 h-4" />
           </div>
 
-          {/* Notifications (no action yet) */}
+          {/* Notifications */}
           <div className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 hover:-translate-y-[1px] hover:drop-shadow-sm">
-            <img src={notificationIcon} alt="Notifications" className="w-4 h-4" />
+            <img
+              src={notificationIcon}
+              alt="Notifications"
+              className="w-4 h-4"
+            />
           </div>
 
           <span>{currentTime}</span>
@@ -129,9 +182,9 @@ export default function App() {
         transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         {[
-          { icon: timerIcon, label: "30-Seconds Mode" },
-          { icon: projectsIcon, label: "Projects" },
-          { icon: videosIcon, label: "Videos" },
+          { icon: desktopIcons.timer, label: "30-Seconds Mode" },
+          { icon: desktopIcons.projects, label: "Projects" },
+          { icon: desktopIcons.videos, label: "Videos" },
         ].map(({ icon, label }, idx) => (
           <motion.div
             key={label}
@@ -170,7 +223,6 @@ export default function App() {
         {openWindows.map((id) => {
           const def = WINDOW_DEFS[id];
           if (!def) return null;
-
           const WindowComponent = def.Component;
 
           return (
@@ -182,11 +234,12 @@ export default function App() {
               height={def.height}
               initialPos={def.initialPos}
               isActive={activeWindow === id}
-              zIndex={zMap[id] ?? 200}
+              zIndex={zMap[id] ?? 999}
               onFocus={focusWindow}
               onClose={closeWindow}
+              uiTheme={uiTheme}
             >
-              <WindowComponent />
+              <WindowComponent uiTheme={uiTheme} setUiTheme={setUiTheme} />
             </MacWindow>
           );
         })}
@@ -250,15 +303,8 @@ function DockItem({ item, index, mouseX, total, loaded, onOpenWindow }) {
       }}
     >
       <motion.div
-        animate={{
-          scale,
-          y: scale > 1 ? -10 : 0,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 300,
-          damping: 20,
-        }}
+        animate={{ scale, y: scale > 1 ? -10 : 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="flex flex-col items-center"
       >
         <div className="w-15 h-15 flex items-center justify-center rounded-[8px] transition-all duration-150">
