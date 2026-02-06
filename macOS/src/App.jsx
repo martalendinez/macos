@@ -40,6 +40,8 @@ export default function App() {
   // wallpaper theme (background)
   const [theme, setTheme] = useState("light");
 
+  const [wallpaperUrl, setWallpaperUrl] = useState(null); // string | null
+
   // UI theme (window/icon style)
   const [uiTheme, setUiTheme] = useState("glass"); // "glass" | "macos"
 
@@ -131,7 +133,7 @@ export default function App() {
     <motion.div
       className="min-h-screen bg-cover bg-center font-sans text-white relative"
       style={{
-        backgroundImage: `url(${theme === "light" ? bgLight : bgDark})`,
+        backgroundImage: `url(${wallpaperUrl ?? (theme === "light" ? bgLight : bgDark)})`,
       }}
       initial={{ opacity: 0, scale: 0.99, filter: "blur(10px)" }}
       animate={loaded ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
@@ -239,7 +241,12 @@ export default function App() {
               onClose={closeWindow}
               uiTheme={uiTheme}
             >
-              <WindowComponent uiTheme={uiTheme} setUiTheme={setUiTheme} />
+              <WindowComponent
+  uiTheme={uiTheme}
+  setUiTheme={setUiTheme}
+  wallpaperUrl={wallpaperUrl}
+  setWallpaperUrl={setWallpaperUrl}
+/>
             </MacWindow>
           );
         })}
