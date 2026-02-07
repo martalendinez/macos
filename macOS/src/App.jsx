@@ -5,7 +5,7 @@ import moonIcon from "./imgs/moon.png";
 import gearIcon from "./imgs/gear.png";
 import notificationIcon from "./imgs/notification.png";
 
-// glass icon set (your current ones)
+// glass icon set
 import aboutIconGlass from "./imgs/me.png";
 import aiIconGlass from "./imgs/bot.png";
 import funIconGlass from "./imgs/games.png";
@@ -33,19 +33,19 @@ import useWindowManager from "./components/windows/useWindowManager";
 
 import SettingsWindow from "./components/windows/SettingsWindow";
 import AboutWindow from "./components/windows/AboutWindow";
+import ProjectsWindow from "./components/windows/ProjectsWindow";
 
 export default function App() {
   const [mouseX, setMouseX] = useState(null);
 
   // wallpaper theme (background)
   const [theme, setTheme] = useState("light");
-
   const [wallpaperUrl, setWallpaperUrl] = useState(null); // string | null
 
   // UI theme (window/icon style)
   const [uiTheme, setUiTheme] = useState("glass"); // "glass" | "macos"
 
-  // ✅ Font scale (1 = default)
+  // ✅ Font scale
   const [fontScale, setFontScale] = useState(1);
 
   // Page load animation trigger
@@ -59,9 +59,11 @@ export default function App() {
     openWindows,
     activeWindow,
     zMap,
+    maxMap, // ✅ from updated hook
     openWindow,
     closeWindow,
     focusWindow,
+    toggleMaximize, // ✅ from updated hook
   } = useWindowManager();
 
   const currentTime = new Date().toLocaleString("en-GB", {
@@ -102,7 +104,7 @@ export default function App() {
     };
   }, [uiTheme]);
 
-  // ✅ Resume icon by UI theme
+  // Resume icon by UI theme
   const docIcon = uiTheme === "macos" ? docIconMac : docIconGlass;
 
   // Window definitions
@@ -122,6 +124,13 @@ export default function App() {
         height: 520,
         initialPos: { x: 260, y: 120 },
       },
+      projects: {
+        title: "Projects",
+        Component: ProjectsWindow,
+        width: 920,
+        height: 600,
+        initialPos: { x: 200, y: 110 },
+      },
     }),
     []
   );
@@ -132,8 +141,15 @@ export default function App() {
     { label: "Extras & Fun", icon: icons.fun, windowId: null },
   ];
 
+  // Left rail items (now clickable -> opens windows)
+  const leftRailItems = [
+    { icon: desktopIcons.timer, label: "30-Seconds Mode", windowId: "timer" }, // placeholder
+    { icon: desktopIcons.projects, label: "Projects", windowId: "projects" },
+    { icon: desktopIcons.videos, label: "Videos", windowId: "videos" }, // placeholder
+  ];
+
   return (
-    // ✅ Wrap the whole app so text scales globally
+    // ✅ global font scaling wrapper
     <div style={{ fontSize: `${(fontScale ?? 1) * 16}px` }}>
       <motion.div
         className="min-h-screen bg-cover bg-center font-sans text-white relative"
@@ -172,11 +188,7 @@ export default function App() {
 
             {/* Notifications */}
             <div className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 hover:-translate-y-[1px] hover:drop-shadow-sm">
-              <img
-                src={notificationIcon}
-                alt="Notifications"
-                className="w-4 h-4"
-              />
+              <img src={notificationIcon} alt="Notifications" className="w-4 h-4" />
             </div>
 
             <span>{currentTime}</span>
@@ -190,14 +202,13 @@ export default function App() {
           animate={loaded ? { opacity: 1, x: 0 } : {}}
           transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          {[
-            { icon: desktopIcons.timer, label: "30-Seconds Mode" },
-            { icon: desktopIcons.projects, label: "Projects" },
-            { icon: desktopIcons.videos, label: "Videos" },
-          ].map(({ icon, label }, idx) => (
+          {leftRailItems.map(({ icon, label, windowId }, idx) => (
             <motion.div
               key={label}
               className="flex flex-col items-start gap-1 cursor-pointer hover:scale-105 transition-transform duration-150 origin-top-left"
+              onClick={() => {
+                if (windowId && WINDOW_DEFS[windowId]) openWindow(windowId);
+              }}
               initial={{ opacity: 0, y: 10 }}
               animate={loaded ? { opacity: 1, y: 0 } : {}}
               transition={{
@@ -220,6 +231,10 @@ export default function App() {
           initial={{ opacity: 0, x: 18 }}
           animate={loaded ? { opacity: 1, x: 0 } : {}}
           transition={{ delay: 0.28, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          onClick={() => {
+            // If you have a resume pdf route later, do it here.
+            // For now, do nothing.
+          }}
         >
           <img src={docIcon} alt="Resume" className="w-15 h-15 object-contain" />
           <div className="bg-white/20 px-2 py-[3px] rounded-[6px] backdrop-blur-sm text-white text-[13px] whitespace-nowrap shadow-sm">
@@ -247,13 +262,15 @@ export default function App() {
                 onFocus={focusWindow}
                 onClose={closeWindow}
                 uiTheme={uiTheme}
+                // ✅ maximize wiring
+                isMaximized={!!maxMap?.[id]}
+                onToggleMaximize={toggleMaximize}
               >
                 <WindowComponent
                   uiTheme={uiTheme}
                   setUiTheme={setUiTheme}
                   wallpaperUrl={wallpaperUrl}
                   setWallpaperUrl={setWallpaperUrl}
-                  // ✅ pass font settings into SettingsWindow
                   fontScale={fontScale}
                   setFontScale={setFontScale}
                 />

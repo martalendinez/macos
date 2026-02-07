@@ -6,6 +6,9 @@ export default function useWindowManager() {
   const [zMap, setZMap] = useState({});
   const [zTop, setZTop] = useState(200);
 
+  // ✅ NEW: maximized state per window
+  const [maxMap, setMaxMap] = useState({}); // { [id]: true/false }
+
   const focusWindow = (id) => {
     setActiveWindow(id);
     setZTop((prev) => {
@@ -27,8 +30,30 @@ export default function useWindowManager() {
       delete copy[id];
       return copy;
     });
+    // ✅ cleanup maximize state too
+    setMaxMap((prev) => {
+      const copy = { ...prev };
+      delete copy[id];
+      return copy;
+    });
+
     setActiveWindow((prev) => (prev === id ? null : prev));
   };
 
-  return { openWindows, activeWindow, zMap, openWindow, closeWindow, focusWindow };
+  // ✅ NEW
+  const toggleMaximize = (id) => {
+    setMaxMap((m) => ({ ...m, [id]: !m[id] }));
+    focusWindow(id);
+  };
+
+  return {
+    openWindows,
+    activeWindow,
+    zMap,
+    maxMap, // ✅
+    openWindow,
+    closeWindow,
+    focusWindow,
+    toggleMaximize, // ✅
+  };
 }
