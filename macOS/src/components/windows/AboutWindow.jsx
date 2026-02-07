@@ -2,11 +2,51 @@
 import { useMemo, useState } from "react";
 import aboutIcon from "../../imgs/me.png";
 
-export default function AboutWindow() {
-  const tabs = useMemo(
-    () => ["Overview", "Experience", "Skills", "Contact"],
-    []
+/* -------------------- LINK ROW (CLICKABLE) -------------------- */
+function LinkRow({ icon, label, value }) {
+  let href = value;
+
+  const lowerLabel = (label ?? "").toLowerCase();
+  const lowerValue = (value ?? "").toLowerCase();
+
+  // email
+  if (lowerLabel === "email" || value?.includes("@")) {
+    href = `mailto:${value}`;
+  }
+  // pdf / local file
+  else if (lowerValue.endsWith(".pdf")) {
+    href = value.startsWith("/") ? value : `/${value}`;
+  }
+  // normal links (add https if missing)
+  else if (!value.startsWith("http")) {
+    href = `https://${value}`;
+  }
+
+  const isEmail = href.startsWith("mailto:");
+
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-xl bg-white/5 border border-white/10 px-4 py-3">
+      <div className="flex items-center gap-2 text-white/80">
+        <span>{icon}</span>
+        <span className="text-sm">{label}</span>
+      </div>
+
+      <a
+        href={href}
+        target={isEmail ? undefined : "_blank"}
+        rel={isEmail ? undefined : "noopener noreferrer"}
+        className="text-white/90 text-sm truncate max-w-[60%] hover:underline transition"
+        title={value}
+      >
+        {value}
+      </a>
+    </div>
   );
+}
+
+/* -------------------- MAIN COMPONENT -------------------- */
+export default function AboutWindow() {
+  const tabs = useMemo(() => ["Overview", "Experience", "Skills", "Contact"], []);
   const [activeTab, setActiveTab] = useState("Overview");
 
   return (
@@ -49,10 +89,8 @@ export default function AboutWindow() {
 function OverviewTab() {
   return (
     <div className="space-y-5">
-      {/* Header block like screenshot: photo box + name/title + short lines */}
       <div className="rounded-2xl bg-white/6 border border-white/10 p-5">
         <div className="flex gap-6">
-          {/* Photo placeholder */}
           <div className="w-44 flex-shrink-0">
             <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
               <div className="aspect-square rounded-xl border border-dashed border-white/25 flex items-center justify-center">
@@ -62,13 +100,10 @@ function OverviewTab() {
                   className="w-16 h-16 object-contain opacity-90"
                 />
               </div>
-              <div className="mt-3 text-white/70 text-xs">
-                [Profile Photo]
-              </div>
+              <div className="mt-3 text-white/70 text-xs">[Profile Photo]</div>
             </div>
           </div>
 
-          {/* Right details */}
           <div className="flex-1 min-w-0">
             <div className="text-white text-lg font-semibold leading-tight">
               Marta Lendínez
@@ -83,11 +118,7 @@ function OverviewTab() {
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-3">
-              <MiniRow
-                icon="🟢"
-                title="Location"
-                value="Stockholm, Sweden"
-              />
+              <MiniRow icon="🟢" title="Location" value="Stockholm, Sweden" />
               <MiniRow
                 icon="🎓"
                 title="Education"
@@ -113,7 +144,6 @@ function OverviewTab() {
         </div>
       </div>
 
-      {/* Bottom buttons like screenshot */}
       <div className="flex gap-3">
         <ActionButton icon="⬇️" label="Download Resume" />
         <ActionButton icon="🗂️" label="View Projects" />
@@ -127,44 +157,43 @@ function ExperienceTab() {
     {
       year: "2026",
       title: (
-  <>
-    Master's Interactive Media Technology @{" "}
-    <a
-      href="https://www.kth.se/en/studies/master/interactive-media-technology/?mtm_source=google&mtm_medium=cpc&mtm_campaign=Europe,%20Africa%20and%20Middle%20East%20(SEM,%20most%20programmes%20and%20general)&mtm_content=Interactive%20Media%20Technology%20EECS&mtm_kwd=masters%20human%20computer%20interaction&gad_source=1&gad_campaignid=20945191593"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-white/90 hover:underline"
-    >
-      KTH
-    </a>
-  </>
-),
+        <>
+          Master's Interactive Media Technology @{" "}
+          <a
+            href="https://www.kth.se/en/studies/master/interactive-media-technology"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/90 hover:underline"
+          >
+            KTH
+          </a>
+        </>
+      ),
       right: "Sep 2024 →",
       bullets: [
         "Interaction Design & Prototyping",
         "Frontend Development",
         "Usability Testing & Evaluation",
       ],
-      link: "View Degree Project →",
     },
     {
       year: "2024-25",
       title: (
-  <>
-    Vice Project Manager @{" "}
-    <a
-      href="https://studieresan.se"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-white/90 hover:underline"
-    >
-      STUDS
-    </a>
-  </>
-),
+        <>
+          Vice Project Manager @{" "}
+          <a
+            href="https://studieresan.se"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/90 hover:underline"
+          >
+            STUDS
+          </a>
+        </>
+      ),
       right: "Sep 2024 - June 2025",
       bullets: [
-        "Co‑led the STUDS project team as Vice Project Manager, coordinating operations and direction",
+        "Co-led the STUDS project team as Vice Project Manager, coordinating operations and direction",
         "Planned and executed networking events connecting Master’s students with Swedish IT companies",
         "Facilitated stakeholder communication between students, partner companies, and the core team",
         "Organized and led recurring team meetings to align goals, timelines, and responsibilities",
@@ -174,44 +203,43 @@ function ExperienceTab() {
     {
       year: "2024",
       title: (
-  <>
-    Full Stack Intern @{" "}
-    <a
-      href="https://www.pridecom.es"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-white/90 hover:underline"
-    >
-      PrideCom
-    </a>
-  </>
-),
+        <>
+          Full Stack Intern @{" "}
+          <a
+            href="https://www.pridecom.es"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/90 hover:underline"
+          >
+            PrideCom
+          </a>
+        </>
+      ),
       right: "Feb - June 2024",
       bullets: [
-        "Led end‑to‑end design and development of an employer‑branding platform for SMBs",
+        "Led end-to-end design and development of an employer-branding platform for SMBs",
         "Conducted user interviews and usability tests to validate needs and refine flows",
-        "Designed information architecture, wireframes, and high‑fidelity UI in Figma",
-        "Built full‑stack application using Python, Flask, PostgreSQL, and Bootstrap",
+        "Designed information architecture, wireframes, and high-fidelity UI in Figma",
+        "Built full-stack application using Python, Flask, PostgreSQL, and Bootstrap",
         "Managed deployment, data structure, and backend logic",
         "Collaborated closely with stakeholders at PrideCom to align product vision",
       ],
-      link: "View Degree Project →",
     },
     {
       year: "2023",
-       title: (
-  <>
-    Programmer Intern @{" "}
-    <a
-      href="https://www.extra-nice.net"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-white/90 hover:underline"
-    >
-      Extra Nice
-    </a>
-  </>
-),
+      title: (
+        <>
+          Programmer Intern @{" "}
+          <a
+            href="https://www.extra-nice.net"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/90 hover:underline"
+          >
+            Extra Nice
+          </a>
+        </>
+      ),
       right: "Feb - June 2023",
       bullets: [
         "Developed gameplay prototypes in Unity to explore and validate new mechanics",
@@ -220,20 +248,46 @@ function ExperienceTab() {
         "Collaborated with the team using Plastic SCM for version control and workflow alignment",
       ],
     },
+    {
+      year: "2020-24",
+      title: (
+        <>
+          BEng Communication & Multimedia Design @{" "}
+          <a
+            href="https://www.hanze.nl/en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/90 hover:underline"
+          >
+            Hanze
+          </a>
+        </>
+      ),
+      right: "Sep 2020 - June 2024 →",
+      bullets: [
+        "Programming across multiple languages and frameworks",
+        "UX/UI design grounded in human-centered principles",
+        "Digital product development from concept to delivery",
+        "Information architecture and interaction design",
+        "Collaborative teamwork in multidisciplinary groups",
+        "Client communication and real-world project execution",
+      ],
+    },
   ];
 
   return (
     <div className="space-y-6">
       {items.map((it) => (
-        <div key={it.year} className="rounded-2xl bg-white/6 border border-white/10 p-5">
+        <div
+          key={it.year}
+          className="rounded-2xl bg-white/6 border border-white/10 p-5"
+        >
           <div className="flex items-start justify-between gap-4">
             <div className="text-white/70 text-sm font-medium">{it.year}</div>
             <div className="text-white/60 text-sm">{it.right}</div>
           </div>
 
-          <div className="mt-3 text-white text-base font-semibold">
-            {it.title}
-          </div>
+          <div className="mt-3 text-white text-base font-semibold">{it.title}</div>
 
           <ul className="mt-3 space-y-2 text-white/75 text-sm">
             {it.bullets.map((b) => (
@@ -243,15 +297,6 @@ function ExperienceTab() {
               </li>
             ))}
           </ul>
-
-          {it.link && (
-            <button
-              type="button"
-              className="mt-4 text-sm text-white/85 hover:text-white transition"
-            >
-              {it.link}
-            </button>
-          )}
         </div>
       ))}
     </div>
@@ -292,27 +337,28 @@ function SkillsTab() {
 function ContactTab() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-      {/* Left card (profile + links) */}
       <div className="rounded-2xl bg-white/6 border border-white/10 p-5">
         <div className="flex items-center gap-3">
           <img src={aboutIcon} alt="Profile" className="w-11 h-11 object-contain" />
           <div>
-            <div className="text-white font-semibold">Marta Lendínez</div>
+            <div className="text-white font-semibold">Marta Casandra Lendínez</div>
             <div className="text-white/70 text-sm">UX Engineer</div>
           </div>
         </div>
 
         <div className="mt-5 space-y-2 text-white/80 text-sm">
-          <LinkRow icon="✉️" label="Email" value="your.email@domain.com" />
-          <LinkRow icon="🔗" label="LinkedIn" value="linkedin.com/in/you" />
-          <LinkRow icon="🐙" label="GitHub" value="github.com/username" />
-          <LinkRow icon="🎨" label="Behance" value="behance.net/you" />
+          <LinkRow icon="✉️" label="Email" value="casandra.lendinez@outlook.com" />
+          <LinkRow
+            icon="🔗"
+            label="LinkedIn"
+            value="www.linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200"
+          />
+          <LinkRow icon="🐙" label="GitHub" value="https://github.com/martalendinez" />
           <LinkRow icon="📄" label="Resume" value="resume.pdf" />
-          <LinkRow icon="🖼️" label="Portfolio" value="your-site.com" />
+          <LinkRow icon="🖼️" label="Portfolio" value="marta.lendinez.portfolio.com" />
         </div>
       </div>
 
-      {/* Right card (let's connect + actions + form) */}
       <div className="rounded-2xl bg-white/6 border border-white/10 p-5">
         <div className="text-white font-semibold mb-2">Let’s Connect!</div>
         <div className="text-white/75 text-sm leading-relaxed">
@@ -320,9 +366,7 @@ function ContactTab() {
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-3">
-          <QuickBtn label="Copy email" />
           <QuickBtn label="Send email" />
-          <QuickBtn label="Visit LinkedIn" />
           <QuickBtn label="View code" />
         </div>
 
@@ -399,13 +443,9 @@ function SkillRow({ name, level, years }) {
     <div className="flex items-center gap-4">
       <div className="w-40 text-white/80 text-sm">{name}</div>
 
-      {/* “bar” (structure like screenshot) */}
       <div className="flex-1">
         <div className="h-3 rounded-full bg-white/10 overflow-hidden border border-white/10">
-          <div
-            className="h-full bg-white/40"
-            style={{ width: levelToPct(level) }}
-          />
+          <div className="h-full bg-white/40" style={{ width: levelToPct(level) }} />
         </div>
       </div>
 
@@ -424,18 +464,6 @@ function levelToPct(level) {
     Expert: "92%",
   };
   return map[level] ?? "50%";
-}
-
-function LinkRow({ icon, label, value }) {
-  return (
-    <div className="flex items-center justify-between gap-3 rounded-xl bg-white/5 border border-white/10 px-4 py-3">
-      <div className="flex items-center gap-2 text-white/80">
-        <span>{icon}</span>
-        <span className="text-sm">{label}</span>
-      </div>
-      <div className="text-white/60 text-sm truncate">{value}</div>
-    </div>
-  );
 }
 
 function QuickBtn({ label }) {
