@@ -1,6 +1,5 @@
 // src/components/windows/SettingsWindow.jsx
 
-// 👉 Replace these with your real wallpaper imports
 import mac1 from "../../imgs/wallpapers/macos/mac1.jpg";
 import mac2 from "../../imgs/wallpapers/macos/mac2.jpg";
 import mac3 from "../../imgs/wallpapers/macos/mac3.jpg";
@@ -14,6 +13,8 @@ export default function SettingsWindow({
   setUiTheme,
   wallpaperUrl,
   setWallpaperUrl,
+  fontScale,
+  setFontScale,
 }) {
   const isMac = uiTheme === "macos";
 
@@ -44,25 +45,18 @@ export default function SettingsWindow({
 
   const isSelected = (src) => wallpaperUrl === src;
 
-  const pickWallpaper = (src) => {
-    setWallpaperUrl?.(src);
-  };
+  const pickWallpaper = (src) => setWallpaperUrl?.(src);
 
   const handleUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Create a temporary URL for the uploaded file
     const url = URL.createObjectURL(file);
     setWallpaperUrl?.(url);
-
-    // Allow uploading the same file again later
     e.target.value = "";
   };
 
-  const clearCustom = () => {
-    setWallpaperUrl?.(null);
-  };
+  const clearCustom = () => setWallpaperUrl?.(null);
 
   return (
     <div className={`h-full flex ${isMac ? "text-black" : "text-white"}`}>
@@ -86,9 +80,9 @@ export default function SettingsWindow({
       <div className={`flex-1 p-6 ${mainBg} overflow-auto`}>
         <div className={`${textMain} text-xl font-semibold mb-4`}>General</div>
 
-        {/* Appearance toggle */}
+        {/* 1) THEME */}
         <div className="mb-7">
-          <div className={`${textSub} text-xs mb-2`}>Appearance</div>
+          <div className={`${textSub} text-xs mb-2`}>Theme</div>
           <div className="flex gap-2">
             <button
               className={`${btnBase} ${uiTheme === "glass" ? btnSelected : btnUnselected}`}
@@ -107,12 +101,11 @@ export default function SettingsWindow({
           </div>
         </div>
 
-        {/* Wallpaper section */}
-        <div className="mb-6">
-          <div className={`${textSub} text-xs mb-2`}>Wallpaper</div>
+        {/* 2) WALLPAPERS */}
+        <div className="mb-7">
+          <div className={`${textSub} text-xs mb-2`}>Wallpapers</div>
 
           <div className="flex items-center gap-2 mb-4">
-            {/* Upload */}
             <label
               className={`${btnBase} ${
                 isMac
@@ -129,7 +122,6 @@ export default function SettingsWindow({
               />
             </label>
 
-            {/* Reset to default */}
             <button
               type="button"
               onClick={clearCustom}
@@ -143,7 +135,6 @@ export default function SettingsWindow({
             </button>
           </div>
 
-          {/* macOS wallpapers row */}
           <WallpaperRow
             title="macOS wallpapers"
             textClass={textMain}
@@ -153,8 +144,8 @@ export default function SettingsWindow({
             uiTheme={uiTheme}
           />
 
-          {/* Glass wallpapers row */}
           <div className="mt-6" />
+
           <WallpaperRow
             title="Glass wallpapers"
             textClass={textMain}
@@ -165,28 +156,194 @@ export default function SettingsWindow({
           />
         </div>
 
-        {/* Your existing grid (optional to keep) */}
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            "About",
-            "Software Update",
-            "Storage",
-            "AirDrop & Handoff",
-            "Login Items",
-            "Language & Region",
-            "Date & Time",
-            "Sharing",
-          ].map((row) => (
-            <div
-              key={row}
-              className={`rounded-xl ${cardBg} border ${cardBorder} p-4 ${textMain} text-sm transition cursor-pointer ${cardHover}`}
-            >
-              {row}
+        {/* 3) FONT SIZE (pretty slider) */}
+        <div className="mb-7">
+          <div className={`${textSub} text-xs mb-2`}>Font size</div>
+
+          <div className={`rounded-xl ${cardBg} border ${cardBorder} p-4`}>
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <div className={`${textMain} text-sm font-medium`}>Font scale</div>
+                <div className={`${textSub} text-xs mt-1`}>Adjust the UI text size</div>
+              </div>
+
+              <div className={`${textSub} text-xs text-right`}>
+                <div>
+                  {fontScale <= 0.95 ? "Small" : fontScale >= 1.1 ? "Large" : "Default"}
+                </div>
+                <div className="tabular-nums">{Math.round((fontScale ?? 1) * 100)}%</div>
+              </div>
             </div>
-          ))}
+
+            {/* Preview */}
+            <div className={`rounded-lg ${isMac ? "bg-black/5" : "bg-white/5"} p-3 mb-4`}>
+              <div className={`${textSub} text-[11px] mb-1`}>Preview</div>
+              <div className={`${textMain}`} style={{ fontSize: `${(fontScale ?? 1) * 14}px` }}>
+                The quick brown fox jumps over the lazy dog.
+              </div>
+            </div>
+
+            {/* Slider row */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() =>
+                  setFontScale?.(Math.max(0.85, Number(((fontScale ?? 1) - 0.05).toFixed(2))))
+                }
+                className={`h-9 w-9 rounded-xl flex items-center justify-center transition ${
+                  isMac
+                    ? "bg-white border border-black/10 text-black/70 hover:bg-black/5"
+                    : "bg-white/10 border border-white/10 text-white/80 hover:bg-white/15"
+                }`}
+                aria-label="Decrease font size"
+              >
+                A
+              </button>
+
+              <div
+                className={`flex-1 rounded-full px-3 py-2 ${
+                  isMac ? "bg-black/5 border border-black/10" : "bg-white/5 border border-white/10"
+                }`}
+              >
+                <input
+                  type="range"
+                  min="0.85"
+                  max="1.25"
+                  step="0.05"
+                  value={fontScale ?? 1}
+                  onChange={(e) => setFontScale?.(Number(e.target.value))}
+                  className={`w-full h-2 appearance-none bg-transparent cursor-pointer slider ${
+                    isMac ? "slider-mac" : "slider-glass"
+                  }`}
+                  aria-label="Font scale"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFontScale?.(Math.min(1.25, Number(((fontScale ?? 1) + 0.05).toFixed(2))))
+                }
+                className={`h-9 w-9 rounded-xl flex items-center justify-center transition ${
+                  isMac
+                    ? "bg-white border border-black/10 text-black/80 hover:bg-black/5"
+                    : "bg-white/10 border border-white/10 text-white hover:bg-white/15"
+                }`}
+                aria-label="Increase font size"
+              >
+                <span className="text-base">A</span>
+              </button>
+            </div>
+
+            <div className="flex justify-end mt-4">
+              <button
+                type="button"
+                onClick={() => setFontScale?.(1)}
+                className={`${btnBase} ${
+                  isMac ? "bg-black/5 text-black/70 hover:bg-black/10" : "bg-white/5 text-white/70 hover:bg-white/10"
+                }`}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 4) QUICK ACTIONS (2 columns + icons) */}
+        <div>
+          <div className={`${textSub} text-xs mb-2`}>Quick actions</div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <QuickAction
+              label="Share portfolio"
+              icon="↗"
+              onClick={() => {
+                // fallback: copy link if share not supported
+                const url = window.location.href;
+                if (navigator.share) navigator.share({ url });
+                else navigator.clipboard?.writeText(url);
+              }}
+              cardBg={cardBg}
+              cardBorder={cardBorder}
+              cardHover={cardHover}
+              textMain={textMain}
+              textSub={textSub}
+              isMac={isMac}
+            />
+
+            <QuickAction
+              label="Download résumé"
+              icon="⬇"
+              onClick={() => window.open("/resume.pdf", "_blank")}
+              cardBg={cardBg}
+              cardBorder={cardBorder}
+              cardHover={cardHover}
+              textMain={textMain}
+              textSub={textSub}
+              isMac={isMac}
+            />
+
+            <QuickAction
+              label="Keyboard shortcuts"
+              icon="⌘"
+              onClick={() => alert("⌘,  Open Settings\n⌘K  Command menu\nEsc  Close window")}
+              cardBg={cardBg}
+              cardBorder={cardBorder}
+              cardHover={cardHover}
+              textMain={textMain}
+              textSub={textSub}
+              isMac={isMac}
+            />
+
+            <QuickAction
+              label="About this portfolio"
+              icon="ℹ"
+              onClick={() => alert("Built with React, Framer Motion & a lot of care ✨")}
+              cardBg={cardBg}
+              cardBorder={cardBorder}
+              cardHover={cardHover}
+              textMain={textMain}
+              textSub={textSub}
+              isMac={isMac}
+            />
+          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function QuickAction({
+  label,
+  icon,
+  onClick,
+  cardBg,
+  cardBorder,
+  cardHover,
+  textMain,
+  textSub,
+  isMac,
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full flex items-center justify-between rounded-xl ${cardBg} border ${cardBorder} px-4 py-3 transition ${cardHover}`}
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <div
+          className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0 ${
+            isMac ? "bg-black/5 text-black/70" : "bg-white/10 text-white/80"
+          }`}
+        >
+          {icon}
+        </div>
+
+        <div className={`${textMain} text-sm font-medium truncate`}>{label}</div>
+      </div>
+
+      <div className={`${textSub} text-sm flex-shrink-0`}>›</div>
+    </button>
   );
 }
 
@@ -215,24 +372,6 @@ function WallpaperRow({ title, textClass, wallpapers, onPick, isSelected, uiThem
             style={{ width: 150, height: 96 }}
           >
             <img src={src} alt={title} className="w-full h-full object-cover" />
-
-            {/* subtle overlay */}
-            <div
-              className={`absolute inset-0 ${
-                isMac ? "bg-black/0 hover:bg-black/5" : "bg-black/0 hover:bg-black/10"
-              } transition`}
-            />
-
-            {/* selected check */}
-            {isSelected(src) && (
-              <div
-                className={`absolute top-2 right-2 text-xs px-2 py-1 rounded-full ${
-                  isMac ? "bg-white/80 text-black/80" : "bg-white/20 text-white"
-                }`}
-              >
-                Selected
-              </div>
-            )}
           </button>
         ))}
       </div>
