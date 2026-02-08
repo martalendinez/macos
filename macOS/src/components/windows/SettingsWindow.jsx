@@ -8,6 +8,16 @@ import glass1 from "../../imgs/wallpapers/glass/glass1.jpg";
 import glass2 from "../../imgs/wallpapers/glass/glass2.jpeg";
 import glass3 from "../../imgs/wallpapers/glass/glass3.jpg";
 
+const downloadResume = () => {
+  const a = document.createElement("a");
+  a.href = "/resume.pdf"; // must be in public/
+  a.download = "Marta_Lendinez_Resume.pdf"; // filename the user gets
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
+
 export default function SettingsWindow({
   uiTheme,
   setUiTheme,
@@ -296,7 +306,12 @@ export default function SettingsWindow({
 
           <div className="grid grid-cols-2 gap-3">
             <QuickAction label="Share portfolio" icon="↗" />
-            <QuickAction label="Download résumé" icon="⬇" />
+            <QuickAction
+  label="Download Resume"
+  icon="⬇"
+  onClick={downloadResume}
+/>
+
             <QuickAction label="Keyboard shortcuts" icon="⌘" />
             <QuickAction label="About this portfolio" icon="ℹ" />
           </div>
@@ -308,9 +323,12 @@ export default function SettingsWindow({
 
 /* ---------------- Subcomponents ---------------- */
 
-function QuickAction({ label, icon }) {
+function QuickAction({ label, icon, onClick }) {
   return (
-    <div className="flex items-center justify-between rounded-xl bg-white/6 border border-white/10 px-4 py-3 hover:bg-white/10 transition cursor-pointer">
+    <div
+      onClick={onClick}
+      className="flex items-center justify-between rounded-xl bg-white/6 border border-white/10 px-4 py-3 hover:bg-white/10 transition cursor-pointer"
+    >
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
           {icon}
@@ -321,6 +339,7 @@ function QuickAction({ label, icon }) {
     </div>
   );
 }
+
 
 function WallpaperRow({ title, textClass, wallpapers, onPick, isSelected, uiTheme }) {
   const isMac = uiTheme === "macos";

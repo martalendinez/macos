@@ -236,7 +236,15 @@ export default function App() {
             // For now, do nothing.
           }}
         >
-          <img src={docIcon} alt="Resume" className="w-15 h-15 object-contain" />
+          <img src={docIcon} alt="Resume" className="w-15 h-15 object-contain" onClick={() => {
+  const a = document.createElement("a");
+  a.href = "/resume.pdf";
+  a.download = "Marta_Lendinez_Resume.pdf"; // filename the user gets
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}}
+/>
           <div className="bg-white/20 px-2 py-[3px] rounded-[6px] backdrop-blur-sm text-white text-[13px] whitespace-nowrap shadow-sm">
             resume.pdf
           </div>

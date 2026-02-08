@@ -197,7 +197,20 @@ function OverviewTab({ styles, onOpenWindow }) {
 
       {/* Actions */}
       <div className="flex gap-3">
-        <ActionButton styles={styles} icon="⬇️" label="Download Resume" />
+        <ActionButton
+  styles={styles}
+  icon="⬇️"
+  label="Download Resume"
+  onClick={() => {
+    const a = document.createElement("a");
+    a.href = "/resume.pdf";
+    a.download = "Marta_Lendinez_Resume.pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }}
+/>
+
         <ActionButton
   styles={styles}
   icon="🗂️"
@@ -469,13 +482,26 @@ function InfoBlock({ styles, icon, title, value }) {
   );
 }
 
-function ActionButton({ styles, icon, label, onClick }) {
+function ActionButton({ styles, icon, label, onClick, href, download }) {
+  const className = `rounded-xl px-4 py-3 text-sm transition flex items-center gap-2 ${styles.btnPrimary}`;
+
+  // ✅ if href exists, render an <a> so the browser can download
+  if (href) {
+    return (
+      <a
+        href={href}
+        download={download ? "" : undefined}
+        className={className}
+      >
+        <span>{icon}</span>
+        <span>{label}</span>
+      </a>
+    );
+  }
+
+  // otherwise keep normal button behavior
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`rounded-xl px-4 py-3 text-sm transition flex items-center gap-2 ${styles.btnPrimary}`}
-    >
+    <button type="button" onClick={onClick} className={className}>
       <span>{icon}</span>
       <span>{label}</span>
     </button>
