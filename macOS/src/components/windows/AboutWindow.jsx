@@ -184,7 +184,7 @@ function OverviewTab({ styles, onOpenWindow }) {
             styles={styles}
             icon="🌍"
             title="International background"
-            value="NL Netherlands • DE Germany • SE Sweden • CA Canada"
+            value="ES Spain • NL Netherlands • DE Germany • SE Sweden • CA Canada"
           />
           <InfoBlock
             styles={styles}

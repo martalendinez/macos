@@ -36,6 +36,12 @@ import AboutWindow from "./components/windows/AboutWindow";
 import ProjectsWindow from "./components/windows/ProjectsWindow";
 import VideosWindow from "./components/windows/VideosWindow";
 
+import FunWindow from "./components/windows/FunWindow";
+import MusicWindow from "./components/windows/MusicWindow";
+import MapWindow from "./components/windows/MapWindow";
+import TerminalWindow from "./components/windows/TerminalWindow";
+
+
 
 export default function App() {
   const [mouseX, setMouseX] = useState(null);
@@ -137,6 +143,34 @@ export default function App() {
       width: 860,
       height: 520,
       initialPos: { x: 240, y: 130 },},
+      fun: {
+  title: "Extras & Fun",
+  Component: FunWindow,
+  width: 920,
+  height: 600,
+  initialPos: { x: 240, y: 120 },
+},
+music: {
+  title: "Music",
+  Component: MusicWindow,
+  width: 760,
+  height: 520,
+  initialPos: { x: 260, y: 130 },
+},
+map: {
+  title: "Interactive Map",
+  Component: MapWindow,
+  width: 920,
+  height: 600,
+  initialPos: { x: 220, y: 110 },
+},
+terminal: {
+  title: "Terminal",
+  Component: TerminalWindow,
+  width: 860,
+  height: 560,
+  initialPos: { x: 240, y: 120 },
+}
       
     }),
     []
@@ -145,7 +179,7 @@ export default function App() {
   const dockItems = [
     { label: "About me", icon: icons.about, windowId: "about" },
     { label: "AI assistant", icon: icons.ai, windowId: null },
-    { label: "Extras & Fun", icon: icons.fun, windowId: null },
+    { label: "Extras & Fun", icon: icons.fun, windowId: "fun" },
   ];
 
   // Left rail items (now clickable -> opens windows)
