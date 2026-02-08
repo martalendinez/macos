@@ -7,51 +7,66 @@ export default function ProjectsWindow({ uiTheme = "glass" }) {
   const projects = useMemo(
     () => [
       {
-        title: "Human–AI Collaboration in UX Design (Thesis)",
-        subtitle: "Exploring AI-assisted wireframing + user flow design",
-        tags: ["Research", "AI", "UX"],
-        bullets: [
-          "Literature review: human–AI co-creation, design cognition, AI-assisted workflows",
-          "Methods: interviews + comparative tool analysis + prototype concepts",
-          "Focus: collaboration patterns (automation vs partnership) + designer control",
-        ],
-        links: [
-          { label: "Notes", href: "#" },
-          { label: "PDF", href: "#" },
-        ],
+        title: "Human–AI Collaboration in UX Design (Master Thesis)",
+subtitle: "Designing AI as a thinking partner for UX workflows",
+tags: ["Research", "AI", "UX"],
+bullets: [
+  "Investigates how designers collaborate with AI during early‑stage ideation and wireframing",
+  "Combines literature review, interviews, and comparative analysis of AI‑assisted design tools",
+  "Explores collaboration models: automation, augmentation, and true partnership",
+  "Proposes a concept for an AI‑supported UX tool that enhances designer cognition",
+],
+links: [
+  { label: "Case Study", href: "#" },
+  { label: "PDF", href: "#" },
+],
+
       },
       {
-        title: "Neighbor Conflict Resolution Platform",
-        subtitle: "Guidelines + themes/statistics to mitigate recurring issues",
-        tags: ["UX", "Product", "Concept"],
-        bullets: [
-          "Designed a flow for agreeing on conflict-resolution rules as neighbors",
-          "Surfaced prominent themes via aggregated neighborhood stats",
-          "Emphasis on trust, clarity, and reducing escalation",
-        ],
-        links: [{ label: "Case study", href: "#" }],
+        title: "Employer Branding Platform (Bachelor Thesis)",
+subtitle: "AI‑powered analysis + recommendations for stronger employer brands",
+tags: ["UX", "Product", "AI", "Full‑stack"],
+bullets: [
+  "Bachelor thesis in collaboration with PrideCom, designing and developing an AI‑driven employer‑branding platform",
+  "Built end‑to‑end: UX research, wireframes, UI design, frontend, backend, and Dockerized deployment",
+  "Used Meta’s LLaMA to analyze companies’ employer branding and generate tailored improvement recommendations",
+  "Created a full workflow for assessing brand maturity and guiding companies toward clearer, more consistent communication",
+],
+links: [
+  { label: "Case Study", href: "#" },
+],
+
       },
       {
-        title: "STUDS 2024 — Networking Platform + Comms",
-        subtitle: "Nonprofit project at KTH for CS master’s networking",
-        tags: ["UX", "Leadership", "Design Ops"],
-        bullets: [
-          "Vice project manager: coordination, planning, stakeholder alignment",
-          "Produced recruitment material + structured applicant interview scheduling",
-          "Focused on clear communication and low-friction participation",
-        ],
-        links: [{ label: "Overview", href: "#" }],
+        title: "Group Restaurant Coordination System", subtitle: "Smart restaurant discovery + group booking for friends and teams", tags: ["UX", "UI", "Frontend", "Product"], bullets: [ "Designed a restaurant recommendation system for both individual discovery and group decision‑making", "Developed a group‑booking flow that collects preferences and availability from all participants to suggest optimal restaurants", "Implemented the UX, UI, and frontend for a seamless end‑to‑end booking experience", "Focused on reducing coordination friction and making group dining decisions fast, fair, and transparent", ], links: [{ label: "Case Study", href: "#" }],
       },
       {
-        title: "Sleep & Sound Study",
-        subtitle: "Experiment + survey on sound effects on sleep",
-        tags: ["Research", "Data", "UX"],
-        bullets: [
-          "Designed study plan (experiment + survey) and analysis approach",
-          "Considered PRISMA-informed structuring from the literature review",
-          "Focused on usable insights + clear visualization of results",
-        ],
-        links: [{ label: "Draft", href: "#" }],
+        title: "Unified Loyalty System",
+subtitle: "All your loyalty cards and rewards in one place",
+tags: ["UX", "UI", "Frontend", "Product"],
+bullets: [
+  "Designed a loyalty‑card aggregation system that centralizes memberships from multiple stores into a single app",
+  "Built a demo Matcha café experience to showcase how points are collected, tracked, and redeemed",
+  "Created the UX, UI, and frontend implementation for a smooth, intuitive user journey",
+  "Focused on simplifying reward management and making loyalty programs more transparent and engaging",
+],
+links: [{ label: "Case Study", href: "#" }],
+
+      },
+       {
+        title: "Gamified Productivity System",
+subtitle: "A Stardew‑Valley‑inspired workflow built in Notion",
+tags: ["UX", "UI", "Systems Design"],
+bullets: [
+  "Designed a gamified productivity system inspired by cozy‑game progression loops and reward mechanics",
+  "Built the full experience in Notion, including tasks, leveling, streaks, and resource‑based incentives",
+  "Created the UX and UI structure to make daily planning feel playful, motivating, and easy to maintain",
+  "Focused on blending game‑like feedback with practical productivity workflows",
+],
+links: [
+  { label: "Case Study", href: "#" },
+],
+
       },
     ],
     []
@@ -90,8 +105,7 @@ export default function ProjectsWindow({ uiTheme = "glass" }) {
           <div>
             <div className={`text-2xl font-semibold ${textMain}`}>Projects</div>
             <div className={`mt-1 text-sm ${textSub}`}>
-              A curated selection of UX + research work. (You can replace these with your real
-              projects anytime.)
+              A hand‑picked collection of my UX and research projects.Feel free to explore any project, dive into the case studies, and get a sense of my thinking and process!
             </div>
           </div>
 

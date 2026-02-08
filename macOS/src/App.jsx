@@ -273,6 +273,7 @@ export default function App() {
                   setWallpaperUrl={setWallpaperUrl}
                   fontScale={fontScale}
                   setFontScale={setFontScale}
+                  onOpenWindow={openWindow}
                 />
               </MacWindow>
             );

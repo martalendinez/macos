@@ -52,7 +52,7 @@ function LinkRow({ icon, label, value, styles }) {
 }
 
 /* -------------------- MAIN COMPONENT -------------------- */
-export default function AboutWindow({ uiTheme = "glass" }) {
+export default function AboutWindow({ uiTheme = "glass", onOpenWindow, }) {
   const isMac = uiTheme === "macos";
 
   // theme tokens (same idea as SettingsWindow)
@@ -120,7 +120,9 @@ export default function AboutWindow({ uiTheme = "glass" }) {
 
       {/* Content */}
       <div className="flex-1 overflow-auto px-6 pb-6">
-        {activeTab === "Overview" && <OverviewTab styles={styles} />}
+        {activeTab === "Overview" && (
+  <OverviewTab styles={styles} onOpenWindow={onOpenWindow} />
+)}
         {activeTab === "Experience" && <ExperienceTab styles={styles} />}
         {activeTab === "Skills" && <SkillsTab styles={styles} />}
         {activeTab === "Contact" && <ContactTab styles={styles} />}
@@ -132,7 +134,7 @@ export default function AboutWindow({ uiTheme = "glass" }) {
 /* -------------------- TABS -------------------- */
 
 /** Overview: 2 columns, big photo, info blocks */
-function OverviewTab({ styles }) {
+function OverviewTab({ styles, onOpenWindow }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -196,7 +198,13 @@ function OverviewTab({ styles }) {
       {/* Actions */}
       <div className="flex gap-3">
         <ActionButton styles={styles} icon="⬇️" label="Download Resume" />
-        <ActionButton styles={styles} icon="🗂️" label="View Projects" />
+        <ActionButton
+  styles={styles}
+  icon="🗂️"
+  label="View Projects"
+  onClick={() => onOpenWindow?.("projects")}
+/>
+
       </div>
     </div>
   );
@@ -461,10 +469,11 @@ function InfoBlock({ styles, icon, title, value }) {
   );
 }
 
-function ActionButton({ styles, icon, label }) {
+function ActionButton({ styles, icon, label, onClick }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className={`rounded-xl px-4 py-3 text-sm transition flex items-center gap-2 ${styles.btnPrimary}`}
     >
       <span>{icon}</span>
@@ -472,6 +481,7 @@ function ActionButton({ styles, icon, label }) {
     </button>
   );
 }
+
 
 function SkillGroup({ styles, title, icon, children }) {
   return (
