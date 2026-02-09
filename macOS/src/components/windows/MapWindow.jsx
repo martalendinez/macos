@@ -12,6 +12,17 @@ import L from "leaflet";
 import spain1 from "../../imgs/map/canada1.jpg";
 import spain2 from "../../imgs/map/canada2.jpg";
 
+import canada1 from "../../imgs/map/canada1.jpg";
+import canada2 from "../../imgs/map/canada2.jpg";
+import canada3 from "../../imgs/map/canada3.jpg";
+import canada4 from "../../imgs/map/canada4.jpg";
+import canada5 from "../../imgs/map/canada5.jpg";
+import canada6 from "../../imgs/map/canada6.jpg";
+import canada7 from "../../imgs/map/canada7.jpg";
+import canada8 from "../../imgs/map/canada8.jpg";
+import canada9 from "../../imgs/map/canada9.jpg";
+import canada10 from "../../imgs/map/canada10.jpg";
+
 // Default Leaflet marker icon
 const DefaultIcon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -88,7 +99,7 @@ const placeDetails = {
     ],
     year: "2025",
     coords: [43.6532, -79.3832],
-    photos: [spain1, ],
+    photos: [canada1, canada2, canada3, canada4, canada5, canada6, canada7, canada8, canada9, canada10],
   },
 };
 
