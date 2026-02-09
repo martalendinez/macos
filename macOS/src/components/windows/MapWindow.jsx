@@ -39,7 +39,7 @@ const placeDetails = {
     ],
     year: "2002–2020",
     coords: [40.4168, -3.7038],
-    photos: [spain1, spain2, spain1, spain2],
+    photos: [spain1, spain2, spain1, spain2, spain1, spain1, spain2],
   },
   nl: {
     title: "Netherlands",
@@ -208,37 +208,61 @@ export default function MapWindow({ uiTheme = "glass" }) {
             </ul>
           </div>
 
-          {/* SEE PHOTOS TOGGLE */}
-          <div className="mt-5">
-            <button
-              onClick={() => setShowPhotos((prev) => !prev)}
-              className="text-sm underline opacity-80 hover:opacity-100"
-            >
-              {showPhotos ? "Hide photos" : "See photos"}
-            </button>
+         {/* SEE PHOTOS TOGGLE */}
+<div className="mt-5">
+  <button
+    onClick={() => setShowPhotos(prev => !prev)}
+    className="text-sm underline opacity-80 hover:opacity-100"
+  >
+    {showPhotos ? "Hide photos" : "See photos"}
+  </button>
 
-            {showPhotos && (
-              <div className="mt-4">
-                {photos.length === 0 ? (
-                  <div className={`${styles.textSub} text-xs opacity-70`}>
-                    No photos added yet.
-                  </div>
-                ) : (
-                  <div className="flex gap-3 overflow-x-auto pb-2">
-                    {photos.map((src, i) => (
-                      <button
-                        key={i}
-                        onClick={() => openViewer(i)}
-                        className="w-32 h-24 rounded-xl overflow-hidden border border-black/10 hover:scale-[1.02] transition"
-                      >
-                        <img src={src} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+  {showPhotos && (
+    <div className="mt-4">
+      {photos.length === 0 ? (
+        <div className={`${styles.textSub} text-xs opacity-70`}>
+          No photos added yet.
+        </div>
+      ) : (
+        <div
+          id="photo-row"
+          className="
+            flex flex-nowrap 
+            gap-3 
+            overflow-x-auto 
+            pb-2 
+            whitespace-nowrap 
+            snap-x snap-mandatory 
+            scrollbar-none
+          "
+        >
+          {photos.map((src, i) => (
+            <button
+              key={i}
+              onClick={() => openViewer(i)}
+              className="
+                w-32 h-24 
+                rounded-xl 
+                overflow-hidden 
+                border border-black/10 
+                hover:scale-[1.02] 
+                transition 
+                snap-start 
+                shrink-0
+              "
+            >
+              <img src={src} className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
+
+
+
         </div>
 
         {/* RIGHT SIDE */}
