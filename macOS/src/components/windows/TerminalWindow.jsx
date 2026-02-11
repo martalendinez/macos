@@ -4,7 +4,10 @@ import { useMemo, useState } from "react";
 export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
   const isMac = uiTheme === "macos";
 
-  // Single source of truth for commands (so help + autocomplete stay in sync)
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1); // -1 = not browsing history
+  const [draftInput, setDraftInput] = useState(""); // what user typed before pressing ↑
+
   const COMMANDS = useMemo(
     () => ({
       help: "Show available commands",
@@ -16,42 +19,33 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       music: "Open music window",
       resume: "Download resume",
       clear: "Clear terminal",
-      cowsay: "Output wisdom via code"
+      cowsay: "ASCII cow says your message",
     }),
     []
   );
 
-function levelToBar(level) {
-  const map = {
-    Basic: 2,
-    Intermediate: 3,
-    Proficient: 4,
-    Advanced: 5,
-    Expert: 6,
-  };
-
-  const filled = map[level] ?? 3;
-  const total = 6;
-
-  return "●".repeat(filled) + "○".repeat(total - filled);
-}
-
-
-
+  function levelToBar(level) {
+    const map = {
+      Basic: 2,
+      Intermediate: 3,
+      Proficient: 4,
+      Advanced: 5,
+      Expert: 6,
+    };
+    const filled = map[level] ?? 3;
+    const total = 6;
+    return "●".repeat(filled) + "○".repeat(total - filled);
+  }
 
   function buildWelcomeLines() {
-    const lines = [
-      "Last login: Thu Jan 22 19:30:45",
-      "",
-      "Available commands:",
-    ];
+    const lines = ["Last login: Thu Jan 22 19:30:45", "", "Available commands:"];
 
     Object.entries(COMMANDS).forEach(([cmd, desc]) => {
       lines.push(`  ${cmd.padEnd(10)} ${desc}`);
     });
 
     lines.push("");
-    lines.push("Tip: press Tab to autocomplete • Enter to run • Esc to clear input");
+    lines.push("Tip: press Tab to autocomplete • ↑/↓ for history • Enter to run • Esc to clear input");
     lines.push("");
     return lines;
   }
@@ -91,113 +85,46 @@ function levelToBar(level) {
     a.remove();
   }
 
+  function handleTabAutocomplete() {
+    const raw = input;
+    const v = raw.trim().toLowerCase();
+    if (!v) return;
+
+    const all = Object.keys(COMMANDS);
+    const matches = all.filter((c) => c.startsWith(v));
+
+    if (matches.length === 1) {
+      setInput(matches[0] + " ");
+      return;
+    }
+
+    if (matches.length > 1) {
+      appendLines([`marta@portfolio ~ % ${raw}`, matches.join("   "), ""]);
+      return;
+    }
+
+    appendLines([`(no matches for "${v}")`, ""]);
+  }
+
   function runCommand(cmdRaw) {
     const raw = cmdRaw ?? "";
     const cmd = raw.trim();
     if (!cmd) return;
 
+    // save to history
+    setHistory((prev) => [...prev, raw]);
+    setHistoryIndex(-1);
+    setDraftInput("");
+
     const lower = cmd.toLowerCase();
     const promptLine = `marta@portfolio ~ % ${raw}`;
 
-    // echo prompt line first
     appendLines([promptLine]);
 
     if (lower === "clear") {
       setLines([]);
       return;
     }
-    if (lower === "ls") {
-  appendLines([
-    "Desktop:",
-    "  30-seconds-mode/        (for recruiters)",
-    "  projects/",
-    "  videos/",
-    "  ai-assistant/",
-    "  extras-and-fun/",
-    "",
-    "System:",
-    "  notification-centre/",
-    "  settings/",
-    "  dark-mode/",
-    "",
-    "Files:",
-    "  resume.pdf",
-    "",
-  ]);
-  return;
-}
-
-if (lower === "skills") {
-  appendLines([
-    "DESIGN TOOLS 🎨",
-    `Figma            ${levelToBar("Advanced")}  Advanced`,
-    `Adobe XD         ${levelToBar("Advanced")}  Advanced`,
-    `Photoshop        ${levelToBar("Proficient")}  Proficient`,
-    `Illustrator      ${levelToBar("Intermediate")}  Intermediate`,
-    `Framer           ${levelToBar("Basic")}  Basic`,
-    "",
-    "DEVELOPMENT 💻",
-    `React            ${levelToBar("Advanced")}  Advanced`,
-    `TypeScript       ${levelToBar("Advanced")}  Advanced`,
-    `HTML/CSS         ${levelToBar("Expert")}  Expert`,
-    `JavaScript       ${levelToBar("Advanced")}  Advanced`,
-    `Tailwind CSS     ${levelToBar("Proficient")}  Proficient`,
-    `Python           ${levelToBar("Advanced")}  Advanced`,
-    `SQL              ${levelToBar("Proficient")}  Proficient`,
-    `Docker           ${levelToBar("Basic")}  Basic`,
-    `Git              ${levelToBar("Advanced")}  Advanced`,
-    "",
-    "UX RESEARCH & METHODS 🔬",
-    `User Interviews  ${levelToBar("Expert")}  Expert`,
-    `Usability Testing${levelToBar("Expert")}  Expert`,
-    `Survey Design    ${levelToBar("Advanced")}  Advanced`,
-    `Persona Creation ${levelToBar("Advanced")}  Advanced`,
-    `Journey Mapping  ${levelToBar("Advanced")}  Advanced`,
-    `A/B Testing      ${levelToBar("Advanced")}  Advanced`,
-    "",
-  ]);
-  return;
-}
-if (lower.startsWith("cowsay")) {
-  const message = cmd.slice(6).trim() || "moo";
-
-  const top = " " + "-".repeat(message.length + 2);
-  const middle = `< ${message} >`;
-  const bottom = " " + "-".repeat(message.length + 2);
-
-  appendLines([
-    top,
-    middle,
-    bottom,
-    "        \\   ^__^",
-    "         \\  (oo)\\_______",
-    "            (__)\\       )\\/\\",
-    "                ||----w |",
-    "                ||     ||",
-    "",
-  ]);
-
-  return;
-}
-
-
-
-
-    if (lower === "whoami") {
-  appendLines([
-    "Hi, I’m Marta — a UX Engineer in my second year of the Interactive Media Technology master’s at KTH.",
-    "",
-    "I love traveling and have lived in Spain, Germany, the Netherlands, Canada, and Sweden.",
-    "",
-    "I’ve always been a creative kid at heart — design, art, writing, anything that let me make things.",
-    "",
-    "Today that curiosity shows up in how I build interfaces, explore new tools,",
-    "and blend engineering with design to create experiences that feel thoughtful and alive.",
-    "",
-  ]);
-  return;
-}
-
 
     if (lower === "help") {
       printHelp();
@@ -210,7 +137,96 @@ if (lower.startsWith("cowsay")) {
       return;
     }
 
-    // (Optional) open windows if you want later
+    if (lower === "ls") {
+      appendLines([
+        "Desktop:",
+        "  30-seconds-mode/        (for recruiters)",
+        "  projects/",
+        "  videos/",
+        "  ai-assistant/",
+        "  extras-and-fun/",
+        "",
+        "System:",
+        "  notification-centre/",
+        "  settings/",
+        "  dark-mode/",
+        "",
+        "Files:",
+        "  resume.pdf",
+        "",
+      ]);
+      return;
+    }
+
+    if (lower === "whoami") {
+      appendLines([
+        "Hi, I’m Marta — a UX Engineer in my second year of the Interactive Media Technology master’s at KTH.",
+        "",
+        "I love traveling and have lived in Spain, Germany, the Netherlands, Canada, and Sweden.",
+        "",
+        "I’ve always been a creative kid at heart — design, art, writing, anything that let me make things.",
+        "",
+        "Today that curiosity shows up in how I build interfaces, explore new tools,",
+        "and blend engineering with design to create experiences that feel thoughtful and alive.",
+        "",
+      ]);
+      return;
+    }
+
+    if (lower === "skills") {
+      appendLines([
+        "DESIGN TOOLS 🎨",
+        `Figma            ${levelToBar("Advanced")}  Advanced`,
+        `Adobe XD         ${levelToBar("Advanced")}  Advanced`,
+        `Photoshop        ${levelToBar("Proficient")}  Proficient`,
+        `Illustrator      ${levelToBar("Intermediate")}  Intermediate`,
+        `Framer           ${levelToBar("Basic")}  Basic`,
+        "",
+        "DEVELOPMENT 💻",
+        `React            ${levelToBar("Advanced")}  Advanced`,
+        `TypeScript       ${levelToBar("Advanced")}  Advanced`,
+        `HTML/CSS         ${levelToBar("Expert")}  Expert`,
+        `JavaScript       ${levelToBar("Advanced")}  Advanced`,
+        `Tailwind CSS     ${levelToBar("Proficient")}  Proficient`,
+        `Python           ${levelToBar("Advanced")}  Advanced`,
+        `SQL              ${levelToBar("Proficient")}  Proficient`,
+        `Docker           ${levelToBar("Basic")}  Basic`,
+        `Git              ${levelToBar("Advanced")}  Advanced`,
+        "",
+        "UX RESEARCH & METHODS 🔬",
+        `User Interviews  ${levelToBar("Expert")}  Expert`,
+        `Usability Testing${levelToBar("Expert")}  Expert`,
+        `Survey Design    ${levelToBar("Advanced")}  Advanced`,
+        `Persona Creation ${levelToBar("Advanced")}  Advanced`,
+        `Journey Mapping  ${levelToBar("Advanced")}  Advanced`,
+        `A/B Testing      ${levelToBar("Advanced")}  Advanced`,
+        "",
+      ]);
+      return;
+    }
+
+    if (lower.startsWith("cowsay")) {
+      const message = cmd.slice(6).trim() || "moo";
+
+      const top = " " + "-".repeat(message.length + 2);
+      const middle = `< ${message} >`;
+      const bottom = " " + "-".repeat(message.length + 2);
+
+      appendLines([
+        top,
+        middle,
+        bottom,
+        "        \\   ^__^",
+        "         \\  (oo)\\_______",
+        "            (__)\\       )\\/\\",
+        "                ||----w |",
+        "                ||     ||",
+        "",
+      ]);
+      return;
+    }
+
+    // open windows
     if (lower === "music") {
       onOpenWindow?.("music");
       appendLines(["(opening music...)", ""]);
@@ -227,7 +243,6 @@ if (lower.startsWith("cowsay")) {
       return;
     }
 
-    // not implemented yet
     const all = Object.keys(COMMANDS);
     const suggestions = all
       .filter((c) => c.startsWith(lower) || c.includes(lower) || lower.includes(c))
@@ -238,29 +253,6 @@ if (lower.startsWith("cowsay")) {
       suggestions.length ? `did you mean: ${suggestions.join(", ")} ?` : `try: ${all.join(", ")}`,
       "",
     ]);
-  }
-
-  function handleTabAutocomplete() {
-    const raw = input;
-    const v = raw.trim().toLowerCase();
-    if (!v) return;
-
-    const all = Object.keys(COMMANDS);
-    const matches = all.filter((c) => c.startsWith(v));
-
-    if (matches.length === 1) {
-      setInput(matches[0] + " "); // nice terminal feel
-      return;
-    }
-
-    if (matches.length > 1) {
-      // Print options like a shell would
-      appendLines([`marta@portfolio ~ % ${raw}`, matches.join("   "), ""]);
-      return;
-    }
-
-    // no matches
-    appendLines([`(no matches for "${v}")`, ""]);
   }
 
   return (
@@ -282,32 +274,68 @@ if (lower.startsWith("cowsay")) {
 
             <input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setHistoryIndex(-1);
+              }}
               onKeyDown={(e) => {
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  if (history.length === 0) return;
+
+                  if (historyIndex === -1) setDraftInput(input);
+
+                  const nextIndex =
+                    historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
+
+                  setHistoryIndex(nextIndex);
+                  setInput(history[nextIndex]);
+                  return;
+                }
+
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  if (history.length === 0) return;
+                  if (historyIndex === -1) return;
+
+                  const nextIndex = historyIndex + 1;
+
+                  if (nextIndex >= history.length) {
+                    setHistoryIndex(-1);
+                    setInput(draftInput);
+                  } else {
+                    setHistoryIndex(nextIndex);
+                    setInput(history[nextIndex]);
+                  }
+                  return;
+                }
+
                 if (e.key === "Enter") {
                   runCommand(input);
                   setInput("");
+                  return;
                 }
 
                 if (e.key === "Tab") {
                   e.preventDefault();
                   handleTabAutocomplete();
+                  return;
                 }
 
                 if (e.key === "Escape") {
                   e.preventDefault();
                   setInput("");
+                  return;
                 }
               }}
               className={`flex-1 bg-transparent outline-none ${styles.text}`}
+              placeholder="type a command… (Tab for autocomplete)"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
             />
           </div>
         </div>
-
-        
       </div>
     </div>
   );
