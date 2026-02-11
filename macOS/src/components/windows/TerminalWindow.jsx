@@ -16,6 +16,7 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       music: "Open music window",
       resume: "Download resume",
       clear: "Clear terminal",
+      cowsay: "Output wisdom via code"
     }),
     []
   );
@@ -157,6 +158,28 @@ if (lower === "skills") {
   ]);
   return;
 }
+if (lower.startsWith("cowsay")) {
+  const message = cmd.slice(6).trim() || "moo";
+
+  const top = " " + "-".repeat(message.length + 2);
+  const middle = `< ${message} >`;
+  const bottom = " " + "-".repeat(message.length + 2);
+
+  appendLines([
+    top,
+    middle,
+    bottom,
+    "        \\   ^__^",
+    "         \\  (oo)\\_______",
+    "            (__)\\       )\\/\\",
+    "                ||----w |",
+    "                ||     ||",
+    "",
+  ]);
+
+  return;
+}
+
 
 
 
