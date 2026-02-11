@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -9,8 +9,13 @@ import {
 import L from "leaflet";
 
 // Example import (add more as needed)
-import spain1 from "../../imgs/map/canada1.jpg";
-import spain2 from "../../imgs/map/canada2.jpg";
+import spain1 from "../../imgs/map/spain1.jpg";
+import spain2 from "../../imgs/map/spain2.jpg";
+import spain3 from "../../imgs/map/spain3.jpg";
+import spain4 from "../../imgs/map/spain4.jpg";
+import spain5 from "../../imgs/map/spain5.jpg";
+import spain6 from "../../imgs/map/spain6.jpg";
+import spain7 from "../../imgs/map/spain7.jpg";
 
 import canada1 from "../../imgs/map/canada1.jpg";
 import canada2 from "../../imgs/map/canada2.jpg";
@@ -72,7 +77,7 @@ const placeDetails = {
     ],
     year: "2002–2020",
     coords: [40.4168, -3.7038],
-    photos: [spain1, spain2, spain1, spain2, spain1, spain1, spain2],
+    photos: [spain1, spain2, spain3, spain4, spain5, spain6, spain7],
   },
   nl: {
     title: "Netherlands",
@@ -126,6 +131,8 @@ const placeDetails = {
 };
 
 export default function MapWindow({ uiTheme = "glass" }) {
+
+
   const isMac = uiTheme === "macos";
   const [selected, setSelected] = useState("stockholm");
 
@@ -168,15 +175,40 @@ export default function MapWindow({ uiTheme = "glass" }) {
     setZoomed(false);
   };
 
-  const next = () => {
-    setViewerIndex((i) => (i + 1) % photos.length);
-    setZoomed(false);
-  };
+const next = () => {
+  if (!photos.length) return;
+  setViewerIndex((i) => (i + 1) % photos.length);
+  setZoomed(false);
+};
 
-  const prev = () => {
-    setViewerIndex((i) => (i - 1 + photos.length) % photos.length);
-    setZoomed(false);
-  };
+const prev = () => {
+  if (!photos.length) return;
+  setViewerIndex((i) => (i - 1 + photos.length) % photos.length);
+  setZoomed(false);
+};
+
+  useEffect(() => {
+  if (!viewerOpen) return;
+
+  function onKeyDown(e) {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next();
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev();
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeViewer();
+    }
+  }
+
+  window.addEventListener("keydown", onKeyDown);
+  return () => window.removeEventListener("keydown", onKeyDown);
+}, [viewerOpen, photos.length, next, prev]);
+
 
   return (
     <div className={`h-full flex flex-col ${styles.textMain}`}>
