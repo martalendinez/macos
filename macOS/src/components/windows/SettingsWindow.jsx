@@ -40,11 +40,13 @@ export default function SettingsWindow({
   const cardHover = isMac ? "hover:bg-black/5" : "hover:bg-white/10";
 
   const btnBase = "px-3 py-2 rounded-xl text-sm transition";
-  const btnSelected = isMac
-    ? "bg-black/10 text-black/90"
+const btnSelected = isMac
+  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+
     : "bg-white/20 text-white";
-  const btnUnselected = isMac
-    ? "bg-white text-black/80 border border-black/10 hover:bg-black/5"
+const btnUnselected = isMac
+  ? "bg-white text-black/80 border border-black/10 hover:bg-emerald-50 hover:border-emerald-200 transition"
+
     : "bg-white/10 text-white/85 hover:bg-white/15";
 
   /* ---------------- Sidebar logic ---------------- */
@@ -111,10 +113,11 @@ export default function SettingsWindow({
               key={s.id}
               onClick={() => scrollToSection(s)}
               className={`px-3 py-2 rounded-lg cursor-pointer transition ${
-                activeSection === s.id
-                  ? isMac
-                    ? "bg-[#d9e8ff] text-black/80"
-                    : "bg-white/15 text-white/95"
+               activeSection === s.id
+  ? isMac
+    ? "bg-black/5 text-emerald-600 border border-emerald-200"
+    : "bg-white/15 text-white/95"
+
                   : isMac
                   ? "hover:bg-black/5 text-black/70"
                   : "hover:bg-white/10 text-white/80"
@@ -240,8 +243,9 @@ export default function SettingsWindow({
                 type="button"
                 onClick={decFont}
                 className={`h-9 w-9 rounded-xl flex items-center justify-center transition ${
-                  isMac
-                    ? "bg-white border border-black/10 text-black/70 hover:bg-black/5"
+                 isMac
+  ? "bg-white border border-black/10 text-black/70 hover:bg-emerald-50 hover:border-emerald-200 transition"
+
                     : "bg-white/10 border border-white/10 text-white/80 hover:bg-white/15"
                 }`}
                 aria-label="Decrease font size"
@@ -289,8 +293,9 @@ export default function SettingsWindow({
                 type="button"
                 onClick={resetFont}
                 className={`${btnBase} ${
-                  isMac
-                    ? "bg-black/5 text-black/70 hover:bg-black/10"
+                 isMac
+  ? "bg-white text-black/70 border border-black/10 hover:bg-emerald-50 hover:border-emerald-200 transition"
+
                     : "bg-white/5 text-white/70 hover:bg-white/10"
                 }`}
               >
@@ -321,24 +326,35 @@ export default function SettingsWindow({
   );
 }
 
-/* ---------------- Subcomponents ---------------- */
-
 function QuickAction({ label, icon, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="flex items-center justify-between rounded-xl bg-white/6 border border-white/10 px-4 py-3 hover:bg-white/10 transition cursor-pointer"
+      className="
+        flex items-center justify-between 
+        rounded-xl 
+        bg-white 
+        border border-black/10 
+        px-4 py-3 
+        hover:bg-black/5 
+        transition 
+        cursor-pointer
+      "
     >
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
+        <div className="w-9 h-9 rounded-xl bg-black/5 flex items-center justify-center text-emerald-600">
           {icon}
         </div>
-        <span className="text-sm font-medium">{label}</span>
+        <span className="text-sm font-medium text-black/80">
+          {label}
+        </span>
       </div>
-      <span className="opacity-50">›</span>
+
+      <span className="text-black/30">›</span>
     </div>
   );
 }
+
 
 
 function WallpaperRow({ title, textClass, wallpapers, onPick, isSelected, uiTheme }) {
@@ -355,7 +371,8 @@ function WallpaperRow({ title, textClass, wallpapers, onPick, isSelected, uiThem
             className={`rounded-2xl overflow-hidden border transition ${
               isSelected(src)
                 ? isMac
-                  ? "border-black/30 ring-2 ring-black/20"
+                  ? "border-emerald-300 ring-2 ring-emerald-200"
+
                   : "border-white/40 ring-2 ring-white/30"
                 : "border-white/10 hover:border-white/20"
             }`}
