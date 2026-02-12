@@ -305,55 +305,57 @@ const btnUnselected = isMac
           </div>
         </div>
 
-        {/* QUICK ACTIONS */}
-        <div ref={quickRef}>
-          <div className={`${textSub} text-xs mb-2`}>Quick actions</div>
+  {/* QUICK ACTIONS */}
+<div ref={quickRef}>
+  <div className={`${textSub} text-xs mb-2`}>Quick actions</div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <QuickAction label="Share portfolio" icon="↗" />
-            <QuickAction
-  label="Download Resume"
-  icon="⬇"
-  onClick={downloadResume}
-/>
+  <div className="grid grid-cols-2 gap-3">
+    <QuickAction isMac={isMac} label="Share portfolio" icon="↗" />
+    <QuickAction
+      isMac={isMac}
+      label="Download Resume"
+      icon="⬇"
+      onClick={downloadResume}
+    />
+    <QuickAction isMac={isMac} label="Keyboard shortcuts" icon="⌘" />
+    <QuickAction isMac={isMac} label="About this portfolio" icon="ℹ" />
+  </div>
+</div>
 
-            <QuickAction label="Keyboard shortcuts" icon="⌘" />
-            <QuickAction label="About this portfolio" icon="ℹ" />
-          </div>
         </div>
       </div>
-    </div>
+    
   );
 }
+function QuickAction({ label, icon, onClick, isMac }) {
+  const cardClass = isMac
+    ? "bg-white border border-black/10 hover:bg-black/5"
+    : "bg-white/6 border border-white/10 hover:bg-white/10";
 
-function QuickAction({ label, icon, onClick }) {
+  const iconWrapClass = isMac
+    ? "bg-black/5 text-emerald-600"
+    : "bg-white/10 text-white/85";
+
+  const textClass = isMac ? "text-black/80" : "text-white/90";
+  const chevronClass = isMac ? "text-black/30" : "text-white/40";
+
   return (
     <div
       onClick={onClick}
-      className="
-        flex items-center justify-between 
-        rounded-xl 
-        bg-white 
-        border border-black/10 
-        px-4 py-3 
-        hover:bg-black/5 
-        transition 
-        cursor-pointer
-      "
+      className={`flex items-center justify-between rounded-xl px-4 py-3 transition cursor-pointer ${cardClass}`}
     >
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-black/5 flex items-center justify-center text-emerald-600">
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconWrapClass}`}>
           {icon}
         </div>
-        <span className="text-sm font-medium text-black/80">
-          {label}
-        </span>
+        <span className={`text-sm font-medium ${textClass}`}>{label}</span>
       </div>
 
-      <span className="text-black/30">›</span>
+      <span className={chevronClass}>›</span>
     </div>
   );
 }
+
 
 
 
