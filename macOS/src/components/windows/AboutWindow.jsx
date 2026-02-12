@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import overviewPhoto from "../../imgs/profile.jpeg";
 
 // Small avatar for contact card
-import contactAvatar from "../../imgs/Avatar1.png";
+import contactAvatar from "../../imgs/Avatar1.jpg";
 
 /* -------------------- LINK ROW (CLICKABLE) -------------------- */
 function LinkRow({ icon, label, value, styles }) {
@@ -52,12 +52,16 @@ function LinkRow({ icon, label, value, styles }) {
 }
 
 /* -------------------- MAIN COMPONENT -------------------- */
-export default function AboutWindow({ uiTheme = "glass", onOpenWindow, }) {
+export default function AboutWindow({ uiTheme = "glass", onOpenWindow }) {
   const isMac = uiTheme === "macos";
 
-  // theme tokens (same idea as SettingsWindow)
+  // theme tokens
   const styles = useMemo(() => {
     return {
+      // accent
+      accentText: isMac ? "text-emerald-700" : "text-white",
+      accentUnderline: isMac ? "bg-emerald-600" : "bg-white/70",
+
       // text
       textMain: isMac ? "text-black/80" : "text-white/90",
       textStrong: isMac ? "text-black" : "text-white",
@@ -66,26 +70,29 @@ export default function AboutWindow({ uiTheme = "glass", onOpenWindow, }) {
 
       // surfaces
       cardBg: isMac ? "bg-white" : "bg-white/6",
-      cardBgSoft: isMac ? "bg-black/5" : "bg-white/5",
+      cardBgSoft: isMac ? "bg-white" : "bg-white/5",
       cardHover: isMac ? "hover:bg-black/5" : "hover:bg-white/10",
 
       // borders/dividers
       cardBorder: isMac ? "border-black/10" : "border-white/10",
       divider: isMac ? "bg-black/10" : "bg-white/10",
 
-      // buttons
+      // buttons (neutral, like your screenshot)
       btn: isMac
-        ? "bg-white border border-black/10 hover:bg-black/5 text-black/80"
+        ? "bg-white border border-black/10 text-black/80 hover:bg-emerald-50 hover:border-emerald-200 transition"
         : "bg-white/10 border border-white/10 hover:bg-white/15 text-white/90",
 
+      // primary action buttons should ALSO be neutral (not solid green)
       btnPrimary: isMac
-        ? "bg-black/10 border border-black/10 hover:bg-black/15 text-black/90"
+        ? "bg-white border border-black/10 text-black/80 hover:bg-emerald-50 hover:border-emerald-200 transition"
         : "bg-white/15 border border-white/10 hover:bg-white/20 text-white",
 
+      // inputs focus ring
+      inputFocus: isMac ? "focus:ring-4 focus:ring-emerald-200" : "focus:ring-4 focus:ring-white/20",
+
       // tabs
-      tab: isMac ? "text-black/60 hover:text-black/90" : "text-white/80 hover:text-white/95",
-      tabActive: isMac ? "text-black" : "text-white",
-      tabUnderline: isMac ? "bg-black/40" : "bg-white/70",
+      tab: isMac ? "text-black/60 hover:text-emerald-700" : "text-white/80 hover:text-white/95",
+      tabActive: isMac ? "text-emerald-700" : "text-white",
     };
   }, [isMac]);
 
@@ -96,20 +103,18 @@ export default function AboutWindow({ uiTheme = "glass", onOpenWindow, }) {
     <div className={`h-full flex flex-col ${styles.textMain}`}>
       {/* Top tabs */}
       <div className="px-6 pt-5 pb-3">
-        <div className={`flex items-center gap-4 text-sm`}>
+        <div className="flex items-center gap-4 text-sm">
           {tabs.map((t) => (
             <button
               key={t}
               type="button"
               onClick={() => setActiveTab(t)}
-              className={`relative transition ${
-                activeTab === t ? styles.tabActive : styles.tab
-              }`}
+              className={`relative transition ${activeTab === t ? styles.tabActive : styles.tab}`}
             >
               <span className="px-1">{t}</span>
               {activeTab === t && (
                 <span
-                  className={`absolute left-1 right-1 -bottom-2 h-[2px] rounded-full ${styles.tabUnderline}`}
+                  className={`absolute left-1 right-1 -bottom-2 h-[2px] rounded-full ${styles.accentUnderline}`}
                 />
               )}
             </button>
@@ -120,11 +125,9 @@ export default function AboutWindow({ uiTheme = "glass", onOpenWindow, }) {
 
       {/* Content */}
       <div className="flex-1 overflow-auto px-6 pb-6">
-        {activeTab === "Overview" && (
-  <OverviewTab styles={styles} onOpenWindow={onOpenWindow} />
-)}
+        {activeTab === "Overview" && <OverviewTab styles={styles} onOpenWindow={onOpenWindow} />}
         {activeTab === "Experience" && <ExperienceTab styles={styles} />}
-        {activeTab === "Skills" && <SkillsTab styles={styles} />}
+        {activeTab === "Skills" && <SkillsTab styles={styles} isMac={isMac} />}
         {activeTab === "Contact" && <ContactTab styles={styles} />}
       </div>
     </div>
@@ -132,14 +135,14 @@ export default function AboutWindow({ uiTheme = "glass", onOpenWindow, }) {
 }
 
 /* -------------------- TABS -------------------- */
+
 function PhotoLocation({ styles, text = "Niagara Falls, CA" }) {
   return (
     <div className="absolute left-4 bottom-4 z-10 opacity-0 group-hover:opacity-100 transition duration-200">
       <div className="relative group/location">
         {/* Pill */}
         <div
-          className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs shadow-xl backdrop-blur-md
-          ${styles.cardBg} border ${styles.cardBorder}`}
+          className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs shadow-xl backdrop-blur-md ${styles.cardBg} border ${styles.cardBorder}`}
         >
           <span className={styles.textMain}>↗</span>
           <span className={`${styles.textMain} font-medium`}>{text}</span>
@@ -147,14 +150,11 @@ function PhotoLocation({ styles, text = "Niagara Falls, CA" }) {
 
         {/* Tooltip */}
         <div
-          className={`pointer-events-none absolute left-0 -top-11 opacity-0 group-hover/location:opacity-100
-          transition duration-150 rounded-xl px-3 py-2 text-xs shadow-xl backdrop-blur-md
-          ${styles.cardBg} border ${styles.cardBorder} ${styles.textMain}`}
+          className={`pointer-events-none absolute left-0 -top-11 opacity-0 group-hover/location:opacity-100 transition duration-150 rounded-xl px-3 py-2 text-xs shadow-xl backdrop-blur-md ${styles.cardBg} border ${styles.cardBorder} ${styles.textMain}`}
         >
           {text}
           <div
-            className={`absolute left-4 -bottom-1 h-2 w-2 rotate-45
-            ${styles.cardBg} border-b ${styles.cardBorder} border-r ${styles.cardBorder}`}
+            className={`absolute left-4 -bottom-1 h-2 w-2 rotate-45 ${styles.cardBg} border-b ${styles.cardBorder} border-r ${styles.cardBorder}`}
           />
         </div>
       </div>
@@ -170,30 +170,29 @@ function OverviewTab({ styles, onOpenWindow }) {
         {/* LEFT — BIG PHOTO CARD */}
         <div className={`rounded-2xl ${styles.cardBg} border ${styles.cardBorder} p-5`}>
           <div
-  className={`group relative aspect-[3/4] rounded-2xl overflow-hidden border ${styles.cardBorder} ${styles.cardBgSoft}`}
->
-
-
-            <img
-              src={overviewPhoto}
-              alt="Marta portrait"
-              className="w-full h-full object-cover"
-            />
+            className={`group relative aspect-[3/4] rounded-2xl overflow-hidden border ${styles.cardBorder} ${styles.cardBgSoft}`}
+          >
+            <img src={overviewPhoto} alt="Marta portrait" className="w-full h-full object-cover" />
             <PhotoLocation styles={styles} text="Niagara Falls, CA" />
-
           </div>
 
           <div className="mt-4">
-            <div className={`${styles.textStrong} text-xl font-semibold leading-tight`}>
-              Marta Lendínez
-            </div>
+            <div className={`${styles.textStrong} text-xl font-semibold leading-tight`}>Marta Lendínez</div>
             <div className={`${styles.textSub} text-sm mt-1`}>
               UX Engineer <span className={styles.textSub2}>•</span> UI Designer
             </div>
 
             <div className={`${styles.textSub} mt-3 text-sm leading-relaxed`}>
-              Master’s in Interactive Media Technology @{" "}
-              <span className={`${styles.textStrong}`}>KTH</span>
+              Master’s in Interactive Media Technology{" "}
+              <span className={styles.accentText}>@</span>{" "}
+              <a
+                href="https://www.kth.se/en/studies/master/interactive-media-technology"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.accentText} hover:underline`}
+              >
+                KTH
+              </a>
             </div>
           </div>
         </div>
@@ -201,18 +200,8 @@ function OverviewTab({ styles, onOpenWindow }) {
         {/* RIGHT — INFO BLOCKS */}
         <div className="space-y-4">
           <InfoBlock styles={styles} icon="📍" title="Location" value="Stockholm, Sweden" />
-          <InfoBlock
-            styles={styles}
-            icon="🎓"
-            title="Education"
-            value="Master’s in Interactive Media Technology • KTH"
-          />
-          <InfoBlock
-            styles={styles}
-            icon="💼"
-            title="Experience"
-            value="UX/UI Designer • Frontend Developer • 1+ year"
-          />
+          <InfoBlock styles={styles} icon="🎓" title="Education" value="Master’s in Interactive Media Technology • KTH" />
+          <InfoBlock styles={styles} icon="💼" title="Experience" value="UX/UI Designer • Frontend Developer • 1+ year" />
           <InfoBlock
             styles={styles}
             icon="🌍"
@@ -231,26 +220,20 @@ function OverviewTab({ styles, onOpenWindow }) {
       {/* Actions */}
       <div className="flex gap-3">
         <ActionButton
-  styles={styles}
-  icon="⬇️"
-  label="Download Resume"
-  onClick={() => {
-    const a = document.createElement("a");
-    a.href = "/resume.pdf";
-    a.download = "Marta_Lendinez_Resume.pdf";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }}
-/>
+          styles={styles}
+          icon="⬇️"
+          label="Download Resume"
+          onClick={() => {
+            const a = document.createElement("a");
+            a.href = "/resume.pdf";
+            a.download = "Marta_Lendinez_Resume.pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }}
+        />
 
-        <ActionButton
-  styles={styles}
-  icon="🗂️"
-  label="View Projects"
-  onClick={() => onOpenWindow?.("projects")}
-/>
-
+        <ActionButton styles={styles} icon="🗂️" label="View Projects" onClick={() => onOpenWindow?.("projects")} />
       </div>
     </div>
   );
@@ -262,12 +245,13 @@ function ExperienceTab({ styles }) {
       year: "2026",
       title: (
         <>
-          Master's Interactive Media Technology @{" "}
+          Master’s Interactive Media Technology{" "}
+          <span className={styles.accentText}>@</span>{" "}
           <a
             href="https://www.kth.se/en/studies/master/interactive-media-technology"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${styles.textStrong} hover:underline`}
+            className={`${styles.accentText} hover:underline`}
           >
             KTH
           </a>
@@ -280,12 +264,13 @@ function ExperienceTab({ styles }) {
       year: "2024-25",
       title: (
         <>
-          Vice Project Manager @{" "}
+          Vice Project Manager{" "}
+          <span className={styles.accentText}>@</span>{" "}
           <a
             href="https://studieresan.se"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${styles.textStrong} hover:underline`}
+            className={`${styles.accentText} hover:underline`}
           >
             STUDS
           </a>
@@ -304,18 +289,19 @@ function ExperienceTab({ styles }) {
       year: "2024",
       title: (
         <>
-          Full Stack Intern @{" "}
+          Full Stack Intern{" "}
+          <span className={styles.accentText}>@</span>{" "}
           <a
             href="https://www.pridecom.es"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${styles.textStrong} hover:underline`}
+            className={`${styles.accentText} hover:underline`}
           >
             PrideCom
           </a>
         </>
       ),
-      right: "Feb - June 2024",
+      right: "Feb - Jun 2024",
       bullets: [
         "Led end-to-end design and development of an employer-branding platform for SMBs",
         "Conducted user interviews and usability tests to validate needs and refine flows",
@@ -329,18 +315,19 @@ function ExperienceTab({ styles }) {
       year: "2023",
       title: (
         <>
-          Programmer Intern @{" "}
+          Programmer Intern{" "}
+          <span className={styles.accentText}>@</span>{" "}
           <a
             href="https://www.extra-nice.net"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${styles.textStrong} hover:underline`}
+            className={`${styles.accentText} hover:underline`}
           >
             Extra Nice
           </a>
         </>
       ),
-      right: "Feb - June 2023",
+      right: "Feb - Jun 2023",
       bullets: [
         "Developed gameplay prototypes in Unity to explore and validate new mechanics",
         "Designed and implemented interactive features using C# and Unity’s component system",
@@ -352,18 +339,19 @@ function ExperienceTab({ styles }) {
       year: "2020-24",
       title: (
         <>
-          BEng Communication & Multimedia Design @{" "}
+          BEng Communication & Multimedia Design{" "}
+          <span className={styles.accentText}>@</span>{" "}
           <a
             href="https://www.hanze.nl/en"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${styles.textStrong} hover:underline`}
+            className={`${styles.accentText} hover:underline`}
           >
             Hanze
           </a>
         </>
       ),
-      right: "Sep 2020 - June 2024 →",
+      right: "Sep 2020 - Jun 2024 →",
       bullets: [
         "Programming across multiple languages and frameworks",
         "UX/UI design grounded in human-centered principles",
@@ -400,36 +388,36 @@ function ExperienceTab({ styles }) {
   );
 }
 
-function SkillsTab({ styles }) {
+function SkillsTab({ styles, isMac }) {
   return (
     <div className="space-y-5">
       <SkillGroup styles={styles} title="DESIGN TOOLS" icon="🎨">
-        <SkillRow styles={styles} name="Figma" level="Advanced" />
-        <SkillRow styles={styles} name="Adobe XD" level="Advanced" />
-        <SkillRow styles={styles} name="Photoshop" level="Proficient" />
-        <SkillRow styles={styles} name="Illustrator" level="Intermediate" />
-        <SkillRow styles={styles} name="Framer" level="Basic" />
+        <SkillRow styles={styles} isMac={isMac} name="Figma" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="Adobe XD" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="Photoshop" level="Proficient" />
+        <SkillRow styles={styles} isMac={isMac} name="Illustrator" level="Intermediate" />
+        <SkillRow styles={styles} isMac={isMac} name="Framer" level="Basic" />
       </SkillGroup>
 
       <SkillGroup styles={styles} title="DEVELOPMENT" icon="💻">
-        <SkillRow styles={styles} name="React" level="Advanced" />
-        <SkillRow styles={styles} name="TypeScript" level="Advanced" />
-        <SkillRow styles={styles} name="HTML/CSS" level="Expert" />
-        <SkillRow styles={styles} name="JavaScript" level="Advanced" />
-        <SkillRow styles={styles} name="Tailwind CSS" level="Proficient" />
-        <SkillRow styles={styles} name="Python" level="Advanced" />
-        <SkillRow styles={styles} name="SQL" level="Proficient" />
-        <SkillRow styles={styles} name="Docker" level="Basic" />
-        <SkillRow styles={styles} name="Git" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="React" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="TypeScript" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="HTML/CSS" level="Expert" />
+        <SkillRow styles={styles} isMac={isMac} name="JavaScript" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="Tailwind CSS" level="Proficient" />
+        <SkillRow styles={styles} isMac={isMac} name="Python" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="SQL" level="Proficient" />
+        <SkillRow styles={styles} isMac={isMac} name="Docker" level="Basic" />
+        <SkillRow styles={styles} isMac={isMac} name="Git" level="Advanced" />
       </SkillGroup>
 
       <SkillGroup styles={styles} title="UX RESEARCH & METHODS" icon="🔬">
-        <SkillRow styles={styles} name="User Interviews" level="Expert" />
-        <SkillRow styles={styles} name="Usability Testing" level="Expert" />
-        <SkillRow styles={styles} name="Survey Design" level="Advanced" />
-        <SkillRow styles={styles} name="Persona Creation" level="Advanced" />
-        <SkillRow styles={styles} name="Journey Mapping" level="Advanced" />
-        <SkillRow styles={styles} name="A/B Testing" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="User Interviews" level="Expert" />
+        <SkillRow styles={styles} isMac={isMac} name="Usability Testing" level="Expert" />
+        <SkillRow styles={styles} isMac={isMac} name="Survey Design" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="Persona Creation" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="Journey Mapping" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="A/B Testing" level="Advanced" />
       </SkillGroup>
     </div>
   );
@@ -518,21 +506,15 @@ function InfoBlock({ styles, icon, title, value }) {
 function ActionButton({ styles, icon, label, onClick, href, download }) {
   const className = `rounded-xl px-4 py-3 text-sm transition flex items-center gap-2 ${styles.btnPrimary}`;
 
-  // ✅ if href exists, render an <a> so the browser can download
   if (href) {
     return (
-      <a
-        href={href}
-        download={download ? "" : undefined}
-        className={className}
-      >
+      <a href={href} download={download ? "" : undefined} className={className}>
         <span>{icon}</span>
         <span>{label}</span>
       </a>
     );
   }
 
-  // otherwise keep normal button behavior
   return (
     <button type="button" onClick={onClick} className={className}>
       <span>{icon}</span>
@@ -540,7 +522,6 @@ function ActionButton({ styles, icon, label, onClick, href, download }) {
     </button>
   );
 }
-
 
 function SkillGroup({ styles, title, icon, children }) {
   return (
@@ -554,18 +535,21 @@ function SkillGroup({ styles, title, icon, children }) {
   );
 }
 
-function SkillRow({ styles, name, level }) {
+function SkillRow({ styles, name, level, isMac }) {
   return (
     <div className="flex items-center gap-4">
       <div className={`w-40 ${styles.textMain} text-sm`}>{name}</div>
 
       <div className="flex-1">
-        <div className={`h-3 rounded-full overflow-hidden border ${styles.cardBorder} ${styles.cardBgSoft}`}>
-          <div
-            className={styles.textSub2}
-            style={{ width: levelToPct(level), height: "100%", background: "currentColor" }}
-          />
-        </div>
+        <div className="h-1.5 rounded-full bg-black/10">
+  <div
+    className={`h-full rounded-full ${
+      isMac ? "bg-emerald-500" : "bg-white/70"
+    }`}
+    style={{ width: levelToPct(level) }}
+  />
+</div>
+
       </div>
 
       <div className={`w-28 ${styles.textSub} text-sm`}>{level}</div>
@@ -586,11 +570,7 @@ function levelToPct(level) {
 }
 
 function QuickBtn({ styles, label }) {
-  return (
-    <button type="button" className={`rounded-xl px-3 py-2 text-sm transition ${styles.btn}`}>
-      {label}
-    </button>
-  );
+  return <button type="button" className={`rounded-xl px-3 py-2 text-sm transition ${styles.btn}`}>{label}</button>;
 }
 
 function Input({ styles, label, placeholder }) {
@@ -599,7 +579,7 @@ function Input({ styles, label, placeholder }) {
       <div className={`${styles.textSub} text-xs mb-1`}>{label}</div>
       <input
         placeholder={placeholder}
-        className={`w-full rounded-xl px-3 py-2 text-sm outline-none border ${styles.cardBorder} ${styles.cardBgSoft} ${styles.textMain}`}
+        className={`w-full rounded-xl px-3 py-2 text-sm outline-none border ${styles.cardBorder} ${styles.cardBgSoft} ${styles.textMain} ${styles.inputFocus}`}
       />
     </label>
   );
@@ -612,7 +592,7 @@ function Textarea({ styles, label, placeholder }) {
       <textarea
         placeholder={placeholder}
         rows={4}
-        className={`w-full rounded-xl px-3 py-2 text-sm outline-none resize-none border ${styles.cardBorder} ${styles.cardBgSoft} ${styles.textMain}`}
+        className={`w-full rounded-xl px-3 py-2 text-sm outline-none resize-none border ${styles.cardBorder} ${styles.cardBgSoft} ${styles.textMain} ${styles.inputFocus}`}
       />
     </label>
   );
