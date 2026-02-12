@@ -134,8 +134,13 @@ export default function MusicWindow({ uiTheme = "glass" }) {
       cardBorder: isMac ? "border-black/10" : "border-white/10",
       divider: isMac ? "bg-black/10" : "bg-white/10",
 
-      hover: isMac ? "hover:bg-emerald-50 hover:border-emerald-200" : "hover:bg-white/10",
-selected: isMac ? "bg-emerald-50 border-emerald-200" : "bg-white/15",
+     hover: isMac
+  ? "hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)]"
+  : "hover:bg-white/10",
+selected: isMac
+  ? "bg-[hsl(var(--accent)/0.12)] border-[hsl(var(--accent)/0.35)]"
+  : "bg-white/15",
+
 
     };
   }, [isMac]);
