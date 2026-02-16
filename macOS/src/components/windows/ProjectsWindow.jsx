@@ -68,7 +68,8 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
           "Created the UX and UI structure to make daily planning feel playful, motivating, and easy to maintain",
           "Focused on blending game-like feedback with practical productivity workflows",
         ],
-        links: [{ label: "Case Study", href: "#" }],
+        // ✅ special action for this one
+        links: [{ label: "Case Study", action: "openStardewNotionCaseStudy" }],
       },
     ],
     []
@@ -90,26 +91,27 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
       ? "bg-white/80 border border-black/10"
       : "bg-white/10 border border-white/15 backdrop-blur-xl";
 
-const chipClass =
-  uiTheme === "macos"
-    ? "bg-white text-black/80 border border-black/10 hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)] transition"
-    : "bg-white/10 text-white/90 border border-white/15";
-
-
+  const chipClass =
+    uiTheme === "macos"
+      ? "bg-white text-black/80 border border-black/10 hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)] transition"
+      : "bg-white/10 text-white/90 border border-white/15";
 
   const textMain = uiTheme === "macos" ? "text-black/90" : "text-white/95";
   const textSub = uiTheme === "macos" ? "text-black/60" : "text-white/70";
 
- const linkBtnClass =
-  uiTheme === "macos"
-    ? "bg-white text-black/80 border border-black/10 hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)] hover:text-[hsl(var(--accent))] transition"
-    : "bg-white/10 hover:bg-white/15 text-white/90 border border-white/15";
-
-
+  const linkBtnClass =
+    uiTheme === "macos"
+      ? "bg-white text-black/80 border border-black/10 hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)] hover:text-[hsl(var(--accent))] transition"
+      : "bg-white/10 hover:bg-white/15 text-white/90 border border-white/15";
 
   function handleLinkClick(link) {
     if (link.action === "openEmployerBrandingCaseStudy") {
       onOpenWindow?.("employerBrandingCaseStudy");
+      return;
+    }
+
+    if (link.action === "openStardewNotionCaseStudy") {
+      onOpenWindow?.("stardewNotionCaseStudy");
       return;
     }
 
@@ -141,12 +143,11 @@ const chipClass =
                   key={tag}
                   onClick={() => setActiveTag(tag)}
                   className={`px-3 py-1 rounded-full text-sm transition-all ${
-                   active
-  ? uiTheme === "macos"
-    ? "bg-[hsl(var(--accent)/0.12)] text-[hsl(var(--accent))] border border-[hsl(var(--accent)/0.35)]"
-    : "bg-white/20 text-white"
-  : chipClass
-
+                    active
+                      ? uiTheme === "macos"
+                        ? "bg-[hsl(var(--accent)/0.12)] text-[hsl(var(--accent))] border border-[hsl(var(--accent)/0.35)]"
+                        : "bg-white/20 text-white"
+                      : chipClass
                   }`}
                 >
                   {tag}

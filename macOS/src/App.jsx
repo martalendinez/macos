@@ -43,6 +43,7 @@ import MapWindow from "./components/windows/MapWindow";
 import TerminalWindow from "./components/windows/TerminalWindow";
 
 import EmployerBrandingCaseStudyWindow from "./components/windows/EmployerBrandingCaseStudyWIndow";
+import StardewNotionCaseStudyWindow from "./components/windows/StardewNotionCaseStudyWindow";
 
 export default function App() {
   const [mouseX, setMouseX] = useState(null);
@@ -202,6 +203,15 @@ export default function App() {
       employerBrandingCaseStudy: {
         title: "Employer Branding — Case Study",
         Component: EmployerBrandingCaseStudyWindow,
+        width: 1180,
+        height: 760,
+        initialPos: { x: 140, y: 80 },
+      },
+
+      // ✅ NEW: Stardew Notion case study window
+      stardewNotionCaseStudy: {
+        title: "Gamified Notion Template — Case Study",
+        Component: StardewNotionCaseStudyWindow,
         width: 1180,
         height: 760,
         initialPos: { x: 140, y: 80 },
