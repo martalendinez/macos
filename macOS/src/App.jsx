@@ -45,6 +45,9 @@ import TerminalWindow from "./components/windows/TerminalWindow";
 import EmployerBrandingCaseStudyWindow from "./components/windows/EmployerBrandingCaseStudyWIndow";
 import StardewNotionCaseStudyWindow from "./components/windows/StardewNotionCaseStudyWindow";
 
+// ✅ NEW: Secret Projects window (for "hacker" command)
+import SecretProjectsWindow from "./components/windows/SecretProjectsWindow";
+
 export default function App() {
   const [mouseX, setMouseX] = useState(null);
 
@@ -165,6 +168,16 @@ export default function App() {
         height: 600,
         initialPos: { x: 200, y: 110 },
       },
+
+      // ✅ NEW: Secret Projects (opened by typing "hacker" in terminal)
+      secretProjects: {
+        title: "Secret Projects",
+        Component: SecretProjectsWindow,
+        width: 920,
+        height: 600,
+        initialPos: { x: 210, y: 120 },
+      },
+
       videos: {
         title: "Videos",
         Component: VideosWindow,

@@ -18,6 +18,7 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       whoami: "About Marta",
       skills: "Show skill summary",
       projects: "List projects",
+      hacker: "Enter hacker mode (opens secret projects)", // ✅ NEW
       map: "Open map window",
       music: "Open music window",
       resume: "Download resume",
@@ -45,7 +46,6 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
     return "●".repeat(filled) + "○".repeat(total - filled);
   }
 
-  // "Rich line" = string OR {type:"cmd", cmd, desc} OR {type:"accent", text} etc.
   function buildWelcomeLines() {
     const out = [
       { type: "dim", text: "Last login: Thu Jan 22 19:30:45" },
@@ -216,15 +216,15 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
         "  videos/",
         "  ai-assistant/",
         "  extras-and-fun/",
-        "",
+        "  ",
         { type: "title", text: "System:" },
         "  notification-centre/",
         "  settings/",
         "  dark-mode/",
-        "",
+        "  ",
         { type: "title", text: "Files:" },
         "  resume.pdf",
-        "",
+        "  ",
       ]);
       return;
     }
@@ -314,6 +314,21 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       return;
     }
 
+    // ✅ NEW: hacker mode → open secret projects window
+    if (lower === "hacker") {
+      // a little “vibe” before opening
+      appendLines([
+        { type: "accent", text: ">>> initiating hacker mode…" },
+        { type: "dim", text: "decrypting portfolio vault · · ·" },
+        { type: "dim", text: "auth ok ✓  channels secure ✓  access granted ✓" },
+        "",
+        { type: "dim", text: "(opening secret projects...)" },
+        "",
+      ]);
+      onOpenWindow?.("secretProjects");
+      return;
+    }
+
     const all = Object.keys(COMMANDS);
     const suggestions = all
       .filter((c) => c.startsWith(lower) || c.includes(lower) || lower.includes(c))
@@ -329,7 +344,6 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
   }
 
   function renderLine(line, i) {
-    // plain string
     if (typeof line === "string") {
       return (
         <div key={i} className={line === "" ? "select-none" : ""}>
@@ -338,7 +352,6 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       );
     }
 
-    // typed line
     const t = line?.type;
 
     if (t === "prompt") {
@@ -364,13 +377,7 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       );
     }
 
-    if (t === "title") {
-      return (
-        <div key={i} className="font-semibold">
-          {line.text}
-        </div>
-      );
-    }
+    if (t === "title") return <div key={i} className="font-semibold">{line.text}</div>;
 
     if (t === "accent") {
       return (
@@ -380,13 +387,7 @@ export default function TerminalWindow({ uiTheme = "glass", onOpenWindow }) {
       );
     }
 
-    if (t === "dim") {
-      return (
-        <div key={i} className={styles.textDim}>
-          {line.text}
-        </div>
-      );
-    }
+    if (t === "dim") return <div key={i} className={styles.textDim}>{line.text}</div>;
 
     if (t === "warn") {
       return (
