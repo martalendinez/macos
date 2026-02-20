@@ -7,7 +7,7 @@ import VideosWindow from "../components/windows/VideosWindow";
 import FunWindow from "../components/windows/FunWindow";
 import MusicWindow from "../components/windows/MusicWindow";
 import MapWindow from "../components/windows/MapWindow";
-import TerminalWindow from "../components/windows/TerminalWindow";
+import TerminalWindow from "../components/windows/terminal/TerminalWindow";
 
 import EmployerBrandingCaseStudyWindow from "../components/windows/EmployerBrandingCaseStudyWIndow";
 import StardewNotionCaseStudyWindow from "../components/windows/StardewNotionCaseStudyWindow";
