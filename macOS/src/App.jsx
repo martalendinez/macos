@@ -25,7 +25,7 @@ import videosIconMac from "./imgs/videosMac.png";
 import timerIconMac from "./imgs/timerMac.png";
 import docIconMac from "./imgs/docMac.png";
 
-import bgLight from "./imgs/Background.jpg";
+import bgLight from "./imgs/wallpapers/glass/glass2.jpeg";
 import bgDark from "./imgs/Background-dark.png";
 
 import useWindowManager from "./components/windows/useWindowManager";
