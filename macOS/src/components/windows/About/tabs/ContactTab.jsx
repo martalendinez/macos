@@ -1,5 +1,5 @@
 // src/components/windows/About/tabs/ContactTab.jsx
-import contactAvatar from "../../../../imgs/Avatar1.jpg";
+import contactAvatar from "../../../../imgs/avatar/Avatar1.jpg";
 
 import LinkRow from "../components/LinkRow";
 import { Input, Textarea, QuickBtn } from "../components/FormFields";

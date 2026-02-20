@@ -1,32 +1,32 @@
 ﻿// src/App.jsx
 import { useEffect, useMemo, useState } from "react";
 
-import moonIcon from "./imgs/moon.png";
-import gearIcon from "./imgs/gear.png";
-import notificationIcon from "./imgs/notification.png";
+import moonIcon from "./imgs/icons/moon.png";
+import gearIcon from "./imgs/icons/gear.png";
+import notificationIcon from "./imgs/icons/notification.png";
 
 // glass icon set
-import aboutIconGlass from "./imgs/me.png";
-import aiIconGlass from "./imgs/bot.png";
-import funIconGlass from "./imgs/games.png";
+import aboutIconGlass from "./imgs/icons/glass/me.png";
+import aiIconGlass from "./imgs/icons/glass/bot.png";
+import funIconGlass from "./imgs/icons/glass/games.png";
 
-import projectsIconGlass from "./imgs/FolderGlass.png";
-import videosIconGlass from "./imgs/MediaGlass.png";
-import timerIconGlass from "./imgs/ProfileGlass.png";
-import docIconGlass from "./imgs/MailGlass.png";
+import projectsIconGlass from "./imgs/icons/glass/FolderGlass.png";
+import videosIconGlass from "./imgs/icons/glass/MediaGlass.png";
+import timerIconGlass from "./imgs/icons/glass/ProfileGlass.png";
+import docIconGlass from "./imgs/icons/glass/MailGlass.png";
 
 // macos icon set
-import aboutIconMac from "./imgs/aboutMac.png";
-import aiIconMac from "./imgs/aiMac.png";
-import funIconMac from "./imgs/gamesMac.png";
+import aboutIconMac from "./imgs/icons/mac/aboutMac.png";
+import aiIconMac from "./imgs/icons/mac/aiMac.png";
+import funIconMac from "./imgs/icons/mac/gamesMac.png";
 
-import projectsIconMac from "./imgs/foldersMac.png";
-import videosIconMac from "./imgs/videosMac.png";
-import timerIconMac from "./imgs/timerMac.png";
-import docIconMac from "./imgs/docMac.png";
+import projectsIconMac from "./imgs/icons/mac/foldersMac.png";
+import videosIconMac from "./imgs/icons/mac/videosMac.png";
+import timerIconMac from "./imgs/icons/mac/timerMac.png";
+import docIconMac from "./imgs/icons/mac/docMac.png";
 
 import bgLight from "./imgs/wallpapers/glass/glass2.jpeg";
-import bgDark from "./imgs/Background-dark.png";
+import bgDark from "./imgs/wallpapers/glass/glass1-dark.png";
 
 import useWindowManager from "./components/windows/useWindowManager";
 

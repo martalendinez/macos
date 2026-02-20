@@ -1,5 +1,5 @@
 // src/components/windows/About/tabs/OverviewTab.jsx
-import overviewPhoto from "../../../../imgs/profile.jpeg";
+import overviewPhoto from "../../../../imgs/avatar/profile.jpeg";
 
 import PhotoLocation from "../components/PhotoLocation";
 import InfoBlock from "../components/InfoBlock";

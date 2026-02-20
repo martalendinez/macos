@@ -1,5 +1,5 @@
 // src/components/windows/Settings/constants.js
-import mac1 from "../../../imgs/wallpapers/macos/mac1.jpg";
+import mac1 from "../../../imgs/wallpapers/macos/mac1.jpeg";
 import mac2 from "../../../imgs/wallpapers/macos/mac2.jpg";
 import mac3 from "../../../imgs/wallpapers/macos/mac3.jpg";
 
