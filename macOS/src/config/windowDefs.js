@@ -4,9 +4,9 @@ import AboutWindow from "../components/windows/About/AboutWindow";
 import ProjectsWindow from "../components/windows/Projects/ProjectsWindow";
 import VideosWindow from "../components/windows/VideosWindow";
 
-import FunWindow from "../components/windows/FunWindow";
-import MusicWindow from "../components/windows/MusicWindow";
-import MapWindow from "../components/windows/MapWindow";
+import FunWindow from "../components/windows/Fun/FunWindow";
+import MusicWindow from "../components/windows/Music/MusicWindow";
+import MapWindow from "../components/windows/Map/MapWindow";
 import TerminalWindow from "../components/windows/terminal/TerminalWindow";
 
 import EmployerBrandingCaseStudyWindow from "../components/windows/Projects/EmployerBrandingCaseStudyWIndow";
