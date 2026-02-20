@@ -1,6 +1,6 @@
 // src/config/windowDefs.js
 import SettingsWindow from "../components/windows/SettingsWindow";
-import AboutWindow from "../components/windows/AboutWindow";
+import AboutWindow from "../components/windows/About/AboutWindow";
 import ProjectsWindow from "../components/windows/ProjectsWindow";
 import VideosWindow from "../components/windows/VideosWindow";
 
