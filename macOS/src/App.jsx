@@ -26,7 +26,7 @@ import timerIconMac from "./imgs/icons/mac/timerMac.png";
 import docIconMac from "./imgs/icons/mac/docMac.png";
 
 import bgLight from "./imgs/wallpapers/glass/glass2.jpeg";
-import bgDark from "./imgs/wallpapers/glass/glass1-dark.png";
+import bgDark from "./imgs/wallpapers/glass/glass2dark.jpeg";
 
 import useWindowManager from "./components/windows/useWindowManager";
 
@@ -50,20 +50,45 @@ import ResumeIcon from "./components/shell/ResumeIcon";
 import Dock from "./components/shell/Dock";
 import WindowsLayer from "./components/shell/WindowsLayer";
 
+/**
+ * If wallpaperUrl is one of your known wallpapers, swap to its matching light/dark pair.
+ * If it’s a custom upload (or unknown), keep it unchanged.
+ */
+const WALLPAPER_PAIRS = [{ light: bgLight, dark: bgDark }];
+
+function swapToThemeWallpaper(current, nextTheme) {
+  if (!current) return null; // null => use default activeWallpaper based on theme
+  for (const pair of WALLPAPER_PAIRS) {
+    if (current === pair.light || current === pair.dark) {
+      return nextTheme === "dark" ? pair.dark : pair.light;
+    }
+  }
+  return current;
+}
+
+function getHourInTimeZone(timeZone) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    hour: "2-digit",
+    hour12: false,
+  }).formatToParts(new Date());
+  const hourStr = parts.find((p) => p.type === "hour")?.value ?? "12";
+  return Number(hourStr);
+}
+
 export default function App() {
   // Accent
   const [accent, setAccent] = useState("emerald");
   useAccentVar(accent);
 
-  // wallpaper theme (background)
-  const [theme, setTheme] = useState("light");
-  const [wallpaperUrl, setWallpaperUrl] = useState(null);
+  // ✅ default: glass icons + macos windows + glass2 wallpaper (bgLight)
+  const [theme, setTheme] = useState("light"); // controls light/dark mode
+  const [wallpaperUrl, setWallpaperUrl] = useState(null); // null => use bgLight/bgDark defaults
 
-  // ✅ uiTheme now ONLY controls WINDOW STYLE (white mac windows vs glass windows)
-  // If you want default mac windows, set this to "macos"
+  // ✅ uiTheme = WINDOW STYLE only (macos windows by default)
   const [uiTheme, setUiTheme] = useState("macos");
 
-  // ✅ NEW: icon pack theme (glass icons vs mac icons)
+  // ✅ iconTheme = ICON PACK only (glass icons by default)
   const [iconTheme, setIconTheme] = useState("glass");
 
   // Font scale
@@ -76,14 +101,15 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
-  // active wallpaper
+  // active wallpaper (respects theme if wallpaperUrl is null)
   const activeWallpaper = wallpaperUrl ?? (theme === "light" ? bgLight : bgDark);
 
   // ✅ adaptive glass contrast (based on WINDOW STYLE)
   const { glassContrast, baseTextClass } = useGlassContrast({ uiTheme, activeWallpaper });
 
   // ✅ clock
-  const currentTime = useClock({ timeZone: "Europe/Stockholm", intervalMs: 30_000 });
+  const timeZone = "Europe/Stockholm";
+  const currentTime = useClock({ timeZone, intervalMs: 30_000 });
 
   // ✅ window manager
   const {
@@ -124,7 +150,48 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ✅ Dock icons by ICON THEME (not uiTheme anymore)
+  // -----------------------------
+  // 🌙 Theme toggle (moon icon)
+  // -----------------------------
+  function setThemeAndSyncWallpaper(nextTheme) {
+    setTheme(nextTheme);
+    setWallpaperUrl((curr) => swapToThemeWallpaper(curr, nextTheme));
+  }
+
+  function toggleTheme() {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      setWallpaperUrl((curr) => swapToThemeWallpaper(curr, next));
+      return next;
+    });
+  }
+
+  // -----------------------------
+  // 🌅 Auto dark mode by hour
+  // -----------------------------
+  useEffect(() => {
+    const AUTO_DARK_START_HOUR = 18; // 18:00 -> dark
+    const AUTO_LIGHT_START_HOUR = 6; // 06:00 -> light
+
+    const applyAutoTheme = () => {
+      const h = getHourInTimeZone(timeZone);
+      const shouldBeDark = h >= AUTO_DARK_START_HOUR || h < AUTO_LIGHT_START_HOUR;
+      const next = shouldBeDark ? "dark" : "light";
+
+      setTheme((prev) => {
+        if (prev === next) return prev;
+        setWallpaperUrl((curr) => swapToThemeWallpaper(curr, next));
+        return next;
+      });
+    };
+
+    applyAutoTheme();
+    const id = window.setInterval(applyAutoTheme, 5 * 60 * 1000);
+    return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ✅ Dock icons by ICON THEME
   const icons = useMemo(() => {
     if (iconTheme === "macos") {
       return {
@@ -173,7 +240,7 @@ export default function App() {
     [desktopIcons]
   );
 
-  // ✅ One prop-bundle for all windows (same features, less prop churn)
+  // ✅ One prop-bundle for all windows
   const appApi = useMemo(
     () => ({
       // window style
@@ -184,6 +251,10 @@ export default function App() {
       // icon style
       iconTheme,
       setIconTheme,
+
+      // light/dark wallpaper mode
+      theme,
+      setTheme: setThemeAndSyncWallpaper,
 
       wallpaperUrl,
       setWallpaperUrl,
@@ -202,6 +273,7 @@ export default function App() {
       uiTheme,
       glassContrast,
       iconTheme,
+      theme,
       wallpaperUrl,
       fontScale,
       accent,
@@ -239,7 +311,8 @@ export default function App() {
       <TopBar
         loaded={loaded}
         theme={theme}
-        setTheme={setTheme}
+        setTheme={setThemeAndSyncWallpaper}
+        onToggleTheme={toggleTheme}
         onOpenSettings={() => openWindow("settings")}
         notifOpen={notif.notifOpen}
         setNotifOpen={notif.setNotifOpen}

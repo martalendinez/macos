@@ -1,66 +1,95 @@
 // src/components/shell/TopBar.jsx
-import { motion } from "framer-motion";
+import React from "react";
 
 export default function TopBar({
   loaded,
   theme,
   setTheme,
+  onToggleTheme,
   onOpenSettings,
   notifOpen,
   setNotifOpen,
-  unreadCount = 0,
+  unreadCount,
   currentTime,
   moonIcon,
   gearIcon,
   notificationIcon,
 }) {
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 z-50 h-10 bg-white/10 backdrop-blur-md flex items-center justify-end px-6 text-sm text-white shadow-sm"
-      initial={{ opacity: 0, y: -12 }}
-      animate={loaded ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: 0.15, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <div className="flex items-center gap-3">
-        {/* Theme toggle */}
-        <div
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 cursor-pointer"
-          title="Toggle wallpaper theme"
-        >
-          <img src={moonIcon} alt="Toggle wallpaper" className="w-4 h-4" />
-        </div>
+  function fallbackToggle() {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme?.(next);
+  }
 
-        {/* Settings */}
-        <div
-          onClick={onOpenSettings}
-          className="w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 cursor-pointer"
-          title="Settings"
+  const handleToggleTheme = () => {
+    if (onToggleTheme) onToggleTheme();
+    else fallbackToggle();
+  };
+
+  return (
+    <div
+      className={[
+        "fixed top-0 left-0 right-0 z-[9999]",
+        "h-10 px-4 flex items-center",
+        "backdrop-blur-xl border-b",
+        theme === "dark"
+          ? "bg-black/25 border-white/10"
+          : "bg-white/20 border-black/10",
+        loaded ? "opacity-100" : "opacity-0",
+        "transition-opacity duration-300",
+      ].join(" ")}
+    >
+      {/* LEFT SIDE (empty space) */}
+      <div className="flex-1" />
+
+      {/* RIGHT SIDE */}
+      <div className="flex items-center gap-3">
+        {/* Moon */}
+        <button
+          onClick={handleToggleTheme}
+          className={[
+            "h-8 w-8 rounded-xl flex items-center justify-center transition",
+            theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/5",
+          ].join(" ")}
+          aria-label="Toggle dark mode"
         >
-          <img src={gearIcon} alt="Settings" className="w-4 h-4" />
-        </div>
+          <img src={moonIcon} alt="" className="h-4 w-4 opacity-90" />
+        </button>
 
         {/* Notifications */}
-        <div
-          onClick={() => setNotifOpen((v) => !v)}
-          className="relative w-7 h-7 flex items-center justify-center rounded-[8px] transition-all duration-150 hover:bg-white/20 hover:scale-105 cursor-pointer"
-          title="Notifications"
+        <button
+          onClick={() => setNotifOpen?.(!notifOpen)}
+          className={[
+            "relative h-8 w-8 rounded-xl flex items-center justify-center transition",
+            theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/5",
+          ].join(" ")}
+          aria-label="Notifications"
         >
-          <img src={notificationIcon} alt="Notifications" className="w-4 h-4" />
+          <img src={notificationIcon} alt="" className="h-4 w-4 opacity-90" />
 
-          {!!unreadCount && (
-            <div
-              className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 rounded-full text-[10px] flex items-center justify-center"
-              style={{ backgroundColor: "hsl(var(--accent))", color: "white" }}
-            >
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </div>
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full text-[10px] flex items-center justify-center bg-red-500 text-white">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
           )}
-        </div>
+        </button>
 
-        {/* Clock */}
-        <span>{currentTime}</span>
+        {/* Settings */}
+        <button
+          onClick={onOpenSettings}
+          className={[
+            "h-8 w-8 rounded-xl flex items-center justify-center transition",
+            theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/5",
+          ].join(" ")}
+          aria-label="Open settings"
+        >
+          <img src={gearIcon} alt="" className="h-4 w-4 opacity-90" />
+        </button>
+
+        {/* Clock (LAST — right next to gear) */}
+        <div className="text-white/90 text-sm tabular-nums select-none">
+          {currentTime}
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

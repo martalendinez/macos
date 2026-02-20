@@ -1,48 +1,91 @@
 // src/components/windows/Settings/components/WallpaperSection.jsx
-import WallpaperRow from "./WallpaperRow";
+import React from "react";
+
+function isPairSelected(pair, isSelected) {
+  return Boolean(isSelected?.(pair.light) || isSelected?.(pair.dark));
+}
+
+function pickForTheme(pair, theme) {
+  return theme === "dark" ? pair.dark : pair.light;
+}
+
+function WallpaperGrid({ title, wallpapers, theme, isSelected, onPick }) {
+  return (
+    <div className="space-y-3">
+      <div className="font-semibold text-sm">{title}</div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {wallpapers.map((pair, idx) => {
+          const selected = isPairSelected(pair, isSelected);
+          const previewSrc = pair.light;
+
+          return (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => onPick?.(pickForTheme(pair, theme))}
+              className={[
+                "rounded-2xl overflow-hidden border transition",
+                selected
+                  ? "ring-2 ring-emerald-400/70 border-emerald-400/40"
+                  : "border-black/10",
+                "bg-white",
+              ].join(" ")}
+              title="Set wallpaper"
+            >
+              <img
+                src={previewSrc}
+                alt=""
+                className="w-full h-[92px] object-cover"
+                draggable={false}
+              />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function WallpaperSection({
-  isMac,
   styles,
-  uiTheme,
+  theme = "light",
   onUpload,
   onReset,
-  macWallpapers,
-  glassWallpapers,
+  macWallpapers = [],
+  glassWallpapers = [],
   isSelected,
   onPick,
 }) {
-  return (
-    <div>
-      <div className="flex items-center gap-2 mb-4">
-        <label className={`${styles.btnBase} ${styles.btnUnselected} cursor-pointer`}>
-          Upload image
-          <input type="file" accept="image/*" className="hidden" onChange={onUpload} />
-        </label>
+  const btnBase =
+    styles?.btnBase ??
+    "px-3 py-2 rounded-xl border border-black/10 bg-white/70 hover:bg-white transition text-sm";
 
-        <button type="button" onClick={onReset} className={`${styles.btnBase} ${styles.btnUnselected}`}>
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <button className={btnBase} onClick={onUpload} type="button">
+          Upload image
+        </button>
+        <button className={btnBase} onClick={onReset} type="button">
           Reset
         </button>
       </div>
 
-      <WallpaperRow
+      <WallpaperGrid
         title="macOS wallpapers"
-        textClass={styles.textMain}
         wallpapers={macWallpapers}
-        onPick={onPick}
+        theme={theme}
         isSelected={isSelected}
-        uiTheme={uiTheme}
+        onPick={onPick}
       />
 
-      <div className="mt-6" />
-
-      <WallpaperRow
+      <WallpaperGrid
         title="Glass wallpapers"
-        textClass={styles.textMain}
         wallpapers={glassWallpapers}
-        onPick={onPick}
+        theme={theme}
         isSelected={isSelected}
-        uiTheme={uiTheme}
+        onPick={onPick}
       />
     </div>
   );

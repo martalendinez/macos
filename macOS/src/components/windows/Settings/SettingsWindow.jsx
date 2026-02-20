@@ -13,18 +13,28 @@ import FontSizeSection from "./components/FontSizeSection";
 import QuickActionsSection from "./components/QuickActionsSection";
 
 export default function SettingsWindow({
+  // window look (white mac windows vs glass blur)
   uiTheme,
   setUiTheme,
+
+  // icon pack (glass icons vs mac icons)
   iconTheme,
   setIconTheme,
+
+  // light/dark mode (for wallpaper pairing)
+  theme = "light",
+
+  // wallpaper selection
   wallpaperUrl,
   setWallpaperUrl,
+
+  // font & accent
   fontScale,
   setFontScale,
   accent,
   setAccent,
 }) {
-  const isMac = uiTheme === "macos"; // window style controls settings styling
+  const isMac = uiTheme === "macos";
   const styles = useSettingsStyles(isMac);
 
   const [activeSection, setActiveSection] = useState("theme");
@@ -86,13 +96,19 @@ export default function SettingsWindow({
             <div className={styles.textSub}>Window style</div>
             <div className="flex gap-2">
               <button
-                className={`${styles.btnBase} ${uiTheme === "glass" ? styles.btnSelected : styles.btnUnselected}`}
+                type="button"
+                className={`${styles.btnBase} ${
+                  uiTheme === "glass" ? styles.btnSelected : styles.btnUnselected
+                }`}
                 onClick={() => setUiTheme?.("glass")}
               >
                 Glass
               </button>
               <button
-                className={`${styles.btnBase} ${uiTheme === "macos" ? styles.btnSelected : styles.btnUnselected}`}
+                type="button"
+                className={`${styles.btnBase} ${
+                  uiTheme === "macos" ? styles.btnSelected : styles.btnUnselected
+                }`}
                 onClick={() => setUiTheme?.("macos")}
               >
                 macOS
@@ -105,13 +121,19 @@ export default function SettingsWindow({
             <div className={styles.textSub}>Icon style</div>
             <div className="flex gap-2">
               <button
-                className={`${styles.btnBase} ${iconTheme === "glass" ? styles.btnSelected : styles.btnUnselected}`}
+                type="button"
+                className={`${styles.btnBase} ${
+                  iconTheme === "glass" ? styles.btnSelected : styles.btnUnselected
+                }`}
                 onClick={() => setIconTheme?.("glass")}
               >
                 Glass icons
               </button>
               <button
-                className={`${styles.btnBase} ${iconTheme === "macos" ? styles.btnSelected : styles.btnUnselected}`}
+                type="button"
+                className={`${styles.btnBase} ${
+                  iconTheme === "macos" ? styles.btnSelected : styles.btnUnselected
+                }`}
                 onClick={() => setIconTheme?.("macos")}
               >
                 macOS icons
@@ -132,11 +154,17 @@ export default function SettingsWindow({
         </Section>
 
         {/* WALLPAPERS */}
-        <Section id="wallpapers" title="Wallpapers" titleClass={styles.textSub} refObj={wallpapersRef}>
+        <Section
+          id="wallpapers"
+          title="Wallpapers"
+          titleClass={styles.textSub}
+          refObj={wallpapersRef}
+        >
           <WallpaperSection
-            isMac={isMac}
+            // NOTE: WallpaperSection now supports styles being undefined,
+            // but we still pass styles for consistent look.
             styles={styles}
-            uiTheme={uiTheme}
+            theme={theme}
             onUpload={handleUpload}
             onReset={clearCustom}
             macWallpapers={MAC_WALLPAPERS}
