@@ -13,33 +13,25 @@ import FontSizeSection from "./components/FontSizeSection";
 import QuickActionsSection from "./components/QuickActionsSection";
 
 export default function SettingsWindow({
-  // window look (white mac windows vs glass blur)
   uiTheme,
   setUiTheme,
-
-  // icon pack (glass icons vs mac icons)
   iconTheme,
   setIconTheme,
-
-  // light/dark mode (for wallpaper pairing)
   theme = "light",
-
-  // wallpaper selection
   wallpaperUrl,
   setWallpaperUrl,
-
-  // font & accent
   fontScale,
   setFontScale,
   accent,
   setAccent,
 }) {
   const isMac = uiTheme === "macos";
-  const styles = useSettingsStyles(isMac);
+  const isDark = theme === "dark";
+
+const styles = useSettingsStyles(isMac, isDark);
 
   const [activeSection, setActiveSection] = useState("theme");
 
-  // refs for scroll
   const themeRef = useRef(null);
   const accentRef = useRef(null);
   const wallpapersRef = useRef(null);
@@ -71,15 +63,21 @@ export default function SettingsWindow({
   const isSelected = (src) => wallpaperUrl === src;
   const pickWallpaper = (src) => setWallpaperUrl?.(src);
   const clearCustom = () => setWallpaperUrl?.(null);
-
   const handleUpload = useMemo(() => makeUploadHandler(setWallpaperUrl), [setWallpaperUrl]);
 
   // font logic
   const safeFontScale = clampFontScale(fontScale ?? 1);
   const setSafeFontScale = (v) => setFontScale?.(clampFontScale(v));
 
+  // ✅ Opt OUT of global .darkwin overrides
+  // We'll keep Settings window readable with its own styling.
   return (
-    <div className={`h-full flex ${isMac ? "text-black" : "text-white"}`}>
+    <div
+      className={[
+        "no-darkwin h-full flex",
+        isDark ? "text-white" : isMac ? "text-black" : "text-white",
+      ].join(" ")}
+    >
       <SidebarNav
         isMac={isMac}
         styles={styles}
@@ -88,27 +86,28 @@ export default function SettingsWindow({
         onSelect={scrollToSection}
       />
 
-      <div className={`flex-1 p-6 ${styles.mainBg} overflow-auto space-y-10`}>
+      <div
+        className={[
+          "flex-1 p-6 overflow-auto space-y-10",
+          // override the main background in dark mode so it looks like macOS Settings dark
+          isDark ? "bg-[#1c1c1e]" : styles.mainBg,
+        ].join(" ")}
+      >
         {/* THEME */}
-        <Section id="theme" title="Theme" titleClass={styles.textSub} refObj={themeRef}>
-          {/* Window style */}
+        <Section id="theme" title="Theme" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={themeRef}>
           <div className="space-y-3">
-            <div className={styles.textSub}>Window style</div>
+            <div className={isDark ? "text-white/60 text-sm" : styles.textSub}>Window style</div>
             <div className="flex gap-2">
               <button
                 type="button"
-                className={`${styles.btnBase} ${
-                  uiTheme === "glass" ? styles.btnSelected : styles.btnUnselected
-                }`}
+                className={`${styles.btnBase} ${uiTheme === "glass" ? styles.btnSelected : styles.btnUnselected}`}
                 onClick={() => setUiTheme?.("glass")}
               >
                 Glass
               </button>
               <button
                 type="button"
-                className={`${styles.btnBase} ${
-                  uiTheme === "macos" ? styles.btnSelected : styles.btnUnselected
-                }`}
+                className={`${styles.btnBase} ${uiTheme === "macos" ? styles.btnSelected : styles.btnUnselected}`}
                 onClick={() => setUiTheme?.("macos")}
               >
                 macOS
@@ -116,24 +115,19 @@ export default function SettingsWindow({
             </div>
           </div>
 
-          {/* Icon style */}
           <div className="mt-6 space-y-3">
-            <div className={styles.textSub}>Icon style</div>
+            <div className={isDark ? "text-white/60 text-sm" : styles.textSub}>Icon style</div>
             <div className="flex gap-2">
               <button
                 type="button"
-                className={`${styles.btnBase} ${
-                  iconTheme === "glass" ? styles.btnSelected : styles.btnUnselected
-                }`}
+                className={`${styles.btnBase} ${iconTheme === "glass" ? styles.btnSelected : styles.btnUnselected}`}
                 onClick={() => setIconTheme?.("glass")}
               >
                 Glass icons
               </button>
               <button
                 type="button"
-                className={`${styles.btnBase} ${
-                  iconTheme === "macos" ? styles.btnSelected : styles.btnUnselected
-                }`}
+                className={`${styles.btnBase} ${iconTheme === "macos" ? styles.btnSelected : styles.btnUnselected}`}
                 onClick={() => setIconTheme?.("macos")}
               >
                 macOS icons
@@ -143,7 +137,7 @@ export default function SettingsWindow({
         </Section>
 
         {/* ACCENT */}
-        <Section id="accent" title="Accent color" titleClass={styles.textSub} refObj={accentRef}>
+        <Section id="accent" title="Accent color" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={accentRef}>
           <AccentPicker
             isMac={isMac}
             styles={styles}
@@ -154,15 +148,8 @@ export default function SettingsWindow({
         </Section>
 
         {/* WALLPAPERS */}
-        <Section
-          id="wallpapers"
-          title="Wallpapers"
-          titleClass={styles.textSub}
-          refObj={wallpapersRef}
-        >
+        <Section id="wallpapers" title="Wallpapers" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={wallpapersRef}>
           <WallpaperSection
-            // NOTE: WallpaperSection now supports styles being undefined,
-            // but we still pass styles for consistent look.
             styles={styles}
             theme={theme}
             onUpload={handleUpload}
@@ -175,7 +162,7 @@ export default function SettingsWindow({
         </Section>
 
         {/* FONT */}
-        <Section id="font" title="Font size" titleClass={styles.textSub} refObj={fontRef}>
+        <Section id="font" title="Font size" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={fontRef}>
           <FontSizeSection
             isMac={isMac}
             styles={styles}
@@ -186,7 +173,7 @@ export default function SettingsWindow({
         </Section>
 
         {/* QUICK */}
-        <Section id="quick" title="Quick actions" titleClass={styles.textSub} refObj={quickRef}>
+        <Section id="quick" title="Quick actions" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={quickRef}>
           <QuickActionsSection uiTheme={uiTheme} onDownloadResume={downloadResume} />
         </Section>
       </div>

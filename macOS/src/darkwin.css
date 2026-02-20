@@ -1,57 +1,60 @@
 /* src/darkwin.css */
 
+/* Only apply overrides inside .darkwin, EXCEPT where .no-darkwin exists */
+.darkwin :not(.no-darkwin):not(.no-darkwin *) {
+  /* this selector exists just to scope the rest logically */
+}
+
 /* Base text fixes */
-.darkwin,
-.darkwin * {
+.darkwin :not(.no-darkwin):not(.no-darkwin *) {
   color: rgba(255, 255, 255, 0.88);
 }
 
 /* Flip common "text-black/..." utility outputs */
-.darkwin .text-black,
-.darkwin .text-black\/70,
-.darkwin .text-black\/80,
-.darkwin .text-black\/60,
-.darkwin .text-black\/50 {
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .text-black,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .text-black\/70,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .text-black\/80,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .text-black\/60,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .text-black\/50 {
   color: rgba(255, 255, 255, 0.88) !important;
 }
 
 /* Make common white cards / surfaces dark */
-.darkwin .bg-white,
-.darkwin .bg-white\/60,
-.darkwin .bg-white\/70,
-.darkwin .bg-white\/80,
-.darkwin .bg-white\/90,
-.darkwin .bg-white\/95 {
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-white,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-white\/60,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-white\/70,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-white\/80,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-white\/90,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-white\/95 {
   background-color: rgba(255, 255, 255, 0.06) !important;
 }
 
-/* If you use light gray surfaces */
-.darkwin .bg-\[\#f6f6f6\],
-.darkwin .bg-\[\#ececec\],
-.darkwin .bg-\[\#f5f5f2\] {
+/* Light gray surfaces -> dark */
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-\[\#f6f6f6\],
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-\[\#ececec\],
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .bg-\[\#f5f5f2\] {
   background-color: rgba(255, 255, 255, 0.06) !important;
 }
 
-/* Borders: turn subtle-light borders into subtle-dark */
-.darkwin .border-black\/10,
-.darkwin .border-black\/15,
-.darkwin .border-black\/20 {
+/* Borders: subtle light -> subtle dark */
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .border-black\/10,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .border-black\/15,
+.darkwin :not(.no-darkwin):not(.no-darkwin *) .border-black\/20 {
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-/* Inputs / dividers */
-.darkwin hr {
+.darkwin :not(.no-darkwin):not(.no-darkwin *) hr {
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-/* Scrollbars (optional but makes it feel nicer) */
-.darkwin ::-webkit-scrollbar {
+/* Scrollbars */
+.darkwin :not(.no-darkwin):not(.no-darkwin *) ::-webkit-scrollbar {
   width: 10px;
 }
-.darkwin ::-webkit-scrollbar-thumb {
+.darkwin :not(.no-darkwin):not(.no-darkwin *) ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 999px;
 }
-.darkwin ::-webkit-scrollbar-track {
+.darkwin :not(.no-darkwin):not(.no-darkwin *) ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.15);
 }
