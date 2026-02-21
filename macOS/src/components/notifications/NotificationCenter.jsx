@@ -4,6 +4,7 @@ import { useMemo } from "react";
 
 export default function NotificationCenter({
   uiTheme = "glass",
+  theme = "light", // ✅ NEW
   isOpen,
   onClose,
   items = [],
@@ -12,25 +13,59 @@ export default function NotificationCenter({
   onRemoveOne,
 }) {
   const isMac = uiTheme === "macos";
+  const isDark = theme === "dark";
 
   const styles = useMemo(() => {
-    return {
-      panel:
-        uiTheme === "macos"
-          ? "bg-white/90 border border-black/10 text-black"
-          : "bg-black/40 border border-white/15 text-white backdrop-blur-xl",
-      title: isMac ? "text-black/80" : "text-white/90",
-      sub: isMac ? "text-black/50" : "text-white/60",
-      item:
-        uiTheme === "macos"
-          ? "bg-white border border-black/10"
-          : "bg-white/10 border border-white/15 backdrop-blur-xl",
-      btn:
-        uiTheme === "macos"
-          ? "bg-white border border-black/10 text-black/80 hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)]"
-          : "bg-white/10 border border-white/15 text-white/90 hover:bg-white/15",
-    };
-  }, [uiTheme, isMac]);
+    // Panel
+    const panel =
+      uiTheme === "macos"
+        ? isDark
+          ? "bg-zinc-900/92 border border-white/10 text-white"
+          : "bg-white/90 border border-black/10 text-black"
+        : isDark
+        ? "bg-black/55 border border-white/12 text-white backdrop-blur-xl"
+        : "bg-black/40 border border-white/15 text-white backdrop-blur-xl";
+
+    // Text
+    const title =
+      uiTheme === "macos"
+        ? isDark
+          ? "text-white/90"
+          : "text-black/80"
+        : "text-white/90";
+
+    const sub =
+      uiTheme === "macos"
+        ? isDark
+          ? "text-white/60"
+          : "text-black/50"
+        : "text-white/60";
+
+    // Item
+    const item =
+      uiTheme === "macos"
+        ? isDark
+          ? "bg-white/5 border border-white/10"
+          : "bg-white border border-black/10"
+        : isDark
+        ? "bg-white/8 border border-white/12 backdrop-blur-xl"
+        : "bg-white/10 border border-white/15 backdrop-blur-xl";
+
+    // Buttons
+    const btn =
+      uiTheme === "macos"
+        ? isDark
+          ? "bg-white/5 border border-white/12 text-white/85 hover:bg-white/10 hover:border-white/20"
+          : "bg-white border border-black/10 text-black/80 hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.35)]"
+        : isDark
+        ? "bg-white/8 border border-white/12 text-white/90 hover:bg-white/14"
+        : "bg-white/10 border border-white/15 text-white/90 hover:bg-white/15";
+
+    const headerBorder =
+      uiTheme === "macos" ? (isDark ? "border-white/10" : "border-black/10") : "border-white/10";
+
+    return { panel, title, sub, item, btn, headerBorder };
+  }, [uiTheme, isMac, isDark]);
 
   return (
     <AnimatePresence>
@@ -54,7 +89,7 @@ export default function NotificationCenter({
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`px-4 py-3 flex items-center justify-between border-b ${isMac ? "border-black/10" : "border-white/10"}`}>
+            <div className={`px-4 py-3 flex items-center justify-between border-b ${styles.headerBorder}`}>
               <div>
                 <div className={`text-sm font-semibold ${styles.title}`}>Notifications</div>
                 <div className={`text-xs ${styles.sub}`}>{items.length ? `${items.length} total` : "All caught up"}</div>
@@ -76,9 +111,7 @@ export default function NotificationCenter({
 
             <div className="max-h-[62vh] overflow-y-auto p-3 space-y-2">
               {!items.length ? (
-                <div className={`p-4 rounded-xl ${styles.sub}`}>
-                  No notifications right now ✨
-                </div>
+                <div className={`p-4 rounded-xl ${styles.sub}`}>No notifications right now ✨</div>
               ) : (
                 items.map((n) => (
                   <div key={n.id} className={`rounded-xl p-3 ${styles.item}`}>
@@ -91,20 +124,12 @@ export default function NotificationCenter({
                               style={{ backgroundColor: "hsl(var(--accent))" }}
                             />
                           )}
-                          <div className={`text-sm font-semibold ${styles.title} truncate`}>
-                            {n.title}
-                          </div>
+                          <div className={`text-sm font-semibold ${styles.title} truncate`}>{n.title}</div>
                         </div>
 
-                        {n.message && (
-                          <div className={`mt-1 text-xs ${styles.sub} leading-relaxed`}>
-                            {n.message}
-                          </div>
-                        )}
+                        {n.message && <div className={`mt-1 text-xs ${styles.sub} leading-relaxed`}>{n.message}</div>}
 
-                        <div className={`mt-2 text-[11px] ${styles.sub}`}>
-                          {n.timeLabel}
-                        </div>
+                        <div className={`mt-2 text-[11px] ${styles.sub}`}>{n.timeLabel}</div>
                       </div>
 
                       <button

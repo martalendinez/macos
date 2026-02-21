@@ -98,7 +98,7 @@ export default function App() {
   }, []);
 
   // Accent
-  const [accent, setAccent] = useState("emerald");
+  const [accent, setAccent] = useState("sky");
   useAccentVar(accent);
 
   // ✅ default: glass icons + macos windows + glass2 wallpaper
@@ -311,6 +311,7 @@ export default function App() {
 
       <NotificationCenter
         uiTheme={uiTheme}
+        theme={theme} // ✅ NEW
         isOpen={notif.notifOpen}
         onClose={() => notif.setNotifOpen(false)}
         items={notif.notifications}
