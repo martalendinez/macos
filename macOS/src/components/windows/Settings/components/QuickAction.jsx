@@ -1,21 +1,26 @@
 // src/components/windows/Settings/components/QuickAction.jsx
-export default function QuickAction({ uiTheme, label, icon, onClick }) {
+export default function QuickAction({ uiTheme = "glass", label, icon, onClick }) {
   const isMac = uiTheme === "macos";
 
+  // Base surface
+  const base = isMac
+    ? "bg-white border border-black/10 text-black/85"
+    : "bg-white/10 border border-white/15 text-white/90 backdrop-blur-xl";
+
+  // ✅ Accent hover (cleaner, softer)
+  const accentHover =
+    "hover:bg-[hsl(var(--accent)/0.12)] hover:border-[hsl(var(--accent)/0.40)]";
+
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
-      className={`flex items-center justify-between rounded-xl px-4 py-3 transition cursor-pointer ${
-        isMac ? "bg-white border border-black/10 hover:bg-black/5" : "bg-white/6 border border-white/10 hover:bg-white/10"
-      }`}
+      className={`rounded-2xl px-4 py-3 text-left transition duration-150 ${base} ${accentHover}`}
     >
-      <div className="flex items-center gap-3">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${isMac ? "bg-black/5 text-black/70" : "bg-white/10 text-white/85"}`}>
-          {icon}
-        </div>
-        <span className={`text-sm font-medium ${isMac ? "text-black/80" : "text-white/90"}`}>{label}</span>
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-medium">{label}</span>
+        <span className="text-base opacity-75">{icon}</span>
       </div>
-      <span className={`${isMac ? "text-black/30" : "text-white/40"}`}>›</span>
-    </div>
+    </button>
   );
 }

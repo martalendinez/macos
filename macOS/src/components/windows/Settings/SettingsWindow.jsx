@@ -18,17 +18,20 @@ export default function SettingsWindow({
   iconTheme,
   setIconTheme,
   theme = "light",
+  setTheme, // ✅ NEW (so quick actions can toggle theme if you want)
   wallpaperUrl,
   setWallpaperUrl,
   fontScale,
   setFontScale,
   accent,
   setAccent,
+  onOpenWindow, // ✅ NEW (so quick actions can open windows)
+  notify, // ✅ NEW (optional, if you want to toast)
 }) {
   const isMac = uiTheme === "macos";
   const isDark = theme === "dark";
 
-const styles = useSettingsStyles(isMac, isDark);
+  const styles = useSettingsStyles(isMac, isDark);
 
   const [activeSection, setActiveSection] = useState("theme");
 
@@ -63,7 +66,9 @@ const styles = useSettingsStyles(isMac, isDark);
   const isSelected = (src) => wallpaperUrl === src;
   const pickWallpaper = (src) => setWallpaperUrl?.(src);
   const clearCustom = () => setWallpaperUrl?.(null);
-  const handleUpload = useMemo(() => makeUploadHandler(setWallpaperUrl), [setWallpaperUrl]);
+
+  // ✅ robust upload handler + hidden input props
+  const upload = useMemo(() => makeUploadHandler(setWallpaperUrl), [setWallpaperUrl]);
 
   // font logic
   const safeFontScale = clampFontScale(fontScale ?? 1);
@@ -94,7 +99,12 @@ const styles = useSettingsStyles(isMac, isDark);
         ].join(" ")}
       >
         {/* THEME */}
-        <Section id="theme" title="Theme" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={themeRef}>
+        <Section
+          id="theme"
+          title="Theme"
+          titleClass={isDark ? "text-white/70" : styles.textSub}
+          refObj={themeRef}
+        >
           <div className="space-y-3">
             <div className={isDark ? "text-white/60 text-sm" : styles.textSub}>Window style</div>
             <div className="flex gap-2">
@@ -137,22 +147,35 @@ const styles = useSettingsStyles(isMac, isDark);
         </Section>
 
         {/* ACCENT */}
-        <Section id="accent" title="Accent color" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={accentRef}>
+        <Section
+          id="accent"
+          title="Accent color"
+          titleClass={isDark ? "text-white/70" : styles.textSub}
+          refObj={accentRef}
+        >
           <AccentPicker
             isMac={isMac}
             styles={styles}
-            accent={accent ?? "emerald"}
+            accent={accent ?? "sky"}
             setAccent={setAccent}
             options={ACCENT_OPTIONS}
           />
         </Section>
 
         {/* WALLPAPERS */}
-        <Section id="wallpapers" title="Wallpapers" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={wallpapersRef}>
+        <Section
+          id="wallpapers"
+          title="Wallpapers"
+          titleClass={isDark ? "text-white/70" : styles.textSub}
+          refObj={wallpapersRef}
+        >
           <WallpaperSection
             styles={styles}
             theme={theme}
-            onUpload={handleUpload}
+            // ✅ This assumes WallpaperSection renders an <input type="file" ... onChange={onUpload} />
+            // If yours expects a different shape, tell me and I’ll match it.
+            onUpload={upload.onChange}
+            uploadInputProps={upload.inputProps} // ✅ NEW: let WallpaperSection spread these onto the input
             onReset={clearCustom}
             macWallpapers={MAC_WALLPAPERS}
             glassWallpapers={GLASS_WALLPAPERS}
@@ -162,7 +185,12 @@ const styles = useSettingsStyles(isMac, isDark);
         </Section>
 
         {/* FONT */}
-        <Section id="font" title="Font size" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={fontRef}>
+        <Section
+          id="font"
+          title="Font size"
+          titleClass={isDark ? "text-white/70" : styles.textSub}
+          refObj={fontRef}
+        >
           <FontSizeSection
             isMac={isMac}
             styles={styles}
@@ -173,8 +201,20 @@ const styles = useSettingsStyles(isMac, isDark);
         </Section>
 
         {/* QUICK */}
-        <Section id="quick" title="Quick actions" titleClass={isDark ? "text-white/70" : styles.textSub} refObj={quickRef}>
-          <QuickActionsSection uiTheme={uiTheme} onDownloadResume={downloadResume} />
+        <Section
+          id="quick"
+          title="Quick actions"
+          titleClass={isDark ? "text-white/70" : styles.textSub}
+          refObj={quickRef}
+        >
+          <QuickActionsSection
+            uiTheme={uiTheme}
+            theme={theme}
+            onDownloadResume={downloadResume}
+            onOpenWindow={onOpenWindow}
+            onToggleTheme={() => setTheme?.(theme === "dark" ? "light" : "dark")}
+            notify={notify}
+          />
         </Section>
       </div>
     </div>
