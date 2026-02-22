@@ -23,12 +23,24 @@ export default function PortfolioInfoSection({ uiTheme = "glass", glassContrast 
       <div className={`p-5 rounded-2xl border ${softCard}`}>
         <div className={sectionTitle}>Tech stack</div>
 
-        <div className="flex flex-wrap gap-2 mt-3">
-          <span className={pillClass}>React</span>
-          <span className={pillClass}>Vite</span>
-          <span className={pillClass}>Tailwind CSS</span>
-          <span className={pillClass}>Framer Motion</span>
-        </div>
+        {/* Accent chips */}
+<div className="flex flex-wrap gap-2 mt-3">
+  {["React", "Vite", "Tailwind CSS", "Framer Motion"].map((t) => (
+    <span
+      key={t}
+      className={[
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium",
+        "ring-1 ring-inset",
+        // accent
+        "bg-[hsl(var(--accent)/0.12)] text-[hsl(var(--accent))] ring-[hsl(var(--accent)/0.22)]",
+        // a tiny bit of depth for glass
+        uiTheme === "glass" ? "backdrop-blur-md shadow-sm" : "",
+      ].join(" ")}
+    >
+      {t}
+    </span>
+  ))}
+</div>
 
         <p className={`${textMain} text-sm mt-4`}>
           Component-based UI built in React. Styling uses Tailwind plus theme tokens for consistent
@@ -36,13 +48,37 @@ export default function PortfolioInfoSection({ uiTheme = "glass", glassContrast 
         </p>
       </div>
 
-      {/* Inspiration */}
-      <div className={`p-5 rounded-2xl border ${softCard}`}>
-        <div className={sectionTitle}>Inspiration</div>
-        <p className={`${textMain} text-sm mt-3`}>
-          Inspired by macOS window systems, glassmorphism, and playful desktop-like navigation.
-        </p>
-      </div>
+    {/* Inspiration */}
+<div className={`p-5 rounded-2xl border ${softCard}`}>
+  <div className={sectionTitle}>Inspiration</div>
+
+  <div className={`${textMain} text-sm mt-3 space-y-3`}>
+    <p>
+      Before defining my own visual language, I explored several portfolios to understand how other designers communicate their identity. These three stood out the most:
+    </p>
+
+    <ul className="list-disc pl-5 space-y-2">
+      <li>
+        <span className="font-medium">Dustin Breet</span> — One of my biggest inspirations was Dustin Breet, who created a full Windows‑style portfolio filled with apps, videos, and interactive windows.  
+        <br />
+        <span className="text-xs opacity-80">Link: https://dustinbrett.com</span>
+      </li>
+
+      <li>
+        <span className="font-medium">You Zhang</span> — I was also inspired by You Zhang, who built a macOS‑style portfolio with beautifully crafted motion design. Their attention to transitions and interaction flow had a huge influence on how I approached movement in my own work.  
+        <br />
+        <span className="text-xs opacity-80">https://atom63.io</span>
+      </li>
+
+      <li>
+        <span className="font-medium">Aakash Sharma</span> — Another designer who really inspired me took the macOS concept even further by recreating an entire desktop filled with functional mini‑apps — things like a VS Code window, a Spotify player, and other playful system elements. 
+        <br />
+        <span className="text-xs opacity-80">https://aakash-sharma.vercel.app</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
 
       {/* Deployment */}
       <div className={`p-5 rounded-2xl border ${softCard}`}>
@@ -58,6 +94,39 @@ export default function PortfolioInfoSection({ uiTheme = "glass", glassContrast 
           Add your live URL + repo link here for extra credibility.
         </p>
       </div>
+      {/* Version & roadmap */}
+<div className={`p-5 rounded-2xl border ${softCard}`}>
+  <div className="flex items-center justify-between">
+    <div className={sectionTitle}>Version</div>
+
+    {/* Accent version badge */}
+    <span
+      className={[
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold",
+        "ring-1 ring-inset",
+        "bg-[hsl(var(--accent)/0.12)] text-[hsl(var(--accent))] ring-[hsl(var(--accent)/0.25)]",
+      ].join(" ")}
+    >
+      v1.0
+    </span>
+  </div>
+
+  <p className={`${textSub} text-xs mt-2`}>
+    Last updated: February 2026
+  </p>
+
+  <div className={`h-px my-4 ${divider}`} />
+
+  <div className="space-y-2">
+    <div className={sectionTitle}>What’s next</div>
+
+    <ul className={`${textMain} text-sm space-y-2 list-disc pl-5`}>
+      <li>Write later</li>
+      <li>Write later</li>
+      <li>Write later</li>
+    </ul>
+  </div>
+</div>
     </div>
   );
 }
