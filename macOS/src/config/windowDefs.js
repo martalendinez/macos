@@ -18,6 +18,9 @@ import SecretProjectsWindow from "../components/windows/Projects/SecretProjectsW
 // ✅ individual secret project window(s)
 import BehindTheButtonWindow from "../components/windows/Projects/BehindTheButtonWindow";
 
+// ✅ NEW: About this portfolio window (lives inside Settings/components, as requested)
+import PortfolioInfoWindow from "../components/windows/Settings/components/PortfolioInfoWindow";
+
 export const WINDOW_DEFS = {
   settings: {
     title: "Settings",
@@ -33,6 +36,16 @@ export const WINDOW_DEFS = {
     height: 520,
     initialPos: { x: 260, y: 120 },
   },
+
+  // ✅ NEW WINDOW DEF
+  portfolioInfo: {
+    title: "About this portfolio",
+    Component: PortfolioInfoWindow,
+    width: 760,
+    height: 560,
+    initialPos: { x: 250, y: 110 },
+  },
+
   projects: {
     title: "Projects",
     Component: ProjectsWindow,

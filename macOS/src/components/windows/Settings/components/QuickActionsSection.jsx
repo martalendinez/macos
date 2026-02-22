@@ -3,7 +3,12 @@ import { useRef, useState } from "react";
 import QuickAction from "./QuickAction";
 import { sharePortfolio } from "../utils";
 
-export default function QuickActionsSection({ uiTheme, onDownloadResume, onResetLayout }) {
+export default function QuickActionsSection({
+  uiTheme,
+  onDownloadResume,
+  onResetLayout,
+  onOpenWindow, // ✅ comes from SettingsWindow
+}) {
   const [shareLabel, setShareLabel] = useState("Share portfolio");
   const busyRef = useRef(false);
 
@@ -23,12 +28,16 @@ export default function QuickActionsSection({ uiTheme, onDownloadResume, onReset
     busyRef.current = false;
   }
 
+  function onAboutPortfolio() {
+    onOpenWindow?.("portfolioInfo");
+  }
+
   return (
     <div className="grid grid-cols-2 gap-3">
       <QuickAction uiTheme={uiTheme} label={shareLabel} icon="↗" onClick={onShare} />
       <QuickAction uiTheme={uiTheme} label="Download Resume" icon="⬇" onClick={onDownloadResume} />
       <QuickAction uiTheme={uiTheme} label="Reset window layout" icon="🗔" onClick={onResetLayout} />
-      <QuickAction uiTheme={uiTheme} label="About this portfolio" icon="ℹ" />
+      <QuickAction uiTheme={uiTheme} label="About this portfolio" icon="ℹ" onClick={onAboutPortfolio} />
     </div>
   );
 }

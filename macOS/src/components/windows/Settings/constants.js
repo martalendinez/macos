@@ -28,6 +28,7 @@ export const SECTIONS = [
   { id: "wallpapers", label: "Wallpapers" },
   { id: "font", label: "Font size" },
   { id: "quick", label: "Quick actions" },
+  { id: "portfolioInfo", label: "About this Portfolio" },
 ];
 
 
