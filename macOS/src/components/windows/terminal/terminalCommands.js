@@ -103,7 +103,7 @@ export function runTerminalCommand({
   if (lower === "ls") {
     appendLines([
       { type: "title", text: "Desktop:" },
-      "  30-seconds-mode/        (for recruiters)",
+      "  Recruiter mode/        (for recruiters)",
       "  projects/",
       "  videos/",
       "  ai-assistant/",

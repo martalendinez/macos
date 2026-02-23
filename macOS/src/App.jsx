@@ -160,7 +160,7 @@ export default function App() {
     const t = window.setTimeout(() => {
       notif.notifyOnce("tip_30sec", {
         title: "Tip",
-        message: "Want the quick version? Open ⚡ 30-Seconds Mode on the left.",
+        message: "Want the quick version? Open ⚡ Recruiter Mode on the left.",
         toast: true,
       });
     }, 900);
@@ -248,7 +248,7 @@ export default function App() {
 
   const leftRailItems = useMemo(
     () => [
-      { icon: desktopIcons.timer, label: "30-Seconds Mode", windowId: "timer" },
+      { icon: desktopIcons.timer, label: "Recruiter Mode", windowId: "timer" },
       { icon: desktopIcons.projects, label: "Projects", windowId: "projects" },
       { icon: desktopIcons.videos, label: "Videos", windowId: "videos" },
     ],

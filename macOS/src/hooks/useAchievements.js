@@ -55,7 +55,7 @@ export default function useAchievements({
       unlockAchievement?.(
         "speedrunner",
         "🏆 Achievement unlocked: Speedrunner",
-        "30-Seconds Mode is recruiter-friendly ⚡"
+        "Recruiter mode is fast 🚀"
       );
     }
 
