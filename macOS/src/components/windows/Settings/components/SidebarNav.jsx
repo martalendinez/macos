@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { getTokens } from "../../../../ui/themeTokens";
 
-/** Finder-style blue glyph icons (thin, minimal) */
+/** Finder-style glyph icons */
 function FinderIcon({ name }) {
   const cls = "w-[18px] h-[18px]";
   const stroke = "currentColor";
@@ -20,12 +20,19 @@ function FinderIcon({ name }) {
           />
         </svg>
       );
+
     case "music":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M14 4v12.2a3.2 3.2 0 1 1-1.8-2.9V7l8-2v9.2a3.2 3.2 0 1 1-1.8-2.9V4" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path
+            d="M14 4v12.2a3.2 3.2 0 1 1-1.8-2.9V7l8-2v9.2a3.2 3.2 0 1 1-1.8-2.9V4"
+            stroke={stroke}
+            strokeWidth={sw}
+            strokeLinejoin="round"
+          />
         </svg>
       );
+
     case "terminal":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
@@ -34,19 +41,32 @@ function FinderIcon({ name }) {
           <path d="M12 15h5" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
         </svg>
       );
+
     case "map":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M9 18 3 20V6l6-2 6 2 6-2v14l-6 2-6-2Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path
+            d="M9 18 3 20V6l6-2 6 2 6-2v14l-6 2-6-2Z"
+            stroke={stroke}
+            strokeWidth={sw}
+            strokeLinejoin="round"
+          />
           <path d="M9 4v14M15 6v14" stroke={stroke} strokeWidth={sw} />
         </svg>
       );
+
     case "projects":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M4 7h6l2 2h8v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path
+            d="M4 7h6l2 2h8v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z"
+            stroke={stroke}
+            strokeWidth={sw}
+            strokeLinejoin="round"
+          />
         </svg>
       );
+
     case "videos":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
@@ -54,6 +74,23 @@ function FinderIcon({ name }) {
           <path d="M18 10l3-2v8l-3-2v-4Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         </svg>
       );
+
+    case "about":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none">
+          <path d="M20 21H4v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke={stroke} strokeWidth={sw} />
+        </svg>
+      );
+
+    case "sparkles":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none">
+          <path d="M12 2l1.2 4.3L18 8l-4.8 1.7L12 14l-1.2-4.3L6 8l4.8-1.7L12 2Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path d="M19 13l.7 2.4L22 16l-2.3.6L19 19l-.7-2.4L16 16l2.3-.6L19 13Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        </svg>
+      );
+
     case "settings":
     default:
       return (
@@ -82,6 +119,9 @@ export default function SidebarNav({
   sections = [],
   onSelect,
   onOpenWindow,
+
+  // ✅ NEW: custom preferences list (window shortcuts, etc)
+  preferencesItems = null, // [{id,label,icon,onClick}]
 }) {
   const t = getTokens(uiTheme, glassContrast);
   const isMac = t.isMac;
@@ -97,7 +137,6 @@ export default function SidebarNav({
     ? "bg-black/15 border-r border-white/10 backdrop-blur-xl"
     : "bg-white/8 border-r border-white/12 backdrop-blur-xl";
 
-  // make headers always readable
   const headerText = isMac ? (isDark ? "text-white/55" : "text-black/55") : "text-white/70";
   const rowText = isMac ? (isDark ? "text-white/90" : "text-black/80") : "text-white/90";
   const iconBlue = isMac ? (isDark ? "text-[#4ea1ff]" : "text-[#0a84ff]") : "text-[#7dd3fc]";
@@ -120,8 +159,15 @@ export default function SidebarNav({
   const q = query.trim().toLowerCase();
   const filteredApps = !q ? apps : apps.filter((a) => a.label.toLowerCase().includes(q));
 
-  const filteredSections =
+  const baseSections =
     !q ? sections : sections.filter((s) => resolveSectionLabel(s).toLowerCase().includes(q));
+
+  const prefs =
+    preferencesItems && Array.isArray(preferencesItems)
+      ? !q
+        ? preferencesItems
+        : preferencesItems.filter((p) => `${p.label ?? ""}`.toLowerCase().includes(q))
+      : null;
 
   return (
     <div className={`w-[280px] shrink-0 h-full flex flex-col ${bg}`}>
@@ -178,7 +224,7 @@ export default function SidebarNav({
 
         <div className={`my-3 h-px ${divider}`} />
 
-        {/* LOCATIONS (your portfolio apps) */}
+        {/* LOCATIONS (portfolio apps) */}
         <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>
           LOCATIONS
         </div>
@@ -201,21 +247,26 @@ export default function SidebarNav({
 
         <div className={`my-3 h-px ${divider}`} />
 
-        {/* ✅ PREFERENCES (this will now show + will have text) */}
+        {/* PREFERENCES */}
         <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>
           PREFERENCES
         </div>
 
         <div className="space-y-1">
-          {filteredSections.map((s) => {
-            const label = resolveSectionLabel(s);
-            const active = activeSection === s.id;
+          {(prefs ?? baseSections).map((item) => {
+            const id = prefs ? item.id : item.id;
+            const label = prefs ? item.label : resolveSectionLabel(item);
+            const icon = prefs ? (item.icon ?? "settings") : "settings";
+            const active = activeSection === id;
 
             return (
               <button
-                key={s.id}
+                key={id}
                 type="button"
-                onClick={() => onSelect?.(s)}
+                onClick={() => {
+                  if (prefs) item.onClick?.();
+                  else onSelect?.(item);
+                }}
                 className={[
                   "w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition",
                   active ? pillActive : pillHover,
@@ -223,7 +274,7 @@ export default function SidebarNav({
                 ].join(" ")}
               >
                 <span className={iconBlue}>
-                  <FinderIcon name="settings" />
+                  <FinderIcon name={icon} />
                 </span>
                 <span className="text-[15px] font-medium">{label}</span>
               </button>
