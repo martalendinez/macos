@@ -2,12 +2,7 @@
 import { useMemo, useState } from "react";
 import { getTokens } from "../../../../ui/themeTokens";
 
-/**
- * Finder-style sidebar icons:
- * - monochrome / single-accent blue
- * - thin stroke, minimal
- * - no colored background tile
- */
+/** Finder-style blue glyph icons (thin, minimal) */
 function FinderIcon({ name }) {
   const cls = "w-[18px] h-[18px]";
   const stroke = "currentColor";
@@ -25,48 +20,58 @@ function FinderIcon({ name }) {
           />
         </svg>
       );
-    case "doc":
+    case "music":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M7 3h7l3 3v15H7V3Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-          <path d="M14 3v4h4" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path d="M14 4v12.2a3.2 3.2 0 1 1-1.8-2.9V7l8-2v9.2a3.2 3.2 0 1 1-1.8-2.9V4" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         </svg>
       );
-    case "pics":
+    case "terminal":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M5 6h14v12H5V6Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-          <path d="M8 14l2-2 3 3 2-2 2 2" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-          <path d="M9 10h.01" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+          <path d="M4 6h16v12H4V6Z" stroke={stroke} strokeWidth={sw} />
+          <path d="M7 9l3 3-3 3" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 15h5" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
         </svg>
       );
-    case "dl":
+    case "map":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M12 3v10" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
-          <path d="M8 10l4 4 4-4" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
-          <path d="M5 21h14" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+          <path d="M9 18 3 20V6l6-2 6 2 6-2v14l-6 2-6-2Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+          <path d="M9 4v14M15 6v14" stroke={stroke} strokeWidth={sw} />
         </svg>
       );
-    case "apps":
+    case "projects":
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M6 7h3v3H6V7Z" stroke={stroke} strokeWidth={sw} />
-          <path d="M10.5 7h3v3h-3V7Z" stroke={stroke} strokeWidth={sw} />
-          <path d="M15 7h3v3h-3V7Z" stroke={stroke} strokeWidth={sw} />
-          <path d="M6 11.5h3v3H6v-3Z" stroke={stroke} strokeWidth={sw} />
-          <path d="M10.5 11.5h3v3h-3v-3Z" stroke={stroke} strokeWidth={sw} />
-          <path d="M15 11.5h3v3h-3v-3Z" stroke={stroke} strokeWidth={sw} />
+          <path d="M4 7h6l2 2h8v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
         </svg>
       );
+    case "videos":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none">
+          <path d="M4 7h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4V7Z" stroke={stroke} strokeWidth={sw} />
+          <path d="M18 10l3-2v8l-3-2v-4Z" stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />
+        </svg>
+      );
+    case "settings":
     default:
       return (
         <svg className={cls} viewBox="0 0 24 24" fill="none">
-          <path d="M12 8v8" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
-          <path d="M8 12h8" stroke={stroke} strokeWidth={sw} strokeLinecap="round" />
+          <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke={stroke} strokeWidth={sw} />
+          <path
+            d="M19.4 15a8.2 8.2 0 0 0 .1-1 8.2 8.2 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7.8 7.8 0 0 0-1.7-1L15 4h-6l-.3 2.5a7.8 7.8 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a8.2 8.2 0 0 0-.1 1c0 .3 0 .7.1 1l-2 1.5 2 3.5 2.4-1a7.8 7.8 0 0 0 1.7 1L9 20h6l.3-2.5a7.8 7.8 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5Z"
+            stroke={stroke}
+            strokeWidth={sw}
+            strokeLinejoin="round"
+          />
         </svg>
       );
   }
+}
+
+function resolveSectionLabel(s) {
+  return s?.title ?? s?.label ?? s?.name ?? s?.id ?? "Section";
 }
 
 export default function SidebarNav({
@@ -81,9 +86,9 @@ export default function SidebarNav({
   const t = getTokens(uiTheme, glassContrast);
   const isMac = t.isMac;
   const isDark = theme === "dark";
+
   const [query, setQuery] = useState("");
 
-  // Finder sidebar surface + text
   const bg = isMac
     ? isDark
       ? "bg-[#141416] border-r border-white/10"
@@ -92,57 +97,31 @@ export default function SidebarNav({
     ? "bg-black/15 border-r border-white/10 backdrop-blur-xl"
     : "bg-white/8 border-r border-white/12 backdrop-blur-xl";
 
+  // make headers always readable
   const headerText = isMac ? (isDark ? "text-white/55" : "text-black/55") : "text-white/70";
   const rowText = isMac ? (isDark ? "text-white/90" : "text-black/80") : "text-white/90";
   const iconBlue = isMac ? (isDark ? "text-[#4ea1ff]" : "text-[#0a84ff]") : "text-[#7dd3fc]";
 
-  const activePill = isMac
-    ? isDark
-      ? "bg-white/10"
-      : "bg-black/10"
-    : "bg-white/12";
-
-  const hoverPill = isMac
-    ? isDark
-      ? "hover:bg-white/8"
-      : "hover:bg-black/5"
-    : "hover:bg-white/10";
-
+  const pillActive = isMac ? (isDark ? "bg-white/10" : "bg-black/10") : "bg-white/12";
+  const pillHover = isMac ? (isDark ? "hover:bg-white/8" : "hover:bg-black/5") : "hover:bg-white/10";
   const divider = isMac ? (isDark ? "bg-white/10" : "bg-black/10") : "bg-white/10";
 
-  // Sidebar groups: make these match your screenshot labels
-  const favorites = useMemo(() => [{ id: "home", label: "Home", icon: "home", onClick: () => onSelect?.(sections[0]) }], [
-    onSelect,
-    sections,
-  ]);
-
-  const locations = useMemo(
+  const apps = useMemo(
     () => [
-      { id: "docs", label: "Documents", icon: "doc", onClick: () => onOpenWindow?.("projects") },
-      { id: "pics", label: "Pictures", icon: "pics", onClick: () => onOpenWindow?.("map") },
-      { id: "downloads", label: "Downloads", icon: "dl", onClick: () => onOpenWindow?.("music") },
-      { id: "apps", label: "Applications", icon: "apps", onClick: () => onOpenWindow?.("terminal") },
+      { id: "music", label: "Music", icon: "music", open: () => onOpenWindow?.("music") },
+      { id: "map", label: "Maps", icon: "map", open: () => onOpenWindow?.("map") },
+      { id: "terminal", label: "Terminal", icon: "terminal", open: () => onOpenWindow?.("terminal") },
+      { id: "projects", label: "Projects", icon: "projects", open: () => onOpenWindow?.("projects") },
+      { id: "videos", label: "Videos", icon: "videos", open: () => onOpenWindow?.("videos") },
     ],
     [onOpenWindow]
   );
 
-  const preferences = useMemo(
-    () =>
-      sections.map((s) => ({
-        id: s.id,
-        label: s.title,
-        onClick: () => onSelect?.(s),
-      })),
-    [sections, onSelect]
-  );
-
   const q = query.trim().toLowerCase();
+  const filteredApps = !q ? apps : apps.filter((a) => a.label.toLowerCase().includes(q));
 
-  const filterList = (list) => (!q ? list : list.filter((x) => (x.label || "").toLowerCase().includes(q)));
-
-  const favFiltered = filterList(favorites);
-  const locFiltered = filterList(locations);
-  const prefFiltered = filterList(preferences);
+  const filteredSections =
+    !q ? sections : sections.filter((s) => resolveSectionLabel(s).toLowerCase().includes(q));
 
   return (
     <div className={`w-[280px] shrink-0 h-full flex flex-col ${bg}`}>
@@ -177,79 +156,76 @@ export default function SidebarNav({
         </div>
       </div>
 
-      {/* Lists */}
       <div className="flex-1 overflow-auto px-2 pb-3">
         {/* FAVORITES */}
-        <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>FAVORITES</div>
+        <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>
+          FAVORITES
+        </div>
+
+        <button
+          type="button"
+          className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition ${pillActive} ${rowText}`}
+          onClick={() => {
+            const first = sections?.[0];
+            if (first) onSelect?.(first);
+          }}
+        >
+          <span className={iconBlue}>
+            <FinderIcon name="home" />
+          </span>
+          <span className="text-[15px] font-medium">Home</span>
+        </button>
+
+        <div className={`my-3 h-px ${divider}`} />
+
+        {/* LOCATIONS (your portfolio apps) */}
+        <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>
+          LOCATIONS
+        </div>
 
         <div className="space-y-1">
-          {favFiltered.map((item) => (
+          {filteredApps.map((a) => (
             <button
-              key={item.id}
+              key={a.id}
               type="button"
-              onClick={item.onClick}
-              className={[
-                "w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition",
-                activePill,
-                rowText,
-              ].join(" ")}
+              onClick={a.open}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition ${pillHover} ${rowText}`}
             >
-              <span className={`${iconBlue}`}>
-                <FinderIcon name={item.icon} />
+              <span className={iconBlue}>
+                <FinderIcon name={a.icon} />
               </span>
-              <span className="text-[15px] font-medium">{item.label}</span>
+              <span className="text-[15px] font-medium">{a.label}</span>
             </button>
           ))}
         </div>
 
         <div className={`my-3 h-px ${divider}`} />
 
-        {/* LOCATIONS */}
-        <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>LOCATIONS</div>
-
-        <div className="space-y-1">
-          {locFiltered.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={item.onClick}
-              className={[
-                "w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition",
-                hoverPill,
-                rowText,
-              ].join(" ")}
-            >
-              <span className={`${iconBlue}`}>
-                <FinderIcon name={item.icon} />
-              </span>
-              <span className="text-[15px] font-medium">{item.label}</span>
-            </button>
-          ))}
+        {/* ✅ PREFERENCES (this will now show + will have text) */}
+        <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>
+          PREFERENCES
         </div>
 
-        <div className={`my-3 h-px ${divider}`} />
-
-        {/* ✅ PREFERENCES (this was missing — now forced visible) */}
-        <div className={`px-2 pt-1 pb-2 text-[11px] font-semibold tracking-wide ${headerText}`}>PREFERENCES</div>
-
         <div className="space-y-1">
-          {prefFiltered.map((item) => {
-            const active = activeSection === item.id;
+          {filteredSections.map((s) => {
+            const label = resolveSectionLabel(s);
+            const active = activeSection === s.id;
+
             return (
               <button
-                key={item.id}
+                key={s.id}
                 type="button"
-                onClick={item.onClick}
+                onClick={() => onSelect?.(s)}
                 className={[
                   "w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition",
-                  active ? activePill : hoverPill,
+                  active ? pillActive : pillHover,
                   rowText,
                 ].join(" ")}
               >
-                <span className={`${iconBlue}`}>
-                  <FinderIcon name="apps" />
+                <span className={iconBlue}>
+                  <FinderIcon name="settings" />
                 </span>
-                <span className="text-[15px] font-medium">{item.label}</span>
+                <span className="text-[15px] font-medium">{label}</span>
               </button>
             );
           })}
