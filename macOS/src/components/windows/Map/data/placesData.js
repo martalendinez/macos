@@ -85,7 +85,7 @@ export const placeDetails = {
 
   canada: {
     title: "Canada",
-    description: "A short adventure abroad in 2015.",
+    description: "A whirlwind adventure abroad in 2025",
     funFacts: [
       "My first time outside Europe, dealing with time zones like a champ (eventually)",
       "The most fun I’ve ever had — traveling across Canada, the US, and the Caribbean ✈️",

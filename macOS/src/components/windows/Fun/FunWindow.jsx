@@ -22,24 +22,14 @@ function AppIconTile({ app, t, theme = "light" }) {
     >
       {/* ICON */}
       <div className="w-[60px] h-[60px]">
-        <img
-          src={app.icon}
-          alt=""
-          className="w-full h-full object-contain drop-shadow-sm"
-        />
+        <img src={app.icon} alt="" className="w-full h-full object-contain drop-shadow-sm" />
       </div>
 
       {/* LABEL */}
-      <div className={`mt-2 text-[13px] font-medium text-center ${label}`}>
-        {app.title}
-      </div>
+      <div className={`mt-2 text-[13px] font-medium text-center ${label}`}>{app.title}</div>
 
       {/* SUBTITLE */}
-      {app.subtitle ? (
-        <div className={`mt-1 text-[11px] text-center ${sub}`}>
-          {app.subtitle}
-        </div>
-      ) : null}
+      {app.subtitle ? <div className={`mt-1 text-[11px] text-center ${sub}`}>{app.subtitle}</div> : null}
     </button>
   );
 }
@@ -79,8 +69,7 @@ export default function FunWindow({
   const topRef = useRef(null);
 
   // ✅ Sidebar "filters"
-  // NOTE: use ids that DO NOT clash with your preferences ids
-  const [activeSection, setActiveSection] = useState("pref_fun"); // highlight “Fun” by default
+  const [activeSection, setActiveSection] = useState("home");
 
   const sections = useMemo(
     () => [
@@ -92,29 +81,12 @@ export default function FunWindow({
     []
   );
 
-  // ✅ PREFERENCES shortcuts (sidebar)
-  const preferencesItems = useMemo(
-    () => [
-      { id: "pref_about", label: "About me", icon: "about", onClick: () => onOpenWindow?.("about") },
-      { id: "pref_map", label: "Map", icon: "map", onClick: () => onOpenWindow?.("map") },
-      { id: "pref_fun", label: "Fun", icon: "sparkles", onClick: () => onOpenWindow?.("fun") },
-      { id: "pref_terminal", label: "Terminal", icon: "terminal", onClick: () => onOpenWindow?.("terminal") },
-      { id: "pref_music", label: "Music", icon: "music", onClick: () => onOpenWindow?.("music") },
-    ],
-    [onOpenWindow]
-  );
-
-  // Clicking a FILTER section should show the grid, not open a window
   function handleSelectFromSidebar(item) {
     setActiveSection(item.id);
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // derive which filter is active (if a preference is active, default grid to "home")
-  const activeFilter =
-    activeSection === "tools" || activeSection === "games" || activeSection === "fun" || activeSection === "home"
-      ? activeSection
-      : "home";
+  const activeFilter = activeSection;
 
   const filteredApps = useMemo(() => {
     if (activeFilter === "home") return allApps;
@@ -150,8 +122,7 @@ export default function FunWindow({
         activeSection={activeSection}
         sections={sections}
         onSelect={handleSelectFromSidebar}
-        onOpenWindow={onOpenWindow}
-        preferencesItems={preferencesItems}
+        preferencesItems={[]} // ✅ hard-disable preferences rendering
       />
 
       <div className={`flex-1 h-full flex flex-col ${rightBg}`}>
@@ -166,7 +137,6 @@ export default function FunWindow({
         <div ref={topRef} className="flex-1 overflow-auto px-6 py-6">
           <div className={`text-[14px] font-semibold ${titleText}`}>{sectionTitle}</div>
 
-          {/* ✅ if you only have 3 apps, this looks better than lg:grid-cols-5 */}
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-x-6 gap-y-5">
             {filteredApps.map((a) => (
               <AppIconTile key={a.key} app={a} t={t} theme={theme} />
