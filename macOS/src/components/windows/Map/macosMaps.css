@@ -7,7 +7,9 @@
   overflow: hidden;
   box-shadow: 0 12px 30px rgba(0,0,0,0.12);
 }
-
+.dark-mode-map .leaflet-pane .leaflet-tile {
+  filter: brightness(0.88) contrast(1.02) saturate(0.95) !important;
+}
 .macos-maps-leaflet .leaflet-control-zoom a {
   width: 38px;
   height: 38px;

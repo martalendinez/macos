@@ -19,6 +19,11 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// ✅ Tile URLs (switch in dark mode)
+const LIGHT_TILE_URL = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+const DARK_TILE_URL =
+  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
 export default function MapWindow({ uiTheme = "glass", glassContrast = "light", theme = "light" }) {
   const t = getTokens(uiTheme, glassContrast);
   const isMac = t.isMac;
@@ -74,6 +79,12 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
       ? "hover:bg-white/8 border-transparent"
       : "hover:bg-black/5 border-transparent"
     : "hover:bg-white/10 border-transparent";
+
+  // ✅ choose map tiles by theme
+  const tileUrl = useMemo(() => (isDark ? DARK_TILE_URL : LIGHT_TILE_URL), [isDark]);
+
+  // ✅ optional: slightly different attribution if you want (kept simple)
+  const tileAttribution = "&copy; OpenStreetMap &copy; CARTO";
 
   return (
     <div className={`h-full ${shell} ${t.textMain}`}>
@@ -210,31 +221,30 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
             </button>
           </div>
 
-          <MapContainer
-            center={current.coords}
-            zoom={5}
-            scrollWheelZoom
-            zoomControl={false}
-            className="w-full h-full macos-maps-leaflet"
-          >
-            <Recenter coords={current.coords} zoom={5} />
+ <div className={`w-full h-full ${isDark ? "dark-mode-map" : ""}`}>
+  <MapContainer
+    center={current.coords}
+    zoom={5}
+    scrollWheelZoom
+    zoomControl={false}
+    className="w-full h-full macos-maps-leaflet"
+  >
+    <Recenter coords={current.coords} zoom={5} />
 
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-              attribution="&copy; OpenStreetMap &copy; CARTO"
-            />
+    <TileLayer url={tileUrl} attribution={tileAttribution} />
 
-            <ZoomControl position="bottomright" />
+    <ZoomControl position="bottomright" />
 
-            {Object.entries(placeDetails).map(([key, place]) => (
-              <Marker key={key} position={place.coords}>
-                <Popup className="macosMapsPopup">
-                  <div className="macosMapsPopupTitle">{place.title}</div>
-                  <div className="macosMapsPopupDesc">{place.description}</div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+    {Object.entries(placeDetails).map(([key, place]) => (
+      <Marker key={key} position={place.coords}>
+        <Popup className="macosMapsPopup">
+          <div className="macosMapsPopupTitle">{place.title}</div>
+          <div className="macosMapsPopupDesc">{place.description}</div>
+        </Popup>
+      </Marker>
+    ))}
+  </MapContainer>
+</div>
         </section>
       </div>
 
@@ -248,7 +258,7 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
         onClose={viewer.closeViewer}
         onNext={viewer.next}
         onPrev={viewer.prev}
-        theme={theme}   // ✅ important for dark/light blur feel
+        theme={theme} // ✅ important for dark/light blur feel
       />
     </div>
   );
