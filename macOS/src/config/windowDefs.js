@@ -12,14 +12,13 @@ import TerminalWindow from "../components/windows/terminal/TerminalWindow";
 import EmployerBrandingCaseStudyWindow from "../components/windows/Projects/EmployerBrandingCaseStudyWIndow";
 import StardewNotionCaseStudyWindow from "../components/windows/Projects/StardewNotionCaseStudyWindow";
 
-// ✅ Secret Projects overview vault
 import SecretProjectsWindow from "../components/windows/Projects/SecretProjectsWindow";
-
-// ✅ individual secret project window(s)
 import BehindTheButtonWindow from "../components/windows/Projects/BehindTheButtonWindow";
 
-// ✅ NEW: About this portfolio window
 import PortfolioInfoWindow from "../components/windows/Settings/components/PortfolioInfoWindow";
+
+// ✅ Recruiter Mode
+import RecruiterModeWindow from "../components/windows/RecruiterMode/RecruiterModeWindow";
 
 export const WINDOW_DEFS = {
   settings: {
@@ -29,6 +28,7 @@ export const WINDOW_DEFS = {
     height: 560,
     initialPos: { x: 220, y: 90 },
   },
+
   about: {
     title: "About me",
     Component: AboutWindow,
@@ -45,6 +45,14 @@ export const WINDOW_DEFS = {
     initialPos: { x: 250, y: 110 },
   },
 
+  recruiter: {
+    title: "Recruiter Mode",
+    Component: RecruiterModeWindow,
+    width: 820,
+    height: 560,
+    initialPos: { x: 240, y: 120 },
+  },
+
   projects: {
     title: "Projects",
     Component: ProjectsWindow,
@@ -52,6 +60,7 @@ export const WINDOW_DEFS = {
     height: 600,
     initialPos: { x: 200, y: 110 },
   },
+
   secretProjects: {
     title: "Secret Projects",
     Component: SecretProjectsWindow,
@@ -59,6 +68,7 @@ export const WINDOW_DEFS = {
     height: 600,
     initialPos: { x: 210, y: 120 },
   },
+
   behindTheButton: {
     title: "Behind the Button — WIP",
     Component: BehindTheButtonWindow,
@@ -66,6 +76,7 @@ export const WINDOW_DEFS = {
     height: 760,
     initialPos: { x: 140, y: 80 },
   },
+
   videos: {
     title: "Videos",
     Component: VideosWindow,
@@ -73,6 +84,7 @@ export const WINDOW_DEFS = {
     height: 520,
     initialPos: { x: 240, y: 130 },
   },
+
   fun: {
     title: "Extras & Fun",
     Component: FunWindow,
@@ -81,12 +93,11 @@ export const WINDOW_DEFS = {
     initialPos: { x: 240, y: 120 },
   },
 
-  // ✅ ONLY CHANGE IS HERE (Music is wider now)
   music: {
     title: "Music",
     Component: MusicWindow,
-    width: 900, // ✅ was 760
-    height: 580, // ✅ was 520 (optional but nicer)
+    width: 900,
+    height: 580,
     initialPos: { x: 180, y: 110 },
   },
 
@@ -97,6 +108,7 @@ export const WINDOW_DEFS = {
     height: 600,
     initialPos: { x: 220, y: 110 },
   },
+
   terminal: {
     title: "Terminal",
     Component: TerminalWindow,
@@ -104,6 +116,7 @@ export const WINDOW_DEFS = {
     height: 560,
     initialPos: { x: 240, y: 120 },
   },
+
   employerBrandingCaseStudy: {
     title: "Employer Branding — Case Study",
     Component: EmployerBrandingCaseStudyWindow,
@@ -111,6 +124,7 @@ export const WINDOW_DEFS = {
     height: 760,
     initialPos: { x: 140, y: 80 },
   },
+
   stardewNotionCaseStudy: {
     title: "Gamified Notion Template — Case Study",
     Component: StardewNotionCaseStudyWindow,

@@ -77,7 +77,8 @@ export default function MacWindow({
       <motion.div
         onMouseDown={() => onFocus(id)}
         className={[
-          "fixed rounded-2xl overflow-hidden",
+          // ✅ make the window a flex column so content can "flex-1"
+          "fixed rounded-2xl overflow-hidden flex flex-col",
           windowClassByTheme[uiTheme],
           isActive ? ringClass : "opacity-95",
           // ✅ this class enables global dark overrides for content
@@ -137,8 +138,10 @@ export default function MacWindow({
           <div className="w-[52px]" />
         </div>
 
-        {/* Content */}
-        <div className="relative h-[calc(100%-3rem)]">{children}</div>
+        {/* ✅ Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          {children}
+        </div>
       </motion.div>
     </>
   );

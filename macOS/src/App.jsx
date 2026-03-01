@@ -59,10 +59,7 @@ import { ALL_WALLPAPER_PAIRS } from "./components/windows/Settings/constants";
  * - Use the pairs defined in Settings
  * - Ensure your default pair (bgLight/bgDark) is included (in case Settings changes)
  */
-const WALLPAPER_PAIRS = [
-  { light: bgLight, dark: bgDark },
-  ...(ALL_WALLPAPER_PAIRS || []),
-];
+const WALLPAPER_PAIRS = [{ light: bgLight, dark: bgDark }, ...(ALL_WALLPAPER_PAIRS || [])];
 
 function swapToThemeWallpaper(current, nextTheme) {
   if (!current) return null; // null => use default activeWallpaper based on theme
@@ -246,9 +243,10 @@ export default function App() {
     [icons]
   );
 
+  // ✅ FIX: Recruiter Mode must open windowId "recruiter"
   const leftRailItems = useMemo(
     () => [
-      { icon: desktopIcons.timer, label: "Recruiter Mode", windowId: "timer" },
+      { icon: desktopIcons.timer, label: "Recruiter Mode", windowId: "recruiter" },
       { icon: desktopIcons.projects, label: "Projects", windowId: "projects" },
       { icon: desktopIcons.videos, label: "Videos", windowId: "videos" },
     ],
@@ -297,7 +295,7 @@ export default function App() {
       fontScale,
       accent,
       openWindow,
-      resetLayout, // ✅ NEW
+      resetLayout,
       notif.notify,
       notif.notifyOnce,
       notif.unlockAchievement,
@@ -307,17 +305,12 @@ export default function App() {
   );
 
   return (
-    <Shell
-      fontScale={fontScale}
-      baseTextClass={baseTextClass}
-      wallpaperUrl={activeWallpaper}
-      loaded={loaded}
-    >
+    <Shell fontScale={fontScale} baseTextClass={baseTextClass} wallpaperUrl={activeWallpaper} loaded={loaded}>
       <ToastStack uiTheme={uiTheme} toasts={notif.toasts} onDismiss={notif.dismissToast} />
 
       <NotificationCenter
         uiTheme={uiTheme}
-        theme={theme} // ✅ NEW
+        theme={theme}
         isOpen={notif.notifOpen}
         onClose={() => notif.setNotifOpen(false)}
         items={notif.notifications}
@@ -345,7 +338,6 @@ export default function App() {
 
       <ResumeIcon loaded={loaded} iconSrc={docIcon} unlockAchievement={notif.unlockAchievement} />
 
-      {/* ✅ pass theme into WindowsLayer so windows can render dark chrome */}
       <WindowsLayer
         openWindows={openWindows}
         activeWindow={activeWindow}
