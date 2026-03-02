@@ -141,9 +141,14 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
             {/* CTA */}
             <div className="mt-6 flex flex-wrap gap-2">
-              <a href="#" target="_blank" rel="noreferrer" className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}>
-                View on GitHub
-              </a>
+              <a
+  href="https://github.com/martalendinez/Kallos"
+  target="_blank"
+  rel="noreferrer"
+  className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+>
+  View on GitHub
+</a>
               <a href="#" target="_blank" rel="noreferrer" className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}>
                 Download PDF
               </a>
