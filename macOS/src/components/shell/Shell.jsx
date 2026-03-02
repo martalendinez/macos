@@ -1,24 +1,30 @@
 // src/components/shell/Shell.jsx
-import { motion } from "framer-motion";
-
-export default function Shell({
-  fontScale = 1,
-  baseTextClass = "text-white",
-  wallpaperUrl,
-  loaded,
-  children,
-}) {
+export default function Shell({ children, fontScale = 1, baseTextClass = "", wallpaperUrl, loaded }) {
   return (
-    <div style={{ fontSize: `${(fontScale ?? 1) * 16}px` }}>
-      <motion.div
-        className={`min-h-screen bg-cover bg-center font-sans ${baseTextClass} relative`}
-        style={{ backgroundImage: `url(${wallpaperUrl})` }}
-        initial={{ opacity: 0, filter: "blur(10px)" }}
-        animate={loaded ? { opacity: 1, filter: "blur(0px)" } : {}}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
-      </motion.div>
+    <div
+      className={[
+        "fixed inset-0 overflow-hidden", // ✅ lock the whole app to the viewport
+        baseTextClass,
+        loaded ? "opacity-100" : "opacity-0",
+        "transition-opacity duration-300",
+      ].join(" ")}
+      style={{
+        fontSize: `${fontScale}em`,
+      }}
+    >
+      {/* ✅ Wallpaper: fixed layer that NEVER scrolls */}
+      <div
+        className="fixed inset-0 -z-10 bg-cover bg-center"
+        style={{
+          backgroundImage: wallpaperUrl ? `url(${wallpaperUrl})` : undefined,
+        }}
+      />
+
+      {/* ✅ Optional: subtle overlay to prevent banding/white edges */}
+      <div className="fixed inset-0 -z-10 bg-black/10" />
+
+      {/* ✅ Foreground app layer */}
+      <div className="relative h-full w-full">{children}</div>
     </div>
   );
 }
