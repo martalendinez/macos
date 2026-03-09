@@ -1,24 +1,33 @@
 // src/config/windowDefs.js
-import SettingsWindow from "../components/windows/Settings/SettingsWindow";
-import AboutWindow from "../components/windows/About/AboutWindow";
-import ProjectsWindow from "../components/windows/Projects/ProjectsWindow";
-import VideosWindow from "../components/windows/VideosWindow";
+import { lazy } from "react";
 
-import FunWindow from "../components/windows/Fun/FunWindow";
-import MusicWindow from "../components/windows/Music/MusicWindow";
-import MapWindow from "../components/windows/Map/MapWindow";
-import TerminalWindow from "../components/windows/terminal/TerminalWindow";
+const SettingsWindow = lazy(() => import("../components/windows/Settings/SettingsWindow"));
+const AboutWindow = lazy(() => import("../components/windows/About/AboutWindow"));
+const ProjectsWindow = lazy(() => import("../components/windows/Projects/ProjectsWindow"));
+const VideosWindow = lazy(() => import("../components/windows/VideosWindow"));
 
-import EmployerBrandingCaseStudyWindow from "../components/windows/Projects/EmployerBrandingCaseStudyWIndow";
-import StardewNotionCaseStudyWindow from "../components/windows/Projects/StardewNotionCaseStudyWindow";
+const FunWindow = lazy(() => import("../components/windows/Fun/FunWindow"));
+const MusicWindow = lazy(() => import("../components/windows/Music/MusicWindow"));
+const MapWindow = lazy(() => import("../components/windows/Map/MapWindow"));
+const TerminalWindow = lazy(() => import("../components/windows/terminal/TerminalWindow"));
 
-import SecretProjectsWindow from "../components/windows/Projects/SecretProjectsWindow";
-import BehindTheButtonWindow from "../components/windows/Projects/BehindTheButtonWindow";
+const EmployerBrandingCaseStudyWindow = lazy(() =>
+  import("../components/windows/Projects/EmployerBrandingCaseStudyWIndow")
+);
+const StardewNotionCaseStudyWindow = lazy(() =>
+  import("../components/windows/Projects/StardewNotionCaseStudyWindow")
+);
 
-import PortfolioInfoWindow from "../components/windows/Settings/components/PortfolioInfoWindow";
+const SecretProjectsWindow = lazy(() => import("../components/windows/Projects/SecretProjectsWindow"));
+const BehindTheButtonWindow = lazy(() => import("../components/windows/Projects/BehindTheButtonWindow"));
 
-// ✅ Recruiter Mode
-import RecruiterModeWindow from "../components/windows/RecruiterMode/RecruiterModeWindow";
+const PortfolioInfoWindow = lazy(() =>
+  import("../components/windows/Settings/components/PortfolioInfoWindow")
+);
+
+const RecruiterModeWindow = lazy(() =>
+  import("../components/windows/RecruiterMode/RecruiterModeWindow")
+);
 
 export const WINDOW_DEFS = {
   settings: {

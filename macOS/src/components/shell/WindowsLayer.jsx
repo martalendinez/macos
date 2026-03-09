@@ -1,4 +1,5 @@
 // src/components/shell/WindowsLayer.jsx
+import { Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 import MacWindow from "../windows/MacWindow";
 
@@ -40,7 +41,15 @@ export default function WindowsLayer({
             isMaximized={!!maxMap?.[id]}
             onToggleMaximize={toggleMaximize}
           >
-            <WindowComponent {...appApi} />
+            <Suspense
+              fallback={
+                <div className="w-full h-full flex items-center justify-center text-sm opacity-70">
+                  Loading window...
+                </div>
+              }
+            >
+              <WindowComponent {...appApi} />
+            </Suspense>
           </MacWindow>
         );
       })}
