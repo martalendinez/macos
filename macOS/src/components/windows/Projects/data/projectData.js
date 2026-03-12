@@ -1,8 +1,15 @@
+import thesisThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
+import employerThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
+import restaurantThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
+import loyaltyThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
+import stardewThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
+
 export const PROJECTS = [
   {
     id: "thesis",
     title: "Human–AI Collaboration in UX Design (Master Thesis)",
     subtitle: "Designing AI as a thinking partner for UX workflows",
+    thumbnail: thesisThumb,
     tags: ["Research", "AI", "UX"],
     bullets: [
       "Investigates how designers collaborate with AI during early-stage ideation and wireframing",
@@ -19,12 +26,12 @@ export const PROJECTS = [
     id: "employerBranding",
     title: "Employer Branding Platform (Bachelor Thesis)",
     subtitle: "AI-powered analysis + recommendations for stronger employer brands",
+    thumbnail: employerThumb,
     tags: ["UX", "Product", "AI", "Full-stack"],
     bullets: [
       "Bachelor thesis in collaboration with PrideCom, designing and developing an AI-driven employer-branding platform",
       "Built end-to-end: UX research, wireframes, UI design, frontend, backend, and Dockerized deployment",
       "Used Meta’s LLaMA to analyze companies’ employer branding and generate tailored improvement recommendations",
-      "Created a full workflow for assessing brand maturity and guiding companies toward clearer, more consistent communication",
     ],
     links: [{ label: "Case Study", action: "openEmployerBrandingCaseStudy" }],
   },
@@ -32,6 +39,7 @@ export const PROJECTS = [
     id: "restaurantCoordination",
     title: "Group Restaurant Coordination System",
     subtitle: "Smart restaurant discovery + group booking for friends and teams",
+    thumbnail: restaurantThumb,
     tags: ["UX", "UI", "Frontend", "Product"],
     bullets: [
       "Designed a restaurant recommendation system for both individual discovery and group decision-making",
@@ -45,6 +53,7 @@ export const PROJECTS = [
     id: "loyaltySystem",
     title: "Unified Loyalty System",
     subtitle: "All your loyalty cards and rewards in one place",
+    thumbnail: loyaltyThumb,
     tags: ["UX", "UI", "Frontend", "Product"],
     bullets: [
       "Designed a loyalty-card aggregation system that centralizes memberships from multiple stores into a single app",
@@ -58,6 +67,7 @@ export const PROJECTS = [
     id: "stardewNotion",
     title: "Gamified Productivity System",
     subtitle: "A Stardew-Valley-inspired workflow built in Notion",
+    thumbnail: stardewThumb,
     tags: ["UX", "UI", "Systems Design"],
     bullets: [
       "Designed a gamified productivity system inspired by cozy-game progression loops and reward mechanics",

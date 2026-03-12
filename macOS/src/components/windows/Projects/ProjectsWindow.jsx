@@ -41,7 +41,7 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
           <TagBar tags={allTags} activeTag={activeTag} onPick={setActiveTag} styles={styles} />
         </div>
 
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filtered.map((p) => (
             <ProjectCard key={p.id} item={p} styles={styles} mode="projects" onAction={handleLinkClick} />
           ))}

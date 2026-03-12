@@ -8,6 +8,8 @@ import CaseStudySection from "./caseStudy/CaseStudySection";
 import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
 import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
+import interviewImg from "../../../imgs/case-study/kallos/Interview.png";
+import competitorImg from "../../../imgs/case-study/kallos/competitor_analysis.png";
 
 export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -16,9 +18,8 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   const IMAGES = useMemo(
     () => ({
       hero: null,
-      competitors: null,
-      interviews: null,
-      iaFlow: null,
+      competitors: competitorImg,
+      interviews: interviewImg,
       designSystem: null,
       lofi: null,
       hifi: null,
@@ -302,62 +303,50 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
             </CaseStudySection>
 
             {/* Research */}
-            <CaseStudySection id="research" title="Research" subtitle="Competitors + expert interviews + what we learned" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Competitor analysis</div>
-                <div className="mt-2">
-                  CultureAmp, Eletive, and Populum were analyzed. None offered a holistic employer branding solution; all relied heavily on surveys.
-                </div>
+<CaseStudySection id="research" title="Research" subtitle="Competitors + expert interviews + what we learned" theme={theme}>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-sm font-semibold ${theme.textMain}`}>Competitor analysis</div>
+    <div className="mt-2">
+      CultureAmp, Eletive, and Populum were analyzed. None offered a holistic employer branding solution; all relied heavily on surveys.
+    </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Expert interviews</div>
-                <div className="mt-2">
-                  To validate feasibility and trust requirements, I interviewed experts across HR, security, and AI:
-                </div>
-                <CaseStudyBulletList items={["HR Director at Toyota", "Marketing Lead at Accenture", "Cybersecurity expert", "AI engineer"]} />
+    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Expert interviews</div>
+    <div className="mt-2">
+      To validate feasibility and trust requirements, I interviewed experts across HR, security, and AI:
+    </div>
+    <CaseStudyBulletList items={["HR Director at Toyota", "Marketing Lead at Accenture", "Cybersecurity expert", "AI engineer"]} />
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Key insights</div>
-                <CaseStudyBulletList
-                  items={[
-                    "HR teams want automated data processing and clear dashboards for fast decision-making.",
-                    "Strong encryption and GDPR compliance are essential to build trust.",
-                    "AI should support recommendations — not replace HR judgment.",
-                  ]}
-                />
-              </div>
+    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Key insights</div>
+    <CaseStudyBulletList
+      items={[
+        "HR teams want automated data processing and clear dashboards for fast decision-making.",
+        "Strong encryption and GDPR compliance are essential to build trust.",
+        "AI should support recommendations — not replace HR judgment.",
+      ]}
+    />
+  </div>
+<div className="mt-6 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 items-stretch">
+  <CaseStudyImageTile
+    src={IMAGES.competitors}
+    alt="Competitor analysis"
+    caption="Competitor matrix / feature comparison."
+    aspect="auto"
+    fit="contain"
+    theme={theme}
+    onOpen={openLightbox}
+  />
 
-              <Gallery3
-                a={
-                  <CaseStudyImageTile
-                    src={IMAGES.competitors}
-                    alt="Competitor analysis"
-                    caption="Competitor matrix / feature comparison."
-                    aspect="4/3"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-                b={
-                  <CaseStudyImageTile
-                    src={IMAGES.interviews}
-                    alt="Expert interviews"
-                    caption="Interview notes / themes / synthesis."
-                    aspect="4/3"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-                c={
-                  <CaseStudyImageTile
-                    src={IMAGES.iaFlow}
-                    alt="Early flow"
-                    caption="Optional: how research shaped structure."
-                    aspect="4/3"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-              />
-            </CaseStudySection>
+  <CaseStudyImageTile
+    src={IMAGES.interviews}
+    alt="Expert interviews"
+    caption="Interview notes / themes / synthesis."
+    aspect="auto"
+    fit="contain"
+    theme={theme}
+    onOpen={openLightbox}
+  />
+</div>
+</CaseStudySection>
 
             {/* Requirements */}
             <CaseStudySection id="requirements" title="Requirements" subtitle="Clarity + trust constraints" theme={theme}>
