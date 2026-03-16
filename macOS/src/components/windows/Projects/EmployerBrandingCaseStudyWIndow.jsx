@@ -19,6 +19,11 @@ import designSystem1Img from "../../../imgs/case-study/kallos/DesignSystem1.png"
 import designSystem2Img from "../../../imgs/case-study/kallos/DesignSystem2.png";
 import lofiImg from "../../../imgs/case-study/kallos/Lofi.png";
 import testingImg from "../../../imgs/case-study/kallos/Testing.png";
+import iterationsImg from "../../../imgs/case-study/kallos/Survey_Iterations.png";
+import recommendationsImg from "../../../imgs/case-study/kallos/recommendations.png";
+import dashboardImg from "../../../imgs/case-study/kallos/Dashboard.png";
+import mockupImg from "../../../imgs/case-study/kallos/Kallos_Mockup.png";
+import finalImg from "../../../imgs/case-study/kallos/Laptop_Kallos.png";
 
 export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -26,7 +31,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   // Images (plug real imports/urls later)
   const IMAGES = useMemo(
     () => ({
-      hero: null,
+      hero: mockupImg,
       competitors: competitorImg,
       interviews: interviewImg,
       designSystem: designSystem1Img,
@@ -37,11 +42,11 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
       iaFlow: IAImg,
       persona: personaImg,
       empathyMap: empathyMapImg,
-      dashboard: null,
-      recommendations: null,
+      dashboard: dashboardImg,
+      recommendations: recommendationsImg,
       testing: testingImg,
-      iterations: null,
-      finalScreens: null,
+      iterations: iterationsImg,
+      finalScreens: finalImg,
     }),
     []
   );
@@ -277,7 +282,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
                   <CaseStudyImageTile
                     src={IMAGES.dashboard}
                     alt="Dashboard highlight"
-                    caption="Optional: key dashboard view."
+                    caption="Key dashboard view."
                     aspect="16/9"
                     theme={theme}
                     onOpen={openLightbox}
@@ -287,7 +292,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
                   <CaseStudyImageTile
                     src={IMAGES.recommendations}
                     alt="Recommendations highlight"
-                    caption="Optional: recommendations view."
+                    caption="Recommendations view."
                     aspect="16/9"
                     theme={theme}
                     onOpen={openLightbox}
@@ -524,7 +529,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
               <Gallery2
                 a={<CaseStudyImageTile src={IMAGES.testing} alt="Testing" caption="Testing HR metrics" aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.iterations} alt="Iterations" caption="Before/after changes and iterations." aspect="4/3" theme={theme} onOpen={openLightbox} />}
+                b={<CaseStudyImageTile src={IMAGES.iterations} alt="Iterations" caption="Iterations on Question Banks" aspect="4/3" theme={theme} onOpen={openLightbox} />}
               />
             </CaseStudySection>
 
@@ -552,7 +557,8 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
                 <CaseStudyImageTile
                   src={IMAGES.finalScreens}
                   alt="Final screens"
-                  caption="Optional: a collage of final key screens."
+                  caption="Final mockup."
+                  fit="contain"
                   aspect="16/9"
                   theme={theme}
                   onOpen={openLightbox}
