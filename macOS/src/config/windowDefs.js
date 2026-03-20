@@ -18,6 +18,11 @@ const StardewNotionCaseStudyWindow = lazy(() =>
   import("../components/windows/Projects/StardewNotionCaseStudyWindow")
 );
 
+// ⭐ NEW: Sällskap case study window
+const GroupDiningCaseStudyWindow = lazy(() =>
+  import("../components/windows/Projects/GroupDiningCaseStudyWindow")
+);
+
 const SecretProjectsWindow = lazy(() => import("../components/windows/Projects/SecretProjectsWindow"));
 const BehindTheButtonWindow = lazy(() => import("../components/windows/Projects/BehindTheButtonWindow"));
 
@@ -137,6 +142,15 @@ export const WINDOW_DEFS = {
   stardewNotionCaseStudy: {
     title: "Gamified Notion Template — Case Study",
     Component: StardewNotionCaseStudyWindow,
+    width: 1180,
+    height: 760,
+    initialPos: { x: 140, y: 80 },
+  },
+
+  // ⭐ NEW: Sällskap case study window entry
+  groupDiningCaseStudy: {
+    title: "Sällskap — Group Dining Coordination",
+    Component: GroupDiningCaseStudyWindow,
     width: 1180,
     height: 760,
     initialPos: { x: 140, y: 80 },

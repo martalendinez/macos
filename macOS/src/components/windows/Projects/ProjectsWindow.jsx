@@ -21,6 +21,12 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
       return;
     }
 
+    // ⭐ NEW: Sällskap case study
+    if (link.action === "openGroupDiningCaseStudy") {
+      onOpenWindow?.("groupDiningCaseStudy");
+      return;
+    }
+
     if (link.href && link.href !== "#") {
       window.open(link.href, "_blank", "noreferrer");
     }
@@ -41,9 +47,15 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
           <TagBar tags={allTags} activeTag={activeTag} onPick={setActiveTag} styles={styles} />
         </div>
 
-       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filtered.map((p) => (
-            <ProjectCard key={p.id} item={p} styles={styles} mode="projects" onAction={handleLinkClick} />
+            <ProjectCard
+              key={p.id}
+              item={p}
+              styles={styles}
+              mode="projects"
+              onAction={handleLinkClick}
+            />
           ))}
         </div>
 

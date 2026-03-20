@@ -22,6 +22,7 @@ export const PROJECTS = [
       { label: "PDF", href: "#" },
     ],
   },
+
   {
     id: "employerBranding",
     title: "Employer Branding Platform (Bachelor Thesis)",
@@ -35,6 +36,7 @@ export const PROJECTS = [
     ],
     links: [{ label: "Case Study", action: "openEmployerBrandingCaseStudy" }],
   },
+
   {
     id: "restaurantCoordination",
     title: "Group Restaurant Coordination System",
@@ -47,8 +49,11 @@ export const PROJECTS = [
       "Implemented the UX, UI, and frontend for a seamless end-to-end booking experience",
       "Focused on reducing coordination friction and making group dining decisions fast, fair, and transparent",
     ],
-    links: [{ label: "Case Study", href: "#" }],
+
+    // ⭐ NEW: Sällskap case study link
+    links: [{ label: "Case Study", action: "openGroupDiningCaseStudy" }],
   },
+
   {
     id: "loyaltySystem",
     title: "Unified Loyalty System",
@@ -63,6 +68,7 @@ export const PROJECTS = [
     ],
     links: [{ label: "Case Study", href: "#" }],
   },
+
   {
     id: "stardewNotion",
     title: "Gamified Productivity System",
