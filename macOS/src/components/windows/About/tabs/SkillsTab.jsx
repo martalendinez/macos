@@ -27,6 +27,12 @@ export default function SkillsTab({ styles }) {
         <SkillRow styles={styles} isMac={isMac} name="Git" level="Advanced" />
       </SkillGroup>
 
+      <SkillGroup styles={styles} title="AI TOOLS" icon="🤖">
+        <SkillRow styles={styles} isMac={isMac} name="Claude" level="Intermediate" />
+        <SkillRow styles={styles} isMac={isMac} name="Supabase" level="Intermediate" />
+        <SkillRow styles={styles} isMac={isMac} name="Loveable" level="Intermediate" />
+      </SkillGroup>
+
       <SkillGroup styles={styles} title="UX RESEARCH & METHODS" icon="🔬">
         <SkillRow styles={styles} isMac={isMac} name="User Interviews" level="Expert" />
         <SkillRow styles={styles} isMac={isMac} name="Usability Testing" level="Expert" />
