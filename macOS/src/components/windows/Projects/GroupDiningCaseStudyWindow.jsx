@@ -19,12 +19,12 @@ import empathyMapImg from "../../../imgs/case-study/sallskap/Elina_Empathy_Map.p
 import designSystem1Img from "../../../imgs/case-study/kallos/DesignSystem1.png";
 import designSystem2Img from "../../../imgs/case-study/kallos/DesignSystem2.png";
 import lofiImg from "../../../imgs/case-study/kallos/Lofi.png";
-import testingImg from "../../../imgs/case-study/kallos/Testing.png";
-import iterationsImg from "../../../imgs/case-study/kallos/Survey_Iterations.png";
-import recommendationsImg from "../../../imgs/case-study/kallos/recommendations.png";
-import dashboardImg from "../../../imgs/case-study/kallos/Dashboard.png";
-import mockupImg from "../../../imgs/case-study/kallos/Kallos_Mockup.png";
-import finalImg from "../../../imgs/case-study/kallos/Laptop_Kallos.png";
+import testingImg from "../../../imgs/case-study/sallskap/Dining_Reviews.png";
+import iterationsImg from "../../../imgs/case-study/sallskap/Dining_Dark.png";
+import recommendationsImg from "../../../imgs/case-study/sallskap/Dining_Restaurant.png";
+import dashboardImg from "../../../imgs/case-study/sallskap/Dining_Group.png";
+import mockupImg from "../../../imgs/case-study/sallskap/Dining_Overall.png";
+import finalImg from "../../../imgs/case-study/sallskap/Dining_Mockup.png";
 
 export default function GroupDiningCaseStudyWindow({
   uiTheme = "glass",
@@ -328,7 +328,7 @@ function scrollToSection(id) {
       <CaseStudyImageTile
         src={IMAGES.dashboard}
         alt="Flow highlight"
-        caption="Core coordination flow (placeholder)."
+        caption="Core coordination flow."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
@@ -338,7 +338,7 @@ function scrollToSection(id) {
       <CaseStudyImageTile
         src={IMAGES.recommendations}
         alt="Restaurant selection highlight"
-        caption="Restaurant selection / decision view (placeholder)."
+        caption="Restaurant selection decision view."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
@@ -701,7 +701,7 @@ is approachable, and the components feel airy and modern.
       <CaseStudyImageTile
         src={IMAGES.testing}
         alt="Testing artifacts"
-        caption="Testing artifacts and notes."
+        caption="Restaurant Reviews - Iteration."
         aspect="4/3"
         theme={theme}
         onOpen={openLightbox}
@@ -711,7 +711,7 @@ is approachable, and the components feel airy and modern.
       <CaseStudyImageTile
         src={IMAGES.iterations}
         alt="Iterations"
-        caption="Iterations planned based on testing insights."
+        caption="Dark Mode - Iteration."
         aspect="4/3"
         theme={theme}
         onOpen={openLightbox}
@@ -727,10 +727,10 @@ is approachable, and the components feel airy and modern.
     <div className={`text-sm font-semibold ${theme.textMain}`}>Key improvements made after testing</div>
     <CaseStudyBulletList
       items={[
+        "Introduced Dark Mode to improve accessibility, comfort, and visual polish across the experience",
         "Added a Back button across the entire flow to reduce dead-ends and increase confidence",
         "Redesigned navigation icons and added labels to improve scannability and reduce guesswork",
-        "Improved restaurant cards with clearer affordances and more visible interaction cues",
-        "Added full restaurant details (address, phone, dietary tags) to support decision-making",
+        "Added full restaurant details (reviews, address, phone, dietary tags) to support decision-making",
         "Reworked the share action to use native sharing options instead of a generic copy link",
         "Added clearer confirmation messaging after booking to close the loop for organizers",
 
@@ -770,7 +770,7 @@ is approachable, and the components feel airy and modern.
     <CaseStudyImageTile
       src={IMAGES.finalScreens}
       alt="Final screens"
-      caption="Final mockup (placeholder) — to be replaced with Sällskap UI."
+      caption="Final mockup."
       fit="contain"
       aspect="16/9"
       theme={theme}
