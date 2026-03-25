@@ -368,7 +368,6 @@ function scrollToSection(id) {
     />
   </div>
 </CaseStudySection>
-
 {/* Research */}
 <CaseStudySection
   id="research"
@@ -381,10 +380,9 @@ function scrollToSection(id) {
     {/* Initial Direction */}
     <div className={`text-sm font-semibold ${theme.textMain}`}>Initial direction</div>
     <div className="mt-2">
-      The project began as a broader concept: a platform supporting both <strong>solo diners </strong> 
-      and <strong>groups</strong>, with a focus on dietary needs, menu transparency, and seating preferences.
-      To validate the opportunity, I ran a competitive analysis and conducted five user interviews with 
-      young adults and adults who dine out regularly.
+      The concept originally aimed to support both <strong>solo diners</strong> and <strong>groups</strong>.
+      To understand the opportunity, I ran a competitive analysis and interviewed five people (20-45 years-old) who
+      regularly organize or join group dinners.
     </div>
 
     {/* Competitive Analysis Summary */}
@@ -392,14 +390,12 @@ function scrollToSection(id) {
       Competitive analysis — key takeaways
     </div>
     <div className="mt-2 text-[15px] leading-7">
-      I compared major platforms (OpenTable, Resy, TheFork, Bookatable, Quandoo) to understand how well 
-      they support both solo and group diners. Three clear gaps emerged:
+      Reviewing major platforms (OpenTable, Resy, TheFork, Bookatable, Quandoo) revealed three consistent gaps:
       <ul className="list-disc ml-5 mt-2">
-        <li><strong>No platform supports group decision‑making</strong> — coordination still happens in chat apps.</li>
-        <li><strong>Dietary needs are handled superficially</strong> — usually as a free‑text “special request.”</li>
-        <li><strong>Personalization is minimal</strong> — recommendations are generic, not based on group constraints.</li>
+        <li><strong>No support for group decision‑making</strong> — coordination still happens in chat apps.</li>
+        <li><strong>Dietary needs are handled superficially</strong> — usually a free‑text “special request.”</li>
+        <li><strong>Minimal personalization</strong> — recommendations don’t adapt to group constraints.</li>
       </ul>
-      These gaps pointed toward a stronger opportunity in <strong>group coordination</strong> rather than solo dining.
     </div>
 
     {/* Interview Summary */}
@@ -407,14 +403,8 @@ function scrollToSection(id) {
       User interviews — biggest insights
     </div>
     <div className="mt-2 text-[15px] leading-7">
-      I interviewed five participants (ages 22–45) who frequently organize or join group dinners. 
-      The most consistent patterns were:
-      <ul className="list-disc ml-5 mt-2">
-        <li><strong>Group planning is chaotic</strong> — WhatsApp threads, polls, and scattered preferences slow everything down.</li>
-        <li><strong>Dietary needs are sensitive</strong> — people want them respected without feeling singled out.</li>
-        <li><strong>Restaurant discovery is fragmented</strong> — users bounce between Maps, Instagram, and booking apps.</li>
-        <li><strong>Organizers carry the mental load</strong> — they feel responsible for making everyone happy.</li>
-      </ul>
+      Interviews reinforced the same themes: planning happens across scattered chats and polls,
+      dietary needs are sensitive, discovery is fragmented, and organizers carry most of the mental load.
     </div>
 
     {/* Pivot */}
@@ -422,15 +412,13 @@ function scrollToSection(id) {
       Why I shifted the concept
     </div>
     <div className="mt-2 text-[15px] leading-7">
-      Both research streams pointed to the same conclusion: 
-      <strong> group dining coordination is the real, underserved problem. </strong>   
-       Solo dining had interesting emotional insights, but the clearest opportunity for impact — and 
-      the biggest UX gap — was helping groups align on availability, dietary needs, and restaurant choices.
-      <br /><br />
-      This led to a focused product direction: a structured, low‑friction flow designed specifically 
-      for group decision‑making.
+      Both research streams pointed to the same conclusion:
+      <strong> group dining coordination is the real, underserved problem.</strong>
+      This led to a focused direction: a structured, low‑friction flow designed specifically for
+      helping groups align on availability, dietary needs, and restaurant choices.
     </div>
   </div>
+
 
 
  {/* Competitor Analysis Image */}
