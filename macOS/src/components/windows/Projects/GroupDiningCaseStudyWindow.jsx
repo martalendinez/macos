@@ -175,26 +175,36 @@ function scrollToSection(id) {
               availability, dietary needs, and preferences — designed and built as a UX + full‑stack
               concept prototype.
             </div>
+{/* CTAs: Live app + GitHub + Full Case Study */}
+<div className="mt-6 flex flex-wrap gap-2">
+  <a
+    href="https://sallskap-git-main-martalendinezs-projects.vercel.app"
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    View Live App
+  </a>
 
-            {/* CTAs: Live app + GitHub */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              <a
-                href="https://sallskap-git-main-martalendinezs-projects.vercel.app"
-                target="_blank"
-                rel="noreferrer"
-                className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
-              >
-                View Live App
-              </a>
-              <a
-                href="https://github.com/martalendinez/Sallskap"
-                target="_blank"
-                rel="noreferrer"
-                className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
-              >
-                View GitHub Repo
-              </a>
-            </div>
+  <a
+    href="https://github.com/martalendinez/Sallskap"
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    View GitHub Repo
+  </a>
+
+  <a
+    href="/Sallskap_Case_Study.pdf" 
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    Read Full Case Study
+  </a>
+</div>
+
 
             {/* Overview */}
             <div
@@ -354,7 +364,6 @@ function scrollToSection(id) {
         "UI: Scandinavian minimalism with soft neutrals and calm geometry",
         "Engineering: React + Supabase backend, Lovable for rapid iteration",
         "Architecture: schema for groups, members, preferences, and reservations",
-        "Future: planned AI‑assisted suggestions for restaurants and coordination nudges",
       ]}
     />
   </div>
@@ -722,98 +731,38 @@ is approachable, and the components feel airy and modern.
     }
   />
 
-  {/* Priority Roadmap */}
-  <div className="mt-10">
-    <div className={`text-lg font-semibold ${theme.textMain}`}>Priority Roadmap</div>
-    <div className={`mt-3 text-sm ${theme.textSub}`}>
-      Based on testing insights, I created a clear roadmap for what to improve next.
-    </div>
+{/* Iterations */}
+<div className="mt-10">
+  <div className={`text-lg font-semibold ${theme.textMain}`}>Iterations</div>
 
-    {/* HIGH PRIORITY */}
-    <div className="mt-6">
-      <div className={`text-sm font-semibold ${theme.textMain}`}>🔥 High Priority — Core usability blockers</div>
-      <CaseStudyBulletList
-        items={[
-          "Redesign My Reservations icon (must read as “booking,” not generic calendar)",
-          "Redesign Favorites icon (heart/bookmark)",
-          "Add a Back button across the entire flow",
-          "Add labels or tooltips to top navigation icons",
-          "Replace “Copy link” with native share options (WhatsApp, Instagram, Email, iMessage, Messenger)",
-          "Add filters: location, dietary, price, preferences, adaptive tags",
-          "Make restaurant cards clearly interactive",
-          "Add clear email confirmation message",
-          "Show full restaurant address + phone number",
-          "Add time to past reservations",
-        ]}
-      />
-    </div>
-
-    {/* MEDIUM PRIORITY */}
-    <div className="mt-6">
-      <div className={`text-sm font-semibold ${theme.textMain}`}>⚡ Medium Priority — Flow improvements & guidance</div>
-      <CaseStudyBulletList
-        items={[
-          "Add progress indicator (“Step 2 of 4”)",
-          "Add “skip for now” options",
-          "Add tooltip for price ($)",
-          "Show reviews when tapping the star icon",
-        ]}
-      />
-    </div>
-
-    {/* LOW PRIORITY */}
-    <div className="mt-6">
-      <div className={`text-sm font-semibold ${theme.textMain}`}>🌙 Low Priority — Enhancements & polish</div>
-      <CaseStudyBulletList
-        items={[
-          "Add Dark Mode",
-          "Improve imagery across the experience",
-          "Enhance Thank You page with visuals and confirmation cues",
-        ]}
-      />
-    </div>
-  </div>
-</CaseStudySection>
-{/* Trade-offs */}
-<CaseStudySection
-  id="tradeoffs"
-  title="Trade-offs"
-  subtitle="Constraints that shaped the prototype"
-  theme={theme}
->
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div className="mt-6">
+    <div className={`text-sm font-semibold ${theme.textMain}`}>Key improvements made after testing</div>
     <CaseStudyBulletList
       items={[
-        "Time‑boxed scope: focused on one core flow instead of multiple edge cases",
-        "Concept prototype: no production‑grade auth or payments yet",
-        "Placeholder restaurant data: real integrations would change some UX details",
-        "AI features scoped for later: current version focuses on clear, manual control",
+        "Added a Back button across the entire flow to reduce dead-ends and increase confidence",
+        "Redesigned navigation icons and added labels to improve scannability and reduce guesswork",
+        "Improved restaurant cards with clearer affordances and more visible interaction cues",
+        "Added full restaurant details (address, phone, dietary tags) to support decision-making",
+        "Reworked the share action to use native sharing options instead of a generic copy link",
+        "Added clearer confirmation messaging after booking to close the loop for organizers",
+
       ]}
     />
   </div>
-</CaseStudySection>
 
-{/* Impact */}
-<CaseStudySection
-  id="impact"
-  title="Impact"
-  subtitle="What this prototype demonstrates"
-  theme={theme}
->
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Conceptual impact</div>
-    <div className={`mt-3 ${theme.textBody}`}>
-      Sällskap demonstrates how UX thinking and full‑stack implementation can reshape a familiar
-      but under‑served problem: group dining coordination. Even as a concept prototype, it:
-      <CaseStudyBulletList
-        items={[
-          "Shows a structured, respectful way to handle dietary needs in group contexts",
-          "Highlights how a single, guided flow can reduce coordination friction",
-          "Provides a foundation for future AI‑assisted suggestions and nudges",
-        ]}
-      />
-    </div>
+  <div className="mt-6">
+    <div className={`text-sm font-semibold ${theme.textMain}`}>Impact of these changes</div>
+    <CaseStudyBulletList
+      items={[
+        "Users moved through the flow faster and with fewer clarifying questions",
+        "Organizers reported feeling more in control and less worried about making mistakes",
+        "Participants understood their role more clearly and completed tasks with less friction",
+        "Overall confidence in the product increased, especially around the booking confirmation step",
+      ]}
+    />
   </div>
+</div>
+
 </CaseStudySection>
 
 {/* Final outcome */}
