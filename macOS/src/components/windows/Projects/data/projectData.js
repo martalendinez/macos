@@ -52,35 +52,5 @@ export const PROJECTS = [
 
     // ⭐ NEW: Sällskap case study link
     links: [{ label: "Case Study", action: "openGroupDiningCaseStudy" }],
-  },
-
-  {
-    id: "loyaltySystem",
-    title: "Unified Loyalty System",
-    subtitle: "All your loyalty cards and rewards in one place",
-    thumbnail: loyaltyThumb,
-    tags: ["UX", "UI", "Frontend", "Product"],
-    bullets: [
-      "Designed a loyalty-card aggregation system that centralizes memberships from multiple stores into a single app",
-      "Built a demo Matcha café experience to showcase how points are collected, tracked, and redeemed",
-      "Created the UX, UI, and frontend implementation for a smooth, intuitive user journey",
-      "Focused on simplifying reward management and making loyalty programs more transparent and engaging",
-    ],
-    links: [{ label: "Case Study", href: "#" }],
-  },
-
-  {
-    id: "stardewNotion",
-    title: "Gamified Productivity System",
-    subtitle: "A Stardew-Valley-inspired workflow built in Notion",
-    thumbnail: stardewThumb,
-    tags: ["UX", "UI", "Systems Design"],
-    bullets: [
-      "Designed a gamified productivity system inspired by cozy-game progression loops and reward mechanics",
-      "Built the full experience in Notion, including tasks, leveling, streaks, and resource-based incentives",
-      "Created the UX and UI structure to make daily planning feel playful, motivating, and easy to maintain",
-      "Focused on blending game-like feedback with practical productivity workflows",
-    ],
-    links: [{ label: "Case Study", action: "openStardewNotionCaseStudy" }],
-  },
+  }, 
 ];

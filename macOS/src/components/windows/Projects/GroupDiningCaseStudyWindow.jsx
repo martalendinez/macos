@@ -198,7 +198,7 @@ function scrollToSection(id) {
   </a>
 
   <a
-    href="/Sallskap_Case_Study.pdf" 
+    href="https://flair-fabrica.vercel.app" 
     target="_blank"
     rel="noreferrer"
     className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
