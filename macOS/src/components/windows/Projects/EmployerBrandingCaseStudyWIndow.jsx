@@ -430,9 +430,26 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="Personas, journeys, content inventory, flowchart"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    I designed personas, empathy maps, user journeys, a content inventory, and a full design flowchart.
-  </div>
+<div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  I designed personas, empathy maps, user journeys, a content inventory, and a full design flowchart. 
+  These weren’t just documentation — they shaped the core UX decisions:
+  <ul className="list-disc ml-5 mt-2">
+    <li>
+      <span className={`font-semibold ${theme.textMain}`}>Persona: </span> 
+      distilled the real constraints HR professionals face (time pressure, limited resources, uncertainty around employer branding). 
+      This clarified where the product needed to reduce cognitive load, guide decisions, and build trust.
+    </li>
+    <li className="mt-2">
+      <span className={`font-semibold ${theme.textMain}`}>Design flowchart: </span> 
+      mapped the entire system logic to expose friction points, dependencies, and dead ends. 
+      It ensured the experience felt predictable, supportive, and aligned with how HR teams naturally move through tasks.
+    </li>
+  </ul>
+</div>
+
+
+
+
 
   <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
     <CaseStudyImageTile
@@ -481,18 +498,127 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 />
             </CaseStudySection>
 
-            <CaseStudySection id="development" title="Development" subtitle="How the build supported UX quality, security, and reliability" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                Built with Python, Flask, PostgreSQL, LM Studio (LLaMA 3), and Docker.
-              </div>
-            </CaseStudySection>
+           <CaseStudySection
+  id="development"
+  title="Development"
+  subtitle="How the build supported UX quality, security, and reliability"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    The platform was built using a modern, reliable stack designed to support
+    secure data handling and smooth user experience.
+    <ul className="list-disc ml-5 mt-2">
+      <li>
+        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
+          Python & Flask
+        </span>
+        for a lightweight, fast backend that enabled clean routing, modular
+        logic, and easy integration with AI components.
+      </li>
 
-            <CaseStudySection id="features" title="Key features" subtitle="Where HR teams get value" theme={theme}>
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.dashboard} alt="Dashboard screen" caption="Dashboard view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.recommendations} alt="Recommendations screen" caption="Recommendations view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
+      <li className="mt-2">
+        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
+          PostgreSQL
+        </span>
+        as a robust relational database for storing surveys, KPIs, and encrypted
+        user data with high reliability.
+      </li>
+
+      <li className="mt-2">
+        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
+          LLaMA 3 via LM Studio
+        </span>
+        powering the employer‑branding analysis through NLP, sentiment
+        extraction, and interpretation of survey data.
+      </li>
+
+      <li className="mt-2">
+        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
+          Docker
+        </span>
+        to containerize the entire system, ensuring consistent environments,
+        reproducible builds, and smooth deployment.
+      </li>
+
+      <li className="mt-2">
+        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
+          PyNaCl encryption
+        </span>
+        to securely encrypt sensitive fields before storing them in the
+        database.
+      </li>
+    </ul>
+    Together, these choices ensured a stable backend, secure data flow, and a
+    responsive interface that supported the UX goals of clarity, security, and
+    reliability.
+  </div>
+</CaseStudySection>
+
+
+
+
+           <CaseStudySection
+  id="features"
+  title="Key features"
+  subtitle="Where HR teams get value"
+  theme={theme}
+>
+ 
+
+  <div className={`rounded-2xl p-5 border mt-6 ${theme.softCard}`}>
+    The platform delivers value through three core features:
+    <ul className="list-disc ml-5 mt-2">
+      <li>
+        <span className={`font-semibold ${theme.textMain}`}>
+          LLM‑powered employer branding analysis
+        </span>{" "}
+        combining company surveys, in‑platform questions, and web‑scraped data.
+        The system uses NLP and sentiment analysis to extract themes, identify
+        gaps, and surface insights across all data sources.
+      </li>
+
+      <li className="mt-2">
+        <span className={`font-semibold ${theme.textMain}`}>
+          Employer branding recommendations
+        </span>{" "}
+        tailored to each company’s maturity level. The platform translates
+        insights into clear, actionable steps HR teams can implement immediately.
+      </li>
+
+      <li className="mt-2">
+        <span className={`font-semibold ${theme.textMain}`}>
+          Competitor benchmarking
+        </span>{" "}
+        that compares your employer brand performance against similar companies,
+        helping HR teams understand where they stand and where to improve.
+      </li>
+    </ul>
+    
+  </div>
+   <Gallery2
+    a={
+      <CaseStudyImageTile
+        src={IMAGES.dashboard}
+        alt="Dashboard screen"
+        caption="Dashboard view."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+    }
+    b={
+      <CaseStudyImageTile
+        src={IMAGES.recommendations}
+        alt="Recommendations screen"
+        caption="Recommendations view."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+    }
+  />
+</CaseStudySection>
+
 
            <CaseStudySection
   id="testing"
@@ -533,20 +659,74 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
               />
             </CaseStudySection>
 
-            <CaseStudySection id="tradeoffs" title="Trade-offs" subtitle="Constraints that shaped the product" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <CaseStudyBulletList items={["4-month timeline (scope had to be tight and prioritized)", "GDPR + encryption requirements (trust first)", "Limited real-world data (careful framing of results)"]} />
-              </div>
-            </CaseStudySection>
+           <CaseStudySection
+  id="tradeoffs"
+  title="Trade-offs"
+  subtitle="Constraints that shaped the product"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <CaseStudyBulletList
+      items={[
+        "4‑month timeline (scope had to be tight and prioritized)",
+        "GDPR + encryption requirements (trust first)",
+        "Limited real‑world data (careful framing of results)"
+      ]}
+    />
 
-            <CaseStudySection id="impact" title="Impact" subtitle="What HR professionals validated" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Quotes</div>
-                <div className={`mt-3 ${theme.textBody}`}>
-                  “Everything is very clear.” · “Very good, very in line with HR vocabulary.” · “Very modern and professional.”
-                </div>
-              </div>
-            </CaseStudySection>
+    <div className="mt-4">
+      <span className={`font-semibold ${theme.textMain}`}>
+        What I would do differently next time:
+      </span>
+      <ul className="list-disc ml-5 mt-2">
+        <li>
+          Expand testing earlier with a broader range of HR roles to validate
+          edge cases and different organizational contexts.
+        </li>
+        <li>
+          Integrate more real‑world datasets sooner to stress‑test the analysis
+          logic and refine recommendations with higher fidelity.
+        </li>
+        <li>
+          Prototype the AI explanation layer earlier to explore how to make
+          insights more transparent and trustworthy.
+        </li>
+      </ul>
+    </div>
+  </div>
+</CaseStudySection>
+
+
+            <CaseStudySection
+  id="impact"
+  title="Impact"
+  subtitle="What HR professionals validated"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-sm font-semibold ${theme.textMain}`}>What resonated</div>
+    <div className={`mt-3 ${theme.textBody}`}>
+      HR professionals consistently highlighted three things: the clarity of the
+      interface, the relevance of the language, and the sense of guidance the
+      platform provided throughout the workflow.
+    </div>
+
+    <div className={`text-sm font-semibold mt-4 ${theme.textMain}`}>Quotes</div>
+    <div className={`mt-3 ${theme.textBody}`}>
+      “Everything is very clear.” · “Very good, very in line with HR vocabulary.” ·
+      “Very modern and professional.”
+    </div>
+
+    <div className={`text-sm font-semibold mt-4 ${theme.textMain}`}>Why it matters</div>
+    <div className={`mt-3 ${theme.textBody}`}>
+      Even without quantitative metrics, the feedback showed that the product
+      delivered on its core UX goals: reducing cognitive load, building trust
+      through familiar HR language, and making complex employer‑branding insights
+      feel accessible and actionable.
+    </div>
+  </div>
+</CaseStudySection>
+
 
             <CaseStudySection id="outcome" title="Final outcome" subtitle="What was delivered and why it matters" theme={theme}>
               <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
