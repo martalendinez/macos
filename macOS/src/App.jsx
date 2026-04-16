@@ -217,7 +217,7 @@ export default function App() {
   const dockItems = useMemo(
     () => [
       { label: "About me", icon: icons.about, windowId: "about" },
-      { label: "AI assistant", icon: icons.ai, windowId: "aiAssistant" },
+     // { label: "AI assistant", icon: icons.ai, windowId: "aiAssistant" },
       { label: "Extras & Fun", icon: icons.fun, windowId: "fun" },
     ],
     [icons]

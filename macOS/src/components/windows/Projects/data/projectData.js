@@ -5,7 +5,7 @@ import loyaltyThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.av
 import stardewThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
 
 export const PROJECTS = [
- {
+ /*{
   id: "thesis",
   title: "Human–AI Collaboration in UX Design (Master Thesis)",
   subtitle: "Designing AI as a thinking partner for UX workflows",
@@ -21,7 +21,7 @@ export const PROJECTS = [
     { label: "Case Study", action: "openThesisCaseStudy" }, // ✅ THIS
     { label: "PDF", href: "#" },
   ],
-},
+},*/
 
   {
     id: "employerBranding",

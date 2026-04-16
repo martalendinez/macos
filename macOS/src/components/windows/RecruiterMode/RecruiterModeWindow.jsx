@@ -196,15 +196,6 @@ export default function RecruiterModeWindow({
           <div className="space-y-3">
             <SectionTitle styles={styles}>Highlighted work</SectionTitle>
 
-            {/* SHORTENED PROJECT CARD 1 */}
-            <ProjectCard
-              styles={styles}
-              badge="Master Thesis"
-              title="AI plugin for designers (control‑first)"
-              subtitle="A Figma AI plugin that gives designers deterministic, controllable model outputs."
-              onOpen={() => openWindowSafe("projects")}
-            />
-
             {/* SHORTENED PROJECT CARD 2 */}
             <ProjectCard
               styles={styles}
@@ -213,6 +204,18 @@ export default function RecruiterModeWindow({
               subtitle="Turned manual branding audits into a scalable, automated analysis platform."
               onOpen={() => openWindowSafe("employerBrandingCaseStudy")}
             />
+
+            {/* SHORTENED PROJECT CARD 1 */}
+            <ProjectCard
+              styles={styles}
+              badge="Personal Project"
+              title="Group Dining Coordination Platform)"
+              subtitle=" A web-based platform that helps groups coordinate restaurant outings by aligning
+              availability, dietary needs, and preferences."
+              onOpen={() => openWindowSafe("groupDiningCaseStudy")}
+            />
+
+            
           </div>
 
 

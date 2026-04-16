@@ -28,7 +28,7 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
     }
 
     if (link.action === "openThesisCaseStudy") {
-  onOpenWindow?.("thesisCaseStudy");
+  onOpenWindow?.("GroupDiningCaseStudyWindow");
   return;
 }
 
