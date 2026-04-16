@@ -41,7 +41,7 @@ export default function ContactTab({ styles }) {
           />
           <LinkRow styles={styles} icon="🐙" label="GitHub" value="https://github.com/martalendinez" />
           <LinkRow styles={styles} icon="📄" label="Resume" value="resume.pdf" />
-          <LinkRow styles={styles} icon="🖼️" label="Portfolio" value="https://macos-martalendines.netlify.app" />
+          <LinkRow styles={styles} icon="🖼️" label="Portfolio" value="https://portfolio-martalendinez.netlify.app" />
         </div>
       </div>
 
