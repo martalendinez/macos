@@ -22,17 +22,25 @@ export default function ProjectCard({ item, styles, mode = "projects", onAction 
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Thumbnail */}
-      {item.thumbnail ? (
+      {item.thumbnail && (
         <button type="button" onClick={handleOpen} className="block w-full text-left">
-          <div className="aspect-[16/10] overflow-hidden">
+          <div className="overflow-hidden">
             <img
               src={item.thumbnail}
               alt={item.title}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+              className="
+                w-full
+                h-auto
+                object-cover
+                transition-transform
+                duration-300
+                hover:scale-[1.02]
+              "
+              draggable="false"
             />
           </div>
         </button>
-      ) : null}
+      )}
 
       {/* Content */}
       <div className="p-4">
@@ -51,7 +59,11 @@ export default function ProjectCard({ item, styles, mode = "projects", onAction 
             {lines.map((b) => (
               <li key={b} className="flex gap-2">
                 <span className={`${styles.textSub} mt-[1px]`}>•</span>
-                <span className={`${styles.isMac ? "text-black/80" : "text-white/85"} leading-relaxed`}>
+                <span
+                  className={`${
+                    styles.isMac ? "text-black/80" : "text-white/85"
+                  } leading-relaxed`}
+                >
                   {b}
                 </span>
               </li>
