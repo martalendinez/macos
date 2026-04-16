@@ -1,4 +1,4 @@
-import thesisThumb from "../../../../imgs/case-study/trace/Trace_Cover.png";
+import thesisThumb from "../../../../imgs/case-study/trace/Trace_Shot.png";
 import employerThumb from "../../../../imgs/case-study/kallos/Kallos_Mockup.png";
 import restaurantThumb from "../../../../imgs/case-study/sallskap/Dining_Overall.png";
 import loyaltyThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
