@@ -1,6 +1,7 @@
 // src/config/windowDefs.js
 import { lazy } from "react";
 
+
 const SettingsWindow = lazy(() => import("../components/windows/Settings/SettingsWindow"));
 const AboutWindow = lazy(() => import("../components/windows/About/AboutWindow"));
 const ProjectsWindow = lazy(() => import("../components/windows/Projects/ProjectsWindow"));
@@ -24,6 +25,10 @@ const GroupDiningCaseStudyWindow = lazy(() =>
 
 const ThesisCaseStudyWindow = lazy(() =>
   import("../components/windows/Projects/ThesisCaseStudyWindow")
+);
+
+const TriviaCaseStudyWindow = lazy(() =>
+  import("../components/windows/Projects/TriviaCaseStudyWindow")
 );
 
 const SecretProjectsWindow = lazy(() => import("../components/windows/Projects/SecretProjectsWindow"));
@@ -150,6 +155,13 @@ export const WINDOW_DEFS = {
   employerBrandingCaseStudy: {
     title: "Employer Branding — Case Study",
     Component: EmployerBrandingCaseStudyWindow,
+    width: 1180,
+    height: 760,
+    initialPos: { x: 140, y: 80 },
+  },
+   triviaCaseStudy: {
+    title: "Trivia — Case Study",
+    Component: TriviaCaseStudyWindow,
     width: 1180,
     height: 760,
     initialPos: { x: 140, y: 80 },

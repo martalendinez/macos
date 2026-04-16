@@ -3,6 +3,7 @@ import employerThumb from "../../../../imgs/case-study/kallos/Kallos_Mockup.png"
 import restaurantThumb from "../../../../imgs/case-study/sallskap/Dining_Overall.png";
 import loyaltyThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
 import stardewThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
+import triviaThumb from "../../../../imgs/case-study/trace/Cover.png";
 
 export const PROJECTS = [
  {
@@ -35,6 +36,19 @@ export const PROJECTS = [
     ],
     links: [{ label: "Case Study", action: "openEmployerBrandingCaseStudy" }],
   },
+  {
+  id: "kthTriviaApp",
+  title: "Trivia App (KTH Group Project)",
+  subtitle: "React Native MVP powered by external trivia API",
+  thumbnail: triviaThumb,
+  tags: ["UX", "Frontend", "React Native", "App Dev"],
+  bullets: [
+    "University group project at KTH: designed and developed a mobile trivia app as an MVP",
+    "Built with React Native and integrated with a public trivia API for dynamic question generation",
+    "Led the UI design and implemented the frontend, ensuring smooth navigation and a clean, engaging experience",
+  ],
+  links: [{ label: "Case Study", action: "openTriviaCaseStudy" }],
+},
 
   {
     id: "restaurantCoordination",
@@ -52,4 +66,6 @@ export const PROJECTS = [
     // ⭐ NEW: Sällskap case study link
     links: [{ label: "Case Study", action: "openGroupDiningCaseStudy" }],
   }, 
+  
+
 ];

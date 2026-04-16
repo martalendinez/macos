@@ -31,6 +31,10 @@ export default function ProjectsWindow({ uiTheme = "glass", onOpenWindow }) {
   onOpenWindow?.("thesisCaseStudy");
   return;
 }
+if (link.action === "openTriviaCaseStudy") {
+  onOpenWindow?.("triviaCaseStudy");
+  return;
+}
 
     if (link.href && link.href !== "#") {
       window.open(link.href, "_blank", "noreferrer");
