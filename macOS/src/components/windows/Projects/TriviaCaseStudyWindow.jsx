@@ -8,13 +8,14 @@ import CaseStudySection from "./caseStudy/CaseStudySection";
 import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
 import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
-import heroImg from "../../../imgs/case-study/trivia/Trivia_Hero.png";
+import heroImg from "../../../imgs/case-study/trivia/Mock.jpg";
 import boardingImg from "../../../imgs/case-study/trivia/Onboarding.png";
 import categoriesImg from "../../../imgs/case-study/trivia/Categories.png";
 import gameImg from "../../../imgs/case-study/trivia/TriviaChallenge.png";
 import rankingImg from "../../../imgs/case-study/trivia/TriviaRanking.png";
 import profileImg from "../../../imgs/case-study/trivia/TriviaProfile.png";
 import lofiImg from "../../../imgs/case-study/trivia/Trivia_Lofi.png";
+import finalImg from "../../../imgs/case-study/trivia/Trivia_Final.jpg";
 
 export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -33,7 +34,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
       designSystem: null,
       wireframes: lofiImg,
       uiDetails: null,
-      finalScreens: null,
+      finalScreens: finalImg,
     }),
     []
   );
@@ -532,30 +533,17 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               </div>
 
               {/* Final hi‑fi placeholders */}
-              <div className="mt-8">
-                <Gallery2
-                  a={
-                    <CaseStudyImageTile
-                      src={IMAGES.finalScreens}
-                      alt="Hi‑fi screens"
-                      caption="Final hi‑fi screens — placeholder until project completion."
-                      aspect="16/9"
-                      theme={theme}
-                      onOpen={openLightbox}
-                    />
-                  }
-                  b={
-                    <CaseStudyImageTile
-                      src={IMAGES.finalScreens}
-                      alt="Hi‑fi screens"
-                      caption="Additional hi‑fi screens — placeholder."
-                      aspect="16/9"
-                      theme={theme}
-                      onOpen={openLightbox}
-                    />
-                  }
-                />
-              </div>
+              {/* Final hi‑fi placeholder */}
+<div className="mt-8">
+  <CaseStudyImageTile
+    src={IMAGES.finalScreens}
+    alt="Hi‑fi screens"
+    caption="Final hi‑fi screens."
+    theme={theme}
+    onOpen={openLightbox}
+  />
+</div>
+
             </CaseStudySection>
 
           </div>
