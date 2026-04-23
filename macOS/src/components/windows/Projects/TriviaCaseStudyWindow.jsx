@@ -17,6 +17,7 @@ import profileImg from "../../../imgs/case-study/trivia/TriviaProfile.png";
 import lofiImg from "../../../imgs/case-study/trivia/Trivia_Lofi.png";
 import finalImg from "../../../imgs/case-study/trivia/Trivia_Final.jpg";
 import uiImg from "../../../imgs/case-study/trivia/Chrome.png";
+import designImg from "../../../imgs/case-study/trivia/design.png";
 
 export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -32,7 +33,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
       results: null,
       leaderboard: rankingImg,
       profile: profileImg,
-      designSystem: null,
+      designSystem: designImg,
       wireframes: lofiImg,
       uiDetails: uiImg,
       finalScreens: finalImg,
