@@ -196,7 +196,7 @@ export default function RecruiterModeWindow({
           <div className="space-y-3">
             <SectionTitle styles={styles}>Highlighted work</SectionTitle>
              {/* SHORTENED PROJECT CARD 1 */}
-            <ProjectCard
+          {/*  <ProjectCard
               styles={styles}
               badge="Master Thesis"
               title="Human–AI Collaboration in UX Design"
@@ -204,13 +204,27 @@ export default function RecruiterModeWindow({
               onOpen={() => openWindowSafe("thesisCaseStudy")}
             />
 
-            {/* SHORTENED PROJECT CARD 2 */}
+             SHORTENED PROJECT CARD 2 
             <ProjectCard
               styles={styles}
               badge="Graduation Internship"
               title="AI platform for employer‑branding analysis"
               subtitle="Turned manual branding audits into a scalable, automated analysis platform."
               onOpen={() => openWindowSafe("employerBrandingCaseStudy")}
+            />*/}
+ <ProjectCard
+              styles={styles}
+              badge="Graduation Internship"
+              title="AI platform for employer‑branding analysis"
+              subtitle="Turned manual branding audits into a scalable, automated analysis platform."
+              onOpen={() => openWindowSafe("employerBrandingCaseStudy")}
+            />
+             <ProjectCard
+              styles={styles}
+              badge="University Group Project"
+              title="Trivia App Game"
+              subtitle="A fast, modern trivia game with ranked challenges and casual play."
+              onOpen={() => openWindowSafe("triviaCaseStudy")}
             />
 
            
