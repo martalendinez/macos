@@ -11,8 +11,7 @@ import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
-
-  const IMAGES = useMemo(
+const IMAGES = useMemo(
   () => ({
     hero: null,
 
@@ -24,18 +23,14 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
     improve: null,
     trace: null,
 
-    // Additional features
-    mixMatch: null,
-    reasoning: null,
+    // Workflow diagram
+    workflowDiagram: null,
 
-    // Research + process
-    researchOverview: null,
+    // Research
+    literature: null,
+    interviews: null,
     study1: null,
     study2: null,
-
-    // System design
-    architecture: null,
-    workflowDiagram: null,
 
     // Final UI
     finalScreens: null,
@@ -44,29 +39,30 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
 );
 
 
+
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: "" });
   const openLightbox = (src, alt = "") => src && setLightbox({ open: true, src, alt });
   const closeLightbox = () => setLightbox({ open: false, src: null, alt: "" });
 
- const sections = useMemo(
+  const sections = useMemo(
   () => [
-    { id: "overview", label: "Overview" },
-    { id: "summary", label: "Summary" },
+    { id: "context", label: "Context" },
+    { id: "problem", label: "Problem" },
+    { id: "why", label: "Why it matters" },
     { id: "role", label: "My role" },
     { id: "goals", label: "Goals" },
-    { id: "researchMethods", label: "Research methods" },
-    { id: "study1", label: "Study I" },
-    { id: "study2", label: "Study II" },
+    { id: "literature", label: "Literature review" },
+    { id: "interviews", label: "Expert interviews" },
     { id: "workflow", label: "Workflow design" },
-    { id: "ia", label: "Information architecture" },
-    { id: "features", label: "Core features" },
-    { id: "design", label: "Design decisions" },
+    { id: "features", label: "Features" },
+    { id: "study1", label: "User testing I" },
+    { id: "study2", label: "User testing II" },
     { id: "outcome", label: "Final outcome" },
+    { id: "impact", label: "Impact" },
   ],
   []
+);
 
-    
-  );
 
   const [active, setActive] = useState("overview");
   function scrollToSection(id) {
