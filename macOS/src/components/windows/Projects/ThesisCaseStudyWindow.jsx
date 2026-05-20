@@ -13,54 +13,59 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
 
   const IMAGES = useMemo(
-    () => ({
-      hero: null,
-      intent: null,
-      options: null,
-      cozyCorner: null,
-      workshop: null,
+  () => ({
+    hero: null,
 
-      calendar: null,
-      sunriseQuests: null,
-      weeklyFields: null,
-      questsDatabases: null,
-      harvestedMemories: null,
+    // Workflow stages
+    intent: null,
+    context: null,
+    options: null,
+    critique: null,
+    improve: null,
+    trace: null,
 
-      goldPouch: null,
-      shop: null,
-      inventory: null,
+    // Additional features
+    mixMatch: null,
+    reasoning: null,
 
-      skillTree: null,
-      characterProfile: null,
-      dailyFortune: null,
-      letters: null,
-      mealPlanner: null,
+    // Research + process
+    researchOverview: null,
+    study1: null,
+    study2: null,
 
-      uiDetails: null,
-      finalScreens: null,
-    }),
-    []
-  );
+    // System design
+    architecture: null,
+    workflowDiagram: null,
+
+    // Final UI
+    finalScreens: null,
+  }),
+  []
+);
+
 
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: "" });
   const openLightbox = (src, alt = "") => src && setLightbox({ open: true, src, alt });
   const closeLightbox = () => setLightbox({ open: false, src: null, alt: "" });
 
-  const sections = useMemo(
-    () => [
-      { id: "overview", label: "Overview" },
-      { id: "summary", label: "Summary" },
-      { id: "role", label: "My role" },
-      { id: "goals", label: "Goals" },
-      { id: "ia", label: "Information architecture" },
-      { id: "farm", label: "The Farm" },
-      { id: "cozy", label: "Cozy Corner" },
-      { id: "workshopSection", label: "Workshop" },
-      { id: "mechanics", label: "Gamification mechanics" },
-      { id: "design", label: "Design decisions" },
-      { id: "outcome", label: "Final outcome" },
-    ],
-    []
+ const sections = useMemo(
+  () => [
+    { id: "overview", label: "Overview" },
+    { id: "summary", label: "Summary" },
+    { id: "role", label: "My role" },
+    { id: "goals", label: "Goals" },
+    { id: "researchMethods", label: "Research methods" },
+    { id: "study1", label: "Study I" },
+    { id: "study2", label: "Study II" },
+    { id: "workflow", label: "Workflow design" },
+    { id: "ia", label: "Information architecture" },
+    { id: "features", label: "Core features" },
+    { id: "design", label: "Design decisions" },
+    { id: "outcome", label: "Final outcome" },
+  ],
+  []
+
+    
   );
 
   const [active, setActive] = useState("overview");
@@ -243,282 +248,386 @@ const facts = [
                 })}
               </div>
             </div>
-
-           <CaseStudySection
-  id="summary"
-  title="Summary"
-  subtitle="Problem → Solution → What makes it work"
+{/* CONTEXT */}
+<CaseStudySection
+  id="context"
+  title="Context"
+  subtitle="Designers increasingly use AI, but not always with clarity or control"
   theme={theme}
 >
   <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
-    <div className="mt-2">
-      Early-stage design work is often messy and under‑structured. Designers struggle to articulate intent,
-      surface relevant context, compare alternatives, and justify decisions. Existing AI tools focus on
-      generating outputs rather than supporting reflective reasoning, which can reduce agency and obscure
-      how decisions are made.
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      AI tools are becoming part of everyday design practice, but most of them focus on generating outputs rather
+      than supporting the thinking that leads to good design. Early‑stage exploration is messy, iterative, and
+      reflective — yet current AI tools often collapse this process into a single prompt–response exchange.
     </div>
 
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
-    <div className="mt-2">
-      A six‑stage AI-assisted workflow that guides designers through intent definition, contextual grounding,
-      option exploration, critique, refinement, and trace creation. Instead of producing final answers, the
-      system structures thinking and makes reasoning visible—turning AI into a reflective partner rather than
-      an automatic generator.
-    </div>
-
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Why it works</div>
     <CaseStudyBulletList
       items={[
-        "A structured workflow that mirrors real design reasoning (intent → context → critique → trace)",
-        "AI outputs are explainable and grounded in user-provided context, increasing trust and clarity",
-        "Critiques and Mix & Match support exploration without reducing designer agency",
+        "Reasoning becomes opaque and difficult to trace",
+        "Designers lose agency and control over the process",
+        "Decision‑making becomes harder to justify to stakeholders",
+        "Teams struggle to align on intent and rationale"
       ]}
     />
   </div>
+</CaseStudySection>
 
-  <Gallery2
-    a={
+{/* PROBLEM */}
+<CaseStudySection
+  id="problem"
+  title="Problem"
+  subtitle="AI helps produce ideas, but not understand them"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      Designers struggle to articulate intent, compare alternatives, and explain why a direction makes sense.
+      Existing AI tools accelerate output but do not support reflection.
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "AI tools generate ideas without showing reasoning",
+        "Designers cannot trace how decisions were formed",
+        "Critiques are shallow or missing entirely",
+        "Workflows become linear and brittle"
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* WHY IT MATTERS */}
+<CaseStudySection
+  id="why"
+  title="Why this matters"
+  subtitle="Reflection is core to design quality"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      Early‑stage reasoning shapes the entire design direction. When reflection is shallow or rushed, teams
+      struggle to justify decisions, communicate rationale, or align on intent.
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "Reflection improves clarity and alignment",
+        "Transparent reasoning increases trust in AI",
+        "Structured thinking reduces design risk",
+        "Better early decisions reduce downstream rework"
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* MY ROLE */}
+<CaseStudySection
+  id="role"
+  title="My role"
+  subtitle="I designed and built the system end‑to‑end"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <CaseStudyBulletList
+      items={[
+        "Designed the six‑stage workflow (Intent → Context → Options → Critique → Improve → Trace)",
+        "Created the information architecture and interaction flows",
+        "Developed the UX and UI for all core features",
+        "Implemented the full prototype (frontend, backend, AI integration)",
+        "Integrated LLM‑based reasoning, critique generation, and grounding",
+        "Designed and ran two usability studies",
+        "Synthesised findings into design principles for reflective AI tools"
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* GOALS */}
+<CaseStudySection
+  id="goals"
+  title="Goals"
+  subtitle="What I set out to understand"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <CaseStudyBulletList
+      items={[
+        "How AI can support early‑stage reasoning without reducing agency",
+        "How structured workflows influence clarity and decision‑making",
+        "How designers interpret AI critiques and reasoning",
+        "How to make AI outputs transparent and explainable",
+        "What principles should guide reflective AI tools"
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* LITERATURE REVIEW */}
+<CaseStudySection
+  id="literature"
+  title="Literature review"
+  subtitle="What existing research says about AI, reflection, and design workflows"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      I reviewed work across human–AI collaboration, reflective practice, and design cognition. Several themes
+      emerged that directly shaped the system.
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "AI often accelerates ideation but reduces transparency, making reasoning harder to follow.",
+        "Design cognition research shows that articulating intent improves decision quality.",
+        "Reflection‑in‑action is essential for navigating ambiguity in early‑stage design.",
+        "Critique is a core mechanism for surfacing blind spots and strengthening ideas.",
+        "Few tools operationalise reflective practice in a structured, designer‑friendly workflow.",
+        "Explainability research highlights the need for visible reasoning to build trust in AI systems."
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* EXPERT INTERVIEWS */}
+<CaseStudySection
+  id="interviews"
+  title="Expert interviews"
+  subtitle="Understanding how designers actually use AI today"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      I conducted semi‑structured interviews with five experts:
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "2 senior UX designers using AI for early ideation",
+        "1 design lead integrating AI into team workflows",
+        "1 product designer experimenting with AI critique tools",
+        "1 HCI researcher studying human–AI collaboration"
+      ]}
+    />
+
+    <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
+      Key insights:
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "AI is good for generating starting points, but not for reasoning.",
+        "Designers want tools that help them compare and critique ideas.",
+        "They need transparency: why did the AI suggest this?",
+        "They want to keep control, not be overridden by automation.",
+        "They need a way to document rationale for stakeholders.",
+        "They want AI to help them think, not think for them."
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* WORKFLOW DESIGN */}
+<CaseStudySection
+  id="workflow"
+  title="Workflow design"
+  subtitle="Structuring reflective reasoning"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      The workflow mirrors how designers naturally think: starting with intent, grounding in context, exploring
+      options, critiquing ideas, refining them, and documenting rationale.
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "Each stage is intentionally lightweight to reduce cognitive load",
+        "Non‑linear navigation supports real design practice",
+        "AI is positioned as a thinking partner, not an answer generator",
+        "Traceability is built in from the start"
+      ]}
+    />
+
+    <div className="mt-4">
       <CaseStudyImageTile
-        src={IMAGES.intent}
-        alt="Intent and context interface"
-        caption="Intent + context: the starting point for reflective design reasoning."
+        src={IMAGES.workflowDiagram}
+        alt="Workflow diagram"
+        caption="The six‑stage reflective workflow."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
       />
-    }
-    b={
+    </div>
+  </div>
+</CaseStudySection>
+
+{/* FEATURES */}
+<CaseStudySection
+  id="features"
+  title="Features"
+  subtitle="The core capabilities that make the system work"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <CaseStudyBulletList
+      items={[
+        "Guided intent definition with microcopy",
+        "Context grounding for more relevant AI outputs",
+        "Multi‑option generation with visible reasoning",
+        "Critique engine surfacing blind spots and risks",
+        "Mix & Match for recombining ideas across options",
+        "Editable trace log capturing the final rationale",
+        "Memory of rejected ideas to avoid repetition",
+        "Structured reasoning presented as bullet points"
+      ]}
+    />
+  </div>
+</CaseStudySection>
+
+{/* USER TESTING I */}
+<CaseStudySection
+  id="study1"
+  title="User testing I"
+  subtitle="Validating the conceptual workflow"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      The first study evaluated the low‑fidelity prototype.
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "Terminology was unclear (intent vs context)",
+        "Linear flow felt too rigid",
+        "Users wanted to jump between stages",
+        "Critiques were helpful but needed more depth",
+        "Trace log was useful but needed editability"
+      ]}
+    />
+
+    <div className="mt-4 font-semibold">What I changed</div>
+    <CaseStudyBulletList
+      items={[
+        "Renamed stages and rewrote microcopy for clarity",
+        "Enabled non‑linear navigation",
+        "Added deeper critique prompts",
+        "Made the trace log editable and structured"
+      ]}
+    />
+
+    <div className="mt-4">
       <CaseStudyImageTile
-        src={IMAGES.options}
-        alt="Options and critique interface"
-        caption="Options + critiques: supporting exploration, comparison, and decision-making."
+        src={IMAGES.study1}
+        alt="Study I prototype"
+        caption="Low-fidelity prototype used in Study I."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
       />
-    }
-  />
+    </div>
+  </div>
+</CaseStudySection>
+
+{/* USER TESTING II */}
+<CaseStudySection
+  id="study2"
+  title="User testing II"
+  subtitle="Evaluating the functional prototype"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
+      The second study focused on collaboration quality and perceived control.
+    </div>
+
+    <CaseStudyBulletList
+      items={[
+        "AI sometimes reintroduced rejected ideas",
+        "Users wanted clearer labels and tooltips",
+        "Reasoning increased trust but needed more structure",
+        "Critiques helped identify blind spots",
+        "Users wanted a 'Go back' button"
+      ]}
+    />
+
+    <div className="mt-4 font-semibold">What I changed</div>
+    <CaseStudyBulletList
+      items={[
+        "Added memory of rejected ideas",
+        "Improved labels, tooltips, and microcopy",
+        "Structured reasoning into bullet points",
+        "Added a global back button",
+        "Improved critique variety and grounding"
+      ]}
+    />
+
+    <div className="mt-4">
+      <CaseStudyImageTile
+        src={IMAGES.study2}
+        alt="Study II prototype"
+        caption="High-fidelity prototype evaluated in Study II."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+    </div>
+  </div>
+</CaseStudySection>
+
+{/* FINAL OUTCOME */}
+<CaseStudySection
+  id="outcome"
+  title="Final outcome"
+  subtitle="A functional prototype and design principles"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <CaseStudyBulletList
+      items={[
+        "Fully implemented prototype (frontend, backend, AI integration)",
+        "Six‑stage workflow supporting reflective design reasoning",
+        "Mix & Match, critique engine, and editable trace log",
+        "Design principles for building transparent, collaborative AI tools"
+      ]}
+    />
+
+    <div className="mt-4">
+      <CaseStudyImageTile
+        src={IMAGES.finalScreens}
+        alt="Final UI screens"
+        caption="Final high-fidelity screens of the system."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+    </div>
+  </div>
+</CaseStudySection>
+
+{/* IMPACT */}
+<CaseStudySection
+  id="impact"
+  title="Impact"
+  subtitle="What this project contributes to design practice"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <CaseStudyBulletList
+      items={[
+        "A validated workflow for reflective AI‑assisted design",
+        "A functional prototype demonstrating how AI can support reasoning, not replace it",
+        "Design principles for building transparent, agency‑preserving AI tools",
+        "A model for integrating critique, reasoning, and traceability into AI systems",
+        "A research‑through‑design methodology applicable to future AI design tools"
+      ]}
+    />
+  </div>
 </CaseStudySection>
 
 
-            <CaseStudySection id="role" title="My role" subtitle="I designed the system, structure, and experience" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <CaseStudyBulletList
-                  items={[
-                    "Designed the information architecture (three main locations + sub-pages and flows)",
-                    "Defined the database model conceptually (tasks, subtasks, projects, habits, events, memories)",
-                    "Created the gamification layer (coins, shop, inventory, skill tree, badges, pets)",
-                    "Wrote the narrative microcopy to make interactions feel like a world (quests, harvest, valley vibes)",
-                  ]}
-                />
-              </div>
-            </CaseStudySection>
 
-            <CaseStudySection id="goals" title="Goals" subtitle="Experience goals + system goals" theme={theme}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Experience goals</div>
-                  <CaseStudyBulletList items={["Make planning feel cozy and inviting", "Turn tasks into meaningful “quests” with story flavor", "Support low-energy days (no shame spiral)"]} />
-                </div>
-
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>System goals</div>
-                  <CaseStudyBulletList items={["Fast daily usage (minimal friction)", "Clear separation between planning, reflection, and rewards", "Scales across tasks, subtasks, projects, habits, and events"]} />
-                </div>
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="ia" title="Information architecture" subtitle="The valley is organized as three locations with clear sub-areas" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Top-level map</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Welcome to your farm (entry point + navigation hub)",
-                    "🥕✨ The Farm — productivity fields (tasks, habits, planning, calendar, memories)",
-                    "🕯️✨ Cozy Corner — your farmhouse (stats, mood/energy, skill tree, letters, fortune, meal planning)",
-                    "🛠️✨ Workshop — gamification hub (gold pouch, shop, inventory)",
-                  ]}
-                />
-                <div className={`mt-3 text-sm ${theme.textSub}`}>
-                  The goal is to make navigation feel like a world map: you “go” somewhere depending on what you need
-                  (plan, do, reflect, or reward).
-                </div>
-              </div>
-
-              <Gallery3
-                a={<CaseStudyImageTile src={IMAGES.cozyCorner} alt="Cozy Corner" caption="Optional: Cozy Corner page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.workshop} alt="Workshop" caption="Optional: Workshop hub page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                c={<CaseStudyImageTile src={IMAGES.farmOverview} alt="Farm hub" caption="Optional: Farm hub page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="farm" title="🥕✨ The Farm" subtitle="Where all planning + execution lives (quests, fields, calendar)" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Core areas</div>
-                <CaseStudyBulletList
-                  items={[
-                    "📅 The Town Calendar — tasks, events, festivals, seasonal milestones",
-                    "🌅🌾 Sunrise Quests — daily tasks, subtasks, habits in one place (start the day with purpose)",
-                    "🪴📅 Weekly and Daily Fields — Trello-style board + calendar views for planning and tracking",
-                    "🧙‍♂️🏰 Main Quests & Side Adventures — big goals broken down into Tasks + Subtasks, grouped by Projects",
-                    "🌾🕰️ Harvested Memories — archive of completed quests and achievements to reflect on progress",
-                  ]}
-                />
-              </div>
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.calendar} alt="Town Calendar" caption="Optional: calendar view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.sunriseQuests} alt="Sunrise Quests" caption="Optional: daily quests hub." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.weeklyFields} alt="Weekly & Daily Fields" caption="Optional: Trello board / weekly plan." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.harvestedMemories} alt="Harvested Memories" caption="Optional: completed archive view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-
-              <div className={`mt-6 rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Quest taxonomy (how work is modeled)</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Tasks — the main storyline steps (bigger actions that move life forward)",
-                    "Subtasks — small supporting steps (lightweight actions that keep momentum)",
-                    "Projects — long-term sagas (themes that group tasks + subtasks)",
-                    "Habits — daily rituals (streak-friendly routines that keep the farm alive)",
-                    "Events — time-based items (appointments, deadlines, festivals)",
-                  ]}
-                />
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.questsDatabases}
-                  alt="Tasks / Subtasks / Projects / Habits"
-                  caption="Optional: collage showing the four databases and key views."
-                  aspect="16/9"
-                  fit="contain"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="cozy" title="🕯️✨ Your Cozy Corner of the Valley" subtitle="Your farmhouse: personal stats, vibes, reflection, and life maintenance" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>What lives here</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Character Profile — name/bio, coins, health, badges, current mood",
-                    "Skill Tree — attach skills to tasks/subtasks/projects/habits to show growth over time",
-                    "Daily Fortune — a motivational quote / tip (soft nudge, not pressure)",
-                    "Letters — narrative messages from “NPCs” (fun, cozy, sometimes hints/quests)",
-                    "Kitchen — meal planning to support energy and routines",
-                    "Pets & badges — collectibles that make progress feel tangible",
-                  ]}
-                />
-              </div>
-
-              <Gallery3
-                a={<CaseStudyImageTile src={IMAGES.characterProfile} alt="Character profile" caption="Optional: character profile." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.skillTree} alt="Skill tree" caption="Optional: skill tree page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                c={<CaseStudyImageTile src={IMAGES.dailyFortune} alt="Daily fortune" caption="Optional: daily fortune view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.letters} alt="Letters" caption="Optional: letters page." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.mealPlanner} alt="Kitchen / meal planner" caption="Optional: kitchen & meal planning." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="workshopSection" title="🛠️✨ Workshop" subtitle="The gamification center: gold pouch, shop, and inventory" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Workshop spaces</div>
-                <CaseStudyBulletList items={["💰 Gold Pouch — track hard-earned coins and plan purchases", "🎁 Shop — spend coins on cosmetics, upgrades, boosts, and rewards", "🍯 Inventory — what you own (pets, badges, decorations, boosts, etc.)"]} />
-                <div className={`mt-3 text-sm ${theme.textSub}`}>
-                  The workshop turns productivity into a gentle economy: effort becomes coins, and coins become rewards
-                  that reinforce consistency.
-                </div>
-              </div>
-
-              <Gallery3
-                a={<CaseStudyImageTile src={IMAGES.goldPouch} alt="Gold Pouch" caption="Optional: gold pouch view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.inventory} alt="Inventory" caption="Optional: inventory view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                c={<CaseStudyImageTile src={IMAGES.shop} alt="Shop" caption="Optional: shop view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="mechanics" title="Gamification mechanics" subtitle="How rewards, feedback, and motivation are designed" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Progress signals</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Coins (gold) earned from completing quests and habits",
-                    "Badges and pets as collectible milestones",
-                    "Skill growth via Skill Tree (skills attached to work items)",
-                    "Harvested Memories as an archive of wins (reflection + identity reinforcement)",
-                  ]}
-                />
-
-                <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>Reward loop</div>
-                <div className="mt-2">
-                  Complete quests → earn coins → spend in the shop → items appear in inventory → your valley feels more
-                  “yours” → motivation stays warm and personal.
-                </div>
-
-                <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>Tone & motivation strategy</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Cozy language reduces anxiety (quests instead of chores)",
-                    "Narrative cues make the system feel alive (morning on the farm, NPC letters)",
-                    "Encouragement over pressure (fortune as gentle nudge, not demand)",
-                  ]}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="design" title="Design decisions" subtitle="What I intentionally optimized for" theme={theme}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Clarity & scanning</div>
-                  <CaseStudyBulletList items={["Location-based structure to reduce navigation confusion", "Daily entry points (Sunrise Quests) to start fast", "Boards + calendar views for flexible planning styles"]} />
-                </div>
-
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Sustainable use</div>
-                  <CaseStudyBulletList items={["Gamification is supportive, not mandatory", "Reflection is built-in (Harvested Memories)", "Personal life support included (mood/energy, meals, letters, fortune)"]} />
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.uiDetails}
-                  alt="UI details"
-                  caption="Optional: collage of key UI patterns (cards, headings, icons, spacing)."
-                  aspect="16/9"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="outcome" title="Final outcome" subtitle="A cozy, complete system you can actually stick to" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                A fully navigable Notion “valley” that blends practical planning with cozy-game motivation: you can plan
-                your week, manage big goals, track habits, reflect on progress, and reward yourself — all inside a world
-                that feels warm.
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.finalScreens}
-                  alt="Final screens"
-                  caption="Optional: collage of best final screens (Welcome + Farm + Cozy Corner + Workshop)."
-                  aspect="16/9"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
 
             <div className="mt-10" />
           </div>
