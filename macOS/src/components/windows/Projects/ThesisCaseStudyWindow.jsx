@@ -15,8 +15,8 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
   const IMAGES = useMemo(
     () => ({
       hero: null,
-      welcome: null,
-      farmOverview: null,
+      intent: null,
+      options: null,
       cozyCorner: null,
       workshop: null,
 
@@ -98,14 +98,21 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
     );
   }
 
-  const metaPills = ["Personal project", "Notion template", "UX + UI", "Gamification", "Systems design"];
+ const metaPills = [
+  "Research-through-design",
+  "AI-assisted design",
+  "UX Research",
+  "Prototype development",
+  "Human–AI collaboration"
+];
 
-  const facts = [
-    { k: "What it is", v: "A Stardew Valley–inspired productivity template built in Notion" },
-    { k: "Core promise", v: "Make planning feel cozy + motivating (not punishing)" },
-    { k: "Structure", v: "Three “locations”: The Farm · Cozy Corner · Workshop" },
-    { k: "Mechanics", v: "Coins, inventory, shop, skills, badges, daily fortune" },
-  ];
+const facts = [
+  { k: "What it is", v: "An AI-assisted design reflection tool supporting early-stage reasoning" },
+  { k: "Core promise", v: "Help designers think better, not faster — without replacing human agency" },
+  { k: "Structure", v: "Six-stage workflow: Intent · Context · Options · Critique · Improve · Trace" },
+  { k: "Focus areas", v: "Designer agency, explainability, critique quality, reflective decision-making" }
+];
+
 
   return (
     <div className="h-full w-full">
@@ -126,58 +133,83 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
             </div>
 
             <div className={`mt-5 text-4xl md:text-5xl font-semibold tracking-tight ${theme.textMain}`}>
-              Gamified Productivity System — Stardew Valley Notion Template
-            </div>
-            <div className={`mt-3 text-base md:text-lg ${theme.textSub}`}>
-              “Welcome to your farm!” A cozy, narrative-driven system that turns everyday tasks into quests, rewards
-              consistency with coins, and makes your Notion workspace feel like a tiny valley.
-            </div>
+  AI Design Reflection Assistant — Supporting Early‑Stage Reasoning
+</div>
+<div className={`mt-3 text-base md:text-lg ${theme.textSub}`}>
+  A research‑through‑design project exploring how AI can support reflective, early‑stage design decision‑making without reducing human agency. The system guides designers through a structured workflow that surfaces intent, context, critiques, and reasoning.
+</div>
 
-            {/* CTA row */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              <a href="#" target="_blank" rel="noreferrer" className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}>
-                View this in Notion
-              </a>
-              <a href="#" target="_blank" rel="noreferrer" className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}>
-                Download the PDF
-              </a>
-            </div>
 
-            <div id="overview" className="mt-8 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-6">
-              <div>
-                <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
-                <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
-                  Traditional productivity tools can feel like judgment: when you fall behind, the system becomes a list
-                  of failures. This template reframes planning as a cozy game world — with locations, characters, and
-                  progression mechanics that turn “to-dos” into small adventures.
-                  <br />
-                  <br />
-                  The valley is organized into three spaces:
-                  <span className={`font-semibold ${theme.textMain}`}> The Farm</span> (work + planning),
-                  <span className={`font-semibold ${theme.textMain}`}> Your Cozy Corner</span> (stats + vibes),
-                  and <span className={`font-semibold ${theme.textMain}`}> the Workshop</span> (gamification hub).
-                </div>
-              </div>
+          {/* CTA row */}
+<div className="mt-6 flex flex-wrap gap-2">
+  <a
+    href="https://github.com/YOUR-REPO"
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    View on GitHub
+  </a>
 
-              <div>
-                <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
+  <a
+    href="/pdfs/Your_Thesis_Paper.pdf"
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    Read Thesis Paper
+  </a>
 
-                <div className={`mt-3 rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className="grid grid-cols-1 gap-3">
-                    {facts.map((f) => (
-                      <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
-                        <div className={`text-xs ${theme.textSub}`}>{f.k}</div>
-                        <div className={`mt-1 text-sm font-medium ${theme.textMain}`}>{f.v}</div>
-                      </div>
-                    ))}
-                  </div>
+  <a
+    href="/pdfs/Your_Case_Study.pdf"
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    Read Full Case Study
+  </a>
+</div>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["UX", "UI", "Notion", "Quests", "Rewards", "Systems"].map((t) => (
-                      <CaseStudyPill key={t} theme={theme}>
-                        {t}
-                      </CaseStudyPill>
-                    ))}
+
+          <div id="overview" className="mt-8 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-6">
+  <div>
+    <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
+    <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
+      The AI Design Reflection Assistant is a research-through-design project exploring how AI can support 
+      early-stage reasoning without reducing designer agency. Instead of generating final solutions, the system 
+      structures the design process into a reflective workflow—helping designers articulate intent, surface 
+      context, explore alternatives, critique ideas, and consolidate their reasoning.
+      <br />
+      <br />
+      The workflow is organised into six stages:
+      <span className={`font-semibold ${theme.textMain}`}> Intent</span> (what you’re trying to achieve),
+      <span className={`font-semibold ${theme.textMain}`}> Context</span> (constraints + insights),
+      <span className={`font-semibold ${theme.textMain}`}> Options</span> (AI-generated alternatives),
+      <span className={`font-semibold ${theme.textMain}`}> Critique</span> (blind spots + risks),
+      <span className={`font-semibold ${theme.textMain}`}> Improve</span> (refinement),
+      and <span className={`font-semibold ${theme.textMain}`}> Trace</span> (a transparent record of decisions).
+    </div>
+  </div>
+
+  <div>
+    <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
+
+    <div className={`mt-3 rounded-2xl p-5 border ${theme.softCard}`}>
+      <div className="grid grid-cols-1 gap-3">
+        {facts.map((f) => (
+          <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
+            <div className={`text-xs ${theme.textSub}`}>{f.k}</div>
+            <div className={`mt-1 text-sm font-medium ${theme.textMain}`}>{f.v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {["UX Research", "AI", "Prototype", "Workflow Design", "Explainability", "Human–AI Collaboration"].map((t) => (
+          <CaseStudyPill key={t} theme={theme}>
+            {t}
+          </CaseStudyPill>
+        ))}
                   </div>
                 </div>
               </div>
@@ -212,35 +244,63 @@ export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast
               </div>
             </div>
 
-            <CaseStudySection id="summary" title="Summary" subtitle="Problem → Solution → What makes it work" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
-                <div className="mt-2">
-                  Planning tools often don’t create emotional momentum. When motivation is low, systems that feel strict
-                  are the first to be abandoned.
-                </div>
+           <CaseStudySection
+  id="summary"
+  title="Summary"
+  subtitle="Problem → Solution → What makes it work"
+  theme={theme}
+>
+  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+    <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
+    <div className="mt-2">
+      Early-stage design work is often messy and under‑structured. Designers struggle to articulate intent,
+      surface relevant context, compare alternatives, and justify decisions. Existing AI tools focus on
+      generating outputs rather than supporting reflective reasoning, which can reduce agency and obscure
+      how decisions are made.
+    </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
-                <div className="mt-2">
-                  A narrative Notion template that maps productivity to a cozy game world: tasks become quests, progress
-                  becomes “harvest,” and consistency rewards you with coins you can spend in a shop.
-                </div>
+    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
+    <div className="mt-2">
+      A six‑stage AI-assisted workflow that guides designers through intent definition, contextual grounding,
+      option exploration, critique, refinement, and trace creation. Instead of producing final answers, the
+      system structures thinking and makes reasoning visible—turning AI into a reflective partner rather than
+      an automatic generator.
+    </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Why it works</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Clear, location-based navigation (you always know where to go)",
-                    "Progress is visible and celebratory (harvested memories, coins, badges)",
-                    "Gamification is optional + supportive (designed to reduce guilt, not increase pressure)",
-                  ]}
-                />
-              </div>
+    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Why it works</div>
+    <CaseStudyBulletList
+      items={[
+        "A structured workflow that mirrors real design reasoning (intent → context → critique → trace)",
+        "AI outputs are explainable and grounded in user-provided context, increasing trust and clarity",
+        "Critiques and Mix & Match support exploration without reducing designer agency",
+      ]}
+    />
+  </div>
 
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.welcome} alt="Welcome page" caption="Optional: Welcome to your farm page." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.farmOverview} alt="The Farm overview" caption="Optional: The Farm overview page." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
+  <Gallery2
+    a={
+      <CaseStudyImageTile
+        src={IMAGES.intent}
+        alt="Intent and context interface"
+        caption="Intent + context: the starting point for reflective design reasoning."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+    }
+    b={
+      <CaseStudyImageTile
+        src={IMAGES.options}
+        alt="Options and critique interface"
+        caption="Options + critiques: supporting exploration, comparison, and decision-making."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+    }
+  />
+</CaseStudySection>
+
 
             <CaseStudySection id="role" title="My role" subtitle="I designed the system, structure, and experience" theme={theme}>
               <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
