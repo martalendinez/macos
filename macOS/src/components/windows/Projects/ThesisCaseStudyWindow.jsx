@@ -10,6 +10,7 @@ import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 import heroImg from "../../../imgs/case-study/trace/trace_mock.png";
 import workflowImg from "../../../imgs/case-study/trace/workflow.png"
+import finalImg from "../../../imgs/case-study/trace/trace_final.png"
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -35,7 +36,7 @@ const IMAGES = useMemo(
     study2: null,
 
     // Final UI
-    finalScreens: null,
+    finalScreens: finalImg,
   }),
   []
 );
