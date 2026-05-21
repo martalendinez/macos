@@ -9,6 +9,7 @@ import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
 import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 import heroImg from "../../../imgs/case-study/trace/trace_mock.png";
+import workflowImg from "../../../imgs/case-study/trace/workflow.png"
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -25,7 +26,7 @@ const IMAGES = useMemo(
     trace: null,
 
     // Workflow diagram
-    workflowDiagram: null,
+    workflowDiagram: workflowImg,
 
     // Research
     literature: null,
@@ -451,9 +452,10 @@ const facts = [
         src={IMAGES.workflowDiagram}
         alt="Workflow diagram"
         caption="The six‑stage reflective workflow."
-        aspect="16/9"
+        aspect="21/9"
         theme={theme}
         onOpen={openLightbox}
+        fit="contain"
       />
     </div>
   </div>
