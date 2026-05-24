@@ -13,6 +13,7 @@ import workflowImg from "../../../imgs/case-study/trace/workflow.png"
 import finalImg from "../../../imgs/case-study/trace/trace_final.png"
 import features1Img from "../../../imgs/case-study/trace/FirstFeatures.png"
 import features2Img from "../../../imgs/case-study/trace/SecondFeatures.png"
+import testing1Img from "../../../imgs/case-study/trace/FirstIteration.png"
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -34,7 +35,7 @@ const IMAGES = useMemo(
     // Research
     literature: null,
     interviews: null,
-    study1: null,
+    study1: testing1Img,
     study2: null,
 
     features1: features1Img,
@@ -536,18 +537,7 @@ final reasoning."
         "Trace log was useful but needed editability and better structure"
       ]}
     />
-
-    <div className="mt-4 font-semibold">What I changed</div>
-    <CaseStudyBulletList
-      items={[
-        "Rewrote labels, microcopy, and placeholder text for clarity",
-        "Added tooltips and short explanations for each step",
-        "Enabled non‑linear navigation (skip, sidebar, go‑back)",
-        "Improved critique prompts and added more depth",
-        "Made the trace log editable and structured"
-      ]}
-    />
-
+   
     <div className="mt-4">
       <CaseStudyImageTile
         src={IMAGES.study1}
