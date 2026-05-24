@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./aiAssistant.css";
 import { getAiResponse } from "../../../utils/aiAssistant";
 
@@ -8,6 +8,15 @@ export default function AiAssistantWindow() {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+
+  const chatRef = useRef(null);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages, isTyping]);
 
   function handleSend(text) {
     if (!text.trim()) return;
@@ -27,12 +36,13 @@ export default function AiAssistantWindow() {
 
   return (
     <div className="ai-window">
-      <div className="ai-chat-column">
+      <div className="ai-chat-column" ref={chatRef}>
         {messages.map((m, i) => (
           <div key={i} className={`bubble ${m.from}`}>
             {m.text}
           </div>
         ))}
+
         {isTyping && (
           <div className="bubble ai typing">A63 is thinking…</div>
         )}

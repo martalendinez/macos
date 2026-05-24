@@ -11,13 +11,18 @@
   backdrop-filter: blur(8px);
 }
 
-/* White bubble at the top */
+/* Chat column */
 .ai-chat-column {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
+/* AI bubble (left) */
 .bubble.ai {
+  align-self: flex-start;
   max-width: 80%;
   padding: 12px 16px;
   border-radius: 14px;
@@ -26,9 +31,29 @@
   color: #333;
   font-size: 15px;
   line-height: 1.45;
+  border-bottom-left-radius: 4px;
 }
 
-/* Big empty space */
+/* USER bubble (right) */
+.bubble.user {
+  align-self: flex-end;
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: hsl(var(--accent));
+  color: white;
+  font-size: 15px;
+  line-height: 1.45;
+  border-bottom-right-radius: 4px;
+}
+
+/* Typing bubble */
+.bubble.typing {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Spacer */
 .ai-spacer {
   flex: 1;
 }
@@ -40,7 +65,7 @@
   gap: 12px;
 }
 
-/* Accent-colored tags */
+/* Tags */
 .suggested-tags {
   display: flex;
   flex-wrap: wrap;
@@ -51,11 +76,9 @@
   padding: 6px 10px;
   font-size: 13px;
   border-radius: 8px;
-
   background: hsl(var(--accent) / 0.12);
   border: 1px solid hsl(var(--accent) / 0.35);
   color: hsl(var(--accent));
-
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -100,7 +123,6 @@
   text-align: center;
 }
 
-
 /* -------------------------------------------------- */
 /* 🌙 DARK MODE OVERRIDES                             */
 /* -------------------------------------------------- */
@@ -110,14 +132,17 @@
   backdrop-filter: blur(10px);
 }
 
-/* Bubble becomes translucent but still WHITE-ish */
 .darkwin .bubble.ai {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* Tags keep accent but with better contrast */
+.darkwin .bubble.user {
+  background: hsl(var(--accent));
+  color: white;
+}
+
 .darkwin .tag {
   background: hsl(var(--accent) / 0.18);
   border: 1px solid hsl(var(--accent) / 0.45);
@@ -128,7 +153,6 @@
   background: hsl(var(--accent) / 0.28);
 }
 
-/* Input bar */
 .darkwin .ai-input input {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -139,7 +163,6 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Send button stays accent */
 .darkwin .ai-input button {
   background: hsl(var(--accent));
   color: white;
@@ -149,7 +172,6 @@
   background: hsl(var(--accent) / 0.85);
 }
 
-/* Footer */
 .darkwin .ai-footer {
   color: rgba(255, 255, 255, 0.6);
 }
