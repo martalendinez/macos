@@ -35,13 +35,15 @@ const IMAGES = useMemo(
     study1: null,
     study2: null,
 
+    features1: null,
+    features2: null,
+
+
     // Final UI
     finalScreens: finalImg,
   }),
   []
 );
-
-
 
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: "" });
   const openLightbox = (src, alt = "") => src && setLightbox({ open: true, src, alt });
@@ -483,6 +485,30 @@ const facts = [
       ]}
     />
   </div>
+   <div className="mt-4">
+      <CaseStudyImageTile
+        src={IMAGES.features1}
+        alt="Features: intent, context, options"
+        caption=" Overview of the first three core features. (A) Intent definition interface. (B) Context input
+interface. (C) Option generation interface"
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />    
+    </div>
+    <div className="mt-4">
+    <CaseStudyImageTile
+        src={IMAGES.features2}
+        alt="Features: Mix & Match, Critique, Trace"
+        caption="Overview of the final three core features. (A) Mix & Match interface for recombining
+elements across options. (B) Critique interface showing usability, accessibility, and risk-focused
+evaluations. (C) Trace interface where designers consolidate selected elements and articulate their
+final reasoning."
+        aspect="16/9"
+        theme={theme}
+        onOpen={openLightbox}
+      />
+      </div>
 </CaseStudySection>
 {/* USER TESTING I */}
 <CaseStudySection
