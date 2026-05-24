@@ -11,6 +11,8 @@ import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 import heroImg from "../../../imgs/case-study/trace/trace_mock.png";
 import workflowImg from "../../../imgs/case-study/trace/workflow.png"
 import finalImg from "../../../imgs/case-study/trace/trace_final.png"
+import features1Img from "../../../imgs/case-study/trace/FirstFeatures.png"
+import features2Img from "../../../imgs/case-study/trace/SecondFeatures.png"
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -35,8 +37,8 @@ const IMAGES = useMemo(
     study1: null,
     study2: null,
 
-    features1: null,
-    features2: null,
+    features1: features1Img,
+    features2: features2Img,
 
 
     // Final UI
@@ -505,6 +507,7 @@ elements across options. (B) Critique interface showing usability, accessibility
 evaluations. (C) Trace interface where designers consolidate selected elements and articulate their
 final reasoning."
         aspect="16/9"
+        fit="cover"
         theme={theme}
         onOpen={openLightbox}
       />
