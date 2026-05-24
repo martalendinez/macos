@@ -204,7 +204,6 @@ export default function RecruiterModeWindow({
               onOpen={() => openWindowSafe("thesisCaseStudy")}
             />
 
-             SHORTENED PROJECT CARD 2 
             <ProjectCard
               styles={styles}
               badge="Graduation Internship"

@@ -484,35 +484,37 @@ const facts = [
     />
   </div>
 </CaseStudySection>
-
 {/* USER TESTING I */}
 <CaseStudySection
   id="study1"
   title="User testing I"
-  subtitle="Validating the conceptual workflow"
+  subtitle="Validating the conceptual workflow (Low‑fidelity prototype)"
   theme={theme}
 >
   <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
     <div className={`text-[15px] leading-7 ${theme.textBody}`}>
-      The first study evaluated the low‑fidelity prototype.
+      The first testing session evaluated the low‑fidelity prototype with four participants. 
+      The goal was to validate the conceptual workflow—intent, critique, improvement, and trace—
+      and identify early usability issues before building the functional version.
     </div>
 
     <CaseStudyBulletList
       items={[
-        "Terminology was unclear (intent vs context)",
-        "Linear flow felt too rigid",
-        "Users wanted to jump between stages",
-        "Critiques were helpful but needed more depth",
-        "Trace log was useful but needed editability"
+        "Terminology was unclear (e.g., intent vs. context)",
+        "Linear flow felt too rigid; users wanted non‑linear navigation",
+        "Critiques felt generic and needed deeper reasoning",
+        "Users wanted clearer microcopy and examples",
+        "Trace log was useful but needed editability and better structure"
       ]}
     />
 
     <div className="mt-4 font-semibold">What I changed</div>
     <CaseStudyBulletList
       items={[
-        "Renamed stages and rewrote microcopy for clarity",
-        "Enabled non‑linear navigation",
-        "Added deeper critique prompts",
+        "Rewrote labels, microcopy, and placeholder text for clarity",
+        "Added tooltips and short explanations for each step",
+        "Enabled non‑linear navigation (skip, sidebar, go‑back)",
+        "Improved critique prompts and added more depth",
         "Made the trace log editable and structured"
       ]}
     />
@@ -521,7 +523,7 @@ const facts = [
       <CaseStudyImageTile
         src={IMAGES.study1}
         alt="Study I prototype"
-        caption="Low-fidelity prototype used in Study I."
+        caption="Low‑fidelity prototype used in Study I."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
@@ -534,32 +536,40 @@ const facts = [
 <CaseStudySection
   id="study2"
   title="User testing II"
-  subtitle="Evaluating the functional prototype"
+  subtitle="Evaluating the functional prototype (High‑fidelity coded version)"
   theme={theme}
 >
   <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
     <div className={`text-[15px] leading-7 ${theme.textBody}`}>
-      The second study focused on collaboration quality and perceived control.
+      The second testing session evaluated the high‑fidelity coded prototype with eight participants. 
+      This round focused on collaboration quality, perceived control, critique usefulness, 
+      transparency of AI reasoning, and the overall value of the workflow in real design tasks.
     </div>
 
     <CaseStudyBulletList
       items={[
-        "AI sometimes reintroduced rejected ideas",
-        "Users wanted clearer labels and tooltips",
-        "Reasoning increased trust but needed more structure",
-        "Critiques helped identify blind spots",
-        "Users wanted a 'Go back' button"
+        "Options felt too few; users wanted more variety and mix‑and‑match",
+        "AI sometimes reintroduced rejected ideas, reducing perceived control",
+        "Critiques felt generic and not tailored to design stage",
+        "Users wanted clearer labels, tooltips, and explanations",
+        "Participants expected visual outputs or the ability to upload designs",
+        "Improvements were sometimes buggy or unclear",
+        "Users wanted to see AI reasoning and differences between options",
+        "Navigation needed a global 'Go back' and smoother return from trace"
       ]}
     />
 
     <div className="mt-4 font-semibold">What I changed</div>
     <CaseStudyBulletList
       items={[
-        "Added memory of rejected ideas",
-        "Improved labels, tooltips, and microcopy",
-        "Structured reasoning into bullet points",
-        "Added a global back button",
-        "Improved critique variety and grounding"
+        "Added memory of rejected ideas so the AI does not repeat them",
+        "Improved labels, tooltips, microcopy, and step explanations",
+        "Structured AI reasoning into clear bullet points",
+        "Added a global back button and improved trace navigation",
+        "Expanded critique variety and grounded critiques in design stage",
+        "Added 'Apply / Suggest / Reject' to critique and improvement flows",
+        "Prepared support for mix‑and‑match and visual option previews",
+        "Improved error handling and fixed improvement‑related bugs"
       ]}
     />
 
@@ -567,7 +577,7 @@ const facts = [
       <CaseStudyImageTile
         src={IMAGES.study2}
         alt="Study II prototype"
-        caption="High-fidelity prototype evaluated in Study II."
+        caption="High‑fidelity prototype evaluated in Study II."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
@@ -575,6 +585,7 @@ const facts = [
     </div>
   </div>
 </CaseStudySection>
+
 
 {/* FINAL OUTCOME */}
 <CaseStudySection
