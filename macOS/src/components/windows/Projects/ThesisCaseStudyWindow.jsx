@@ -14,6 +14,7 @@ import finalImg from "../../../imgs/case-study/trace/trace_final.png"
 import features1Img from "../../../imgs/case-study/trace/FirstFeatures.png"
 import features2Img from "../../../imgs/case-study/trace/SecondFeatures.png"
 import testing1Img from "../../../imgs/case-study/trace/FirstIteration.png"
+import testing2Img from "../../../imgs/case-study/trace/Testing2.png"
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -36,7 +37,7 @@ const IMAGES = useMemo(
     literature: null,
     interviews: null,
     study1: testing1Img,
-    study2: null,
+    study2: testing2Img,
 
     features1: features1Img,
     features2: features2Img,
@@ -301,30 +302,6 @@ const facts = [
   </div>
 </CaseStudySection>
 
-{/* WHY IT MATTERS */}
-<CaseStudySection
-  id="why"
-  title="Why this matters"
-  subtitle="Reflection is core to design quality"
-  theme={theme}
->
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    <div className={`text-[15px] leading-7 ${theme.textBody}`}>
-      Early‑stage reasoning shapes the entire design direction. When reflection is shallow or rushed, teams
-      struggle to justify decisions, communicate rationale, or align on intent.
-    </div>
-
-    <CaseStudyBulletList
-      items={[
-        "Reflection improves clarity and alignment",
-        "Transparent reasoning increases trust in AI",
-        "Structured thinking reduces design risk",
-        "Better early decisions reduce downstream rework"
-      ]}
-    />
-  </div>
-</CaseStudySection>
-
 {/* MY ROLE */}
 <CaseStudySection
   id="role"
@@ -542,7 +519,7 @@ final reasoning."
       <CaseStudyImageTile
         src={IMAGES.study1}
         alt="Study I prototype"
-        caption="Low‑fidelity prototype used in Study I."
+        caption="Iterations done after lofi testing."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
@@ -578,25 +555,11 @@ final reasoning."
       ]}
     />
 
-    <div className="mt-4 font-semibold">What I changed</div>
-    <CaseStudyBulletList
-      items={[
-        "Added memory of rejected ideas so the AI does not repeat them",
-        "Improved labels, tooltips, microcopy, and step explanations",
-        "Structured AI reasoning into clear bullet points",
-        "Added a global back button and improved trace navigation",
-        "Expanded critique variety and grounded critiques in design stage",
-        "Added 'Apply / Suggest / Reject' to critique and improvement flows",
-        "Prepared support for mix‑and‑match and visual option previews",
-        "Improved error handling and fixed improvement‑related bugs"
-      ]}
-    />
-
     <div className="mt-4">
       <CaseStudyImageTile
         src={IMAGES.study2}
         alt="Study II prototype"
-        caption="High‑fidelity prototype evaluated in Study II."
+        caption="Iterations done after hifi testing."
         aspect="16/9"
         theme={theme}
         onOpen={openLightbox}
