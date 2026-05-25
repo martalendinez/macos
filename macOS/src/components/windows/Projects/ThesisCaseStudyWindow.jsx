@@ -15,6 +15,8 @@ import features1Img from "../../../imgs/case-study/trace/FirstFeatures.png"
 import features2Img from "../../../imgs/case-study/trace/SecondFeatures.png"
 import testing1Img from "../../../imgs/case-study/trace/FirstIteration.png"
 import testing2Img from "../../../imgs/case-study/trace/Testing2.png"
+import lit1Img from "../../../imgs/case-study/trace/Lit.png"
+import lit2Img from "../../../imgs/case-study/trace/Expert.png"
 
 export default function ThesisCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast });
@@ -33,6 +35,9 @@ const IMAGES = useMemo(
     // Workflow diagram
     workflowDiagram: workflowImg,
 
+    lit1: lit1Img,
+    lit2: lit2Img,
+
     // Research
     literature: null,
     interviews: null,
@@ -41,7 +46,6 @@ const IMAGES = useMemo(
 
     features1: features1Img,
     features2: features2Img,
-
 
     // Final UI
     finalScreens: finalImg,
@@ -366,6 +370,29 @@ const facts = [
         "Few tools operationalise reflective practice in a structured, designer‑friendly workflow.",
         "Explainability research highlights the need for visible reasoning to build trust in AI systems."
       ]}
+    />
+  </div>
+
+  {/* IMAGES BELOW */}
+  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <CaseStudyImageTile
+      src={IMAGES.lit1}
+      alt="Literature review visual 1"
+      caption="Key themes emerging from the literature."
+      aspect="4/3"
+      theme={theme}
+      onOpen={openLightbox}
+      fit="cover"
+    />
+
+    <CaseStudyImageTile
+      src={IMAGES.lit2}
+      alt="Literature review visual 2"
+      caption="How existing research informed the system design."
+      aspect="4/3"
+      theme={theme}
+      onOpen={openLightbox}
+      fit="cover"
     />
   </div>
 </CaseStudySection>
