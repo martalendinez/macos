@@ -153,9 +153,17 @@ const facts = [
   A research‑through‑design project exploring how AI can support reflective, early‑stage design decision‑making without reducing human agency. The system guides designers through a structured workflow that surfaces intent, context, critiques, and reasoning.
 </div>
 
-
-          {/* CTA row */}
+{/* CTA row */}
 <div className="mt-6 flex flex-wrap gap-2">
+  <a
+    href="https://trace-thought-lab.base44.app/"
+    target="_blank"
+    rel="noreferrer"
+    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  >
+    See Landing Page
+  </a>
+
   <a
     href="https://github.com/YOUR-REPO"
     target="_blank"
