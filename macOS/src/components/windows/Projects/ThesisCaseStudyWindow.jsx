@@ -165,7 +165,7 @@ const facts = [
   </a>
 
   <a
-    href="https://github.com/YOUR-REPO"
+    href="https://github.com/martalendinez/Trace_Plugin"
     target="_blank"
     rel="noreferrer"
     className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
