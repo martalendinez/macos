@@ -39,6 +39,7 @@ export default function MacWindow({
 
   const isMac = uiTheme === "macos";
   const isDark = theme === "dark";
+  const isMobile = viewport.w < 768;
 
   const windowClassByTheme = {
     glass: isDark
@@ -72,9 +73,20 @@ export default function MacWindow({
   const closeBtn = uiTheme === "macos" ? "bg-[#ff5f57]" : "bg-red-400";
 
   const MAX_MARGIN = 16;
-  const SAFE_TOP = 56; // keeps traffic-light buttons visible
+  const SAFE_TOP = 56;
 
-  const computedStyle = isMaximized
+  // ⭐ MOBILE = fullscreen window
+  const computedStyle = isMobile
+    ? {
+        position: "fixed",
+        left: 0,
+        top: 0,
+        width: "100vw",
+        height: "100dvh",
+        borderRadius: 0,
+        transform: "none",
+      }
+    : isMaximized
     ? {
         left: MAX_MARGIN,
         top: MAX_MARGIN + 40,
@@ -88,8 +100,7 @@ export default function MacWindow({
         height,
       };
 
-  // Explicit drag constraints relative to the initial position
-  const dragConstraints = isMaximized
+  const dragConstraints = isMobile || isMaximized
     ? undefined
     : {
         left: -(initialPos.x - MAX_MARGIN),
@@ -102,7 +113,8 @@ export default function MacWindow({
     <motion.div
       onMouseDown={() => onFocus(id)}
       className={[
-        "fixed rounded-2xl overflow-hidden flex flex-col",
+        "fixed overflow-hidden flex flex-col",
+        isMobile ? "" : "rounded-2xl",
         windowClassByTheme[uiTheme],
         isActive ? ringClass : "opacity-95",
         isDark ? "darkwin" : "",
@@ -113,41 +125,54 @@ export default function MacWindow({
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       exit={{ opacity: 0, y: 10, filter: "blur(8px)" }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      drag={!isMaximized}
+      drag={!isMobile && !isMaximized}
       dragListener={false}
       dragControls={dragControls}
       dragConstraints={dragConstraints}
       dragMomentum={false}
       dragElastic={0}
     >
-      {/* Title bar */}
+      {/* ⭐ TITLE BAR */}
       <div
-        className={`relative h-12 px-4 flex items-center justify-between cursor-default shrink-0 ${titleBarClassByTheme[uiTheme]}`}
-        style={{ touchAction: "none" }}
+        className={`relative ${
+          isMobile ? "h-16" : "h-12"
+        } px-4 flex items-center justify-between cursor-default shrink-0 ${titleBarClassByTheme[uiTheme]}`}
+        style={{
+          touchAction: "none",
+          // ⭐ LOWERED TOP BAR FOR MOBILE
+          paddingTop: isMobile
+            ? "calc(env(safe-area-inset-top) + 32px)"
+            : 0,
+        }}
         onPointerDown={(e) => {
           onFocus(id);
-          if (!isMaximized) dragControls.start(e);
+          if (!isMobile && !isMaximized) dragControls.start(e);
         }}
       >
-        <div className="flex items-center gap-2">
+        {/* ⭐ MAC BUTTONS — visible on mobile */}
+        <div className="flex items-center gap-3">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onClose(id);
             }}
-            className={`w-3 h-3 rounded-full ${closeBtn} hover:brightness-110`}
-            aria-label="Close"
-            title="Close"
+            className={`rounded-full ${
+              isMobile ? "w-4 h-4" : "w-3 h-3"
+            } ${closeBtn} hover:brightness-110`}
           />
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] opacity-80" />
+          <div
+            className={`rounded-full bg-[#ffbd2e] opacity-80 ${
+              isMobile ? "w-4 h-4" : "w-3 h-3"
+            }`}
+          />
           <button
             onClick={(e) => {
               e.stopPropagation();
               onToggleMaximize?.(id);
             }}
-            className="w-3 h-3 rounded-full bg-[#28c840] opacity-80 hover:brightness-110"
-            aria-label={isMaximized ? "Restore" : "Maximize"}
-            title={isMaximized ? "Restore" : "Maximize"}
+            className={`rounded-full bg-[#28c840] opacity-80 hover:brightness-110 ${
+              isMobile ? "w-4 h-4" : "w-3 h-3"
+            }`}
           />
         </div>
 
@@ -161,10 +186,8 @@ export default function MacWindow({
         <div className="w-[52px]" />
       </div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        {children}
-      </div>
+      {/* CONTENT */}
+      <div className="flex-1 overflow-y-auto min-h-0">{children}</div>
     </motion.div>
   );
 }
