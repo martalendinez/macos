@@ -2,8 +2,6 @@
 import { useMemo, useRef, useState } from "react";
 import { getTokens } from "../../../ui/themeTokens";
 import { getFunApps } from "./data/funApps";
-
-// ✅ reuse the exact Settings sidebar
 import SidebarNav from "../Settings/components/SidebarNav";
 
 function AppIconTile({ app, t, theme = "light" }) {
@@ -18,18 +16,15 @@ function AppIconTile({ app, t, theme = "light" }) {
       type="button"
       onClick={app.onClick}
       className="flex flex-col items-center transition hover:scale-105 active:scale-95"
-      title={app.title}
     >
-      {/* ICON */}
       <div className="w-[60px] h-[60px]">
         <img src={app.icon} alt="" className="w-full h-full object-contain drop-shadow-sm" />
       </div>
 
-      {/* LABEL */}
       <div className={`mt-2 text-[13px] font-medium text-center ${label}`}>{app.title}</div>
-
-      {/* SUBTITLE */}
-      {app.subtitle ? <div className={`mt-1 text-[11px] text-center ${sub}`}>{app.subtitle}</div> : null}
+      {app.subtitle && (
+        <div className={`mt-1 text-[11px] text-center ${sub}`}>{app.subtitle}</div>
+      )}
     </button>
   );
 }
@@ -55,20 +50,17 @@ export default function FunWindow({
   uiTheme = "glass",
   glassContrast = "light",
   theme = "light",
-  iconTheme = "glass", // ✅ icons follow this (NOT uiTheme)
+  iconTheme = "glass",
   onOpenWindow,
 }) {
   const t = getTokens(uiTheme, glassContrast);
   const isMac = t.isMac;
   const isDark = theme === "dark";
 
-  // ✅ IMPORTANT: use iconTheme for icons
   const allApps = useMemo(() => getFunApps(onOpenWindow, iconTheme), [onOpenWindow, iconTheme]);
 
-  // single scroll container anchor
   const topRef = useRef(null);
 
-  // ✅ Sidebar "filters"
   const [activeSection, setActiveSection] = useState("home");
 
   const sections = useMemo(
@@ -86,12 +78,10 @@ export default function FunWindow({
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  const activeFilter = activeSection;
-
   const filteredApps = useMemo(() => {
-    if (activeFilter === "home") return allApps;
-    return allApps.filter((a) => inferGroup(a) === activeFilter);
-  }, [allApps, activeFilter]);
+    if (activeSection === "home") return allApps;
+    return allApps.filter((a) => inferGroup(a) === activeSection);
+  }, [allApps, activeSection]);
 
   const titleText = isMac ? (isDark ? "text-white/90" : "text-black/80") : "text-white/90";
   const muted = isMac ? (isDark ? "text-white/55" : "text-black/50") : "text-white/60";
@@ -105,39 +95,65 @@ export default function FunWindow({
     : "border-b border-white/10 bg-white/5 backdrop-blur-xl";
 
   const sectionTitle =
-    activeFilter === "home"
+    activeSection === "home"
       ? "All"
-      : activeFilter === "tools"
+      : activeSection === "tools"
       ? "Mini tools"
-      : activeFilter === "games"
+      : activeSection === "games"
       ? "Games"
       : "Fun stuff";
 
   return (
     <div className={`h-full flex ${t.textMain}`}>
-      <SidebarNav
-        uiTheme={uiTheme}
-        glassContrast={glassContrast}
-        theme={theme}
-        activeSection={activeSection}
-        sections={sections}
-        onSelect={handleSelectFromSidebar}
-        preferencesItems={[]} // ✅ hard-disable preferences rendering
-      />
 
+      {/* ⭐ SIDEBAR — wider on mobile, normal on desktop */}
+      <div
+        className="
+          shrink-0
+          w-[150px]     /* ⭐ mobile width */
+          md:w-auto     /* ⭐ desktop width */
+          border-r border-white/10
+        "
+      >
+        <SidebarNav
+          uiTheme={uiTheme}
+          glassContrast={glassContrast}
+          theme={theme}
+          activeSection={activeSection}
+          sections={sections}
+          onSelect={handleSelectFromSidebar}
+          preferencesItems={[]}
+        />
+      </div>
+
+      {/* ⭐ RIGHT PANEL */}
       <div className={`flex-1 h-full flex flex-col ${rightBg}`}>
-        <div className={`h-14 px-6 flex items-center justify-between gap-4 ${toolbar}`}>
+
+        {/* DESKTOP TOOLBAR */}
+        <div className={`h-14 px-4 md:px-6 items-center justify-between gap-4 ${toolbar} flex`}>
           <div className="flex items-center gap-3">
             <div className={`text-[18px] font-semibold ${titleText}`}>Extras</div>
             <div className={`text-[13px] ${muted}`}>{sectionTitle}</div>
           </div>
-          <div className={`text-[13px] ${muted}`}>Tip: try “play tetris” in Terminal</div>
+          <div className={`hidden md:block text-[13px] ${muted}`}>
+            Tip: try “play tetris” in Terminal
+          </div>
         </div>
 
-        <div ref={topRef} className="flex-1 overflow-auto px-6 py-6">
+        {/* CONTENT */}
+        <div ref={topRef} className="flex-1 overflow-auto px-4 md:px-6 py-6">
           <div className={`text-[14px] font-semibold ${titleText}`}>{sectionTitle}</div>
 
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-x-6 gap-y-5">
+          {/* ⭐ MOBILE = 1 column, DESKTOP = 3 columns */}
+          <div className="
+            mt-4 
+            grid 
+            grid-cols-1        /* ⭐ mobile */
+            sm:grid-cols-2 
+            md:grid-cols-3     /* ⭐ desktop */
+            gap-x-4 
+            gap-y-6
+          ">
             {filteredApps.map((a) => (
               <AppIconTile key={a.key} app={a} t={t} theme={theme} />
             ))}
