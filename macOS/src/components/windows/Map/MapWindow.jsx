@@ -2,7 +2,7 @@
 import "leaflet/dist/leaflet.css";
 import "./macosMaps.css";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 
@@ -19,10 +19,8 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// ✅ Tile URLs (switch in dark mode)
 const LIGHT_TILE_URL = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
-const DARK_TILE_URL =
-  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+const DARK_TILE_URL = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 
 export default function MapWindow({ uiTheme = "glass", glassContrast = "light", theme = "light" }) {
   const t = getTokens(uiTheme, glassContrast);
@@ -44,6 +42,7 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
       year: v.year,
       description: v.description,
       coords: v.coords,
+      funFacts: v.funFacts, // Ensure fun facts are included
     }));
   }, []);
 
@@ -55,7 +54,20 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
     );
   }, [places, query]);
 
-  // ✅ surfaces that respect uiTheme
+  // Handle viewport for responsive design
+  const [viewport, setViewport] = useState({ w: window.innerWidth, h: window.innerHeight });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewport({ w: window.innerWidth, h: window.innerHeight });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = viewport.w < 768;
+
+  // UI Classes based on theme and platform
   const shell = isMac ? (isDark ? "bg-[#1c1c1e]" : "bg-white") : "";
   const sidebar = isMac
     ? isDark
@@ -80,15 +92,12 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
       : "hover:bg-black/5 border-transparent"
     : "hover:bg-white/10 border-transparent";
 
-  // ✅ choose map tiles by theme
   const tileUrl = useMemo(() => (isDark ? DARK_TILE_URL : LIGHT_TILE_URL), [isDark]);
-
-  // ✅ optional: slightly different attribution if you want (kept simple)
-  const tileAttribution = "&copy; OpenStreetMap &copy; CARTO";
+  const tileAttribution = "© OpenStreetMap © CARTO";
 
   return (
     <div className={`h-full ${shell} ${t.textMain}`}>
-      <div className="h-full grid grid-cols-[320px_1fr]">
+      <div className={`h-full grid ${isMobile ? "grid-cols-1" : "grid-cols-[320px_1fr]"}`}>
         {/* LEFT SIDEBAR */}
         <aside className={`h-full ${sidebar} p-4 flex flex-col overflow-hidden`}>
           <div
@@ -221,30 +230,30 @@ export default function MapWindow({ uiTheme = "glass", glassContrast = "light", 
             </button>
           </div>
 
- <div className={`w-full h-full ${isDark ? "dark-mode-map" : ""}`}>
-  <MapContainer
-    center={current.coords}
-    zoom={5}
-    scrollWheelZoom
-    zoomControl={false}
-    className="w-full h-full macos-maps-leaflet"
-  >
-    <Recenter coords={current.coords} zoom={5} />
+          <div className={`w-full h-full ${isDark ? "dark-mode-map" : ""}`}>
+            <MapContainer
+              center={current.coords}
+              zoom={5}
+              scrollWheelZoom
+              zoomControl={false}
+              className="w-full h-full macos-maps-leaflet"
+            >
+              <Recenter coords={current.coords} zoom={5} />
 
-    <TileLayer url={tileUrl} attribution={tileAttribution} />
+              <TileLayer url={tileUrl} attribution={tileAttribution} />
 
-    <ZoomControl position="bottomright" />
+              <ZoomControl position="bottomright" />
 
-    {Object.entries(placeDetails).map(([key, place]) => (
-      <Marker key={key} position={place.coords}>
-        <Popup className="macosMapsPopup">
-          <div className="macosMapsPopupTitle">{place.title}</div>
-          <div className="macosMapsPopupDesc">{place.description}</div>
-        </Popup>
-      </Marker>
-    ))}
-  </MapContainer>
-</div>
+              {Object.entries(placeDetails).map(([key, place]) => (
+                <Marker key={key} position={place.coords}>
+                  <Popup className="macosMapsPopup">
+                    <div className="macosMapsPopupTitle">{place.title}</div>
+                    <div className="macosMapsPopupDesc">{place.description}</div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
         </section>
       </div>
 
