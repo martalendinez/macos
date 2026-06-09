@@ -1,8 +1,6 @@
 import { PROJECTS } from "../components/windows/Projects/data/projectData";
 import { MARTA_INFO } from "../components/windows/Projects/data/martaInfo";
 
-// ---------- INTENTS ----------
-
 const INTENTS = [
   {
     name: "about_marta",
@@ -18,18 +16,19 @@ const INTENTS = [
   },
   {
     name: "project_specific",
-    keywords: [
-      "thesis",
-      "master thesis",
-      "bachelor thesis",
-      "employer branding",
-      "branding",
-      "trivia",
-      "restaurant",
-      "coordination",
-      "group dining",
-      "kth app",
-    ],
+    keywords: ["thesis", "master thesis", "bachelor thesis", "employer branding", "branding", "trivia", "restaurant", "coordination", "group dining", "kth app"],
+  },
+  {
+    name: "career_goals",
+    keywords: ["career", "goals", "future plans", "where do you see yourself"],
+  },
+  {
+    name: "design_philosophy",
+    keywords: ["design philosophy", "design approach", "how do you design"],
+  },
+  {
+    name: "general_questions",
+    keywords: ["tell me", "what do you think about", "how do you feel about", "what is your opinion"],
   },
 ];
 
@@ -43,56 +42,42 @@ function detectIntent(q) {
   return "unknown";
 }
 
-// ---------- REASONING TEXT ----------
-
 function generateReasoning(intent) {
   const thoughts = {
-    about_marta: "Thinking about Marta’s background...",
-    interests: "Checking what Marta is into...",
-    projects_general: "Looking through Marta’s project history...",
-    project_specific: "Finding the project that matches your question...",
-    unknown: "Trying to understand your question...",
+    unknown: getRandomUnknownResponse(),
   };
-
-  return thoughts[intent] || thoughts.unknown;
+  return thoughts[intent] || "";
 }
 
-// ---------- TEMPLATES ----------
+function getRandomUnknownResponse() {
+  const responses = [
+    "Hmm, that's an interesting question!",
+    "I need a moment to think about that...",
+    "I’m not sure, but let me try to help!",
+    "That's a great question! Let me find out more.",
+    "Can you provide a bit more detail on that?",
+  ];
+  return responses[Math.floor(Math.random() * responses.length)];
+}
 
 const aboutMartaTemplates = [
-  () =>
-    `${MARTA_INFO.summary} She works with ${MARTA_INFO.skills.join(", ")}.`,
-  () =>
-    `Marta is ${MARTA_INFO.role.toLowerCase()}. ${MARTA_INFO.summary} Her main skills include ${MARTA_INFO.skills.join(
-      ", "
-    )}.`,
-  () =>
-    `Quick snapshot of Marta: ${MARTA_INFO.summary} She’s especially strong in ${MARTA_INFO.skills.join(
-      ", "
-    )}.`,
+  () => `${MARTA_INFO.summary} She works with ${MARTA_INFO.skills.join(", ")}.`,
+  () => `Marta is ${MARTA_INFO.role.toLowerCase()}. ${MARTA_INFO.summary} Her main skills include ${MARTA_INFO.skills.join(", ")}.`,
+  () => `Quick snapshot of Marta: ${MARTA_INFO.summary} She’s especially strong in ${MARTA_INFO.skills.join(", ")}.`,
 ];
 
 const interestsTemplates = [
   () => `Marta is into ${MARTA_INFO.interests.join(", ")}.`,
-  () =>
-    `She gravitates towards ${MARTA_INFO.interests.join(
-      ", "
-    )} — especially when working on new projects.`,
-  () =>
-    `Her main interests include ${MARTA_INFO.interests.join(
-      ", "
-    )}, and she often blends them in her work.`,
+  () => `She gravitates towards ${MARTA_INFO.interests.join(", ")} — especially when working on new projects.`,
+  () => `Her main interests include ${MARTA_INFO.interests.join(", ")}, and she often blends them in her work.`,
 ];
 
 function randomTemplate(arr) {
   return arr[Math.floor(Math.random() * arr.length)]();
 }
 
-// ---------- PROJECT MATCHING ----------
-
 function findProject(q) {
   const lower = q.toLowerCase();
-
   return (
     PROJECTS.find(p => {
       const allKeywords = [
@@ -117,8 +102,6 @@ You can explore more in the case study: ${project.links[0]?.label}.
 `;
 }
 
-// ---------- MAIN ENTRY ----------
-
 export function getAiResponse(question) {
   const q = question.trim();
   if (!q) {
@@ -126,8 +109,6 @@ export function getAiResponse(question) {
   }
 
   const intent = detectIntent(q);
-  const reasoning = generateReasoning(intent);
-
   let coreAnswer = "";
 
   if (intent === "about_marta") {
@@ -135,26 +116,23 @@ export function getAiResponse(question) {
   } else if (intent === "interests") {
     coreAnswer = randomTemplate(interestsTemplates);
   } else if (intent === "projects_general") {
-    coreAnswer = `Marta has worked on ${PROJECTS.length} major projects, including ${PROJECTS.map(
-      p => p.title
-    ).join(", ")}. You can ask about any of them specifically.`;
+    coreAnswer = `Marta has worked on ${PROJECTS.length} major projects, including ${PROJECTS.map(p => p.title).join(", ")}. You can ask about any of them specifically.`;
   } else if (intent === "project_specific") {
     const project = findProject(q);
     if (project) {
       coreAnswer = formatProjectAnswer(project);
     } else {
-      coreAnswer =
-        "I think you're asking about one of Marta’s projects, but I couldn’t match it exactly. Try mentioning “thesis”, “trivia app”, or “restaurant coordination”.";
+      coreAnswer = "I couldn't find that project. Try asking about Marta's thesis or her portfolio!";
     }
+  } else if (intent === "career_goals") {
+    coreAnswer = "I aim to develop innovative UX solutions that enhance user experiences and leverage AI technologies. I see myself leading design projects that focus on human-centered design.";
+  } else if (intent === "design_philosophy") {
+    coreAnswer = "My design philosophy centers around empathy and user-centricity. I believe in iterative design processes that involve user feedback and testing.";
+  } else if (intent === "general_questions") {
+    coreAnswer = "I'm here to provide insights on Marta's work and background. If you have a specific question in mind, feel free to ask!";
   } else {
-    const project = findProject(q);
-    if (project) {
-      coreAnswer = formatProjectAnswer(project);
-    } else {
-      coreAnswer =
-        "I'm not fully sure yet, but you can ask about Marta, her interests, or any of her projects.";
-    }
+    coreAnswer = getRandomUnknownResponse();
   }
 
-  return `🤖 ${reasoning}\n\n${coreAnswer}`;
+  return coreAnswer;
 }

@@ -11,7 +11,6 @@ export default function AiAssistantWindow() {
 
   const chatRef = useRef(null);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -42,10 +41,7 @@ export default function AiAssistantWindow() {
             {m.text}
           </div>
         ))}
-
-        {isTyping && (
-          <div className="bubble ai typing">A63 is thinking…</div>
-        )}
+        {isTyping && <div className="bubble ai typing">A63 is thinking…</div>}
       </div>
 
       <div className="ai-spacer" />
@@ -55,17 +51,14 @@ export default function AiAssistantWindow() {
           <button className="tag" onClick={() => handleSend("Who is Marta?")}>
             Who is Marta?
           </button>
-          <button
-            className="tag"
-            onClick={() => handleSend("Tell me about her work")}
-          >
+          <button className="tag" onClick={() => handleSend("Tell me about her work")}>
             Tell me about her work
           </button>
-          <button
-            className="tag"
-            onClick={() => handleSend("What’s she into?")}
-          >
-            What’s she into?
+          <button className="tag" onClick={() => handleSend("What’s her design philosophy?")}>
+            Design Philosophy
+          </button>
+          <button className="tag" onClick={() => handleSend("What are your career goals?")}>
+            Career Goals
           </button>
         </div>
 
