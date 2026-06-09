@@ -26,8 +26,13 @@ export default function AiAssistantWindow() {
     setIsTyping(true);
 
     setTimeout(() => {
-      const aiText = getAiResponse(text);
-      const aiMsg = { from: "ai", text: aiText };
+      const { text: aiText, fallback } = getAiResponse(text);
+
+      const finalText = fallback
+        ? `${aiText}\n\n✨ This is an early version of A63 — future updates will let me explore the full portfolio and adapt to broader questions.`
+        : aiText;
+
+      const aiMsg = { from: "ai", text: finalText };
       setMessages(prev => [...prev, aiMsg]);
       setIsTyping(false);
     }, 600);
@@ -41,7 +46,10 @@ export default function AiAssistantWindow() {
             {m.text}
           </div>
         ))}
-        {isTyping && <div className="bubble ai typing">A63 is thinking…</div>}
+
+        {isTyping && (
+          <div className="bubble ai typing">A63 is thinking…</div>
+        )}
       </div>
 
       <div className="ai-spacer" />
@@ -51,13 +59,25 @@ export default function AiAssistantWindow() {
           <button className="tag" onClick={() => handleSend("Who is Marta?")}>
             Who is Marta?
           </button>
-          <button className="tag" onClick={() => handleSend("Tell me about her work")}>
+
+          <button
+            className="tag"
+            onClick={() => handleSend("Tell me about her work")}
+          >
             Tell me about her work
           </button>
-          <button className="tag" onClick={() => handleSend("What’s her design philosophy?")}>
+
+          <button
+            className="tag"
+            onClick={() => handleSend("What’s her design philosophy?")}
+          >
             Design Philosophy
           </button>
-          <button className="tag" onClick={() => handleSend("What are your career goals?")}>
+
+          <button
+            className="tag"
+            onClick={() => handleSend("What are your career goals?")}
+          >
             Career Goals
           </button>
         </div>
