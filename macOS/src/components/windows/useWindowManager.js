@@ -1,70 +1,114 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export default function useWindowManager() {
   const [openWindows, setOpenWindows] = useState([]); // array of ids
   const [activeWindow, setActiveWindow] = useState(null);
   const [zMap, setZMap] = useState({});
-  const [zTop, setZTop] = useState(200);
+  const zTopRef = useRef(200);
 
-  // ✅ NEW: maximized state per window
+  // maximized / minimized state per window
   const [maxMap, setMaxMap] = useState({}); // { [id]: true/false }
+  const [minMap, setMinMap] = useState({}); // { [id]: true/false }
 
-  const focusWindow = (id) => {
+  // mirrors so callbacks can read the latest state synchronously
+  const stateRef = useRef({ openWindows, zMap, minMap });
+  stateRef.current = { openWindows, zMap, minMap };
+
+  const focusWindow = useCallback((id) => {
     setActiveWindow(id);
-    setZTop((prev) => {
-      const next = prev + 1;
-      setZMap((m) => ({ ...m, [id]: next }));
-      return next;
-    });
-  };
+    zTopRef.current += 1;
+    const next = zTopRef.current;
+    setZMap((m) => (m[id] === next ? m : { ...m, [id]: next }));
+  }, []);
 
-  const openWindow = (id) => {
-    setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
-    focusWindow(id);
-  };
+  // like macOS: when a window goes away, the next window in the stack becomes key
+  const focusTopmostExcept = useCallback((exceptId) => {
+    const { openWindows: open, zMap: z, minMap: min } = stateRef.current;
+    const candidates = open.filter((w) => w !== exceptId && !min[w]);
+    if (!candidates.length) {
+      setActiveWindow(null);
+      return;
+    }
+    const top = candidates.reduce((a, b) => ((z[a] ?? 0) >= (z[b] ?? 0) ? a : b));
+    setActiveWindow(top);
+  }, []);
 
-  const closeWindow = (id) => {
-    setOpenWindows((prev) => prev.filter((w) => w !== id));
-    setZMap((prev) => {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
+  const restoreWindow = useCallback(
+    (id) => {
+      setMinMap((m) => {
+        if (!m[id]) return m;
+        const copy = { ...m };
+        delete copy[id];
+        return copy;
+      });
+      focusWindow(id);
+    },
+    [focusWindow]
+  );
 
-    // ✅ cleanup maximize state too
-    setMaxMap((prev) => {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
+  const openWindow = useCallback(
+    (id) => {
+      setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
+      restoreWindow(id);
+    },
+    [restoreWindow]
+  );
 
-    setActiveWindow((prev) => (prev === id ? null : prev));
-  };
+  const closeWindow = useCallback(
+    (id) => {
+      focusTopmostExcept(id);
+      setOpenWindows((prev) => prev.filter((w) => w !== id));
+      const drop = (prev) => {
+        if (!(id in prev)) return prev;
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      };
+      setZMap(drop);
+      setMaxMap(drop);
+      setMinMap(drop);
+    },
+    [focusTopmostExcept]
+  );
 
-  // ✅ NEW
-  const toggleMaximize = (id) => {
-    setMaxMap((m) => ({ ...m, [id]: !m[id] }));
-    focusWindow(id);
-  };
+  const minimizeWindow = useCallback(
+    (id) => {
+      setMinMap((m) => ({ ...m, [id]: true }));
+      focusTopmostExcept(id);
+    },
+    [focusTopmostExcept]
+  );
 
-  // ✅ NEW: reset window layout
-  const resetLayout = () => {
-    setOpenWindows([]); // close all
-    setActiveWindow(null); // remove focus
-    setZMap({}); // reset z-order
-    setMaxMap({}); // reset maximize states
-    setZTop(200); // reset stacking baseline
-  };
+  const toggleMaximize = useCallback(
+    (id) => {
+      setMaxMap((m) => ({ ...m, [id]: !m[id] }));
+      focusWindow(id);
+    },
+    [focusWindow]
+  );
+
+  // reset window layout
+  const resetLayout = useCallback(() => {
+    setOpenWindows([]);
+    setActiveWindow(null);
+    setZMap({});
+    setMaxMap({});
+    setMinMap({});
+    zTopRef.current = 200;
+  }, []);
 
   return {
     openWindows,
     activeWindow,
     zMap,
-    maxMap, // ✅
+    maxMap,
+    minMap,
     openWindow,
     closeWindow,
     focusWindow,
-    toggleMaximize, // ✅
-    resetLayout, // ✅ NEW
+    toggleMaximize,
+    minimizeWindow,
+    restoreWindow,
+    resetLayout,
   };
 }

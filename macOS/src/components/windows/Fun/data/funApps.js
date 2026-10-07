@@ -33,6 +33,18 @@ function pickIcon(iconTheme, iconKey) {
   return ICONS[themeKey]?.[iconKey] ?? ICONS.glass?.[iconKey] ?? null;
 }
 
+// Apps with their own icon in public/icons/apps (same for both icon themes)
+const EXTRA_APPS = [
+  { key: "instagram", title: "Instagram", subtitle: "My life in photos & stories", group: "fun" },
+  { key: "messages", title: "Messages", subtitle: "Ask me anything", group: "fun" },
+  { key: "photobooth", title: "Photo Booth", subtitle: "Take a selfie with filters", group: "fun" },
+  { key: "paint", title: "Paint", subtitle: "Draw me something!", group: "fun" },
+  { key: "notes", title: "Notes", subtitle: "My philosophy & toolbox", group: "tools" },
+  { key: "weather", title: "Weather", subtitle: "Every city I've lived in", group: "tools" },
+  { key: "stickies", title: "Stickies", subtitle: "Leave yourself a note", group: "tools" },
+  { key: "calculator", title: "Calculator", subtitle: "Yes, it really works", group: "tools" },
+];
+
 /**
  * @param {(key: string) => void} onOpenWindow
  * @param {"glass"|"macos"} iconTheme
@@ -63,5 +75,10 @@ export function getFunApps(onOpenWindow, iconTheme = "glass") {
       icon: pickIcon(iconTheme, "music"),
       onClick: () => onOpenWindow?.("music"),
     },
+    ...EXTRA_APPS.map((a) => ({
+      ...a,
+      icon: `/icons/apps/${a.key}.svg`,
+      onClick: () => onOpenWindow?.(a.key),
+    })),
   ];
 }

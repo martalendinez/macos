@@ -1,52 +1,63 @@
 // src/components/notifications/ToastStack.jsx
+// macOS-style notification banners: slide in from the right, close button on hover.
 import { AnimatePresence, motion } from "framer-motion";
-import { useMemo } from "react";
+import { MENU_BAR_H } from "../../config/shell";
+import AppleLogo from "../../ui/AppleLogo";
 
-export default function ToastStack({ uiTheme = "glass", toasts = [], onDismiss }) {
-  const isMac = uiTheme === "macos";
+export default function ToastStack({ uiTheme = "glass", theme = "light", toasts = [], onDismiss }) {
+  const isDark = theme === "dark" || uiTheme !== "macos";
 
-  const toastClass = useMemo(() => {
-    return uiTheme === "macos"
-      ? "bg-white/95 border border-black/10 text-black shadow-lg"
-      : "bg-black/55 border border-white/15 text-white shadow-lg backdrop-blur-xl";
-  }, [uiTheme]);
-
-  const titleClass = isMac ? "text-black/85" : "text-white/90";
-  const subClass = isMac ? "text-black/55" : "text-white/60";
+  const surface = isDark
+    ? {
+        background: "rgba(40,40,44,0.72)",
+        boxShadow: "0 0 0 0.5px rgba(0,0,0,0.7), inset 0 0 0 0.5px rgba(255,255,255,0.14), 0 10px 30px rgba(0,0,0,0.35)",
+      }
+    : {
+        background: "rgba(246,246,246,0.78)",
+        boxShadow: "0 0 0 0.5px rgba(0,0,0,0.12), 0 10px 30px rgba(0,0,0,0.18)",
+      };
 
   return (
-    <div className="fixed top-12 right-4 z-[90] w-[360px] max-w-[92vw] pointer-events-none">
+    <div
+      className="fixed right-3 z-[9000] w-[356px] max-w-[calc(100vw-24px)] pointer-events-none"
+      style={{ top: MENU_BAR_H + 8 }}
+    >
       <AnimatePresence initial={false}>
         {toasts.map((t) => (
           <motion.div
             key={t.id}
-            className={`pointer-events-auto mb-2 rounded-2xl overflow-hidden ${toastClass}`}
-            initial={{ opacity: 0, y: -10, x: 8 }}
-            animate={{ opacity: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, y: -10, x: 8 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            layout
+            className={`group relative pointer-events-auto mb-2 rounded-[18px] backdrop-blur-2xl backdrop-saturate-[1.8] ${
+              isDark ? "text-white" : "text-black"
+            }`}
+            style={surface}
+            initial={{ opacity: 0, x: 380 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 380, transition: { duration: 0.28, ease: [0.4, 0, 1, 1] } }}
+            transition={{ type: "spring", stiffness: 340, damping: 32 }}
           >
-            <div className="px-4 py-3 flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <div className={`text-sm font-semibold ${titleClass} truncate`}>
-                  {t.title}
-                </div>
-                {t.message && (
-                  <div className={`mt-1 text-xs ${subClass} leading-relaxed`}>
-                    {t.message}
-                  </div>
-                )}
-              </div>
+            <button
+              className={`absolute -left-[7px] -top-[7px] w-[20px] h-[20px] rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-xl ${
+                isDark ? "bg-[#3a3a3c]/90 text-white/80" : "bg-white/95 text-black/60"
+              }`}
+              style={{ boxShadow: "0 0 0 0.5px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.15)" }}
+              onClick={() => onDismiss?.(t.id)}
+              aria-label="Dismiss notification"
+            >
+              ✕
+            </button>
 
-              <button
-                className={`shrink-0 text-xs px-2 py-1 rounded-lg ${
-                  isMac ? "bg-black/5 hover:bg-black/10" : "bg-white/10 hover:bg-white/15"
-                }`}
-                onClick={() => onDismiss?.(t.id)}
-                title="Dismiss"
-              >
-                ✕
-              </button>
+            <div className="px-[14px] py-[12px] flex items-start gap-3">
+              <span className="mt-[2px] shrink-0 w-[34px] h-[34px] rounded-[9px] bg-gradient-to-b from-[#5ac8fa] to-[#007aff] text-white flex items-center justify-center shadow-sm">
+                <AppleLogo className="w-[17px] h-[17px] -mt-[2px]" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <div className="text-[13px] font-semibold truncate">{t.title}</div>
+                  <div className="text-[11px] opacity-50 shrink-0">now</div>
+                </div>
+                {t.message && <div className="mt-[1px] text-[13px] leading-snug opacity-80">{t.message}</div>}
+              </div>
             </div>
           </motion.div>
         ))}

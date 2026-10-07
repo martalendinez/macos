@@ -64,7 +64,7 @@ export const placeDetails = {
       "Completed a programming internship at Extra Nice — my first real step into creative tech 🚀",
     ],
     year: "2020–2024",
-    coords: [52.3676, 4.9041],
+    coords: [53.2194, 6.5665], // Groningen
     photos: [NL1, NL2, NL3, NL4, NL5],
     label: "Groningen, Netherlands 🇳🇱",
   },
@@ -78,7 +78,7 @@ export const placeDetails = {
       "Developed a mild (okay, major) 🚌 FlixBus addiction",
     ],
     year: "2022–2023",
-    coords: [52.52, 13.405],
+    coords: [48.7758, 9.1829], // Stuttgart
     photos: [germany1, germany2, germany3, germany4, germany5],
     label: "Stuttgart, Germany 🇩🇪",
   },
@@ -92,7 +92,7 @@ export const placeDetails = {
       "Lived with a lovely host family — including a dog and a tiny puppy who followed me everywhere 🐶",
     ],
     year: "2025",
-    coords: [43.6532, -79.3832],
+    coords: [43.2557, -79.8711], // Hamilton
     photos: [canada1, canada2, canada3, canada4, canada5, canada6, canada7, canada8, canada9, canada10],
     label: "Hamilton, Canada 🇨🇦",
   },

@@ -1,63 +1,107 @@
-/* src/components/windows/Map/macosMaps.css */
+/* src/components/windows/Map/macosMaps.css — Apple Maps look */
 
-/* Remove Leaflet's default weird backgrounds and make it “macOS” */
-.macos-maps-leaflet .leaflet-control-zoom {
-  border: 1px solid rgba(0,0,0,0.12);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+.apple-maps {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif;
+  background: transparent;
 }
-.dark-mode-map .leaflet-pane .leaflet-tile {
-  filter: brightness(0.88) contrast(1.02) saturate(0.95) !important;
+
+/* soften the basemap a little, like Apple's muted palette */
+.apple-maps .leaflet-tile-pane {
+  filter: saturate(0.85) brightness(1.03);
 }
-.macos-maps-leaflet .leaflet-control-zoom a {
-  width: 38px;
-  height: 38px;
-  line-height: 38px;
-  font-size: 18px;
-  color: rgba(0,0,0,0.75);
-  background: rgba(255,255,255,0.9);
+.apple-maps.is-dark .leaflet-tile-pane {
+  filter: brightness(1.15) contrast(0.95);
+}
+
+/* attribution: small and quiet */
+.apple-maps .leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 6px 0 0 0;
+  padding: 1px 6px;
+  font-size: 9px;
+  color: rgba(0, 0, 0, 0.55);
+}
+.apple-maps .leaflet-control-attribution a {
+  color: inherit;
+}
+
+/* journey route: marching dashes */
+.am-route {
+  animation: am-march 1.2s linear infinite;
+}
+@keyframes am-march {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+/* photo pins */
+.am-pin-wrap {
+  background: none;
   border: none;
 }
-
-.macos-maps-leaflet .leaflet-control-zoom a:hover {
-  background: rgba(245,245,245,0.95);
+.am-pin {
+  position: relative;
+  width: var(--s);
+  height: calc(var(--s) + 10px);
+  transform-origin: 50% 100%;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 200ms ease, filter 200ms ease;
+  animation: am-drop 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  cursor: pointer;
 }
-
-.macos-maps-leaflet .leaflet-control-attribution {
-  background: rgba(255,255,255,0.75);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 10px;
-  padding: 2px 8px;
-  margin: 8px;
-  color: rgba(0,0,0,0.55);
+.am-pin:hover {
+  transform: scale(1.12);
 }
-
-/* Popup like macOS place bubble */
-.macos-maps-leaflet .leaflet-popup-content-wrapper {
-  border-radius: 14px;
-  border: 1px solid rgba(0,0,0,0.10);
-  box-shadow: 0 16px 45px rgba(0,0,0,0.18);
+.am-pin.is-dimmed {
+  opacity: 0.75;
+  filter: saturate(0.6);
 }
-
-.macos-maps-leaflet .leaflet-popup-content {
-  margin: 10px 12px;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+.am-pin-photo {
+  width: var(--s);
+  height: var(--s);
+  border-radius: 999px;
+  background-size: cover;
+  background-position: center;
+  border: 3px solid #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 0 0 0.5px rgba(0, 0, 0, 0.2);
 }
-
-.macosMapsPopupTitle {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(0,0,0,0.85);
+.am-pin.is-selected .am-pin-photo {
+  border-color: #0a84ff;
+  border-width: 3.5px;
 }
-
-.macosMapsPopupDesc {
-  margin-top: 6px;
-  font-size: 12px;
-  color: rgba(0,0,0,0.65);
-  line-height: 1.35;
+.am-pin-tail {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 2px;
+  z-index: -1;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
 }
-
-.macos-maps-leaflet .leaflet-popup-tip {
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+.am-pin.is-selected .am-pin-tail {
+  background: #0a84ff;
+}
+.am-pin-label {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font: 700 12px/1.2 -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  color: #1c1c1e;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff;
+}
+.apple-maps.is-dark .am-pin-label {
+  color: #fff;
+  text-shadow: 0 0 3px #000, 0 0 3px #000;
+}
+@keyframes am-drop {
+  from {
+    transform: translateY(-18px) scale(0.6);
+    opacity: 0;
+  }
 }

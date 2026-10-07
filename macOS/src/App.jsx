@@ -1,5 +1,6 @@
 ﻿// src/App.jsx
-import { Suspense, lazy, useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
+import { MotionConfig } from "framer-motion";
 
 import useWindowManager from "./components/windows/useWindowManager";
 
@@ -18,11 +19,15 @@ import useAchievements from "./hooks/useAchievements";
 // ✅ shell components
 import Shell from "./components/shell/Shell";
 import TopBar from "./components/shell/TopBar";
-import LeftRail from "./components/shell/LeftRail";
-import ResumeIcon from "./components/shell/ResumeIcon";
+import DesktopIcons from "./components/shell/DesktopIcons";
+import DesktopSurface from "./components/shell/DesktopSurface";
+import Spotlight from "./components/shell/Spotlight";
+import LockScreen from "./components/shell/LockScreen";
+import BootOverlay from "./components/shell/BootOverlay";
 import Dock from "./components/shell/Dock";
 import WindowsLayer from "./components/shell/WindowsLayer";
 import Loader from "./ui/Loader";
+import { getApps, iconForWindow, RESUME_URL } from "./config/apps";
 
 // ✅ import wallpaper pairs from Settings so every wallpaper swaps correctly
 import { ALL_WALLPAPER_PAIRS } from "./components/windows/Settings/constants";
@@ -66,15 +71,6 @@ function getHourInTimeZone(timeZone) {
 }
 
 export default function App() {
-  useEffect(() => {
-    const el = document.getElementById("boot-splash");
-    if (!el) return;
-
-    el.classList.add("boot-hide");
-    const t = window.setTimeout(() => el.remove(), 220);
-    return () => window.clearTimeout(t);
-  }, []);
-
   const [accent, setAccent] = useState("sky");
   useAccentVar(accent);
 
@@ -86,10 +82,30 @@ export default function App() {
 
   const [fontScale, setFontScale] = useState(1);
 
+  // Boot screen: keep it up briefly so the progress bar can finish, then reveal the desktop
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const t = window.setTimeout(() => setLoaded(true), 40);
-    return () => window.clearTimeout(t);
+    const el = document.getElementById("boot-splash");
+    if (!el) {
+      setLoaded(true);
+      return;
+    }
+    const timers = [];
+    const MIN_BOOT_MS = 1200;
+    const wait = Math.max(0, MIN_BOOT_MS - performance.now());
+    timers.push(
+      window.setTimeout(() => {
+        el.classList.add("boot-done");
+        timers.push(
+          window.setTimeout(() => {
+            el.classList.add("boot-hide");
+            setLoaded(true);
+            timers.push(window.setTimeout(() => el.remove(), 500));
+          }, 280)
+        );
+      }, wait)
+    );
+    return () => timers.forEach(window.clearTimeout);
   }, []);
 
   const activeWallpaper = wallpaperUrl ?? (theme === "light" ? bgLight : bgDark);
@@ -110,10 +126,13 @@ export default function App() {
     activeWindow,
     zMap,
     maxMap,
+    minMap,
     openWindow,
     closeWindow,
     focusWindow,
     toggleMaximize,
+    minimizeWindow,
+    restoreWindow,
     resetLayout,
   } = useWindowManager();
 
@@ -127,17 +146,18 @@ export default function App() {
   });
 
   useEffect(() => {
+    if (!loaded) return;
     const t = window.setTimeout(() => {
       notif.notifyOnce("tip_30sec", {
         title: "Tip",
-        message: "Want the quick version? Open ⚡ Recruiter Mode on the left.",
+        message: "Want the quick version? Open ⚡ Recruiter Mode on your desktop, or press ⌘K to search.",
         toast: true,
       });
-    }, 900);
+    }, 1400);
 
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loaded]);
 
   function setThemeAndSyncWallpaper(nextTheme) {
     setTheme(nextTheme);
@@ -174,63 +194,141 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Dock icons by ICON THEME
-  const icons = useMemo(() => {
-    if (iconTheme === "macos") {
-      return {
-        about: "/icons/mac/aboutMac.png",
-        ai: "/icons/mac/aiMac.png",
-        fun: "/icons/mac/gamesMac.png",
-      };
-    }
+  // ---------- Desktop shell state ----------
+  const apps = useMemo(() => getApps(iconTheme), [iconTheme]);
+  const appById = useMemo(() => Object.fromEntries(apps.map((a) => [a.id, a])), [apps]);
 
-    return {
-      about: "/icons/glass/me-512.png",
-      ai: "/icons/glass/bot-512.png",
-      fun: "/icons/glass/games-512.png",
-    };
-  }, [iconTheme]);
+  const [spotlightOpen, setSpotlightOpen] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [booting, setBooting] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState(null);
 
-  // Desktop icons by ICON THEME
-  const desktopIcons = useMemo(() => {
-    if (iconTheme === "macos") {
-      return {
-        timer: "/icons/mac/timerMac.png",
-        projects: "/icons/mac/foldersMac.png",
-        videos: "/icons/mac/videosMac.png",
-      };
-    }
+  const openResume = useCallback(() => {
+    window.open(RESUME_URL, "_blank", "noopener,noreferrer");
+    notif.unlockAchievement?.(
+      "prepared_recruiter",
+      "Achievement unlocked: Prepared Recruiter",
+      "Resume viewed ✅"
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notif.unlockAchievement]);
 
-    return {
-      timer: "/icons/glass/ProfileGlass.png",
-      projects: "/icons/glass/FolderGlass.png",
-      videos: "/icons/glass/MediaGlass.png",
-    };
-  }, [iconTheme]);
-
-  const docIcon =
-    iconTheme === "macos"
-      ? "/icons/mac/docMac.png"
-      : "/icons/glass/MailGlass.png";
-
-  // ⭐ UPDATED: AI assistant now opens aiAssistant window
-  const dockItems = useMemo(
-    () => [
-      { label: "About me", icon: icons.about, windowId: "about" },
-     // { label: "AI assistant", icon: icons.ai, windowId: "aiAssistant" },
-      { label: "Extras & Fun", icon: icons.fun, windowId: "fun" },
-    ],
-    [icons]
+  const launch = useCallback(
+    (app) => {
+      if (!app) return;
+      if (app.href) openResume();
+      else if (app.windowId) openWindow(app.windowId);
+    },
+    [openResume, openWindow]
   );
 
-  // ⭐ UPDATED: Videos removed
-  const leftRailItems = useMemo(
+  // ⌘K / Ctrl+K toggles Spotlight
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSpotlightOpen((o) => !o);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const restart = useCallback(() => {
+    setBooting(true);
+    resetLayout();
+  }, [resetLayout]);
+  const finishBoot = useCallback(() => setBooting(false), []);
+  const unlock = useCallback(() => setLocked(false), []);
+
+  const activeAppName = useMemo(() => {
+    const t = WINDOW_DEFS[activeWindow]?.title;
+    return t ? t.split(" — ")[0] : "Finder";
+  }, [activeWindow]);
+
+  const windowList = useMemo(
+    () =>
+      openWindows.map((id) => ({
+        id,
+        title: WINDOW_DEFS[id]?.title ?? id,
+        active: id === activeWindow,
+        minimized: !!minMap[id],
+        maximized: !!maxMap[id],
+      })),
+    [openWindows, activeWindow, minMap, maxMap]
+  );
+
+  const menuActions = useMemo(
+    () => ({
+      openWindow,
+      openResume,
+      resetLayout,
+      restart,
+      lockScreen: () => setLocked(true),
+      openSpotlight: () => setSpotlightOpen(true),
+      closeActive: () => activeWindow && closeWindow(activeWindow),
+      minimizeActive: () => activeWindow && minimizeWindow(activeWindow),
+      zoomActive: () => activeWindow && toggleMaximize(activeWindow),
+      focusOrRestore: (id) => restoreWindow(id),
+      showShortcuts: () =>
+        notif.notify?.({
+          title: "Keyboard shortcuts",
+          message: "⌘K / Ctrl+K: Spotlight · Esc: close menus · Double-click a title bar: zoom · Right-click the desktop: more options",
+          toast: true,
+        }),
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [openWindow, openResume, resetLayout, restart, activeWindow, closeWindow, minimizeWindow, toggleMaximize, restoreWindow, notif.notify]
+  );
+
+  const goItems = useMemo(
     () => [
-      { icon: desktopIcons.timer, label: "Recruiter Mode", windowId: "recruiter" },
-      { icon: desktopIcons.projects, label: "Projects", windowId: "projects" },
-      // { icon: desktopIcons.videos, label: "Videos", windowId: "videos" },
+      ...apps.filter((a) => a.kind === "app" && !a.extra).map((a) => ({ label: a.label, onSelect: () => launch(a) })),
+      { separator: true },
+      { header: "Extras" },
+      ...apps.filter((a) => a.extra).map((a) => ({ label: a.label, onSelect: () => launch(a) })),
+      { separator: true },
+      { label: "Résumé (PDF)", onSelect: openResume },
     ],
-    [desktopIcons]
+    [apps, launch, openResume]
+  );
+
+  const desktopItems = useMemo(
+    () =>
+      ["recruiter", "projects", "resume"].map((id) => ({
+        id,
+        label: appById[id].label,
+        icon: appById[id].icon,
+        onOpen: () => launch(appById[id]),
+      })),
+    [appById, launch]
+  );
+
+  const desktopMenu = useMemo(
+    () => [
+      { label: "New Folder", disabled: true },
+      { separator: true },
+      { label: "Get Info", onSelect: () => openWindow("about") },
+      { label: "Change Wallpaper…", onSelect: () => openWindow("settings") },
+      { label: theme === "dark" ? "Use Light Appearance" : "Use Dark Appearance", onSelect: toggleTheme },
+      { separator: true },
+      { label: "Open Recruiter Mode", onSelect: () => openWindow("recruiter") },
+      { label: "View Résumé", onSelect: openResume },
+      { label: "Spotlight Search…", onSelect: () => setSpotlightOpen(true) },
+      { separator: true },
+      { label: "Clean Up (Close All Windows)", disabled: !openWindows.length, onSelect: resetLayout },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [theme, openWindows.length, openWindow, openResume, resetLayout]
+  );
+
+  const dockApps = useMemo(() => apps.filter((a) => a.inDock), [apps]);
+  const dockMinimized = useMemo(
+    () =>
+      openWindows
+        .filter((id) => minMap[id])
+        .map((id) => ({ id, title: WINDOW_DEFS[id]?.title ?? id, icon: iconForWindow(id, iconTheme) })),
+    [openWindows, minMap, iconTheme]
   );
 
   const appApi = useMemo(
@@ -280,6 +378,7 @@ export default function App() {
   );
 
   return (
+    <MotionConfig reducedMotion="user">
     <Shell
       fontScale={fontScale}
       baseTextClass={baseTextClass}
@@ -287,9 +386,16 @@ export default function App() {
       previewWallpaperUrl={activeWallpaperPreview}
       loaded={loaded}
     >
+      <DesktopSurface
+        isDark={theme === "dark"}
+        menuItems={desktopMenu}
+        onDeselect={() => setSelectedIcon(null)}
+      />
+
       <Suspense fallback={null}>
         <ToastStack
           uiTheme={uiTheme}
+          theme={theme}
           toasts={notif.toasts}
           onDismiss={notif.dismissToast}
         />
@@ -311,7 +417,6 @@ export default function App() {
       <TopBar
         loaded={loaded}
         theme={theme}
-        setTheme={setThemeAndSyncWallpaper}
         onToggleTheme={toggleTheme}
         onOpenSettings={() => openWindow("settings")}
         notifOpen={notif.notifOpen}
@@ -321,14 +426,17 @@ export default function App() {
         moonIcon="/icons/ui/moon.png"
         gearIcon="/icons/ui/gear.png"
         notificationIcon="/icons/ui/notification.png"
+        activeAppName={activeAppName}
+        windowList={windowList}
+        goItems={goItems}
+        actions={menuActions}
       />
 
-      <LeftRail loaded={loaded} items={leftRailItems} onOpenWindow={openWindow} />
-
-      <ResumeIcon
+      <DesktopIcons
         loaded={loaded}
-        iconSrc={docIcon}
-        unlockAchievement={notif.unlockAchievement}
+        items={desktopItems}
+        selectedId={selectedIcon}
+        onSelect={setSelectedIcon}
       />
 
       <WindowsLayer
@@ -336,8 +444,10 @@ export default function App() {
         activeWindow={activeWindow}
         zMap={zMap}
         maxMap={maxMap}
+        minMap={minMap}
         focusWindow={focusWindow}
         closeWindow={closeWindow}
+        minimizeWindow={minimizeWindow}
         toggleMaximize={toggleMaximize}
         uiTheme={uiTheme}
         theme={theme}
@@ -345,7 +455,27 @@ export default function App() {
         appApi={appApi}
       />
 
-      <Dock loaded={loaded} items={dockItems} onOpenWindow={openWindow} />
+      <Dock
+        loaded={loaded}
+        theme={theme}
+        apps={dockApps}
+        minimized={dockMinimized}
+        runningIds={openWindows}
+        onLaunch={launch}
+        onRestore={restoreWindow}
+      />
+
+      <Spotlight
+        open={spotlightOpen}
+        onClose={() => setSpotlightOpen(false)}
+        items={apps}
+        isDark={theme === "dark"}
+        onPick={launch}
+      />
+
+      <LockScreen open={locked} onUnlock={unlock} wallpaperUrl={activeWallpaper} timeZone={timeZone} />
+      <BootOverlay open={booting} onDone={finishBoot} />
     </Shell>
+    </MotionConfig>
   );
 }

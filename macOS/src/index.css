@@ -3,10 +3,14 @@
 
 
 :root {
-  font-family: "Segoe UI", Arial, sans-serif;
+  /* SF Pro on Apple devices, Inter elsewhere */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv11", "ss01";
 }
 
 body {
@@ -91,4 +95,9 @@ body {
 
 .app {
   text-align: center;
+}
+/* Music window: "now playing" equalizer bars */
+@keyframes music-eq {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
 }

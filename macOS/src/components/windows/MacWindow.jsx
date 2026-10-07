@@ -1,6 +1,41 @@
 // src/components/windows/MacWindow.jsx
-import { useEffect, useState } from "react";
-import { motion, useDragControls } from "framer-motion";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { animate, motion, useDragControls, useMotionValue } from "framer-motion";
+import TrafficLights from "./TrafficLights";
+import {
+  DOCK_RESERVE,
+  MENU_BAR_H,
+  SPRING_WINDOW,
+  WINDOW_MARGIN,
+} from "../../config/shell";
+
+const MIN_W = 420;
+const MIN_H = 280;
+const TITLE_H = 44;
+
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+function zoomedRect() {
+  return {
+    left: WINDOW_MARGIN,
+    top: MENU_BAR_H + WINDOW_MARGIN,
+    width: window.innerWidth - WINDOW_MARGIN * 2,
+    height: window.innerHeight - MENU_BAR_H - WINDOW_MARGIN - DOCK_RESERVE,
+  };
+}
+
+// Fit the requested frame on small screens (e.g. 1180×760 windows on a 13" laptop)
+function initialFrame(initialPos, width, height) {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const maxW = vw - WINDOW_MARGIN * 2;
+  const maxH = vh - MENU_BAR_H - WINDOW_MARGIN - DOCK_RESERVE;
+  const w = Math.min(width, maxW);
+  const h = Math.min(height, maxH);
+  const left = clamp(initialPos.x, WINDOW_MARGIN, vw - WINDOW_MARGIN - w);
+  const top = clamp(initialPos.y, MENU_BAR_H + WINDOW_MARGIN, Math.max(MENU_BAR_H + WINDOW_MARGIN, vh - DOCK_RESERVE - h));
+  return { left, top, width: w, height: h };
+}
 
 export default function MacWindow({
   id,
@@ -9,6 +44,7 @@ export default function MacWindow({
   zIndex,
   onFocus,
   onClose,
+  onMinimize,
   width = 860,
   height = 560,
   initialPos = { x: 220, y: 90 },
@@ -16,155 +52,269 @@ export default function MacWindow({
   uiTheme = "glass",
   theme = "light",
   isMaximized = false,
+  isMinimized = false,
   onToggleMaximize,
+  dragBoundsRef,
+  resizable = true,
 }) {
   const dragControls = useDragControls();
+  const outerRef = useRef(null);
 
-  const [viewport, setViewport] = useState({
-    w: typeof window !== "undefined" ? window.innerWidth : 1440,
-    h: typeof window !== "undefined" ? window.innerHeight : 900,
-  });
+  // Frame lives in motion values so zoom can animate and resizing stays 60fps
+  const [f0] = useState(() => initialFrame(initialPos, width, height));
+  const left = useMotionValue(f0.left);
+  const top = useMotionValue(f0.top);
+  const w = useMotionValue(f0.width);
+  const h = useMotionValue(f0.height);
+  const x = useMotionValue(0); // drag offset
+  const y = useMotionValue(0);
 
+  const [resizing, setResizing] = useState(false);
+
+  // ---------- Zoom (green button / double-click title bar) ----------
+  const restoreRef = useRef(null);
+  const firstRun = useRef(true);
   useEffect(() => {
-    function onResize() {
-      setViewport({
-        w: window.innerWidth,
-        h: window.innerHeight,
-      });
+    if (firstRun.current) {
+      firstRun.current = false;
+      if (!isMaximized) return;
     }
+    const opts = SPRING_WINDOW;
+    if (isMaximized) {
+      restoreRef.current = { left: left.get(), top: top.get(), width: w.get(), height: h.get(), x: x.get(), y: y.get() };
+      const t = zoomedRect();
+      animate(left, t.left, opts);
+      animate(top, t.top, opts);
+      animate(w, t.width, opts);
+      animate(h, t.height, opts);
+      animate(x, 0, opts);
+      animate(y, 0, opts);
+    } else if (restoreRef.current) {
+      const r = restoreRef.current;
+      restoreRef.current = null;
+      animate(left, r.left, opts);
+      animate(top, r.top, opts);
+      animate(w, r.width, opts);
+      animate(h, r.height, opts);
+      animate(x, r.x, opts);
+      animate(y, r.y, opts);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMaximized]);
 
+  // keep zoomed windows filling the screen when the browser is resized
+  useEffect(() => {
+    if (!isMaximized) return;
+    function onResize() {
+      const t = zoomedRect();
+      left.set(t.left);
+      top.set(t.top);
+      w.set(t.width);
+      h.set(t.height);
+    }
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMaximized]);
 
+  // ---------- Minimize ("genie" into the Dock) ----------
+  const [genie, setGenie] = useState(null);
+  useLayoutEffect(() => {
+    if (!isMinimized || !outerRef.current) return;
+    const r = outerRef.current.getBoundingClientRect();
+    const anchor = document.querySelector("[data-dock-min-anchor]")?.getBoundingClientRect();
+    const tx = anchor ? anchor.left + anchor.width / 2 : window.innerWidth / 2;
+    const ty = anchor ? anchor.top + anchor.height / 2 : window.innerHeight - 40;
+    setGenie({
+      x: tx - (r.left + r.width / 2),
+      y: ty - (r.top + r.height / 2),
+      s: Math.min(56 / r.width, 0.14),
+    });
+  }, [isMinimized]);
+
+  const genieAnimate =
+    isMinimized && genie
+      ? { x: genie.x, y: genie.y, scaleX: genie.s, scaleY: genie.s * 0.85, opacity: 0 }
+      : { x: 0, y: 0, scaleX: 1, scaleY: 1, opacity: 1 };
+
+  const genieTransition = isMinimized
+    ? {
+        x: { duration: 0.5, ease: [0.55, 0, 0.75, 0.25] },
+        y: { duration: 0.5, ease: [0.7, 0, 0.84, 0] },
+        scaleX: { duration: 0.42, ease: [0.4, 0, 0.6, 1] },
+        scaleY: { duration: 0.5, ease: [0.4, 0, 0.6, 1] },
+        opacity: { duration: 0.5, ease: [0.9, 0, 1, 0.6] },
+      }
+    : { ...SPRING_WINDOW, opacity: { duration: 0.18 } };
+
+  const zoom = () => resizable && onToggleMaximize?.(id);
+
+  // ---------- Resize from edges ----------
+  const minW = Math.min(MIN_W, f0.width);
+  const minH = Math.min(MIN_H, f0.height);
+  function startResize(dir) {
+    return (e) => {
+      if (isMaximized) return;
+      e.preventDefault();
+      e.stopPropagation();
+      onFocus(id);
+      setResizing(true);
+
+      const sx = e.clientX;
+      const sy = e.clientY;
+      const sw = w.get();
+      const sh = h.get();
+      const sl = left.get();
+      const cursor = getComputedStyle(e.currentTarget).cursor;
+      document.body.style.cursor = cursor;
+
+      const move = (ev) => {
+        const dx = ev.clientX - sx;
+        const dy = ev.clientY - sy;
+        if (dir.includes("e")) {
+          const maxW = window.innerWidth - WINDOW_MARGIN - (left.get() + x.get());
+          w.set(clamp(sw + dx, minW, maxW));
+        }
+        if (dir.includes("w")) {
+          const maxW = sw + (sl + x.get() - WINDOW_MARGIN);
+          const nw = clamp(sw - dx, minW, maxW);
+          left.set(sl + (sw - nw));
+          w.set(nw);
+        }
+        if (dir.includes("s")) {
+          const maxH = window.innerHeight - WINDOW_MARGIN - (top.get() + y.get());
+          h.set(clamp(sh + dy, minH, maxH));
+        }
+      };
+      const up = () => {
+        setResizing(false);
+        document.body.style.cursor = "";
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+    };
+  }
+
+  // ---------- Styling ----------
   const isMac = uiTheme === "macos";
   const isDark = theme === "dark";
 
-  const windowClassByTheme = {
-    glass: isDark
-      ? "border border-white/15 bg-black/25 backdrop-blur-xl shadow-2xl"
-      : "border border-white/15 bg-white/10 backdrop-blur-xl shadow-2xl",
+  const surfaceClass = isMac
+    ? isDark
+      ? "bg-[#1e1e20]"
+      : "bg-white"
+    : isDark
+    ? "bg-black/30 backdrop-blur-2xl backdrop-saturate-150"
+    : "bg-white/12 backdrop-blur-2xl backdrop-saturate-150";
 
-    macos: isDark
-      ? "border border-white/10 bg-[#1c1c1e] shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
-      : "border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.18)]",
-  };
+  const shadow = (() => {
+    const edge = isDark
+      ? "0 0 0 0.5px rgba(0,0,0,0.9), inset 0 0 0 0.5px rgba(255,255,255,0.16)"
+      : isMac
+      ? "0 0 0 0.5px rgba(0,0,0,0.16)"
+      : "0 0 0 0.5px rgba(255,255,255,0.28), inset 0 0 0 0.5px rgba(255,255,255,0.18)";
+    return isActive
+      ? `${edge}, 0 28px 70px -12px rgba(0,0,0,${isDark ? 0.7 : 0.42}), 0 10px 24px -8px rgba(0,0,0,${isDark ? 0.5 : 0.2})`
+      : `${edge}, 0 14px 36px -12px rgba(0,0,0,${isDark ? 0.55 : 0.26})`;
+  })();
 
-  const titleBarClassByTheme = {
-    glass: isDark ? "bg-black/20" : "bg-white/10",
-    macos: isDark
-      ? "bg-[#2c2c2e] border-b border-white/10"
-      : "bg-[#f6f6f6] border-b border-black/10",
-  };
+  const titleBarClass = isMac
+    ? isDark
+      ? "bg-[#2a2a2c] border-b border-black/60"
+      : "bg-[#f6f6f6] border-b border-black/10"
+    : isDark
+    ? "bg-black/20 border-b border-white/10"
+    : "bg-white/10 border-b border-white/15";
 
-  const titleTextClassByTheme = {
-    glass: "text-white/90",
-    macos: isDark ? "text-white/85" : "text-black/70",
-  };
+  const titleTextClass = isMac
+    ? isDark
+      ? isActive ? "text-white/85" : "text-white/40"
+      : isActive ? "text-black/80" : "text-black/35"
+    : isActive ? "text-white/90" : "text-white/50";
 
-  const ringClass =
-    uiTheme === "macos"
-      ? isDark
-        ? "ring-1 ring-white/10"
-        : "ring-1 ring-black/10"
-      : "ring-1 ring-white/20";
-
-  const closeBtn = uiTheme === "macos" ? "bg-[#ff5f57]" : "bg-red-400";
-
-  const MAX_MARGIN = 16;
-  const SAFE_TOP = 56; // keeps traffic-light buttons visible
-
-  const computedStyle = isMaximized
-    ? {
-        left: MAX_MARGIN,
-        top: MAX_MARGIN + 40,
-        width: `calc(100vw - ${MAX_MARGIN * 2}px)`,
-        height: `calc(100vh - ${MAX_MARGIN * 2 + 40 + 24}px)`,
-      }
-    : {
-        left: initialPos.x,
-        top: initialPos.y,
-        width,
-        height,
-      };
-
-  // Explicit drag constraints relative to the initial position
-  const dragConstraints = isMaximized
-    ? undefined
-    : {
-        left: -(initialPos.x - MAX_MARGIN),
-        top: -(initialPos.y - SAFE_TOP),
-        right: Math.max(0, viewport.w - MAX_MARGIN - (initialPos.x + width)),
-        bottom: Math.max(0, viewport.h - MAX_MARGIN - (initialPos.y + height)),
-      };
+  const edge = "absolute z-20";
 
   return (
     <motion.div
-      onMouseDown={() => onFocus(id)}
-      className={[
-        "fixed rounded-2xl overflow-hidden flex flex-col",
-        windowClassByTheme[uiTheme],
-        isActive ? ringClass : "opacity-95",
-        isDark ? "darkwin" : "",
-        isMac ? (isDark ? "text-white" : "text-black") : "text-white",
-      ].join(" ")}
-      style={{ zIndex, ...computedStyle }}
-      initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      exit={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      drag={!isMaximized}
+      ref={outerRef}
+      role="dialog"
+      aria-label={title}
+      onPointerDownCapture={() => !isMinimized && onFocus(id)}
+      className="fixed"
+      style={{
+        zIndex,
+        left,
+        top,
+        width: w,
+        height: h,
+        x,
+        y,
+        pointerEvents: isMinimized ? "none" : "auto",
+      }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
+      transition={{ ...SPRING_WINDOW, opacity: { duration: 0.18 } }}
+      drag={!isMaximized && !resizing}
       dragListener={false}
       dragControls={dragControls}
-      dragConstraints={dragConstraints}
+      dragConstraints={dragBoundsRef}
       dragMomentum={false}
       dragElastic={0}
     >
-      {/* Title bar */}
-      <div
-        className={`relative h-12 px-4 flex items-center justify-between cursor-default shrink-0 ${titleBarClassByTheme[uiTheme]}`}
-        style={{ touchAction: "none" }}
-        onPointerDown={(e) => {
-          onFocus(id);
-          if (!isMaximized) dragControls.start(e);
-        }}
+      <motion.div
+        className={[
+          "relative w-full h-full rounded-xl overflow-hidden flex flex-col",
+          surfaceClass,
+          isDark ? "darkwin" : "",
+          isMac ? (isDark ? "text-white" : "text-black") : "text-white",
+        ].join(" ")}
+        style={{ boxShadow: shadow, transition: "box-shadow 200ms ease" }}
+        animate={genieAnimate}
+        transition={genieTransition}
       >
-        <div className="flex items-center gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onClose(id);
-            }}
-            className={`w-3 h-3 rounded-full ${closeBtn} hover:brightness-110`}
-            aria-label="Close"
-            title="Close"
-          />
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] opacity-80" />
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleMaximize?.(id);
-            }}
-            className="w-3 h-3 rounded-full bg-[#28c840] opacity-80 hover:brightness-110"
-            aria-label={isMaximized ? "Restore" : "Maximize"}
-            title={isMaximized ? "Restore" : "Maximize"}
-          />
-        </div>
-
+        {/* Title bar */}
         <div
-          className={`text-[14px] font-medium select-none ${titleTextClassByTheme[uiTheme]}`}
-          style={{ fontFamily: "Lustria" }}
+          className={`relative px-4 flex items-center shrink-0 cursor-default select-none ${titleBarClass}`}
+          style={{ height: TITLE_H, touchAction: "none" }}
+          onPointerDown={(e) => {
+            if (!isMaximized) dragControls.start(e);
+          }}
+          onDoubleClick={zoom}
         >
-          {title}
+          <TrafficLights
+            isActive={isActive}
+            isDark={isDark || !isMac}
+            isMaximized={isMaximized}
+            onClose={() => onClose(id)}
+            onMinimize={() => onMinimize?.(id)}
+            onZoom={zoom}
+            canZoom={resizable}
+          />
+
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 max-w-[60%] truncate text-[13px] font-semibold tracking-[-0.01em] transition-colors duration-200 ${titleTextClass}`}
+          >
+            {title}
+          </div>
         </div>
 
-        <div className="w-[52px]" />
-      </div>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto min-h-0">{children}</div>
+      </motion.div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        {children}
-      </div>
+      {/* Resize handles (sit slightly outside the frame, like macOS) */}
+      {resizable && !isMaximized && !isMinimized && (
+        <>
+          <div className={`${edge} top-3 bottom-3 -right-1 w-2 cursor-ew-resize`} onPointerDown={startResize("e")} />
+          <div className={`${edge} top-3 bottom-3 -left-1 w-2 cursor-ew-resize`} onPointerDown={startResize("w")} />
+          <div className={`${edge} left-3 right-3 -bottom-1 h-2 cursor-ns-resize`} onPointerDown={startResize("s")} />
+          <div className={`${edge} -right-1 -bottom-1 w-4 h-4 cursor-nwse-resize`} onPointerDown={startResize("se")} />
+          <div className={`${edge} -left-1 -bottom-1 w-4 h-4 cursor-nesw-resize`} onPointerDown={startResize("sw")} />
+        </>
+      )}
     </motion.div>
   );
 }

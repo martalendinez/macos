@@ -73,7 +73,7 @@ export default function NotificationCenter({
         <>
           {/* overlay */}
           <motion.div
-            className="fixed inset-0 z-[70]"
+            className="fixed inset-0 z-[9050]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -82,7 +82,7 @@ export default function NotificationCenter({
 
           {/* panel */}
           <motion.aside
-            className={`fixed top-12 right-4 z-[80] w-[380px] max-w-[92vw] rounded-2xl shadow-xl overflow-hidden ${styles.panel}`}
+            className={`fixed top-9 right-3 z-[9100] w-[380px] max-w-[92vw] rounded-2xl shadow-xl overflow-hidden ${styles.panel}`}
             initial={{ opacity: 0, y: -8, x: 12 }}
             animate={{ opacity: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, y: -8, x: 12 }}

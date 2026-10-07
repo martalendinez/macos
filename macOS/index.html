@@ -3,194 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Lustria&display=swap" rel="stylesheet">
-    <title>macOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lustria&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#000000">
+    <title>Marta Lendinez — Portfolio</title>
     <link rel="icon" href="/icons/favicon.ico" />
 
   </head>
 
   <body>
-    <!-- ✅ Boot splash (shows BEFORE React loads) -->
-    <div id="boot-splash" aria-label="Loading" role="status">
-      <!-- subtle grain like macOS -->
-      <div class="boot-grain" aria-hidden="true"></div>
-
-      <div class="boot-card">
-        <!-- macOS “traffic lights” hint -->
-        <div class="boot-lights" aria-hidden="true">
-          <span class="boot-light red"></span>
-          <span class="boot-light yellow"></span>
-          <span class="boot-light green"></span>
-        </div>
-
-        <div class="boot-row">
-          <div class="boot-spinner" aria-hidden="true"></div>
-
-          <div class="boot-text">
-            <div class="boot-title">Loading Marta’s Portfolio…</div>
-
-            <!-- rotating status lines (CSS-only) -->
-            <div class="boot-subtitle">
-              <span class="boot-status s1">Starting Server</span>
-              <span class="boot-status s2">Mounting Dock</span>
-              <span class="boot-status s3">Rendering Desktop</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- macOS-ish thin progress bar -->
-        <div class="boot-progress" aria-hidden="true">
-          <div class="boot-progress-fill"></div>
-        </div>
-      </div>
+    <!-- Boot screen (shows BEFORE React loads), macOS style -->
+    <div id="boot-splash" aria-label="Loading Marta’s portfolio" role="status">
+      <svg class="boot-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/>
+      </svg>
+      <div class="boot-progress" aria-hidden="true"><div class="boot-progress-fill"></div></div>
     </div>
 
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
     <style>
-      /* -------------------------
-         Splash overlay
-      -------------------------- */
       #boot-splash {
         position: fixed;
         inset: 0;
         z-index: 99999;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.55);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
+        gap: 56px;
+        background: #000;
+        color: #fff;
+        transition: opacity 450ms ease;
       }
-
-      /* Subtle grain overlay (no external images) */
-      .boot-grain {
-        pointer-events: none;
-        position: absolute;
-        inset: 0;
-        opacity: 0.06;
-        background-image:
-          radial-gradient(circle at 20% 30%, rgba(0,0,0,0.35) 0.5px, transparent 0.6px),
-          radial-gradient(circle at 70% 60%, rgba(0,0,0,0.25) 0.5px, transparent 0.6px),
-          radial-gradient(circle at 40% 80%, rgba(0,0,0,0.20) 0.5px, transparent 0.6px);
-        background-size: 6px 6px, 7px 7px, 5px 5px;
-        mix-blend-mode: soft-light;
-      }
-
-      /* -------------------------
-         Card
-      -------------------------- */
-      .boot-card {
-        position: relative;
-        width: 380px;
-        max-width: 92vw;
-        border-radius: 22px;
-        padding: 18px 18px 16px;
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid rgba(0, 0, 0, 0.10);
-        box-shadow:
-          0 30px 90px rgba(0,0,0,0.18),
-          0 1px 0 rgba(255,255,255,0.45) inset;
-      }
-
-      /* tiny macOS traffic lights */
-      .boot-lights {
-        display: flex;
-        gap: 7px;
-        margin-bottom: 12px;
-        opacity: 0.9;
-      }
-      .boot-light {
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        box-shadow: 0 0 0 1px rgba(0,0,0,0.10) inset;
-      }
-      .boot-light.red { background: rgba(255, 90, 90, 0.95); }
-      .boot-light.yellow { background: rgba(255, 203, 77, 0.95); }
-      .boot-light.green { background: rgba(72, 213, 124, 0.95); }
-
-      .boot-row {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .boot-spinner {
-        width: 36px;
-        height: 36px;
-        border-radius: 999px;
-        border: 2px solid rgba(0,0,0,0.16);
-        border-top-color: rgba(0,0,0,0.70);
-        animation: bootspin 1.6s linear infinite;
-      }
-      @keyframes bootspin { to { transform: rotate(360deg); } }
-
-      .boot-title {
-        font: 600 15px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        color: rgba(0,0,0,0.82);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* rotating status lines */
-      .boot-subtitle {
-        position: relative;
-        height: 16px;
-        margin-top: 5px;
-        font: 400 13px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        color: rgba(0,0,0,0.55);
-        overflow: hidden;
-      }
-      .boot-status {
-        position: absolute;
-        left: 0;
-        top: 0;
+      .boot-logo {
+        width: 76px;
+        height: 76px;
         opacity: 0;
-        transform: translateY(4px);
-        animation: bootstatus 4.2s ease-in-out infinite;
-        white-space: nowrap;
+        animation: bootfade 400ms ease 150ms forwards;
       }
-      .boot-status.s1 { animation-delay: 0s; }
-      .boot-status.s2 { animation-delay: 1.4s; }
-      .boot-status.s3 { animation-delay: 2.8s; }
-
-      @keyframes bootstatus {
-        0% { opacity: 0; transform: translateY(4px); }
-        10% { opacity: 1; transform: translateY(0px); }
-        35% { opacity: 1; transform: translateY(0px); }
-        45% { opacity: 0; transform: translateY(-4px); }
-        100% { opacity: 0; }
-      }
-
-      /* macOS login-style progress bar */
       .boot-progress {
-        margin-top: 14px;
-        height: 6px;
+        width: 200px;
+        height: 5px;
         border-radius: 999px;
         overflow: hidden;
-        background: rgba(0,0,0,0.10);
+        background: rgba(255, 255, 255, 0.25);
+        opacity: 0;
+        animation: bootfade 400ms ease 250ms forwards;
       }
       .boot-progress-fill {
         height: 100%;
-        width: 38%;
+        width: 0;
         border-radius: 999px;
-        background: rgba(0,0,0,0.30);
-        transform: translateX(-70%);
-        animation: bootbar 2s ease-in-out infinite;
+        background: #fff;
+        /* fills quickly to ~85%, then React completes it */
+        animation: bootfill 1.4s cubic-bezier(0.45, 0, 0.2, 1) 300ms forwards;
       }
-      @keyframes bootbar {
-        0% { transform: translateX(-70%); }
-        100% { transform: translateX(220%); }
+      #boot-splash.boot-done .boot-progress-fill {
+        width: 100% !important;
+        animation: none;
+        transition: width 260ms ease-out;
       }
-
-      /* Fade out nicely when React removes it */
       #boot-splash.boot-hide {
         opacity: 0;
         pointer-events: none;
-        transition: opacity 120ms ease;
+      }
+      @keyframes bootfade { to { opacity: 1; } }
+      @keyframes bootfill { to { width: 85%; } }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-logo, .boot-progress { animation: none; opacity: 1; }
+        .boot-progress-fill { animation: none; width: 85%; }
       }
     </style>
   </body>

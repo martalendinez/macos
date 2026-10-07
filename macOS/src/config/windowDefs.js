@@ -42,6 +42,16 @@ const RecruiterModeWindow = lazy(() =>
   import("../components/windows/RecruiterMode/RecruiterModeWindow")
 );
 
+// Extras & Fun apps
+const InstagramWindow = lazy(() => import("../components/windows/Instagram/InstagramWindow"));
+const MessagesWindow = lazy(() => import("../components/windows/Messages/MessagesWindow"));
+const PhotoBoothWindow = lazy(() => import("../components/windows/PhotoBooth/PhotoBoothWindow"));
+const NotesWindow = lazy(() => import("../components/windows/Notes/NotesWindow"));
+const WeatherWindow = lazy(() => import("../components/windows/Weather/WeatherWindow"));
+const StickiesWindow = lazy(() => import("../components/windows/Stickies/StickiesWindow"));
+const CalculatorWindow = lazy(() => import("../components/windows/Calculator/CalculatorWindow"));
+const PaintWindow = lazy(() => import("../components/windows/Paint/PaintWindow"));
+
 // ⭐ NEW AI ASSISTANT
 const AiAssistantWindow = lazy(() =>
   import("../components/windows/AiAssistant/AiAssistantWindow")
@@ -131,17 +141,17 @@ export const WINDOW_DEFS = {
   music: {
     title: "Music",
     Component: MusicWindow,
-    width: 900,
-    height: 580,
-    initialPos: { x: 180, y: 110 },
+    width: 1040,
+    height: 700,
+    initialPos: { x: 160, y: 50 },
   },
 
   map: {
-    title: "Interactive Map",
+    title: "Maps",
     Component: MapWindow,
-    width: 920,
-    height: 600,
-    initialPos: { x: 220, y: 110 },
+    width: 1120,
+    height: 720,
+    initialPos: { x: 160, y: 44 },
   },
 
   terminal: {
@@ -191,4 +201,13 @@ export const WINDOW_DEFS = {
     height: 560,
     initialPos: { x: 260, y: 120 },
   },
+
+  instagram: { title: "Instagram", Component: InstagramWindow, width: 980, height: 720, initialPos: { x: 200, y: 40 } },
+  messages: { title: "Messages", Component: MessagesWindow, width: 820, height: 600, initialPos: { x: 260, y: 90 } },
+  photobooth: { title: "Photo Booth", Component: PhotoBoothWindow, width: 840, height: 640, initialPos: { x: 240, y: 60 } },
+  notes: { title: "Notes", Component: NotesWindow, width: 880, height: 580, initialPos: { x: 230, y: 90 } },
+  weather: { title: "Weather", Component: WeatherWindow, width: 920, height: 660, initialPos: { x: 210, y: 50 } },
+  stickies: { title: "Stickies", Component: StickiesWindow, width: 780, height: 560, initialPos: { x: 280, y: 100 } },
+  calculator: { title: "Calculator", Component: CalculatorWindow, width: 240, height: 412, initialPos: { x: 620, y: 140 }, resizable: false },
+  paint: { title: "Paint", Component: PaintWindow, width: 920, height: 640, initialPos: { x: 200, y: 60 } },
 };
