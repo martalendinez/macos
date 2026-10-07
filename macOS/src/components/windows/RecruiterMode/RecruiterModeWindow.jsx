@@ -177,7 +177,7 @@ export default function RecruiterModeWindow({
           {/* TEXT BLOCK */}
           <div className="space-y-3">
             <div className={`${styles.textSub} text-[11px] tracking-wide uppercase`}>
-              UX Engineer • Stockholm • KTH
+              Design Engineer @ Royc • Stockholm • KTH
             </div>
 
             <div className={`${styles.textMain} text-4xl font-semibold leading-tight`}>
@@ -185,7 +185,7 @@ export default function RecruiterModeWindow({
             </div>
 
             <div className="flex flex-wrap gap-2 pt-1">
-              <Chip>UX Engineer</Chip>
+              <Chip>Design Engineer</Chip>
               <Chip>Research → UI</Chip>
               <Chip>React</Chip>
               <Chip>Design Systems</Chip>

@@ -45,7 +45,7 @@ export function getApps(iconTheme = "glass") {
   const i = getIcons(iconTheme);
 
   return [
-    { id: "about", label: "About me", windowId: "about", icon: i.about, kind: "app", inDock: true, keywords: "marta bio contact experience skills" },
+    { id: "about", label: "About me", windowId: "about", icon: i.about, kind: "app", inDock: true, keywords: "marta bio contact experience skills royc design engineer job" },
     { id: "projects", label: "Projects", windowId: "projects", icon: i.projects, kind: "app", inDock: false, keywords: "work portfolio case studies ux" },
     { id: "recruiter", label: "Recruiter Mode", windowId: "recruiter", icon: i.recruiter, kind: "app", inDock: false, keywords: "quick summary hire tour" },
     { id: "fun", label: "Extras & Fun", windowId: "fun", icon: i.fun, kind: "app", inDock: true, keywords: "games extras" },

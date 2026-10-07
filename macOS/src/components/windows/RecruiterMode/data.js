@@ -3,9 +3,10 @@
 export const recruiterSteps = [
   {
     kicker: "Role fit",
-    title: "Marta Lendi — UX Engineer (Design + React), Stockholm.",
-    chips: ["UX Engineer", "Product/UX", "Stockholm", "EU/Remote"],
+    title: "Marta Lendínez — Design Engineer at Royc (Figma + React), Stockholm.",
+    chips: ["Design Engineer @ Royc", "Figma → Code", "Stockholm", "EU/Remote"],
     body: [
+      "Since Aug 2026 I'm a Design Engineer at Royc: I design the platform's UI in Figma, building a scalable, responsive component library with auto layout, and implement it in TypeScript & React.",
       "I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components.",
       "Strong fit for teams that need clarity, structure, and polished delivery.",
     ],

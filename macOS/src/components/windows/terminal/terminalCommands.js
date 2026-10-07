@@ -124,7 +124,10 @@ export function runTerminalCommand({
   // whoami
   if (lower === "whoami") {
     appendLines([
-      "Hi, I’m Marta — a UX Engineer in my second year of the Interactive Media Technology master’s at KTH.",
+      "Hi, I’m Marta — a Design Engineer at Royc (since Aug 2026) and a master’s student in Interactive Media Technology at KTH.",
+      "",
+      "At Royc I design our platform's UI in Figma (a scalable component library, auto layout, responsive design)",
+      "and build it in JavaScript, TypeScript and React, with GitHub Copilot and MCP in my toolkit.",
       "",
       "I love traveling and have lived in Spain, Germany, the Netherlands, Canada, and Sweden.",
       "",
@@ -146,6 +149,8 @@ export function runTerminalCommand({
       `Photoshop        ${levelToBar("Proficient")}  Proficient`,
       `Illustrator      ${levelToBar("Intermediate")}  Intermediate`,
       `Framer           ${levelToBar("Basic")}  Basic`,
+      `Auto Layout      ${levelToBar("Advanced")}  Advanced`,
+      `Responsive UI    ${levelToBar("Advanced")}  Advanced`,
       "",
       { type: "title", text: "DEVELOPMENT 💻" },
       `React            ${levelToBar("Advanced")}  Advanced`,
@@ -157,6 +162,10 @@ export function runTerminalCommand({
       `SQL              ${levelToBar("Proficient")}  Proficient`,
       `Docker           ${levelToBar("Basic")}  Basic`,
       `Git              ${levelToBar("Advanced")}  Advanced`,
+      "",
+      { type: "title", text: "AI WORKFLOW 🤖" },
+      `GitHub Copilot   ${levelToBar("Advanced")}  Advanced`,
+      `MCP              ${levelToBar("Advanced")}  Advanced`,
       "",
       { type: "title", text: "UX RESEARCH & METHODS 🔬" },
       `User Interviews  ${levelToBar("Expert")}  Expert`,

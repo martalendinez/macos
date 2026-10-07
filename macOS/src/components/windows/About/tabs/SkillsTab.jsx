@@ -13,6 +13,8 @@ export default function SkillsTab({ styles }) {
         <SkillRow styles={styles} isMac={isMac} name="Photoshop" level="Proficient" />
         <SkillRow styles={styles} isMac={isMac} name="Illustrator" level="Intermediate" />
         <SkillRow styles={styles} isMac={isMac} name="Framer" level="Basic" />
+        <SkillRow styles={styles} isMac={isMac} name="Component Libraries & Auto Layout" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="Responsive Design" level="Advanced" />
       </SkillGroup>
 
       <SkillGroup styles={styles} title="DEVELOPMENT" icon="💻">
@@ -28,6 +30,8 @@ export default function SkillsTab({ styles }) {
       </SkillGroup>
 
       <SkillGroup styles={styles} title="AI TOOLS" icon="🤖">
+        <SkillRow styles={styles} isMac={isMac} name="GitHub Copilot" level="Advanced" />
+        <SkillRow styles={styles} isMac={isMac} name="MCP" level="Advanced" />
         <SkillRow styles={styles} isMac={isMac} name="Claude" level="Intermediate" />
         <SkillRow styles={styles} isMac={isMac} name="Supabase" level="Intermediate" />
         <SkillRow styles={styles} isMac={isMac} name="Loveable" level="Intermediate" />

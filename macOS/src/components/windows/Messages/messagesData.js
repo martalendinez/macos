@@ -21,9 +21,9 @@ export const INTENTS = [
     keywords: ["who", "hello", "hi", "hey", "about", "yourself", "introduce"],
     reply: () => ({
       bubbles: [
-        "I'm a UX Engineer & UI Designer based in Stockholm 🇸🇪",
-        "I'm doing my Master's in Interactive Media Technology at KTH.",
-        "I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components.",
+        "I'm a Design Engineer at Royc in Stockholm 🇸🇪",
+        "I design our platform in Figma and build it in TypeScript & React, so I get to live on both sides of the handoff 😄",
+        "I'm also doing my Master's in Interactive Media Technology at KTH.",
       ],
       actions: [{ label: "About me", windowId: "about" }],
     }),
@@ -49,8 +49,9 @@ export const INTENTS = [
     keywords: ["skill", "tool", "stack", "figma", "react", "code", "tech", "know"],
     reply: () => ({
       bubbles: [
-        "🎨 Design: Figma, Adobe XD, Photoshop, Illustrator",
-        "💻 Code: React, TypeScript, JavaScript, HTML/CSS, Tailwind, Python, SQL, Git",
+        "🎨 Design: Figma (component libraries, auto layout, responsive design), Adobe XD, Photoshop, Illustrator",
+        "💻 Code: React (JSX), TypeScript, JavaScript, HTML/CSS, Tailwind, Python, SQL, Git",
+        "🤖 AI workflow: GitHub Copilot, MCP and Claude",
         "🔬 Research: user interviews, usability testing, surveys, personas, journey maps, A/B testing",
       ],
       actions: [{ label: "See all skills", windowId: "about" }],
@@ -73,12 +74,13 @@ export const INTENTS = [
   },
   {
     id: "hire",
-    question: "Are you open to work? 🚀",
-    keywords: ["hire", "job", "open", "available", "role", "position", "work with", "recruit"],
+    question: "What are you working on now? 🚀",
+    keywords: ["hire", "job", "open", "available", "role", "position", "now", "current", "royc", "recruit"],
     reply: () => ({
       bubbles: [
-        "Yes! I'm a great fit for UX Engineer roles that mix design and React, in Stockholm or remote within the EU.",
-        "Teams that need clarity, structure and polished delivery are my favorite 💛",
+        "Since August 2026 I'm a Design Engineer at Royc 💼",
+        "I design our platform's UI in Figma, building a scalable component library with auto layout and responsive behavior, then bring it to life in JavaScript, TypeScript and React.",
+        "GitHub Copilot and MCP are a big part of my workflow. Always happy to chat about design engineering! 💛",
       ],
       actions: [
         { label: "View résumé", href: "/resume.pdf" },

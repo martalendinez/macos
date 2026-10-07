@@ -9,7 +9,7 @@ export const PINNED_NOTES = [
     preview: "Hi, I'm Marta! A quick guide to this portfolio",
     blocks: [
       { h: "Hi, I'm Marta!" },
-      { p: "UX Engineer & UI Designer based in Stockholm, doing my Master's in Interactive Media Technology at KTH." },
+      { p: "Design Engineer at Royc in Stockholm, and a Master's student in Interactive Media Technology at KTH." },
       { p: "I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components." },
       { h: "How to explore" },
       {
@@ -39,12 +39,14 @@ export const PINNED_NOTES = [
   {
     id: "toolbox",
     title: "🧰 My toolbox",
-    preview: "Figma, React, TypeScript, user interviews…",
+    preview: "Figma, React, TypeScript, Copilot, MCP…",
     blocks: [
       { h: "Design" },
-      { check: [["Figma (advanced)", true], ["Adobe XD (advanced)", true], ["Photoshop (proficient)", true], ["Illustrator (intermediate)", true], ["Framer (learning!)", false]] },
+      { check: [["Figma (advanced)", true], ["Component libraries & auto layout", true], ["Responsive design", true], ["Adobe XD (advanced)", true], ["Photoshop (proficient)", true], ["Illustrator (intermediate)", true], ["Framer (learning!)", false]] },
       { h: "Development" },
-      { check: [["React", true], ["TypeScript", true], ["HTML / CSS", true], ["JavaScript", true], ["Tailwind CSS", true], ["Python & SQL", true], ["Git", true], ["Docker (learning!)", false]] },
+      { check: [["React & JSX", true], ["TypeScript", true], ["HTML / CSS", true], ["JavaScript", true], ["Tailwind CSS", true], ["Python & SQL", true], ["Git", true], ["Docker (learning!)", false]] },
+      { h: "AI-assisted workflow" },
+      { check: [["GitHub Copilot", true], ["MCP", true], ["Claude", true]] },
       { h: "UX research" },
       { check: [["User interviews", true], ["Usability testing", true], ["Survey design", true], ["Personas & journey maps", true], ["A/B testing", true]] },
     ],
@@ -52,8 +54,10 @@ export const PINNED_NOTES = [
   {
     id: "timeline",
     title: "🗓️ Timeline",
-    preview: "KTH, STUDS, PrideCom, Extra Nice",
+    preview: "Royc, KTH, STUDS, PrideCom, Extra Nice",
     blocks: [
+      { h: "Aug 2026 → · Royc" },
+      { p: "Design Engineer. I design our platform's UI in Figma, building and maintaining a scalable component library with auto layout and responsive behavior across screen sizes. I then implement it as production-ready UI in JavaScript, TypeScript and React, using GitHub Copilot and MCP to streamline the design-to-code workflow." },
       { h: "Sep 2024 → · KTH" },
       { p: "Master's in Interactive Media Technology: interaction design & prototyping, frontend development, usability testing." },
       { h: "Sep 2024 – Jun 2025 · STUDS" },

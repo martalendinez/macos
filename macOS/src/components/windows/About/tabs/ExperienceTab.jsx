@@ -5,6 +5,24 @@ export default function ExperienceTab({ styles }) {
       year: "2026",
       title: (
         <>
+          Design Engineer <span className={styles.accentText}>@</span>{" "}
+          <a href="https://www.roycgroup.com" target="_blank" rel="noopener noreferrer" className={`${styles.accentText} hover:underline`}>
+            Royc
+          </a>
+        </>
+      ),
+      right: "Aug 2026 →",
+      bullets: [
+        "Design the Royc platform's UI in Figma, building and maintaining a scalable component library",
+        "Use auto layout and responsive design principles to create flexible interfaces that adapt across screen sizes",
+        "Implement designs as production-ready UI in JavaScript, TypeScript and React (JSX)",
+        "Streamline the design-to-code workflow with GitHub Copilot and MCP",
+      ],
+    },
+    {
+      year: "2026",
+      title: (
+        <>
           Master’s Interactive Media Technology <span className={styles.accentText}>@</span>{" "}
           <a
             href="https://www.kth.se/en/studies/master/interactive-media-technology"
@@ -101,7 +119,7 @@ export default function ExperienceTab({ styles }) {
   return (
     <div className="space-y-6">
       {items.map((it) => (
-        <div key={it.year} className={`rounded-2xl ${styles.cardBg} border ${styles.cardBorder} p-5`}>
+        <div key={`${it.year}-${it.right}`} className={`rounded-2xl ${styles.cardBg} border ${styles.cardBorder} p-5`}>
           <div className="flex items-start justify-between gap-4">
             <div className={`${styles.textSub} text-sm font-medium`}>{it.year}</div>
             <div className={`${styles.textSub2} text-sm`}>{it.right}</div>

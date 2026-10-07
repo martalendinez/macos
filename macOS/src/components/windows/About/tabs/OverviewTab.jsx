@@ -18,7 +18,11 @@ export default function OverviewTab({ styles, onOpenWindow }) {
           <div className="mt-4">
             <div className={`${styles.textStrong} text-xl font-semibold leading-tight`}>Marta Lendínez</div>
             <div className={`${styles.textSub} text-sm mt-1`}>
-              UX Engineer <span className={styles.textSub2}>•</span> UI Designer
+              Design Engineer <span className={styles.accentText}>@</span>{" "}
+              <a href="https://www.roycgroup.com" target="_blank" rel="noopener noreferrer" className={`${styles.accentText} hover:underline`}>
+                Royc
+              </a>{" "}
+              <span className={styles.textSub2}>•</span> UX Engineer
             </div>
 
             <div className={`${styles.textSub} mt-3 text-sm leading-relaxed`}>
@@ -38,7 +42,7 @@ export default function OverviewTab({ styles, onOpenWindow }) {
         <div className="space-y-4">
           <InfoBlock styles={styles} icon="📍" title="Location" value="Stockholm, Sweden" />
           <InfoBlock styles={styles} icon="🎓" title="Education" value="Master’s in Interactive Media Technology • KTH" />
-          <InfoBlock styles={styles} icon="💼" title="Experience" value="UX/UI Designer • Frontend Developer • 1+ year" />
+          <InfoBlock styles={styles} icon="💼" title="Experience" value="Design Engineer @ Royc (Aug 2026 →) • previously UX/UI Designer & Frontend Developer" />
           <InfoBlock styles={styles} icon="🌍" title="International background" value="ES Spain • NL Netherlands • DE Germany • SE Sweden • CA Canada" />
           <InfoBlock
             styles={styles}

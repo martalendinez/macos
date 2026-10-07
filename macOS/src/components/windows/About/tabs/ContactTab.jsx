@@ -27,7 +27,7 @@ export default function ContactTab({ styles }) {
 
           <div>
             <div className={`${styles.textStrong} font-semibold`}>Marta Casandra Lendínez</div>
-            <div className={`${styles.textSub} text-sm`}>UX Engineer</div>
+            <div className={`${styles.textSub} text-sm`}>Design Engineer @ Royc</div>
           </div>
         </div>
 
