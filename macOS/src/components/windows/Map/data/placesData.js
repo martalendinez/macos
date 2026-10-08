@@ -104,7 +104,7 @@ export const placeDetails = {
       "The first place where everything truly clicked — life, friends, career…",
       "Found friends who felt like family and a rhythm that finally felt like me 🤍",
       "Fika is a lifestyle 🧘‍♀️",
-      "Started my first job as a Design Engineer at Royc in August 2026 💼",
+      "Started my first job as a Design Engineer at ROYC in August 2026 💼",
       "Where this OS was built!",
     ],
     year: "2024 →",

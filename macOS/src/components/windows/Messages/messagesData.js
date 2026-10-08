@@ -21,7 +21,7 @@ export const INTENTS = [
     keywords: ["who", "hello", "hi", "hey", "about", "yourself", "introduce"],
     reply: () => ({
       bubbles: [
-        "I'm a Design Engineer at Royc in Stockholm 🇸🇪",
+        "I'm a Design Engineer at ROYC in Stockholm 🇸🇪, a fintech building the operating system for private markets.",
         "I design our platform in Figma and build it in TypeScript & React, so I get to live on both sides of the handoff 😄",
         "I'm also doing my Master's in Interactive Media Technology at KTH.",
       ],
@@ -78,13 +78,29 @@ export const INTENTS = [
     keywords: ["hire", "job", "open", "available", "role", "position", "now", "current", "royc", "recruit"],
     reply: () => ({
       bubbles: [
-        "Since August 2026 I'm a Design Engineer at Royc 💼",
+        "Since August 2026 I'm a Design Engineer at ROYC 💼, a fintech whose white-label platform helps banks, wealth and asset managers launch and run private markets funds.",
         "I design our platform's UI in Figma, building a scalable component library with auto layout and responsive behavior, then bring it to life in JavaScript, TypeScript and React.",
         "GitHub Copilot and MCP are a big part of my workflow. Always happy to chat about design engineering! 💛",
       ],
       actions: [
         { label: "View résumé", href: "/resume.pdf" },
         { label: "Email me", href: `mailto:${EMAIL}` },
+      ],
+    }),
+  },
+  {
+    id: "fintech",
+    question: "Fintech experience? 💳",
+    keywords: ["fintech", "finance", "bank", "fund", "invest", "private market", "b2b", "saas", "royc", "wealth"],
+    reply: () => ({
+      bubbles: [
+        "Yes! At ROYC I design for private markets. The platform covers the whole fund lifecycle, from onboarding and KYC/AML to servicing and reporting, for banks, wealth and asset managers.",
+        "It's B2B SaaS and white-label, so a solid component library matters a lot: one design system has to look great under many brands.",
+        "My bachelor project at PrideCom was B2B too: an employer-branding platform for companies. Try my Fund Simulator to see how I explain complex finance simply 📈",
+      ],
+      actions: [
+        { label: "Open Fund Simulator", windowId: "fundsim" },
+        { label: "Fintech notes", windowId: "notes" },
       ],
     }),
   },

@@ -237,6 +237,7 @@ export function runCommand(raw, ctx) {
         ["Theme", ctx.appearance === "dark" ? "Dark" : "Light"],
         ["Terminal", `Terminal.app (${ctx.profile})`],
         ["Role", `${PROFILE.role} @ ${PROFILE.company.name}`],
+        ["Domain", "Fintech · Private markets · B2B SaaS"],
         ["Location", PROFILE.location],
         ["Education", `MSc Interactive Media Tech · ${PROFILE.education.school}`],
         [],

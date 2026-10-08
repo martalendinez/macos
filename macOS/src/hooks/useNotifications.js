@@ -1,5 +1,6 @@
 // src/hooks/useNotifications.js
 import { useMemo, useState } from "react";
+import { readUnlocked } from "../config/achievements";
 
 function makeTimeLabel(d = new Date()) {
   return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -9,6 +10,8 @@ export default function useNotifications() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [toasts, setToasts] = useState([]);
+  // unlocked achievements { key: timestamp | true }, kept in sync with localStorage for the Achievements app
+  const [unlocked, setUnlocked] = useState(readUnlocked);
 
   function notify({ title, message = "", toast = true } = {}) {
     const id = `${Date.now()}_${Math.random().toString(16).slice(2)}`;
@@ -42,7 +45,12 @@ export default function useNotifications() {
 
   function unlockAchievement(key, title, message = "") {
     const storageKey = `ach:${key}`;
-    if (localStorage.getItem(storageKey)) return;
+    try {
+      if (localStorage.getItem(storageKey)) return;
+    } catch {
+      /* storage blocked: still unlock for this session */
+    }
+    if (unlocked[key]) return;
 
     notify({
       title: title || "Achievement unlocked",
@@ -50,7 +58,24 @@ export default function useNotifications() {
       toast: true,
     });
 
-    localStorage.setItem(storageKey, "1");
+    const at = Date.now();
+    try {
+      localStorage.setItem(storageKey, String(at));
+    } catch {
+      /* ignore */
+    }
+    setUnlocked((u) => ({ ...u, [key]: at }));
+  }
+
+  function resetAchievements() {
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("ach:"))
+        .forEach((k) => localStorage.removeItem(k));
+    } catch {
+      /* ignore */
+    }
+    setUnlocked({});
   }
 
   const unreadCount = useMemo(
@@ -85,6 +110,8 @@ export default function useNotifications() {
     notify,
     notifyOnce,
     unlockAchievement,
+    unlocked,
+    resetAchievements,
     dismissToast,
     clearAllNotifications,
     markAllRead,

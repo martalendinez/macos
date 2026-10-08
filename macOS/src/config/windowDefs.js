@@ -51,6 +51,13 @@ const WeatherWindow = lazy(() => import("../components/windows/Weather/WeatherWi
 const StickiesWindow = lazy(() => import("../components/windows/Stickies/StickiesWindow"));
 const CalculatorWindow = lazy(() => import("../components/windows/Calculator/CalculatorWindow"));
 const PaintWindow = lazy(() => import("../components/windows/Paint/PaintWindow"));
+const FundSimWindow = lazy(() => import("../components/windows/FundSim/FundSimWindow"));
+const FundQuestWindow = lazy(() => import("../components/windows/FundQuest/FundQuestWindow"));
+const FigmaWindow = lazy(() => import("../components/windows/Figma/FigmaWindow"));
+const FaceTimeWindow = lazy(() => import("../components/windows/FaceTime/FaceTimeWindow"));
+const ActivityMonitorWindow = lazy(() => import("../components/windows/ActivityMonitor/ActivityMonitorWindow"));
+const DesignSystemWindow = lazy(() => import("../components/windows/DesignSystem/DesignSystemWindow"));
+const AchievementsWindow = lazy(() => import("../components/windows/Achievements/AchievementsWindow"));
 
 // ⭐ NEW AI ASSISTANT
 const AiAssistantWindow = lazy(() =>
@@ -139,7 +146,7 @@ export const WINDOW_DEFS = {
   },
 
   music: {
-    title: "Music",
+    title: "Spotify",
     Component: MusicWindow,
     width: 1040,
     height: 700,
@@ -209,5 +216,12 @@ export const WINDOW_DEFS = {
   weather: { title: "Weather", Component: WeatherWindow, width: 920, height: 660, initialPos: { x: 210, y: 50 } },
   stickies: { title: "Stickies", Component: StickiesWindow, width: 780, height: 560, initialPos: { x: 280, y: 100 } },
   calculator: { title: "Calculator", Component: CalculatorWindow, width: 240, height: 412, initialPos: { x: 620, y: 140 }, resizable: false },
+  fundquest: { title: "Fund Quest", Component: FundQuestWindow, width: 700, height: 760, initialPos: { x: 370, y: 36 } },
+  figma: { title: "Figma", Component: FigmaWindow, width: 1180, height: 740, initialPos: { x: 140, y: 40 } },
+  facetime: { title: "FaceTime", Component: FaceTimeWindow, width: 560, height: 720, initialPos: { x: 440, y: 40 } },
+  activitymonitor: { title: "Activity Monitor", Component: ActivityMonitorWindow, width: 860, height: 600, initialPos: { x: 260, y: 70 } },
+  designsystem: { title: "Design System", Component: DesignSystemWindow, width: 1040, height: 720, initialPos: { x: 200, y: 44 } },
+  achievements: { title: "Achievements", Component: AchievementsWindow, width: 900, height: 700, initialPos: { x: 240, y: 50 } },
+  fundsim: { title: "Fund Simulator", Component: FundSimWindow, width: 1060, height: 760, initialPos: { x: 190, y: 36 } },
   paint: { title: "Paint", Component: PaintWindow, width: 920, height: 640, initialPos: { x: 200, y: 60 } },
 };

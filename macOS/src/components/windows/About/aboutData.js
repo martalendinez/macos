@@ -5,7 +5,7 @@ export const PROFILE = {
   name: "Marta Lendínez",
   fullName: "Marta Casandra Lendínez",
   role: "Design Engineer",
-  company: { name: "Royc", url: "https://www.roycgroup.com" },
+  company: { name: "ROYC", url: "https://www.roycgroup.com", about: "AI-native private markets infrastructure for wealth & asset managers" },
   secondaryRole: "UX Engineer",
   location: "Stockholm, Sweden",
   education: { label: "Master’s in Interactive Media Technology", school: "KTH", url: "https://www.kth.se/en/studies/master/interactive-media-technology" },
@@ -15,7 +15,7 @@ export const PROFILE = {
 };
 
 export const STATS = [
-  { value: "Royc", label: "Design Engineer since Aug 2026", icon: "💼", tint: "#0a84ff" },
+  { value: "ROYC", label: "Design Engineer in fintech since Aug 2026", icon: "💼", tint: "#0a84ff" },
   { value: "5", label: "Countries I’ve lived in", icon: "🌍", tint: "#34c759" },
   { value: "KTH", label: "Master’s in Interactive Media Technology", icon: "🎓", tint: "#bf5af2" },
   { value: "Figma → Code", label: "Design and build, end to end", icon: "✨", tint: "#ff9f0a" },
@@ -25,14 +25,15 @@ export const STATS = [
 export const EXPERIENCE = [
   {
     role: "Design Engineer",
-    org: "Royc",
+    org: "ROYC",
     url: "https://www.roycgroup.com",
     dates: "Aug 2026 →",
     type: "work",
     current: true,
     tint: "#0a84ff",
     bullets: [
-      "Design the Royc platform's UI in Figma, building and maintaining a scalable component library",
+      "ROYC is a fintech building the AI-native operating system for private markets: a white-label B2B SaaS platform that lets banks, wealth and asset managers launch and run funds",
+      "Design the ROYC platform's UI in Figma, building and maintaining a scalable component library",
       "Use auto layout and responsive design principles to create flexible interfaces that adapt across screen sizes",
       "Implement designs as production-ready UI in JavaScript, TypeScript and React (JSX)",
       "Streamline the design-to-code workflow with GitHub Copilot and MCP",
@@ -111,6 +112,9 @@ export const EXPERIENCE = [
 ];
 
 export const CORE_TOOLBOX = ["Figma", "React", "TypeScript", "GitHub Copilot", "MCP", "User Interviews"];
+
+// industries I design for
+export const DOMAINS = ["Fintech", "Private markets", "B2B SaaS", "Regulated platforms", "White-label products"];
 
 export const SKILL_GROUPS = [
   {

@@ -20,6 +20,7 @@ import useAchievements from "./hooks/useAchievements";
 import Shell from "./components/shell/Shell";
 import TopBar from "./components/shell/TopBar";
 import DesktopIcons from "./components/shell/DesktopIcons";
+import Widgets from "./components/shell/Widgets";
 import DesktopSurface from "./components/shell/DesktopSurface";
 import Spotlight from "./components/shell/Spotlight";
 import LockScreen from "./components/shell/LockScreen";
@@ -363,8 +364,22 @@ export default function App() {
       unlockAchievement: notif.unlockAchievement,
       trackTerminalCommand: ach.trackTerminalCommand,
       trackGameLaunch: ach.trackGameLaunch,
+
+      // live system state for Activity Monitor & Achievements
+      unlockedAchievements: notif.unlocked,
+      resetAchievements: notif.resetAchievements,
+      openWindows,
+      activeWindow,
+      closeWindow,
+      focusOrRestore: restoreWindow,
     }),
     [
+      notif.unlocked,
+      notif.resetAchievements,
+      openWindows,
+      activeWindow,
+      closeWindow,
+      restoreWindow,
       uiTheme,
       glassContrast,
       iconTheme,
@@ -443,6 +458,8 @@ export default function App() {
         selectedId={selectedIcon}
         onSelect={setSelectedIcon}
       />
+
+      <Widgets loaded={loaded} theme={theme} onOpenWindow={openWindow} unlocked={notif.unlocked} accent={accent} />
 
       <WindowsLayer
         openWindows={openWindows}

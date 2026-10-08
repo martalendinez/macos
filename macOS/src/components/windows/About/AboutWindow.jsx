@@ -6,7 +6,7 @@ import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
 import { placeDetails } from "../Map/data/placesData";
 import avatar from "../../../imgs/avatar/profile-photo.jpg";
 import photo from "../../../imgs/avatar/profile.jpeg";
-import { CONTACT, CORE_TOOLBOX, EXPERIENCE, LEVELS, PROFILE, SKILL_GROUPS, STATS } from "./aboutData";
+import { CONTACT, CORE_TOOLBOX, DOMAINS, EXPERIENCE, LEVELS, PROFILE, SKILL_GROUPS, STATS } from "./aboutData";
 
 const SECTIONS = [
   { id: "overview", label: "Overview", tint: "#0a84ff", d: "M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5" },
@@ -96,7 +96,7 @@ function Overview({ t, onOpenWindow, go }) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.18, duration: 0.5 }}
             >
-              {[`📍 ${PROFILE.location}`, `🎓 ${PROFILE.education.school}`, "🇪🇸 → 🇸🇪"].map((c) => (
+              {["💳 Fintech · B2B SaaS", `📍 ${PROFILE.location}`, `🎓 ${PROFILE.education.school}`, "🇪🇸 → 🇸🇪"].map((c) => (
                 <span key={c} className={`px-3 py-1 rounded-full text-[12px] font-medium backdrop-blur-md ${t.isDark ? "bg-white/10 text-white/85" : "bg-white/70 text-black/70"}`}>
                   {c}
                 </span>
@@ -329,6 +329,15 @@ function Skills({ t }) {
         ))}
       </div>
 
+      <div className={`mt-6 text-[11px] font-semibold uppercase tracking-[0.08em] ${t.textSub}`}>Industries I design for</div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {DOMAINS.map((d) => (
+          <span key={d} className={`px-3 py-1 rounded-full text-[13px] font-medium ring-1 ${t.isDark ? "ring-white/15 text-white/85" : "ring-black/10 text-black/75"}`}>
+            {d}
+          </span>
+        ))}
+      </div>
+
       <div className="mt-10 grid grid-cols-1 @4xl:grid-cols-2 gap-x-12 gap-y-10">
         {SKILL_GROUPS.map((g) => (
           <div key={g.title}>
@@ -357,7 +366,7 @@ function Skills({ t }) {
 }
 
 /* ---------------------------------- Contact ---------------------------------- */
-function Contact({ t }) {
+function Contact({ t, onOpenWindow }) {
   const [copied, setCopied] = useState(false);
   const tile = t.isDark ? "bg-white/[0.05] ring-1 ring-white/[0.08]" : "bg-white ring-1 ring-black/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.04)]";
 
@@ -393,9 +402,12 @@ function Contact({ t }) {
                 </motion.span>
               </AnimatePresence>
             </button>
-            <a href={`mailto:${CONTACT.email}`} className="px-3.5 py-1.5 rounded-lg bg-white text-[13px] font-semibold text-[#1d1d1f] hover:bg-white/90 transition">
+            <a href={`mailto:${CONTACT.email}`} className="px-3.5 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-[13px] font-medium backdrop-blur-md transition">
               Send email
             </a>
+            <button onClick={() => onOpenWindow?.("facetime")} className="px-3.5 py-1.5 rounded-lg bg-white text-[13px] font-semibold text-[#1d1d1f] hover:bg-white/90 transition">
+              📞 Book a call
+            </button>
           </div>
         </div>
       </div>
@@ -453,7 +465,7 @@ export default function AboutWindow({ uiTheme = "glass", glassContrast = "light"
     overview: <Overview t={t} onOpenWindow={onOpenWindow} go={setSection} />,
     experience: <Experience t={t} />,
     skills: <Skills t={t} />,
-    contact: <Contact t={t} />,
+    contact: <Contact t={t} onOpenWindow={onOpenWindow} />,
   };
 
   return (

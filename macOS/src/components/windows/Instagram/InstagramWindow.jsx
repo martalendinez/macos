@@ -375,7 +375,7 @@ export default function InstagramWindow({ theme = "light", onOpenWindow, unlockA
 
               <div className="mt-4 text-[14px] leading-snug">
                 <div className="font-semibold">Marta Lendínez</div>
-                <div className="opacity-60 text-[13px]">Design Engineer @ Royc 💼</div>
+                <div className="opacity-60 text-[13px]">Design Engineer @ ROYC 💼 · Fintech</div>
                 <div>🎓 Master’s in Interactive Media Technology @ KTH</div>
                 <div>📍 Stockholm · 🇪🇸 → 🇳🇱 → 🇩🇪 → 🇨🇦 → 🇸🇪</div>
                 <div className="opacity-80">Designing software for humans, with empathy and curiosity ✨</div>

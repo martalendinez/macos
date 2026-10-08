@@ -10,13 +10,62 @@ const EASE = [0.22, 1, 0.36, 1];
 
 const CATEGORIES = [
   { id: "discover", label: "Discover", tint: "#0a84ff", d: "M8 1.8l1.7 4.5 4.5 1.7-4.5 1.7L8 14.2l-1.7-4.5L1.8 8l4.5-1.7z" },
+  { id: "fintech", label: "Fintech", tint: "#5e5ce6", d: "M2.5 12.5l3.5-4 3 2.5 4.5-6M10.5 5h3v3" },
+  { id: "design", label: "Design & Build", tint: "#ff9f0a", d: "M3 13l1.2-3.6L10.8 2.8a1.4 1.4 0 0 1 2 2L6.2 11.4z M9.5 4l2 2" },
   { id: "me", label: "Get to know me", tint: "#ff375f", d: "M8 7.5a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM3 13.8c0-2.6 2.2-4.2 5-4.2s5 1.6 5 4.2" },
   { id: "play", label: "Just for fun", tint: "#ff9f0a", d: "M5 3.5v9l7-4.5z" },
-  { id: "tools", label: "Handy tools", tint: "#8e8e93", d: "M10.5 2.5a3 3 0 0 0-3.4 4L2.8 10.8a1.3 1.3 0 0 0 1.9 1.9L9 8.4a3 3 0 0 0 4-3.4l-1.8 1.8-1.7-.4-.4-1.7z" },
+  { id: "tools", label: "Utilities", tint: "#8e8e93", d: "M10.5 2.5a3 3 0 0 0-3.4 4L2.8 10.8a1.3 1.3 0 0 0 1.9 1.9L9 8.4a3 3 0 0 0 4-3.4l-1.8 1.8-1.7-.4-.4-1.7z" },
   { id: "games", label: "Games", tint: "#34c759", d: "M4.5 5h7a2.5 2.5 0 0 1 2.4 3.2l-.8 2.7a1.6 1.6 0 0 1-2.7.6L9 10H7l-1.4 1.5a1.6 1.6 0 0 1-2.7-.6l-.8-2.7A2.5 2.5 0 0 1 4.5 5zM5.5 6.8v2M4.5 7.8h2" },
 ];
 
-const SHELF_TITLES = { me: "Get to know Marta", play: "Just for fun", tools: "Handy tools" };
+const SHELF_TITLES = { design: "Design & Build", me: "Get to know Marta", play: "Just for fun", tools: "Utilities" };
+
+/** Fintech gets a feature card: the simulator, the fintech notes and Marta's role at ROYC. */
+function FintechSection({ t, apps, onOpenWindow }) {
+  const sim = apps.find((a) => a.key === "fundsim");
+  const tiles = [
+    { title: "Fund Quest", sub: "Learn private markets, game-style", icon: "/icons/apps/fundquest.svg", open: () => onOpenWindow?.("fundquest") },
+    { title: "Fund Simulator", sub: "Play with the J-curve, IRR & TVPI", icon: sim?.icon, open: () => onOpenWindow?.("fundsim") },
+    { title: "Designing for fintech", sub: "My principles, in Notes", emoji: "💳", open: () => onOpenWindow?.("notes") },
+    { title: "My role at ROYC", sub: "Design Engineer · private markets", emoji: "💼", open: () => onOpenWindow?.("about") },
+  ];
+  return (
+    <section className="mt-9">
+      <div className={`flex items-baseline justify-between border-t pt-4 ${t.divider}`}>
+        <h2 className={`text-[19px] font-bold tracking-[-0.01em] ${t.textMain}`}>Fintech</h2>
+      </div>
+      <div
+        className="mt-3 rounded-[20px] p-5 @2xl:p-6 text-white relative overflow-hidden"
+        style={{ background: "radial-gradient(120% 140% at 100% 0%, #5e5ce6 0%, #2a2f6b 45%, #11142b 100%)" }}
+      >
+        <div className="absolute -right-10 -bottom-16 w-64 h-64 rounded-full bg-[#30d158]/20 blur-3xl" />
+        <div className="relative max-w-[460px]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/70">Private markets · B2B SaaS</div>
+          <div className="mt-1 text-[24px] font-bold tracking-[-0.02em] leading-tight">I design the operating system for private markets</div>
+          <p className="mt-2 text-[13px] leading-relaxed text-white/80">
+            At ROYC I work on a white-label platform that lets banks, wealth and asset managers launch and run funds. Here’s that side of me.
+          </p>
+        </div>
+        <div className="relative mt-5 grid grid-cols-1 @2xl:grid-cols-2 gap-2.5">
+          {tiles.map((x) => (
+            <button key={x.title} onClick={x.open} className="group flex items-center gap-3 rounded-2xl p-3 text-left bg-white/10 hover:bg-white/[0.16] backdrop-blur-md transition">
+              {x.icon ? (
+                <img src={x.icon} alt="" className="w-10 h-10 shrink-0" />
+              ) : (
+                <span className="w-10 h-10 shrink-0 rounded-[11px] bg-white/15 flex items-center justify-center text-[20px]">{x.emoji}</span>
+              )}
+              <span className="min-w-0 flex-1">
+                <span className="block text-[13px] font-semibold">{x.title}</span>
+                <span className="block text-[11px] text-white/70 truncate">{x.sub}</span>
+              </span>
+              <span className="text-white/60 transition group-hover:translate-x-0.5">›</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function Glyph({ d }) {
   return (
@@ -404,7 +453,8 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
                 </div>
                 <h1 className={`mb-5 text-[32px] font-bold tracking-[-0.03em] ${t.textMain}`}>Discover</h1>
                 <FeaturedBanner apps={featured} t={t} />
-                {["me", "play", "tools"].map((c) => (
+                <FintechSection t={t} apps={apps} onOpenWindow={onOpenWindow} />
+                {["design", "me", "play", "tools"].map((c) => (
                   <Shelf key={c} title={SHELF_TITLES[c]} apps={byCat(c)} t={t} onSeeAll={() => setCat(c)} />
                 ))}
                 <GameCarousel games={GAMES} t={t} onPlay={playGame} onSeeAll={() => setCat("games")} />
@@ -423,8 +473,17 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
               <>
                 <h1 className={`text-[32px] font-bold tracking-[-0.03em] ${t.textMain}`}>{current?.label}</h1>
                 <p className={`mt-1 text-[14px] ${t.textSub}`}>
-                  {cat === "me" ? "Apps that tell you who I am beyond the CV." : cat === "play" ? "Little toys to make you smile." : "Small, real utilities, rebuilt for the web."}
+                  {
+                    {
+                      fintech: "The fintech side of me: private markets, explained.",
+                      design: "The craft: my design system and the tools I build with.",
+                      me: "Apps that tell you who I am beyond the CV.",
+                      play: "Little toys to make you smile.",
+                      tools: "Small, real utilities, rebuilt for the web.",
+                    }[cat]
+                  }
                 </p>
+                {cat === "fintech" && <FintechSection t={t} apps={apps} onOpenWindow={onOpenWindow} />}
                 <div className="mt-6 grid grid-cols-2 @4xl:grid-cols-3 gap-4">
                   {byCat(cat).map((a, i) => (
                     <motion.button

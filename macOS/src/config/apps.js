@@ -3,7 +3,7 @@
 
 // new Extras apps share one icon set (public/icons/apps)
 const APP_ICONS = Object.fromEntries(
-  ["instagram", "messages", "photobooth", "notes", "weather", "stickies", "calculator", "paint"].map((k) => [k, `/icons/apps/${k}.svg`])
+  ["instagram", "messages", "photobooth", "notes", "weather", "stickies", "calculator", "paint", "fundsim", "fundquest", "figma", "facetime", "activitymonitor", "designsystem", "achievements", "spotify"].map((k) => [k, `/icons/apps/${k}.svg`])
 );
 
 const ICONS = {
@@ -14,7 +14,7 @@ const ICONS = {
     fun: "/icons/mac/gamesMac.png",
     terminal: "/icons/mac/terminalMac.webp",
     map: "/icons/mac/mapsMac.png",
-    music: "/icons/mac/musicMap.svg",
+    music: "/icons/apps/spotify.svg",
     doc: "/icons/mac/docMac.png",
     ...APP_ICONS,
   },
@@ -25,7 +25,7 @@ const ICONS = {
     fun: "/icons/glass/games-512.png",
     terminal: "/icons/glass/terminalGlass.png",
     map: "/icons/glass/mapsGlass.png",
-    music: "/icons/glass/MediaGlass.png",
+    music: "/icons/apps/spotify.svg",
     doc: "/icons/glass/MailGlass.png",
     ...APP_ICONS,
   },
@@ -45,13 +45,20 @@ export function getApps(iconTheme = "glass") {
   const i = getIcons(iconTheme);
 
   return [
-    { id: "about", label: "About me", windowId: "about", icon: i.about, kind: "app", inDock: true, keywords: "marta bio contact experience skills royc design engineer job" },
+    { id: "about", label: "About me", windowId: "about", icon: i.about, kind: "app", inDock: true, keywords: "marta bio contact experience skills royc design engineer job fintech b2b saas private markets" },
     { id: "projects", label: "Projects", windowId: "projects", icon: i.projects, kind: "app", inDock: false, keywords: "work portfolio case studies ux" },
     { id: "recruiter", label: "Recruiter Mode", windowId: "recruiter", icon: i.recruiter, kind: "app", inDock: false, keywords: "quick summary hire tour" },
     { id: "fun", label: "Extras & Fun", windowId: "fun", icon: i.fun, kind: "app", inDock: true, keywords: "games extras" },
     { id: "terminal", label: "Terminal", windowId: "terminal", icon: i.terminal, kind: "app", inDock: false, keywords: "shell snake pong tetris commands" },
     { id: "map", label: "Maps", windowId: "map", icon: i.map, kind: "app", inDock: false, keywords: "places travel home world" },
-    { id: "music", label: "Music", windowId: "music", icon: i.music, kind: "app", inDock: false, keywords: "songs playlist spotify" },
+    { id: "music", label: "Spotify", windowId: "music", icon: i.music, kind: "app", inDock: false, keywords: "music songs playlist spotify wrapped" },
+    { id: "fundquest", label: "Fund Quest", windowId: "fundquest", icon: i.fundquest, kind: "app", extra: true, keywords: "learn private markets course quiz game fintech kyc j-curve tvpi lesson" },
+    { id: "figma", label: "Figma", windowId: "figma", icon: i.figma, kind: "app", extra: true, keywords: "design canvas auto layout components prototype ui ux tool" },
+    { id: "facetime", label: "FaceTime", windowId: "facetime", icon: i.facetime, kind: "app", extra: true, keywords: "call book meeting contact video talk hire" },
+    { id: "designsystem", label: "Design System", windowId: "designsystem", icon: i.designsystem, kind: "app", extra: true, keywords: "tokens colors typography components motion ui" },
+    { id: "activitymonitor", label: "Activity Monitor", windowId: "activitymonitor", icon: i.activitymonitor, kind: "app", extra: true, keywords: "processes cpu skills windows task manager" },
+    { id: "achievements", label: "Achievements", windowId: "achievements", icon: i.achievements, kind: "app", extra: true, keywords: "trophies badges unlock game center progress" },
+    { id: "fundsim", label: "Fund Simulator", windowId: "fundsim", icon: i.fundsim, kind: "app", extra: true, keywords: "fintech private markets fund j-curve irr tvpi investing royc finance" },
     { id: "instagram", label: "Instagram", windowId: "instagram", icon: i.instagram, kind: "app", extra: true, keywords: "photos pictures stories travel" },
     { id: "messages", label: "Messages", windowId: "messages", icon: i.messages, kind: "app", extra: true, keywords: "chat imessage talk ask contact" },
     { id: "photobooth", label: "Photo Booth", windowId: "photobooth", icon: i.photobooth, kind: "app", extra: true, keywords: "camera selfie webcam filters" },

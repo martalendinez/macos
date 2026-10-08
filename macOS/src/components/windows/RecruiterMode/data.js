@@ -5,13 +5,19 @@ export const PITCH =
   "I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components.";
 
 export const QUICK_FACTS = [
-  { label: "Current role", value: "Design Engineer @ Royc", sub: "Since Aug 2026", icon: "💼" },
+  { label: "Current role", value: "Design Engineer @ ROYC", sub: "Fintech · private markets · since Aug 2026", icon: "💼" },
   { label: "Education", value: "MSc Interactive Media Tech", sub: "KTH Royal Institute of Technology", icon: "🎓" },
   { label: "Based in", value: "Stockholm, Sweden", sub: "EU / Remote", icon: "📍" },
-  { label: "Specialty", value: "Figma → Code", sub: "Design systems + React", icon: "✨" },
+  { label: "Domain", value: "Fintech & B2B SaaS", sub: "Complex, regulated products made clear", icon: "💳" },
 ];
 
 export const STRENGTHS = [
+  {
+    title: "Fintech & B2B SaaS",
+    text: "At ROYC I design a white-label platform that runs the full private markets lifecycle for banks, wealth and asset managers.",
+    tint: "#5e5ce6",
+    icon: "💳",
+  },
   {
     title: "Design + code, one person",
     text: "I design the platform's UI in Figma, building a scalable, responsive component library with auto layout, and implement it in TypeScript & React.",
@@ -23,12 +29,6 @@ export const STRENGTHS = [
     text: "User interviews and usability testing shape every flow, from research to flows to high-fidelity UI.",
     tint: "#34c759",
     icon: "🔬",
-  },
-  {
-    title: "Polished delivery",
-    text: "Strong fit for teams that need clarity, structure, and polished delivery.",
-    tint: "#ff9f0a",
-    icon: "✓",
   },
 ];
 

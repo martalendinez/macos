@@ -1,9 +1,18 @@
 // src/components/windows/Music/hooks/useAudioPlayer.js
-// Small audio engine for the Music window: queue, shuffle, repeat, seek, volume, Media Session.
+// Small audio engine for the Music window: queue, shuffle, repeat, seek, volume, Media Session,
+// a Web Audio analyser for the visualizer, and a listening-time counter for "Wrapped".
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function useAudioPlayer() {
-  const [audio] = useState(() => (typeof Audio !== "undefined" ? new Audio() : null));
+  const [audio] = useState(() => {
+    if (typeof Audio === "undefined") return null;
+    const a = new Audio();
+    a.crossOrigin = "anonymous"; // previews send CORS headers, so the analyser can read them
+    return a;
+  });
+  const graph = useRef(null); // { ctx, analyser }
+  const [listened, setListened] = useState(0); // seconds actually played this session
+  const lastT = useRef(0);
 
   const [queue, setQueue] = useState([]); // playable tracks
   const [queueSource, setQueueSource] = useState(null); // e.g. playlist key or "search"
@@ -25,7 +34,9 @@ export default function useAudioPlayer() {
   const load = useCallback(
     (q, i) => {
       if (!audio || !q[i]) return;
+      ensureGraph();
       setIndex(i);
+      lastT.current = 0;
       setTime(0);
       setDuration(0);
       audio.src = q[i].previewUrl;
@@ -34,6 +45,45 @@ export default function useAudioPlayer() {
     },
     [audio]
   );
+
+  // Web Audio graph, created on the first user-initiated play (browsers require a gesture)
+  function ensureGraph() {
+    if (graph.current || !audio) return;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx();
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.8;
+      ctx.createMediaElementSource(audio).connect(analyser);
+      analyser.connect(ctx.destination);
+      graph.current = { ctx, analyser };
+    } catch {
+      /* Web Audio unavailable: visualizer falls back to an animation */
+    }
+  }
+  const getAnalyser = useCallback(() => {
+    if (graph.current?.ctx.state === "suspended") graph.current.ctx.resume();
+    return graph.current?.analyser ?? null;
+  }, []);
+
+  /** Insert a track to play right after the current one (Spotify's "Add to queue"). */
+  const addToQueue = useCallback(
+    (track) => {
+      if (!track?.previewUrl) return;
+      const { queue: q, index: i } = live.current;
+      if (i < 0) {
+        setQueue([track]);
+        setQueueSource("queue");
+        load([track], 0);
+        return;
+      }
+      setQueue([...q.slice(0, i + 1), { ...track, queued: true, id: `${track.id}#q${Date.now()}` }, ...q.slice(i + 1)]);
+    },
+    [load]
+  );
+
+  const playAt = useCallback((i) => load(live.current.queue, i), [load]);
 
   const playQueue = useCallback(
     (tracks, startTrack, source) => {
@@ -113,7 +163,12 @@ export default function useAudioPlayer() {
   // audio element events
   useEffect(() => {
     if (!audio) return;
-    const onTime = () => setTime(audio.currentTime);
+    const onTime = () => {
+      const d = audio.currentTime - lastT.current;
+      if (d > 0 && d < 2 && !audio.paused) setListened((s) => s + d);
+      lastT.current = audio.currentTime;
+      setTime(audio.currentTime);
+    };
     const onMeta = () => setDuration(audio.duration || 0);
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
@@ -145,6 +200,7 @@ export default function useAudioPlayer() {
       audio.pause();
       audio.removeAttribute("src");
       audio.load();
+      graph.current?.ctx.close();
     };
   }, [audio]);
 
@@ -173,7 +229,13 @@ export default function useAudioPlayer() {
 
   return {
     current,
+    queue,
+    index,
     queueSource,
+    listened,
+    getAnalyser,
+    addToQueue,
+    playAt,
     isPlaying,
     time,
     duration,

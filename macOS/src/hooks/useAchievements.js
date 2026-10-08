@@ -51,7 +51,7 @@ export default function useAchievements({
       });
     }
 
-    if (id === "timer") {
+    if (id === "recruiter") {
       unlockAchievement?.(
         "speedrunner",
         "🏆 Achievement unlocked: Speedrunner",
@@ -63,7 +63,12 @@ export default function useAchievements({
       unlockAchievement?.("secret_finder", "Secret Finder", "You unlocked the vault 👀");
     }
 
-    if (id === "employerBrandingCaseStudy" || id === "stardewNotionCaseStudy") {
+    const CASE_STUDIES = ["employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy", "stardewNotionCaseStudy", "thesisCaseStudy"];
+    if (id === "fundsim") unlockAchievement?.("fintech_curious", "🏆 Achievement unlocked: Fintech Curious", "Private markets, demystified 📈");
+    if (id === "figma") unlockAchievement?.("pixel_pusher", "🏆 Achievement unlocked: Pixel Pusher", "You opened Figma ❖");
+    if (id === "designsystem") unlockAchievement?.("design_nerd", "🏆 Achievement unlocked: Design Nerd", "Tokens, components & springs 🎨");
+
+    if (CASE_STUDIES.includes(id)) {
       unlockAchievement?.(
         "deep_diver",
         "🏆 Achievement unlocked: Deep Diver",
@@ -71,7 +76,7 @@ export default function useAchievements({
       );
 
       const opened = sessionRef.current.distinctWindowsOpened;
-      if (opened.has("employerBrandingCaseStudy") && opened.has("stardewNotionCaseStudy")) {
+      if (CASE_STUDIES.filter((c) => opened.has(c)).length >= 2) {
         unlockAchievement?.(
           "case_study_collector",
           "🏆 Achievement unlocked: Case Study Collector",

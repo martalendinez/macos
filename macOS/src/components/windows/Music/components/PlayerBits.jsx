@@ -58,6 +58,22 @@ export const Icon = {
       <path d="M9 2.5h4.5V7M13.5 2.5L7 9M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3" />
     </svg>
   ),
+  Heart: ({ filled, ...props }) => (
+    <svg viewBox="0 0 16 16" aria-hidden="true" {...props}>
+      <path d="M8 13.6S1.8 9.9 1.8 5.7A3.2 3.2 0 0 1 8 4.4a3.2 3.2 0 0 1 6.2 1.3C14.2 9.9 8 13.6 8 13.6z" fill={filled ? "#1ed760" : "none"} stroke={filled ? "#1ed760" : "currentColor"} strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>
+  ),
+  Queue: (props) => (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden="true" {...props}>
+      <path d="M2 3.5h12M2 7.5h12M2 11.5h7M12 10v4M10 12h4" />
+    </svg>
+  ),
+  Expand: (props) => (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <rect x="2" y="2.5" width="12" height="11" rx="2" />
+      <path d="M5.5 9.5l2.5-2.5 2.5 2.5" />
+    </svg>
+  ),
   Spotify: (props) => (
     <svg viewBox="0 0 24 24" {...P} {...props}>
       <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.52 17.34c-.24.36-.66.48-1.02.24-2.82-1.74-6.36-2.1-10.56-1.14-.42.12-.78-.18-.9-.54-.12-.42.18-.78.54-.9 4.56-1.02 8.52-.6 11.64 1.32.42.18.48.66.3 1.02zm1.44-3.3c-.3.42-.84.6-1.26.3-3.24-1.98-8.16-2.58-11.94-1.38-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14C9.6 9.9 15 10.56 18.72 12.84c.36.18.54.78.24 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.3c-.6.18-1.2-.18-1.38-.72-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.72 1.62.54.3.72 1.02.42 1.56-.3.42-1.02.6-1.56.3z" />
@@ -137,7 +153,7 @@ export function ScrubBar({ value = 0, onChange, label, className = "" }) {
 }
 
 /** Bottom player bar. */
-export function NowPlayingBar({ player }) {
+export function NowPlayingBar({ player, liked = false, onLike, queueOpen, onQueue, nowOpen, onNow }) {
   const { current, isPlaying, time, duration, volume, muted, shuffle, repeat } = player;
   const ctl = "w-8 h-8 flex items-center justify-center rounded-full transition disabled:opacity-30";
   const vol = muted ? 0 : volume;
@@ -150,11 +166,19 @@ export function NowPlayingBar({ player }) {
       <div className="min-w-0 flex items-center gap-3">
         {current ? (
           <>
-            <img src={current.cover} alt="" className="w-12 h-12 rounded-md object-cover shadow-lg" />
+            <button onClick={onNow} className="relative group shrink-0" aria-label="Open Now Playing" title="Now Playing">
+              <img src={current.cover} alt="" className="w-12 h-12 rounded-md object-cover shadow-lg" />
+              <span className="absolute inset-0 rounded-md bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white">
+                <Icon.Expand className="w-4 h-4" />
+              </span>
+            </button>
             <div className="min-w-0">
               <div className="text-white text-[13px] font-semibold truncate">{current.title}</div>
               <div className="text-white/60 text-[11px] truncate">{current.artist}</div>
             </div>
+            <button onClick={onLike} className="shrink-0 w-7 h-7 flex items-center justify-center text-white/60 hover:text-white hover:scale-110 transition" aria-label={liked ? "Remove from Liked Songs" : "Save to Liked Songs"} title={liked ? "Remove from Liked Songs" : "Save to Liked Songs"}>
+              <Icon.Heart filled={liked} className="w-4 h-4" />
+            </button>
           </>
         ) : (
           <div className="text-white/45 text-[12px]">Pick a song to start listening</div>
@@ -216,6 +240,12 @@ export function NowPlayingBar({ player }) {
 
       {/* extras */}
       <div className="hidden @2xl:flex items-center justify-end gap-2">
+        <button onClick={onNow} disabled={!current} className={`w-7 h-7 flex items-center justify-center disabled:opacity-30 ${nowOpen ? "text-[#1ed760]" : "text-white/70 hover:text-white"}`} aria-label="Now Playing view" title="Now Playing view">
+          <Icon.Expand className="w-4 h-4" />
+        </button>
+        <button onClick={onQueue} className={`w-7 h-7 flex items-center justify-center ${queueOpen ? "text-[#1ed760]" : "text-white/70 hover:text-white"}`} aria-label="Queue" title="Queue">
+          <Icon.Queue className="w-4 h-4" />
+        </button>
         {current && (
           <a
             href={current.url}
