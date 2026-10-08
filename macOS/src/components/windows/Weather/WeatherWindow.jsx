@@ -118,9 +118,9 @@ export default function WeatherWindow() {
   }, [w]);
 
   return (
-    <div className="no-darkwin h-full flex text-white">
-      {/* city list */}
-      <aside className="w-[240px] shrink-0 bg-[#1c1c1e] border-r border-white/10 p-2 overflow-y-auto space-y-2">
+    <div className="no-darkwin h-full flex flex-col @2xl:flex-row text-white">
+      {/* city list: a swipeable row on narrow windows, a sidebar otherwise */}
+      <aside className="shrink-0 bg-[#1c1c1e] border-b @2xl:border-b-0 @2xl:border-r border-white/10 p-2 flex @2xl:block gap-2 overflow-x-auto @2xl:overflow-x-hidden @2xl:overflow-y-auto @2xl:w-[240px] @2xl:space-y-2 [scrollbar-width:none]">
         {CITIES.map((c, i) => {
           const cw = data?.[i];
           const cd = cw ? describe(cw.current.weather_code, cw.current.is_day) : null;
@@ -129,7 +129,7 @@ export default function WeatherWindow() {
               key={c.id}
               whileTap={{ scale: 0.98 }}
               onClick={() => setSel(i)}
-              className={`w-full text-left rounded-xl p-3 relative overflow-hidden ${sel === i ? "ring-2 ring-white/70" : ""}`}
+              className={`shrink-0 w-[168px] @2xl:w-full text-left rounded-xl p-3 relative overflow-hidden ${sel === i ? "ring-2 ring-white/70" : ""}`}
               style={{ background: cw ? sky(cd.kind, cw.current.is_day) : "#2c2c2e" }}
             >
               <div className="flex justify-between">
@@ -152,11 +152,11 @@ export default function WeatherWindow() {
             </motion.button>
           );
         })}
-        <div className="px-2 pt-1 text-[10px] text-white/35">Weather data by Open-Meteo.com</div>
+        <div className="hidden @2xl:block px-2 pt-1 text-[10px] text-white/35">Weather data by Open-Meteo.com</div>
       </aside>
 
       {/* detail */}
-      <main className="relative flex-1 min-w-0 overflow-y-auto" style={{ background: view?.bg ?? "#2c2c2e", transition: "background 600ms ease" }}>
+      <main className="relative flex-1 min-w-0 min-h-0 overflow-y-auto" style={{ background: view?.bg ?? "#2c2c2e", transition: "background 600ms ease" }}>
         {!view ? (
           <div className="h-full flex items-center justify-center text-white/70 text-[14px]">
             {error ? "Couldn't load the weather. Check your connection and try again." : "Loading weather…"}
@@ -165,7 +165,7 @@ export default function WeatherWindow() {
           <AnimatePresence mode="wait">
             <motion.div
               key={city.id}
-              className="max-w-[640px] mx-auto px-6 py-8"
+              className="max-w-[640px] mx-auto px-4 @lg:px-6 py-6 @lg:py-8"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
@@ -173,7 +173,7 @@ export default function WeatherWindow() {
             >
               <div className="text-center drop-shadow-sm">
                 <div className="text-[32px] font-normal">{city.name}</div>
-                <div className="text-[96px] font-thin leading-none -mt-1">{r(view.cur.temperature_2m)}°</div>
+                <div className="text-[72px] @lg:text-[96px] font-thin leading-none -mt-1">{r(view.cur.temperature_2m)}°</div>
                 <div className="text-[18px] text-white/90 mt-1">
                   {view.d.icon} {view.d.label}
                 </div>
@@ -197,7 +197,7 @@ export default function WeatherWindow() {
                 </div>
               </Card>
 
-              <div className="mt-3 grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-3">
+              <div className="mt-3 grid grid-cols-1 @2xl:grid-cols-[1.4fr_1fr] gap-3">
                 <Card title="7-day forecast">
                   {view.days.map((d) => (
                     <div key={d.label} className="grid grid-cols-[52px_28px_34px_1fr_34px] items-center gap-2 py-1.5 border-t border-white/10 first:border-t-0 text-[14px]">

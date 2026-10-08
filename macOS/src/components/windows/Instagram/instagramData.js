@@ -1,7 +1,7 @@
 // src/components/windows/Instagram/instagramData.js
 // Built from the Map's places so photos, captions and stories stay in one place.
 import { placeDetails } from "../Map/data/placesData";
-import avatar from "../../../imgs/avatar/Avatar1.jpg";
+import avatar from "../../../imgs/avatar/profile-photo.jpg";
 
 // ✏️ Set your real Instagram profile URL to show a "Follow" button (leave "" to hide it)
 export const INSTAGRAM_URL = "";

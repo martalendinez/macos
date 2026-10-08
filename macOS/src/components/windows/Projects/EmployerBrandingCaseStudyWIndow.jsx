@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
+import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
+import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
 import CaseStudyPill from "./caseStudy/CaseStudyPill";
 import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
@@ -25,8 +26,8 @@ import dashboardImg from "../../../imgs/case-study/kallos/Dashboard.png";
 import mockupImg from "../../../imgs/case-study/kallos/Kallos_Mockup.png";
 import finalImg from "../../../imgs/case-study/kallos/Laptop_Kallos.png";
 
-export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
-  const theme = useCaseStudyTheme({ uiTheme, glassContrast });
+export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
+  const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
 
   // Images (plug real imports/urls later)
   const IMAGES = useMemo(
@@ -76,13 +77,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
     []
   );
 
-  const [active, setActive] = useState("overview");
-  function scrollToSection(id) {
-    setActive(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  const metaPills = ["2024", "PrideCom", "UX + Full-stack", "AI (LLaMA 3)", "Security / GDPR"];
+const metaPills = ["2024", "PrideCom", "UX + Full-stack", "AI (LLaMA 3)", "Security / GDPR"];
 
   const facts = [
     { k: "Role", v: "UX Designer & Developer (hybrid UX engineering)" },
@@ -92,35 +87,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
     { k: "Tech", v: "Python · Flask · PostgreSQL · Docker · LM Studio (LLaMA 3)" },
   ];
 
-  function HeroCover() {
-    return (
-      <div className={`mt-10 rounded-[28px] overflow-hidden border ${theme.softCard}`}>
-        <button
-          type="button"
-          onClick={() => openLightbox(IMAGES.hero, "Cover image")}
-          className="w-full text-left"
-          disabled={!IMAGES.hero}
-          title={IMAGES.hero ? "Click to zoom" : "Hero placeholder — set IMAGES.hero"}
-        >
-          {IMAGES.hero ? (
-            <img src={IMAGES.hero} alt="Cover" className="w-full h-auto object-cover" />
-          ) : (
-            <div className="w-full aspect-[16/7] flex items-center justify-center">
-              <div className="text-center px-6">
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Cover image (hero)</div>
-                <div className={`mt-2 text-xs ${theme.textSub}`}>
-                  Add a wide screenshot of your dashboard / product in context. <br />
-                  Set it as <span className="font-semibold">IMAGES.hero</span>.
-                </div>
-              </div>
-            </div>
-          )}
-        </button>
-      </div>
-    );
-  }
-
-  function IconChip() {
+function IconChip() {
     if (!theme.isMac) return null;
     return (
       <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-[hsl(var(--accent)/0.10)] border border-[hsl(var(--accent)/0.35)]">
@@ -130,15 +97,8 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   }
 
   return (
-    <div className="h-full w-full">
-      <div className="h-full overflow-y-auto p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className={`mx-auto w-full max-w-[1150px] rounded-[28px] ${theme.pageCard}`}
-        >
-          <div className="px-6 md:px-10 pt-8 md:pt-10 pb-10">
+    <CaseStudyLayout theme={theme} sections={sections} title="Employer Branding">
+          <div>
             {/* Meta pills */}
             <div className="flex flex-wrap gap-2">
               {metaPills.map((p) => (
@@ -149,10 +109,10 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
             </div>
 
             {/* Title */}
-            <div className={`mt-5 text-4xl md:text-5xl font-semibold tracking-tight ${theme.textMain}`}>
+            <div className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}>
               Employer Branding Platform
             </div>
-            <div className={`mt-3 text-base md:text-lg ${theme.textSub}`}>
+            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
               UX Design & Full-Stack Development for PrideCom — a secure, AI-powered platform that helps SMEs understand
               and improve their employer brand.
             </div>
@@ -163,7 +123,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   href="https://github.com/martalendinez/Kallos"
   target="_blank"
   rel="noreferrer"
-  className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}
 >
   View on GitHub
 </a>
@@ -171,14 +131,14 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   href="/pdfs/Case-Study-Kallos.pdf"
   target="_blank"
   rel="noreferrer"
-  className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+  className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
 >
   Read Full Case Study
 </a>
             </div>
 
             {/* Overview */}
-            <div id="overview" className="mt-8 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-6">
+            <div id="overview" className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16">
               <div>
                 <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
                 <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
@@ -195,11 +155,11 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
               <div>
                 <div className="flex items-center gap-3">
-                  <IconChip />
+                  <CaseStudyIconChip theme={theme} />
                   <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
                 </div>
 
-                <div className={`mt-3 rounded-2xl p-5 border ${theme.softCard}`}>
+                <div className={`mt-3`}>
                   <div className="grid grid-cols-1 gap-3">
                     {facts.map((f) => (
                       <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
@@ -220,50 +180,24 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
               </div>
             </div>
 
-            <HeroCover />
-
-            {/* Contents */}
-            <div className={`mt-10 rounded-2xl p-5 border ${theme.softCard}`}>
-              <div className={`text-sm font-semibold ${theme.textMain}`}>Contents</div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {sections.map((s) => {
-                  const isActive = active === s.id;
-                  const activeClass = theme.isMac || theme.isGlassDarkText
-                    ? `${theme.accentSoftBg} ${theme.accentBorder} ${theme.accentText}`
-                    : "bg-white/20 border-white/15 text-white";
-
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => scrollToSection(s.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
-                        isActive ? activeClass : theme.pillClass
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
 
             {/* Summary */}
             <CaseStudySection id="summary" title="Summary" subtitle="Problem → Solution → Impact" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
                 <div className="mt-2">
                   SMEs often lack the budget for employer branding consultancy. Existing tools focus on isolated areas and rely heavily on surveys,
                   leaving HR teams without a holistic view of their employer brand.
                 </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
+                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
                 <div className="mt-2">
                   A secure, AI-powered platform that analyzes employer branding, generates a numerical score, and provides tailored recommendations
                   through a clean, intuitive dashboard.
                 </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Impact</div>
+                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Impact</div>
                 <CaseStudyBulletList
                   items={[
                     "All participants completed the full flow without assistance, confirming an intuitive, low-friction experience.",
@@ -303,7 +237,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
             {/* Role */}
             <CaseStudySection id="role" title="My role" subtitle="I led the full UX + engineering process" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 This project let me work as a hybrid UX engineer — designing the experience and building the system behind it.
                 <CaseStudyBulletList
                   items={[
@@ -321,19 +255,19 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
             {/* Research */}
 <CaseStudySection id="research" title="Research" subtitle="Competitors + expert interviews + what we learned" theme={theme}>
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Competitor analysis</div>
+  <div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Competitor analysis</div>
     <div className="mt-2">
       CultureAmp, Eletive, and Populum were analyzed. None offered a holistic employer branding solution; all relied heavily on surveys.
     </div>
 
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Expert interviews</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Expert interviews</div>
     <div className="mt-2">
       To validate feasibility and trust requirements, I interviewed experts across HR, security, and AI:
     </div>
     <CaseStudyBulletList items={["HR Director at Toyota", "Marketing Lead at Accenture", "Cybersecurity expert", "AI engineer"]} />
 
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Key insights</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Key insights</div>
     <CaseStudyBulletList
       items={[
         "HR teams want automated data processing and clear dashboards for fast decision-making.",
@@ -342,7 +276,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
       ]}
     />
   </div>
-<div className="mt-6 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 items-stretch">
+<div className="mt-6 grid grid-cols-1 @4xl:grid-cols-[1.5fr_1fr] gap-6 items-stretch">
   <CaseStudyImageTile
     src={IMAGES.competitors}
     alt="Competitor analysis"
@@ -367,14 +301,14 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
             {/* Requirements */}
             <CaseStudySection id="requirements" title="Requirements" subtitle="Clarity + trust constraints" theme={theme}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Design requirements</div>
+              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Design requirements</div>
                   <CaseStudyBulletList items={["Clear dashboards that support scanning", "Clean, legible, brand-consistent UI", "Simple, intuitive experience for HR users"]} />
                 </div>
 
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Engineering requirements</div>
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Engineering requirements</div>
                   <CaseStudyBulletList items={["Clean architecture (SOLID principles)", "Encrypted data handling (PyNaCl)", "GDPR-aligned data flows and storage", "Secure authentication", "Reliable PostgreSQL schema"]} />
                 </div>
               </div>
@@ -411,7 +345,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="From options → chosen direction → scoped feature set"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     The chosen concept,{" "}
     <span className={`font-semibold ${theme.textMain}`}>
       Holistic Employer Branding
@@ -430,7 +364,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="Personas, journeys, content inventory, flowchart"
   theme={theme}
 >
-<div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+<div>
   I designed personas, empathy maps, user journeys, a content inventory, and a full design flowchart. 
   These weren’t just documentation — they shaped the core UX decisions:
   <ul className="list-disc ml-5 mt-2">
@@ -451,7 +385,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
 
 
-  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
     <CaseStudyImageTile
       src={IMAGES.persona}
       alt="Persona"
@@ -487,7 +421,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 </CaseStudySection>
 
             <CaseStudySection id="ui" title="UI design" subtitle="Design system + low-fi → high-fi" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 I created a design system aligned with PrideCom’s brand and developed low-fi and high-fi prototypes.
               </div>
 
@@ -504,7 +438,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="How the build supported UX quality, security, and reliability"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     The platform was built using a modern, reliable stack designed to support
     secure data handling and smooth user experience.
     <ul className="list-disc ml-5 mt-2">
@@ -565,7 +499,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 >
  
 
-  <div className={`rounded-2xl p-5 border mt-6 ${theme.softCard}`}>
+  <div className={`mt-6`}>
     The platform delivers value through three core features:
     <ul className="list-disc ml-5 mt-2">
       <li>
@@ -626,7 +560,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="What changed after testing with HR professionals"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     <span className={`font-semibold ${theme.textMain}`}>Seven HR professionals</span> tested the prototype, focusing primarily on the{" "}
     <span className={`font-semibold ${theme.textMain}`}>HR metrics flow</span> as well as the overall interface experience.
     Their feedback highlighted:
@@ -665,7 +599,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="Constraints that shaped the product"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     <CaseStudyBulletList
       items={[
         "4‑month timeline (scope had to be tight and prioritized)",
@@ -703,8 +637,8 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
   subtitle="What HR professionals validated"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    <div className={`text-sm font-semibold ${theme.textMain}`}>What resonated</div>
+  <div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>What resonated</div>
     <div className={`mt-3 ${theme.textBody}`}>
       HR professionals consistently highlighted three things: the clarity of the
       interface, the relevance of the language, and the sense of guidance the
@@ -729,7 +663,7 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
 
             <CaseStudySection id="outcome" title="Final outcome" subtitle="What was delivered and why it matters" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 A secure, AI-powered platform that helps SMEs understand and improve their employer brand.
               </div>
 
@@ -748,10 +682,9 @@ export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", gla
 
             <div className="mt-10" />
           </div>
-        </motion.div>
+        
 
         <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={closeLightbox} theme={theme} />
-      </div>
-    </div>
+    </CaseStudyLayout>
   );
 }

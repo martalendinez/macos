@@ -137,7 +137,7 @@ export default function PaintWindow({ theme = "light" }) {
               title={t.label}
             >
               <span>{t.icon}</span>
-              <span className="hidden md:inline">{t.label}</span>
+              <span className="hidden @2xl:inline">{t.label}</span>
             </button>
           ))}
         </div>

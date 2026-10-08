@@ -91,6 +91,13 @@ export default function NotesWindow({ theme = "light" }) {
     [mine, q]
   );
 
+  // narrow windows / phones show one pane at a time: the list, or the open note
+  const [narrowView, setNarrowView] = useState("list");
+  const select = (id) => {
+    setSelected(id);
+    setNarrowView("note");
+  };
+
   const pinnedNote = PINNED_NOTES.find((n) => n.id === selected);
   const myNote = mine.find((n) => n.id === selected);
 
@@ -98,6 +105,7 @@ export default function NotesWindow({ theme = "light" }) {
     const n = { id: `n${Date.now()}`, text: "", updated: Date.now() };
     setMine((m) => [n, ...m]);
     setSelected(n.id);
+    setNarrowView("note");
     setQuery("");
   }
 
@@ -108,19 +116,20 @@ export default function NotesWindow({ theme = "light" }) {
   function deleteNote() {
     setMine((m) => m.filter((n) => n.id !== selected));
     setSelected(PINNED_NOTES[0].id);
+    setNarrowView("list");
   }
 
   const side = isDark ? "bg-[#232325] border-white/10" : "bg-[#f6f5f2] border-black/10";
   const main = isDark ? "bg-[#1c1c1e] text-white/90" : "bg-white text-black/85";
   const rowActive = isDark ? "bg-[#7a6200]/70" : "bg-[#ffe27a]";
   const sub = isDark ? "text-white/45" : "text-black/45";
-  const rowProps = { selected, onSelect: setSelected, isDark, rowActive, sub };
+  const rowProps = { selected, onSelect: select, isDark, rowActive, sub };
   const toolBtn = `w-8 h-7 rounded-md flex items-center justify-center ${isDark ? "hover:bg-white/10" : "hover:bg-black/5"}`;
 
 
   return (
     <div className={`no-darkwin h-full flex ${isDark ? "text-white" : "text-black"}`}>
-      <aside className={`w-[260px] shrink-0 border-r flex flex-col ${side}`}>
+      <aside className={`${narrowView === "note" ? "hidden @2xl:flex" : "flex"} w-full @2xl:w-[260px] shrink-0 border-r flex-col ${side}`}>
         <div className="p-2 flex items-center gap-1">
           <input
             value={query}
@@ -162,16 +171,19 @@ export default function NotesWindow({ theme = "light" }) {
         </div>
       </aside>
 
-      <main className={`flex-1 min-w-0 flex flex-col ${main}`}>
-        <div className={`h-10 shrink-0 px-4 flex items-center justify-between text-[11px] ${sub}`}>
-          <span>{pinnedNote ? "Pinned by Marta · read-only" : myNote ? `Edited ${timeLabel(myNote.updated)}` : ""}</span>
+      <main className={`${narrowView === "list" ? "hidden @2xl:flex" : "flex"} flex-1 min-w-0 flex-col ${main}`}>
+        <div className={`h-10 shrink-0 px-4 flex items-center justify-between gap-2 text-[11px] ${sub}`}>
+          <button onClick={() => setNarrowView("list")} className="@2xl:hidden -ml-1 flex items-center gap-0.5 text-[14px] font-medium text-[#e5b700]">
+            ‹ Notes
+          </button>
+          <span className="truncate">{pinnedNote ? "Pinned by Marta · read-only" : myNote ? `Edited ${timeLabel(myNote.updated)}` : ""}</span>
           {myNote && (
             <button onClick={deleteNote} className={`${toolBtn} w-auto px-2`} title="Delete note">
               🗑 Delete
             </button>
           )}
         </div>
-        <div className="flex-1 min-h-0 overflow-y-auto px-10 pb-10">
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 @2xl:px-10 pb-10">
           <AnimatePresence mode="wait">
             <motion.div key={selected} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="h-full">
               {pinnedNote ? (

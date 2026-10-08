@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
+import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
+import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
 import CaseStudyPill from "./caseStudy/CaseStudyPill";
 import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
@@ -29,9 +30,9 @@ import finalImg from "../../../imgs/case-study/sallskap/Dining_Mockup.png";
 
 export default function GroupDiningCaseStudyWindow({
   uiTheme = "glass",
-  glassContrast = "light",
+  glassContrast = "light", theme: appearance = "light",
 }) {
-  const theme = useCaseStudyTheme({ uiTheme, glassContrast });
+  const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
 
   const IMAGES = useMemo(
     () => ({
@@ -96,18 +97,8 @@ const openLightbox = (src, alt = "") => {
     []
   );
 
-  const [active, setActive] = useState("overview");
 
-function scrollToSection(id) {
-  setActive(id);
-  const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
-
-  const metaPills = [
+const metaPills = [
     "2026",
     "Sällskap",
     "Personal project",
@@ -124,21 +115,7 @@ function scrollToSection(id) {
     { k: "Tech", v: "React · Supabase · Lovable" },
   ];
 
-  function HeroCover() {
-    return (
-      <div className={`mt-10 rounded-[28px] overflow-hidden border ${theme.softCard}`}>
-        <button
-          type="button"
-          onClick={() => openLightbox(IMAGES.hero, "Cover image")}
-          className="w-full text-left"
-        >
-          <img src={IMAGES.hero} alt="Cover" className="w-full h-auto object-cover" />
-        </button>
-      </div>
-    );
-  }
-
-  function IconChip() {
+function IconChip() {
     if (!theme.isMac) return null;
     return (
       <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-[hsl(var(--accent)/0.10)] border border-[hsl(var(--accent)/0.35)]">
@@ -148,15 +125,8 @@ function scrollToSection(id) {
   }
 
   return (
-    <div className="h-full w-full">
-      <div className="h-full overflow-y-auto p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className={`mx-auto w-full max-w-[1150px] rounded-[28px] ${theme.pageCard}`}
-        >
-          <div className="px-6 md:px-10 pt-8 md:pt-10 pb-10">
+    <CaseStudyLayout theme={theme} sections={sections} title="Sällskap">
+          <div>
             {/* Meta pills */}
             <div className="flex flex-wrap gap-2">
               {metaPills.map((p) => (
@@ -168,11 +138,11 @@ function scrollToSection(id) {
 
             {/* Title */}
             <div
-              className={`mt-5 text-4xl md:text-5xl font-semibold tracking-tight ${theme.textMain}`}
+              className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}
             >
               Sällskap — Group Dining Coordination Platform
             </div>
-            <div className={`mt-3 text-base md:text-lg ${theme.textSub}`}>
+            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
               A web-based platform that helps groups coordinate restaurant outings by aligning
               availability, dietary needs, and preferences — designed and built as a UX + full‑stack
               concept prototype.
@@ -183,7 +153,7 @@ function scrollToSection(id) {
     href="https://sallskap-git-main-martalendinezs-projects.vercel.app"
     target="_blank"
     rel="noreferrer"
-    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+    className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}
   >
     View Live App
   </a>
@@ -192,7 +162,7 @@ function scrollToSection(id) {
     href="https://github.com/martalendinez/Sallskap"
     target="_blank"
     rel="noreferrer"
-    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+    className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
   >
     View GitHub Repo
   </a>
@@ -201,7 +171,7 @@ function scrollToSection(id) {
     href="https://flair-fabrica.vercel.app" 
     target="_blank"
     rel="noreferrer"
-    className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}
+    className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
   >
     Read Full Case Study
   </a>
@@ -211,7 +181,7 @@ function scrollToSection(id) {
             {/* Overview */}
             <div
               id="overview"
-              className="mt-8 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-6"
+              className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16"
             >
               <div>
                 <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
@@ -232,11 +202,11 @@ function scrollToSection(id) {
 
               <div>
                 <div className="flex items-center gap-3">
-                  <IconChip />
+                  <CaseStudyIconChip theme={theme} />
                   <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
                 </div>
 
-                <div className={`mt-3 rounded-2xl p-5 border ${theme.softCard}`}>
+                <div className={`mt-3`}>
                   <div className="grid grid-cols-1 gap-3">
                     {facts.map((f) => (
                       <div
@@ -260,34 +230,8 @@ function scrollToSection(id) {
               </div>
             </div>
 
-            <HeroCover />
+            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
 
-            {/* Contents */}
-            <div className={`mt-10 rounded-2xl p-5 border ${theme.softCard}`}>
-              <div className={`text-sm font-semibold ${theme.textMain}`}>Contents</div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {sections.map((s) => {
-                  const isActive = active === s.id;
-                  const activeClass =
-                    theme.isMac || theme.isGlassDarkText
-                      ? `${theme.accentSoftBg} ${theme.accentBorder} ${theme.accentText}`
-                      : "bg-white/20 border-white/15 text-white";
-
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => scrollToSection(s.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
-                        isActive ? activeClass : theme.pillClass
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
 {/* Summary */}
 <CaseStudySection
   id="summary"
@@ -295,22 +239,22 @@ function scrollToSection(id) {
   subtitle="Problem → Solution → Impact"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
+  <div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
     <div className="mt-2">
       Group dining decisions are messy: coordinating schedules, dietary needs, and preferences
       usually happens in long chat threads with no structure. Existing restaurant apps optimize
       for discovery and booking, not for group alignment and decision‑making.
     </div>
 
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
     <div className="mt-2">
       A web-based coordination platform where one person creates a group, collects availability
       and dietary information, and then gets a curated set of restaurant options that work for
       everyone — with a clear, guided flow from invite to confirmation.
     </div>
 
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Impact (conceptual)</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Impact (conceptual)</div>
     <CaseStudyBulletList
       items={[
         "Reduces back‑and‑forth in group chats by centralizing decisions in one flow.",
@@ -356,7 +300,7 @@ function scrollToSection(id) {
   subtitle="I led the full UX + engineering process"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     This project was a chance to work as a hybrid UX engineer — shaping the experience and
     building the underlying system.
     <CaseStudyBulletList
@@ -377,10 +321,10 @@ function scrollToSection(id) {
   subtitle="Competitive landscape, user interviews, and a shift in direction"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
 
     {/* Initial Direction */}
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Initial direction</div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Initial direction</div>
     <div className="mt-2">
       The concept originally aimed to support both <strong>solo diners</strong> and <strong>groups</strong>.
       To understand the opportunity, I ran a competitive analysis and interviewed five people (20-45 years-old) who
@@ -388,7 +332,7 @@ function scrollToSection(id) {
     </div>
 
     {/* Competitive Analysis Summary */}
-    <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>
+    <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>
       Competitive analysis — key takeaways
     </div>
     <div className="mt-2 text-[15px] leading-7">
@@ -401,7 +345,7 @@ function scrollToSection(id) {
     </div>
 
     {/* Interview Summary */}
-    <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>
+    <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>
       User interviews — biggest insights
     </div>
     <div className="mt-2 text-[15px] leading-7">
@@ -410,7 +354,7 @@ function scrollToSection(id) {
     </div>
 
     {/* Pivot */}
-    <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>
+    <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>
       Why I shifted the concept
     </div>
     <div className="mt-2 text-[15px] leading-7">
@@ -444,9 +388,9 @@ function scrollToSection(id) {
   subtitle="Clarity, inclusivity, and low‑friction coordination"
   theme={theme}
 >
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-      <div className={`text-sm font-semibold ${theme.textMain}`}>Design requirements</div>
+  <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
+    <div>
+      <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Design requirements</div>
       <CaseStudyBulletList
         items={[
           "Clear, guided flow from group creation to confirmation",
@@ -457,8 +401,8 @@ function scrollToSection(id) {
       />
     </div>
 
-    <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-      <div className={`text-sm font-semibold ${theme.textMain}`}>Engineering requirements</div>
+    <div>
+      <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Engineering requirements</div>
       <CaseStudyBulletList
         items={[
           "Simple, robust schema for groups, members, preferences, and reservations",
@@ -503,7 +447,7 @@ function scrollToSection(id) {
   subtitle="From messy chats → structured, gentle coordination"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     The core concept behind{" "}
     <span className={`font-semibold ${theme.textMain}`}>Sällskap</span> is to turn chaotic group
     chats into a structured, gentle flow that respects everyone’s needs. Instead of asking people
@@ -526,7 +470,7 @@ function scrollToSection(id) {
   subtitle="Organizer vs. participant, flows, and content"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     I mapped a for the role of the organizer and designed flows
     that keep them in control without overloading them. The IA focuses on a single,
     linear journey:
@@ -540,7 +484,7 @@ function scrollToSection(id) {
     />
   </div>
 
-  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
     <CaseStudyImageTile
       src={IMAGES.persona}
       alt="Persona"
@@ -582,13 +526,13 @@ function scrollToSection(id) {
   subtitle="Scandinavian minimalism with playful, social touches"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
    The interface uses a Scandinavian‑inspired aesthetic: light backgrounds, soft shadows, rounded
 geometry, and a calm green accent that carries the brand. The spacing is generous, the typography
 is approachable, and the components feel airy and modern.
 
 
-<div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
   <CaseStudyImageTile
     src={IMAGES.designSystem}
     alt="Design system"
@@ -638,7 +582,7 @@ is approachable, and the components feel airy and modern.
   subtitle="How the build supports the experience"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     The prototype is built as a web app using React and Supabase, with Lovable enabling rapid
     iteration. The goal was to create a clean, modular foundation that could scale into a
     production‑ready coordination tool.
@@ -706,7 +650,7 @@ is approachable, and the components feel airy and modern.
   subtitle="Usability testing with real tasks"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     I tested the prototype with 5 participants (from the intial interviews).
     Sessions were short, task‑based, and focused on clarity, friction, and confidence.
 
@@ -748,7 +692,7 @@ is approachable, and the components feel airy and modern.
   <div className={`text-lg font-semibold ${theme.textMain}`}>Iterations</div>
 
   <div className="mt-6">
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Key improvements made after testing</div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Key improvements made after testing</div>
     <CaseStudyBulletList
       items={[
         "Introduced Dark Mode to improve accessibility, comfort, and visual polish across the experience",
@@ -763,7 +707,7 @@ is approachable, and the components feel airy and modern.
   </div>
 
   <div className="mt-6">
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Impact of these changes</div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Impact of these changes</div>
     <CaseStudyBulletList
       items={[
         "Users moved through the flow faster and with fewer clarifying questions",
@@ -784,7 +728,7 @@ is approachable, and the components feel airy and modern.
   subtitle="What was delivered and why it matters"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
     A working web prototype that takes a group from “we should have dinner” to a concrete
     restaurant reservation — while respecting constraints, reducing friction, and leaving room
     for future AI‑powered enhancements.
@@ -805,7 +749,7 @@ is approachable, and the components feel airy and modern.
 
 <div className="mt-10" />
 </div>
-</motion.div>
+
 
 <CaseStudyLightbox
   open={lightbox.open}
@@ -814,7 +758,6 @@ is approachable, and the components feel airy and modern.
   onClose={closeLightbox}
   theme={theme}
 />
-</div>
-</div>
-);
+    </CaseStudyLayout>
+  );
 }

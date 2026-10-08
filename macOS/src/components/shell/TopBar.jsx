@@ -160,7 +160,7 @@ export default function TopBar({
   }
 
   const itemBase =
-    "h-[22px] px-[9px] rounded-[5px] flex items-center text-[13px] leading-none transition-colors duration-75";
+    "h-[22px] px-[9px] rounded-[5px] flex items-center text-[13px] leading-none whitespace-nowrap transition-colors duration-75";
   const itemHover = "hover:bg-white/15";
   const itemOpen = "bg-white/20";
 
@@ -210,7 +210,7 @@ export default function TopBar({
                 if (openMenu && openMenu !== m.key) openAt(m.key, e.currentTarget);
               }}
             >
-              {m.title}
+              {m.key === "app" ? <span className="block max-w-[38vw] md:max-w-none truncate">{m.title}</span> : m.title}
             </button>
           ))}
         </nav>
@@ -223,7 +223,7 @@ export default function TopBar({
             <SearchGlyph />
           </button>
 
-          <button onClick={onToggleTheme} className={statusBtn} aria-label="Toggle dark mode" title="Appearance">
+          <button onClick={onToggleTheme} className={`${statusBtn} hidden sm:flex`} aria-label="Toggle dark mode" title="Appearance">
             <img src={moonIcon} alt="" className="h-[14px] w-[14px] opacity-95" />
           </button>
 
@@ -236,7 +236,7 @@ export default function TopBar({
             )}
           </button>
 
-          <button onClick={onOpenSettings} className={statusBtn} aria-label="Open settings" title="System Settings">
+          <button onClick={onOpenSettings} className={`${statusBtn} hidden sm:flex`} aria-label="Open settings" title="System Settings">
             <img src={gearIcon} alt="" className="h-[14px] w-[14px] opacity-95" />
           </button>
 
@@ -246,7 +246,8 @@ export default function TopBar({
             className={`${itemBase} ${notifOpen ? itemOpen : itemHover} font-medium tabular-nums ml-1`}
             aria-label="Date and time"
           >
-            {String(currentTime).replace(",", "")}
+            <span className="hidden sm:inline">{String(currentTime).replace(",", "")}</span>
+            <span className="sm:hidden">{String(currentTime).split(", ").pop()}</span>
           </button>
         </div>
       </div>

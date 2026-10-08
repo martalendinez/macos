@@ -20,7 +20,8 @@ export default function ToastStack({ uiTheme = "glass", theme = "light", toasts 
   return (
     <div
       className="fixed right-3 z-[9000] w-[356px] max-w-[calc(100vw-24px)] pointer-events-none"
-      style={{ top: MENU_BAR_H + 8 }}
+      // phones: below the full-screen app's title bar so its Done button stays reachable
+      style={{ top: MENU_BAR_H + (typeof window !== "undefined" && window.innerWidth < 768 ? 52 : 8) }}
     >
       <AnimatePresence initial={false}>
         {toasts.map((t) => (

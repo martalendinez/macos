@@ -72,9 +72,9 @@ export function curvedRoute(points, bend = 0.18, steps = 32) {
   return out;
 }
 
-/** Fly so the point lands in the middle of the area NOT covered by the sidebar. */
-export function flyToVisible(map, latlng, zoom, sidebarW, opts = {}) {
+/** Fly so the point lands in the middle of the area NOT covered by the sidebar (or bottom sheet). */
+export function flyToVisible(map, latlng, zoom, sidebarW, opts = {}, sheetH = 0) {
   const z = zoom ?? map.getZoom();
-  const p = map.project(latlng, z).subtract([sidebarW / 2, 0]);
+  const p = map.project(latlng, z).subtract([sidebarW / 2, -sheetH / 2]);
   map.flyTo(map.unproject(p, z), z, { duration: 1.6, easeLinearity: 0.2, ...opts });
 }

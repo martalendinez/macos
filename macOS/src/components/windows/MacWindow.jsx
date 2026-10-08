@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useDragControls, useMotionValue } from "framer-motion";
 import TrafficLights from "./TrafficLights";
+import useIsMobile from "../../hooks/useIsMobile";
 import {
   DOCK_RESERVE,
   MENU_BAR_H,
@@ -59,6 +60,7 @@ export default function MacWindow({
 }) {
   const dragControls = useDragControls();
   const outerRef = useRef(null);
+  const mobile = useIsMobile(); // phones: full-screen app sheets, no drag/resize
 
   // Frame lives in motion values so zoom can animate and resizing stays 60fps
   const [f0] = useState(() => initialFrame(initialPos, width, height));
@@ -243,21 +245,16 @@ export default function MacWindow({
       aria-label={title}
       onPointerDownCapture={() => !isMinimized && onFocus(id)}
       className="fixed"
-      style={{
-        zIndex,
-        left,
-        top,
-        width: w,
-        height: h,
-        x,
-        y,
-        pointerEvents: isMinimized ? "none" : "auto",
-      }}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
+      style={
+        mobile
+          ? { zIndex, left: 0, top: MENU_BAR_H, width: "100vw", height: `calc(100dvh - ${MENU_BAR_H}px)`, pointerEvents: isMinimized ? "none" : "auto" }
+          : { zIndex, left, top, width: w, height: h, x, y, pointerEvents: isMinimized ? "none" : "auto" }
+      }
+      initial={mobile ? { opacity: 0, y: 80 } : { opacity: 0, scale: 0.9 }}
+      animate={mobile ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1 }}
+      exit={mobile ? { opacity: 0, y: 80, transition: { duration: 0.2, ease: "easeIn" } } : { opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
       transition={{ ...SPRING_WINDOW, opacity: { duration: 0.18 } }}
-      drag={!isMaximized && !resizing}
+      drag={!mobile && !isMaximized && !resizing}
       dragListener={false}
       dragControls={dragControls}
       dragConstraints={dragBoundsRef}
@@ -266,7 +263,7 @@ export default function MacWindow({
     >
       <motion.div
         className={[
-          "relative w-full h-full rounded-xl overflow-hidden flex flex-col",
+          `relative w-full h-full overflow-hidden flex flex-col ${mobile ? "rounded-t-xl" : "rounded-xl"}`,
           surfaceClass,
           isDark ? "darkwin" : "",
           isMac ? (isDark ? "text-white" : "text-black") : "text-white",
@@ -275,14 +272,17 @@ export default function MacWindow({
         animate={genieAnimate}
         transition={genieTransition}
       >
+        {/* clip-path guarantees rounded corners clip animated/composited children
+            (Chrome can miss them with overflow:hidden alone); kept off the shadowed frame */}
+        <div className="flex-1 min-h-0 flex flex-col" style={{ clipPath: mobile ? "inset(0 round 12px 12px 0 0)" : "inset(0 round 12px)" }}>
         {/* Title bar */}
         <div
           className={`relative px-4 flex items-center shrink-0 cursor-default select-none ${titleBarClass}`}
           style={{ height: TITLE_H, touchAction: "none" }}
           onPointerDown={(e) => {
-            if (!isMaximized) dragControls.start(e);
+            if (!mobile && !isMaximized) dragControls.start(e);
           }}
-          onDoubleClick={zoom}
+          onDoubleClick={mobile ? undefined : zoom}
         >
           <TrafficLights
             isActive={isActive}
@@ -295,18 +295,30 @@ export default function MacWindow({
           />
 
           <div
-            className={`absolute left-1/2 -translate-x-1/2 max-w-[60%] truncate text-[13px] font-semibold tracking-[-0.01em] transition-colors duration-200 ${titleTextClass}`}
+            className={`absolute left-1/2 -translate-x-1/2 ${mobile ? "max-w-[45%]" : "max-w-[60%]"} truncate text-[13px] font-semibold tracking-[-0.01em] transition-colors duration-200 ${titleTextClass}`}
           >
             {title}
           </div>
+
+          {mobile && (
+            <button
+              onClick={() => onClose(id)}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="ml-auto -mr-1 px-3 py-1.5 rounded-full text-[15px] font-semibold text-[hsl(var(--accent))] active:opacity-60"
+            >
+              Done
+            </button>
+          )}
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto min-h-0">{children}</div>
+        {/* @container: apps adapt to the window's width (narrow windows + phones get compact layouts) */}
+        <div className="@container flex-1 overflow-y-auto min-h-0">{children}</div>
+        </div>
       </motion.div>
 
       {/* Resize handles (sit slightly outside the frame, like macOS) */}
-      {resizable && !isMaximized && !isMinimized && (
+      {resizable && !mobile && !isMaximized && !isMinimized && (
         <>
           <div className={`${edge} top-3 bottom-3 -right-1 w-2 cursor-ew-resize`} onPointerDown={startResize("e")} />
           <div className={`${edge} top-3 bottom-3 -left-1 w-2 cursor-ew-resize`} onPointerDown={startResize("w")} />

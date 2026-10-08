@@ -1,175 +1,174 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+// src/components/windows/terminal/games/PongGame.jsx
+import { useRef, useState } from "react";
+import { GameShell, NEON, glow, makeParticles, roundRect, useCanvas, useHighScore, useKeyUp, useKeys, useLoop } from "./kit";
 
-export default function PongGame({ uiTheme = "glass", onExit }) {
-  const isMac = uiTheme === "macos";
-  const canvasRef = useRef(null);
-  const rafRef = useRef(null);
+const W = 520;
+const H = 340;
+const PW = 10;
+const PH = 70;
+const WIN = 7;
 
-  const [score, setScore] = useState({ you: 0, cpu: 0 });
+function serve(dir = 1) {
+  const a = (Math.random() * 0.8 - 0.4);
+  return { x: W / 2, y: H / 2, vx: Math.cos(a) * 260 * dir, vy: Math.sin(a) * 260, trail: [] };
+}
 
-  const cfg = useMemo(() => {
-    return {
-      w: 520,
-      h: 320,
-      bg: isMac ? "#f5f5f2" : "rgba(0,0,0,0.25)",
-      fg: isMac ? "rgba(0,0,0,0.75)" : "rgba(255,255,255,0.9)",
-      dim: isMac ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.15)",
-    };
-  }, [isMac]);
+function fresh() {
+  return { you: H / 2 - PH / 2, cpu: H / 2 - PH / 2, ball: serve(Math.random() < 0.5 ? 1 : -1), keys: {}, shake: 0, particles: makeParticles(), pause: 0 };
+}
 
-  const stateRef = useRef({
-    you: { x: 20, y: 130, w: 10, h: 60, vy: 0 },
-    cpu: { x: 490, y: 130, w: 10, h: 60, vy: 0 },
-    ball: { x: 260, y: 160, r: 6, vx: 3.2, vy: 2.0 },
-    keys: { up: false, down: false },
+export default function PongGame() {
+  const canvas = useCanvas(W, H);
+  const g = useRef(fresh());
+  const [status, setStatus] = useState("ready");
+  const [you, setYou] = useState(0);
+  const [cpu, setCpu] = useState(0);
+  const [best, setBest] = useHighScore("pong"); // best = most points scored in a match
+
+  function restart() {
+    g.current = fresh();
+    setYou(0);
+    setCpu(0);
+    setStatus("playing");
+  }
+
+  useKeys((e) => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (k === " " && status === "ready") return setStatus("playing");
+    if (k === "r") return restart();
+    if (k === "p" && (status === "playing" || status === "paused")) return setStatus(status === "playing" ? "paused" : "playing");
+    g.current.keys[k] = true;
   });
 
-  function resetBall(dir = 1) {
-    const s = stateRef.current;
-    s.ball.x = cfg.w / 2;
-    s.ball.y = cfg.h / 2;
-    s.ball.vx = 3.2 * dir;
-    s.ball.vy = (Math.random() * 3 - 1.5) || 1.2;
-  }
+  // key release stops paddle movement
+  useKeyUp((e) => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    g.current.keys[k] = false;
+  });
 
-  function clamp(v, a, b) {
-    return Math.max(a, Math.min(b, v));
-  }
+  useLoop((dt, now) => {
+    const s = g.current;
+    s.particles.update(dt);
+    s.shake = Math.max(0, s.shake - dt * 30);
 
-  function intersects(a, b) {
-    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-  }
+    if (status === "playing") {
+      const up = s.keys.ArrowUp || s.keys.w ? 1 : 0;
+      const down = s.keys.ArrowDown || s.keys.s ? 1 : 0;
+      s.you = Math.max(0, Math.min(H - PH, s.you + (down - up) * 360 * dt));
 
-  function step() {
-    const s = stateRef.current;
+      // CPU: follows the ball with a reaction limit, so it can be beaten
+      const target = s.ball.y - PH / 2 + Math.sin(now / 400) * 18;
+      const maxStep = (s.ball.vx > 0 ? 250 : 120) * dt;
+      s.cpu += Math.max(-maxStep, Math.min(maxStep, target - s.cpu));
+      s.cpu = Math.max(0, Math.min(H - PH, s.cpu));
 
-    // player input
-    const speed = 4.3;
-    s.you.vy = (s.keys.up ? -speed : 0) + (s.keys.down ? speed : 0);
-    s.you.y = clamp(s.you.y + s.you.vy, 0, cfg.h - s.you.h);
+      if (s.pause > 0) s.pause -= dt;
+      else {
+        const b = s.ball;
+        b.trail.unshift({ x: b.x, y: b.y });
+        b.trail.length = Math.min(b.trail.length, 12);
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+        if (b.y < 6 || b.y > H - 6) {
+          b.vy *= -1;
+          b.y = Math.max(6, Math.min(H - 6, b.y));
+        }
+        const hitPaddle = (px, py, side) => {
+          if (b.y > py - 4 && b.y < py + PH + 4 && Math.abs(b.x - px) < PW) {
+            const rel = (b.y - (py + PH / 2)) / (PH / 2); // -1..1
+            const speed = Math.min(620, Math.hypot(b.vx, b.vy) * 1.07);
+            const ang = rel * 0.9;
+            b.vx = Math.cos(ang) * speed * side;
+            b.vy = Math.sin(ang) * speed;
+            b.x = px + PW * side;
+            s.particles.burst(b.x, b.y, side > 0 ? NEON.blue : NEON.pink, 10, 120);
+          }
+        };
+        if (b.vx < 0) hitPaddle(24 + PW, s.you, 1);
+        if (b.vx > 0) hitPaddle(W - 24 - PW, s.cpu, -1);
 
-    // cpu (simple follow with lag)
-    const target = s.ball.y - s.cpu.h / 2;
-    s.cpu.y += clamp(target - s.cpu.y, -3.4, 3.4);
-    s.cpu.y = clamp(s.cpu.y, 0, cfg.h - s.cpu.h);
-
-    // ball
-    s.ball.x += s.ball.vx;
-    s.ball.y += s.ball.vy;
-
-    // walls
-    if (s.ball.y - s.ball.r <= 0 || s.ball.y + s.ball.r >= cfg.h) {
-      s.ball.vy *= -1;
-      s.ball.y = clamp(s.ball.y, s.ball.r, cfg.h - s.ball.r);
+        const scored = b.x < -10 ? "cpu" : b.x > W + 10 ? "you" : null;
+        if (scored) {
+          s.shake = 8;
+          s.particles.burst(scored === "you" ? W - 10 : 10, b.y, scored === "you" ? NEON.blue : NEON.pink, 30, 260);
+          if (scored === "you") {
+            const n = you + 1;
+            setYou(n);
+            if (n > best) setBest(n);
+            if (n >= WIN) setStatus("won");
+          } else {
+            const n = cpu + 1;
+            setCpu(n);
+            if (n >= WIN) setStatus("over");
+          }
+          s.ball = serve(scored === "you" ? -1 : 1);
+          s.pause = 0.7;
+        }
+      }
     }
 
-    // paddles
-    const ballBox = { x: s.ball.x - s.ball.r, y: s.ball.y - s.ball.r, w: s.ball.r * 2, h: s.ball.r * 2 };
-
-    if (intersects(ballBox, s.you)) {
-      s.ball.vx = Math.abs(s.ball.vx) + 0.2;
-      const hit = (s.ball.y - (s.you.y + s.you.h / 2)) / (s.you.h / 2);
-      s.ball.vy += hit * 1.4;
-      s.ball.x = s.you.x + s.you.w + s.ball.r + 1;
-    }
-
-    if (intersects(ballBox, s.cpu)) {
-      s.ball.vx = -(Math.abs(s.ball.vx) + 0.2);
-      const hit = (s.ball.y - (s.cpu.y + s.cpu.h / 2)) / (s.cpu.h / 2);
-      s.ball.vy += hit * 1.2;
-      s.ball.x = s.cpu.x - s.ball.r - 1;
-    }
-
-    // scoring
-    if (s.ball.x < -20) {
-      setScore((sc) => ({ ...sc, cpu: sc.cpu + 1 }));
-      resetBall(1);
-    }
-    if (s.ball.x > cfg.w + 20) {
-      setScore((sc) => ({ ...sc, you: sc.you + 1 }));
-      resetBall(-1);
-    }
-  }
-
-  function draw() {
-    const c = canvasRef.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-
-    ctx.clearRect(0, 0, cfg.w, cfg.h);
-    ctx.fillStyle = cfg.bg;
-    ctx.fillRect(0, 0, cfg.w, cfg.h);
-
-    // mid line
-    ctx.strokeStyle = cfg.dim;
-    ctx.setLineDash([6, 8]);
+    // draw
+    const ctx = canvas.current?.getContext("2d");
+    if (!ctx) return;
+    ctx.save();
+    if (s.shake) ctx.translate((Math.random() - 0.5) * s.shake, (Math.random() - 0.5) * s.shake);
+    ctx.fillStyle = NEON.bg;
+    ctx.fillRect(-10, -10, W + 20, H + 20);
+    ctx.strokeStyle = "rgba(255,255,255,0.15)";
+    ctx.setLineDash([8, 10]);
     ctx.beginPath();
-    ctx.moveTo(cfg.w / 2, 0);
-    ctx.lineTo(cfg.w / 2, cfg.h);
+    ctx.moveTo(W / 2, 0);
+    ctx.lineTo(W / 2, H);
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.font = "bold 44px ui-monospace, Menlo, monospace";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    ctx.fillText(String(you), W / 2 - 60, 60);
+    ctx.fillText(String(cpu), W / 2 + 60, 60);
 
-    const s = stateRef.current;
+    glow(ctx, NEON.blue, 16);
+    ctx.fillStyle = NEON.blue;
+    roundRect(ctx, 24, s.you, PW, PH, 4);
+    glow(ctx, NEON.pink, 16);
+    ctx.fillStyle = NEON.pink;
+    roundRect(ctx, W - 24 - PW, s.cpu, PW, PH, 4);
 
-    ctx.fillStyle = cfg.fg;
-    ctx.fillRect(s.you.x, s.you.y, s.you.w, s.you.h);
-    ctx.fillRect(s.cpu.x, s.cpu.y, s.cpu.w, s.cpu.h);
-
+    const b = s.ball;
+    b.trail.forEach((p, i) => {
+      ctx.globalAlpha = (1 - i / b.trail.length) * 0.35;
+      ctx.fillStyle = NEON.white;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 6 - i * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    glow(ctx, NEON.white, 20);
+    ctx.fillStyle = NEON.white;
     ctx.beginPath();
-    ctx.arc(s.ball.x, s.ball.y, s.ball.r, 0, Math.PI * 2);
+    ctx.arc(b.x, b.y, 6, 0, Math.PI * 2);
     ctx.fill();
-  }
-
-  function loop() {
-    step();
-    draw();
-    rafRef.current = requestAnimationFrame(loop);
-  }
-
-  useEffect(() => {
-    const c = canvasRef.current;
-    if (!c) return;
-    c.width = cfg.w;
-    c.height = cfg.h;
-    c.tabIndex = 0;
-    c.focus();
-
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onExit?.();
-        return;
-      }
-      if (e.key === "ArrowUp") stateRef.current.keys.up = true;
-      if (e.key === "ArrowDown") stateRef.current.keys.down = true;
-    };
-    const onKeyUp = (e) => {
-      if (e.key === "ArrowUp") stateRef.current.keys.up = false;
-      if (e.key === "ArrowDown") stateRef.current.keys.down = false;
-    };
-
-    c.addEventListener("keydown", onKeyDown);
-    c.addEventListener("keyup", onKeyUp);
-
-    rafRef.current = requestAnimationFrame(loop);
-
-    return () => {
-      c.removeEventListener("keydown", onKeyDown);
-      c.removeEventListener("keyup", onKeyUp);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cfg.w, cfg.h]);
+    ctx.shadowBlur = 0;
+    s.particles.draw(ctx);
+    ctx.restore();
+  }, true);
 
   return (
-    <div>
-      <div className={`mb-2 text-xs ${isMac ? "text-black/60" : "text-white/60"}`}>
-        ↑ / ↓ to move • You {score.you} : {score.cpu} CPU
-      </div>
-      <canvas
-        ref={canvasRef}
-        className={`w-full max-w-[520px] rounded-lg outline-none ${isMac ? "border border-black/10" : "border border-white/10"}`}
-      />
-    </div>
+    <GameShell
+      title="Pong" touch={{ action: "Start", arrows: ["ArrowUp", "ArrowDown"] }}
+      accent={NEON.blue}
+      score={you}
+      best={best}
+      status={status}
+      overTitle="CPU WINS"
+      extra={
+        <span>
+          YOU <b style={{ color: NEON.blue }}>{you}</b> : <b style={{ color: NEON.pink }}>{cpu}</b> CPU
+        </span>
+      }
+      controls={`↑/↓ or W/S to move · first to ${WIN}`}
+    >
+      <canvas ref={canvas} style={{ width: W, maxWidth: "100%", height: "auto", aspectRatio: `${W} / ${H}` }} />
+    </GameShell>
   );
 }

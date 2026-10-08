@@ -1,211 +1,125 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+// src/components/windows/terminal/games/SnakeGame.jsx
+import { useRef, useState } from "react";
+import { GameShell, NEON, drawGrid, glow, makeParticles, roundRect, useCanvas, useHighScore, useKeys, useLoop } from "./kit";
 
-export default function SnakeGame({ uiTheme = "glass", onExit }) {
-  const isMac = uiTheme === "macos";
+const CELL = 20;
+const COLS = 26;
+const ROWS = 18;
+const W = COLS * CELL;
+const H = ROWS * CELL;
+const DIRS = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] };
 
-  const canvasRef = useRef(null);
-  const rafRef = useRef(null);
-  const lastRef = useRef(0);
-  const dirRef = useRef({ x: 1, y: 0 });
-  const queuedRef = useRef(null);
+function freeCell(snake) {
+  let p;
+  do p = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
+  while (snake.some((s) => s.x === p.x && s.y === p.y));
+  return p;
+}
 
+function fresh() {
+  const snake = [{ x: 8, y: 9 }, { x: 7, y: 9 }, { x: 6, y: 9 }];
+  return { snake, dir: [1, 0], queue: [], food: freeCell(snake), gold: null, acc: 0, grow: 0, particles: makeParticles() };
+}
+
+export default function SnakeGame() {
+  const canvas = useCanvas(W, H);
+  const g = useRef(fresh());
+  const [status, setStatus] = useState("ready");
   const [score, setScore] = useState(0);
-  const [status, setStatus] = useState("running"); // running | dead
+  const [best, setBest] = useHighScore("snake");
 
-  const cfg = useMemo(() => {
-    return {
-      size: 420,
-      cell: 20,
-      tickMs: 95,
-      bg: isMac ? "#f5f5f2" : "rgba(0,0,0,0.25)",
-      fg: isMac ? "rgba(0,0,0,0.75)" : "rgba(255,255,255,0.9)",
-      dim: isMac ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.15)",
-    };
-  }, [isMac]);
+  function restart() {
+    g.current = fresh();
+    setScore(0);
+    setStatus("playing");
+  }
 
-  const stateRef = useRef({
-    snake: [{ x: 8, y: 10 }, { x: 7, y: 10 }, { x: 6, y: 10 }],
-    food: { x: 14, y: 10 },
+  useKeys((e) => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (k === " " && status === "ready") return setStatus("playing");
+    if (k === "r") return restart();
+    if (k === "p" && (status === "playing" || status === "paused")) return setStatus(status === "playing" ? "paused" : "playing");
+    const d = DIRS[k];
+    if (d && status === "playing") {
+      const q = g.current.queue;
+      const last = q[q.length - 1] ?? g.current.dir;
+      if (d[0] !== -last[0] || d[1] !== -last[1]) q.length < 3 && q.push(d); // no 180° turns
+    }
   });
 
-  function randomEmptyCell() {
-    const cols = cfg.size / cfg.cell;
-    const rows = cfg.size / cfg.cell;
-    const occupied = new Set(stateRef.current.snake.map((p) => `${p.x},${p.y}`));
-
-    for (let i = 0; i < 999; i++) {
-      const x = Math.floor(Math.random() * cols);
-      const y = Math.floor(Math.random() * rows);
-      const key = `${x},${y}`;
-      if (!occupied.has(key)) return { x, y };
-    }
-    return { x: 1, y: 1 };
-  }
-
-  function reset() {
-    stateRef.current = {
-      snake: [{ x: 8, y: 10 }, { x: 7, y: 10 }, { x: 6, y: 10 }],
-      food: { x: 14, y: 10 },
-    };
-    dirRef.current = { x: 1, y: 0 };
-    queuedRef.current = null;
-    setScore(0);
-    setStatus("running");
-  }
-
-  function step() {
-    if (status !== "running") return;
-
-    if (queuedRef.current) {
-      dirRef.current = queuedRef.current;
-      queuedRef.current = null;
-    }
-
-    const cols = cfg.size / cfg.cell;
-    const rows = cfg.size / cfg.cell;
-
-    const snake = stateRef.current.snake;
-    const head = snake[0];
-    const dir = dirRef.current;
-
-    const next = { x: head.x + dir.x, y: head.y + dir.y };
-
-    // wall collision
-    if (next.x < 0 || next.y < 0 || next.x >= cols || next.y >= rows) {
-      setStatus("dead");
-      return;
-    }
-
-    // self collision (allow moving into tail only if tail moves away; easiest: check after pop when not eating)
-    const eating = next.x === stateRef.current.food.x && next.y === stateRef.current.food.y;
-
-    const nextSnake = [next, ...snake];
-    if (!eating) nextSnake.pop();
-
-    const setKeys = new Set(nextSnake.map((p) => `${p.x},${p.y}`));
-    if (setKeys.size !== nextSnake.length) {
-      setStatus("dead");
-      return;
-    }
-
-    stateRef.current.snake = nextSnake;
-
-    if (eating) {
-      setScore((s) => s + 1);
-      stateRef.current.food = randomEmptyCell();
-    }
-  }
-
-  function draw() {
-    const c = canvasRef.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-
-    // background
-    ctx.clearRect(0, 0, cfg.size, cfg.size);
-    // subtle grid
-    ctx.fillStyle = cfg.bg;
-    ctx.fillRect(0, 0, cfg.size, cfg.size);
-
-    ctx.strokeStyle = cfg.dim;
-    ctx.lineWidth = 1;
-    for (let x = 0; x <= cfg.size; x += cfg.cell) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, cfg.size);
-      ctx.stroke();
-    }
-    for (let y = 0; y <= cfg.size; y += cfg.cell) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(cfg.size, y);
-      ctx.stroke();
-    }
-
-    // food
-    const { food, snake } = stateRef.current;
-    ctx.fillStyle = isMac ? "rgba(220, 50, 50, 0.9)" : "rgba(255, 110, 110, 0.95)";
-    ctx.fillRect(food.x * cfg.cell + 3, food.y * cfg.cell + 3, cfg.cell - 6, cfg.cell - 6);
-
-    // snake
-    ctx.fillStyle = cfg.fg;
-    snake.forEach((p, i) => {
-      const pad = i === 0 ? 2 : 4;
-      ctx.fillRect(p.x * cfg.cell + pad, p.y * cfg.cell + pad, cfg.cell - pad * 2, cfg.cell - pad * 2);
-    });
-
-    if (status === "dead") {
-      ctx.fillStyle = isMac ? "rgba(0,0,0,0.65)" : "rgba(255,255,255,0.7)";
-      ctx.font = "bold 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
-      ctx.textAlign = "center";
-      ctx.fillText("Game over — press R to restart", cfg.size / 2, cfg.size / 2);
-    }
-  }
-
-  function loop(ts) {
-    if (!lastRef.current) lastRef.current = ts;
-    const delta = ts - lastRef.current;
-
-    if (delta >= cfg.tickMs) {
-      lastRef.current = ts;
-      step();
-      draw();
-    } else {
-      draw();
-    }
-
-    rafRef.current = requestAnimationFrame(loop);
-  }
-
-  function queueDir(next) {
-    const cur = dirRef.current;
-    // disallow reversing
-    if (cur.x + next.x === 0 && cur.y + next.y === 0) return;
-    queuedRef.current = next;
-  }
-
-  useEffect(() => {
-    const c = canvasRef.current;
-    if (!c) return;
-    c.width = cfg.size;
-    c.height = cfg.size;
-    c.tabIndex = 0;
-    c.focus();
-
-    const onKey = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onExit?.();
-        return;
+  useLoop((dt, now) => {
+    const s = g.current;
+    s.particles.update(dt);
+    const speed = Math.max(0.055, 0.12 - score * 0.0025); // faster as you grow
+    s.acc += dt;
+    while (status === "playing" && !s.over && s.acc >= speed) {
+      s.acc -= speed;
+      if (s.queue.length) s.dir = s.queue.shift();
+      const head = { x: s.snake[0].x + s.dir[0], y: s.snake[0].y + s.dir[1] };
+      const hit = head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS || s.snake.some((p) => p.x === head.x && p.y === head.y);
+      if (hit) {
+        s.over = true;
+        s.particles.burst(s.snake[0].x * CELL + 10, s.snake[0].y * CELL + 10, NEON.pink, 30, 220);
+        setStatus("over");
+        if (score > best) setBest(score);
+        break;
       }
-      if (e.key === "ArrowUp") queueDir({ x: 0, y: -1 });
-      if (e.key === "ArrowDown") queueDir({ x: 0, y: 1 });
-      if (e.key === "ArrowLeft") queueDir({ x: -1, y: 0 });
-      if (e.key === "ArrowRight") queueDir({ x: 1, y: 0 });
+      s.snake.unshift(head);
+      if (head.x === s.food.x && head.y === s.food.y) {
+        s.particles.burst(head.x * CELL + 10, head.y * CELL + 10, NEON.pink);
+        setScore((v) => v + 1);
+        s.grow += 1;
+        s.food = freeCell(s.snake);
+        if (!s.gold && Math.random() < 0.25) s.gold = { ...freeCell(s.snake), until: now + 5000 };
+      } else if (s.gold && head.x === s.gold.x && head.y === s.gold.y) {
+        s.particles.burst(head.x * CELL + 10, head.y * CELL + 10, NEON.yellow, 26);
+        setScore((v) => v + 5);
+        s.grow += 3;
+        s.gold = null;
+      }
+      if (s.grow > 0) s.grow -= 1;
+      else s.snake.pop();
+    }
+    if (s.gold && now > s.gold.until) s.gold = null;
 
-      if (e.key.toLowerCase() === "r") reset();
-    };
-
-    c.addEventListener("keydown", onKey);
-
-    rafRef.current = requestAnimationFrame(loop);
-
-    return () => {
-      c.removeEventListener("keydown", onKey);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cfg.size, cfg.tickMs, status]);
+    // draw
+    const ctx = canvas.current?.getContext("2d");
+    if (!ctx) return;
+    drawGrid(ctx, W, H, CELL);
+    const pulse = 1 + Math.sin(now / 160) * 0.12;
+    glow(ctx, NEON.pink, 18);
+    ctx.fillStyle = NEON.pink;
+    ctx.beginPath();
+    ctx.arc(s.food.x * CELL + 10, s.food.y * CELL + 10, 6 * pulse, 0, Math.PI * 2);
+    ctx.fill();
+    if (s.gold) {
+      glow(ctx, NEON.yellow, 22);
+      ctx.fillStyle = NEON.yellow;
+      ctx.beginPath();
+      ctx.arc(s.gold.x * CELL + 10, s.gold.y * CELL + 10, 7.5 * pulse, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    s.snake.forEach((p, i) => {
+      const t = i / s.snake.length;
+      ctx.fillStyle = `hsl(${145 - t * 40}, 100%, ${62 - t * 22}%)`;
+      glow(ctx, NEON.green, i === 0 ? 16 : 6);
+      roundRect(ctx, p.x * CELL + 2, p.y * CELL + 2, CELL - 4, CELL - 4, i === 0 ? 6 : 4);
+    });
+    // eyes
+    const h = s.snake[0];
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = NEON.bg;
+    const [dx, dy] = s.dir;
+    [[-1, 1]].forEach(() => {
+      ctx.fillRect(h.x * CELL + 10 + dx * 4 - dy * 4 - 1.5, h.y * CELL + 10 + dy * 4 - dx * 4 - 1.5, 3, 3);
+      ctx.fillRect(h.x * CELL + 10 + dx * 4 + dy * 4 - 1.5, h.y * CELL + 10 + dy * 4 + dx * 4 - 1.5, 3, 3);
+    });
+    s.particles.draw(ctx);
+  }, true);
 
   return (
-    <div>
-      <div className={`mb-2 text-xs ${isMac ? "text-black/60" : "text-white/60"}`}>
-        Arrow keys to move • R to restart • Score: <span className="font-semibold">{score}</span>
-      </div>
-      <canvas
-        ref={canvasRef}
-        className={`w-full max-w-[420px] rounded-lg outline-none ${isMac ? "border border-black/10" : "border border-white/10"}`}
-      />
-    </div>
+    <GameShell title="Snake" touch={{ action: "Start" }} accent={NEON.green} score={score} best={best} status={status} controls="Arrows / WASD to move · 🟡 golden apple = +5">
+      <canvas ref={canvas} style={{ width: W, maxWidth: "100%", height: "auto", aspectRatio: `${W} / ${H}` }} />
+    </GameShell>
   );
 }

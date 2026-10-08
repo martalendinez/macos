@@ -44,6 +44,22 @@ function ActionButton({ icon, label, onClick, primary, isDark }) {
 export default function MapWindow({ theme = "light", onOpenWindow }) {
   const isDark = theme === "dark";
   const [map, setMap] = useState(null);
+  // narrow windows / phones: the sidebar becomes a bottom sheet
+  const rootRef = useRef(null);
+  const [narrow, setNarrow] = useState(false);
+  const [rootH, setRootH] = useState(600);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => {
+      setNarrow(e.contentRect.width < 640);
+      setRootH(e.contentRect.height);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const sideW = narrow ? 0 : SIDEBAR_W;
+  const sheetH = narrow ? Math.round(rootH * 0.48) : 0;
   const [selected, setSelected] = useState(null); // place key or null (= overview)
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState("explore");
@@ -59,10 +75,10 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
       if (!map) return;
       map.flyToBounds(
         PLACES.map((p) => p.coords),
-        { paddingTopLeft: [SIDEBAR_W + 40, 60], paddingBottomRight: [60, 60], duration: animate ? 1.4 : 0, maxZoom: 5 }
+        { paddingTopLeft: [sideW + 40, 60], paddingBottomRight: [40, sheetH + 40], duration: animate ? 1.4 : 0, maxZoom: 5 }
       );
     },
-    [map]
+    [map, sideW, sheetH]
   );
 
   const focus = useCallback(
@@ -71,10 +87,10 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
       if (!p || !map) return;
       setSelected(key);
       viewer.resetForPlaceChange?.();
-      flyToVisible(map, p.coords, CITY_ZOOM, SIDEBAR_W, opts);
+      flyToVisible(map, p.coords, CITY_ZOOM, sideW, opts, sheetH);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [map]
+    [map, sideW, sheetH]
   );
 
   // first view: the whole journey
@@ -111,7 +127,7 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
     }
     // zoom out between stops for that "flying over the world" feel
     const p = PLACES[tour];
-    flyToVisible(map, p.coords, CITY_ZOOM - 1, SIDEBAR_W, { duration: tour === 0 ? 1.8 : 2.6 });
+    flyToVisible(map, p.coords, CITY_ZOOM - 1, sideW, { duration: tour === 0 ? 1.8 : 2.6 }, sheetH);
     setSelected(p.key);
     tourTimer.current = setTimeout(() => setTour((t) => (t == null ? t : t + 1)), TOUR_MS);
     return () => clearTimeout(tourTimer.current);
@@ -143,7 +159,7 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
   const ctrl = `${glass} backdrop-blur-2xl backdrop-saturate-150`;
 
   return (
-    <div className="no-darkwin relative h-full w-full overflow-hidden" style={{ background: isDark ? "#1b1b1d" : "#e8eef0" }}>
+    <div ref={rootRef} className="no-darkwin relative h-full w-full overflow-hidden" style={{ background: isDark ? "#1b1b1d" : "#e8eef0" }}>
       {/* MAP */}
       <MapContainer
         ref={setMap}
@@ -184,7 +200,7 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
       {/* SIDEBAR */}
       <aside
         className={`absolute left-3 top-3 bottom-3 z-[500] rounded-2xl backdrop-blur-2xl backdrop-saturate-150 flex flex-col overflow-hidden ${glass}`}
-        style={{ width: SIDEBAR_W - 12 }}
+        style={narrow ? { left: 8, right: 8, top: "auto", bottom: 8, height: sheetH } : { width: SIDEBAR_W - 12 }}
       >
         <AnimatePresence mode="wait" initial={false}>
           {!place ? (
@@ -396,7 +412,7 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
         {tour != null && (
           <motion.div
             className={`absolute top-3 left-1/2 z-[600] rounded-full pl-4 pr-1.5 py-1.5 flex items-center gap-3 text-[12px] ${ctrl}`}
-            style={{ x: "-50%", marginLeft: SIDEBAR_W / 2 }}
+            style={{ x: "-50%", marginLeft: sideW / 2 }}
             initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -40, opacity: 0 }}
@@ -415,7 +431,7 @@ export default function MapWindow({ theme = "light", onOpenWindow }) {
       </AnimatePresence>
 
       {/* ZOOM + HOME CONTROLS */}
-      <div className="absolute right-3 bottom-8 z-[500] flex flex-col gap-2">
+      <div className="absolute right-3 z-[500] flex flex-col gap-2" style={{ bottom: narrow ? sheetH + 20 : 32 }}>
         <button
           onClick={() => {
             stopTour();

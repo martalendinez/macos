@@ -21,17 +21,6 @@ import glass3Light from "/wallpapers/glass/glass3.jpg";
 import glass3Dark from "/wallpapers/glass/glass3dark.jpg";
 
 
-// ------------------- SECTIONS -------------------
-export const SECTIONS = [
-  { id: "theme", label: "Theme" },
-  { id: "accent", label: "Accent color" },
-  { id: "wallpapers", label: "Wallpapers" },
-  { id: "font", label: "Font size" },
-  { id: "quick", label: "Quick actions" },
-  { id: "portfolioInfo", label: "About this Portfolio" },
-];
-
-
 // ------------------- WALLPAPER STRUCTURE -------------------
 // Each wallpaper now knows its dark version
 

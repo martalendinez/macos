@@ -1,7 +1,7 @@
 // src/components/shell/LockScreen.jsx
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import avatar from "../../imgs/avatar/Avatar1.jpg";
+import avatar from "../../imgs/avatar/profile-photo.jpg";
 
 function useNow(open) {
   const [now, setNow] = useState(() => new Date());

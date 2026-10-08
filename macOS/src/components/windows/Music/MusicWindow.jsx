@@ -55,7 +55,7 @@ function TrackRow({ tr, idx, isCurrent, isPlaying, onPlay, showAlbumDate = true 
       onClick={() => (playable ? onPlay(tr) : window.open(tr.url, "_blank", "noopener,noreferrer"))}
       onKeyDown={(e) => e.key === "Enter" && (playable ? onPlay(tr) : window.open(tr.url, "_blank", "noopener,noreferrer"))}
       className={[
-        "group grid grid-cols-[40px_1.6fr_1fr_140px_88px] items-center gap-3 px-3 py-2 rounded-md transition cursor-default",
+        "group grid grid-cols-[28px_1fr_64px] @2xl:grid-cols-[40px_1.6fr_1fr_88px] @4xl:grid-cols-[40px_1.6fr_1fr_140px_88px] items-center gap-3 px-3 py-2 rounded-md transition cursor-default",
         styles.rowHover,
         isCurrent ? styles.rowSelected : "",
       ].join(" ")}
@@ -92,8 +92,8 @@ function TrackRow({ tr, idx, isCurrent, isPlaying, onPlay, showAlbumDate = true 
         </div>
       </div>
 
-      <div className="hidden md:block text-white/60 text-sm truncate">{showAlbumDate ? album : ""}</div>
-      <div className="hidden lg:block text-white/60 text-sm truncate">{showAlbumDate ? dateAdded : ""}</div>
+      <div className="hidden @2xl:block text-white/60 text-sm truncate">{showAlbumDate ? album : ""}</div>
+      <div className="hidden @4xl:block text-white/60 text-sm truncate">{showAlbumDate ? dateAdded : ""}</div>
       <div className="flex items-center justify-end gap-3 text-white/60 text-sm tabular-nums">
         <a
           href={tr.url}
@@ -156,9 +156,9 @@ export default function MusicWindow() {
   return (
     <div className="h-full w-full flex flex-col no-darkwin">
       <div className={`flex-1 min-h-0 overflow-hidden ${styles.shell}`}>
-        <div className="h-full grid grid-cols-[260px_1fr]">
+        <div className="h-full grid grid-cols-1 @3xl:grid-cols-[260px_1fr]">
           {/* LEFT SIDEBAR */}
-          <aside className={`h-full overflow-y-auto ${styles.sideBg} border-r border-white/10 p-4`}>
+          <aside className={`hidden @3xl:block h-full overflow-y-auto ${styles.sideBg} border-r border-white/10 p-4`}>
             <div className="space-y-1">
               <button
                 type="button"
@@ -281,6 +281,21 @@ export default function MusicWindow() {
               </div>
             </div>
 
+            {/* narrow: playlists as chips instead of the sidebar */}
+            <div className="@3xl:hidden shrink-0 flex gap-2 overflow-x-auto px-4 py-2.5 border-b border-white/10 [scrollbar-width:none]">
+              {PLAYLISTS.map((p) => (
+                <button
+                  key={p.key}
+                  onClick={() => openPlaylist(p.key)}
+                  className={`shrink-0 px-3 py-1 rounded-full text-[13px] font-semibold ${
+                    p.key === activePlaylistKey && !q ? "bg-[#1ed760] text-black" : "bg-white/10 text-white/85"
+                  }`}
+                >
+                  {p.title}
+                </button>
+              ))}
+            </div>
+
             {/* SCROLL AREA */}
             <div className="flex-1 min-h-0 overflow-auto">
               {q ? (
@@ -307,9 +322,9 @@ export default function MusicWindow() {
               ) : (
                 <>
                   {/* HEADER (gradient + huge title) */}
-                  <div className="px-6 pt-8 pb-6" style={headerGradient}>
-                    <div className="flex items-end gap-6">
-                      <div className="w-44 h-44 rounded-md overflow-hidden shadow-2xl border border-white/10 bg-black/30 shrink-0 grid grid-cols-2 grid-rows-2">
+                  <div className="px-4 @2xl:px-6 pt-6 @2xl:pt-8 pb-6" style={headerGradient}>
+                    <div className="flex items-end gap-4 @2xl:gap-6">
+                      <div className="w-28 h-28 @2xl:w-44 @2xl:h-44 rounded-md overflow-hidden shadow-2xl border border-white/10 bg-black/30 shrink-0 grid grid-cols-2 grid-rows-2">
                         {Array.from({ length: 4 }).map((_, i) => (
                           <div key={i} className="w-full h-full bg-black/30">
                             {playlistMosaic[i] ? (
@@ -321,7 +336,7 @@ export default function MusicWindow() {
 
                       <div className="min-w-0 pb-1">
                         <div className="text-white/90 text-sm font-semibold">Public Playlist</div>
-                        <div className="text-white text-5xl xl:text-6xl font-black tracking-tight truncate mt-2">{playlist?.title}</div>
+                        <div className="text-white text-3xl @2xl:text-5xl @6xl:text-6xl font-black tracking-tight truncate mt-2">{playlist?.title}</div>
                         <div className="mt-4 text-white/80 text-sm">
                           <span className="font-semibold">martalendi</span>
                           <span className="text-white/60"> • </span>
@@ -364,11 +379,11 @@ export default function MusicWindow() {
 
                   {/* TABLE */}
                   <div className="px-6 py-3">
-                    <div className="grid grid-cols-[40px_1.6fr_1fr_140px_88px] items-center gap-3 px-3 py-2 text-xs text-white/50">
+                    <div className="grid grid-cols-[28px_1fr_64px] @2xl:grid-cols-[40px_1.6fr_1fr_88px] @4xl:grid-cols-[40px_1.6fr_1fr_140px_88px] items-center gap-3 px-3 py-2 text-xs text-white/50">
                       <div className="text-center">#</div>
                       <div>Title</div>
-                      <div className="hidden md:block">Album</div>
-                      <div className="hidden lg:block">Date added</div>
+                      <div className="hidden @2xl:block">Album</div>
+                      <div className="hidden @4xl:block">Date added</div>
                       <div className="text-right">🕒</div>
                     </div>
                     <div className="h-px bg-white/10" />

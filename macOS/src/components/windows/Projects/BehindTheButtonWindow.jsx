@@ -34,7 +34,7 @@ export default function BehindTheButtonWindow({ uiTheme = "glass" }) {
           </div>
 
           {/* Content */}
-          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="mt-6 grid grid-cols-1 @4xl:grid-cols-2 gap-4">
             <div className={`rounded-2xl p-5 ${styles.cardClass}`}>
               <div className={`text-sm font-semibold ${sectionTitle}`}>Target users</div>
               <ul className={`mt-2 space-y-2 text-sm ${styles.textMain}`}>
@@ -52,7 +52,7 @@ export default function BehindTheButtonWindow({ uiTheme = "glass" }) {
               </div>
             </div>
 
-            <div className={`rounded-2xl p-5 ${styles.cardClass} lg:col-span-2`}>
+            <div className={`rounded-2xl p-5 ${styles.cardClass} @4xl:col-span-2`}>
               <div className={`text-sm font-semibold ${sectionTitle}`}>
                 The learning experience (modern, not like school)
               </div>

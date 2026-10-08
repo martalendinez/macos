@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
+import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
+import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
 import CaseStudyPill from "./caseStudy/CaseStudyPill";
 import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
@@ -9,8 +10,8 @@ import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
 import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 
-export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
-  const theme = useCaseStudyTheme({ uiTheme, glassContrast });
+export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
+  const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
 
   const IMAGES = useMemo(
     () => ({
@@ -63,42 +64,7 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
     []
   );
 
-  const [active, setActive] = useState("overview");
-  function scrollToSection(id) {
-    setActive(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function HeroCover() {
-    return (
-      <div className={`mt-10 rounded-[28px] overflow-hidden border ${theme.softCard}`}>
-        <button
-          type="button"
-          onClick={() => openLightbox(IMAGES.hero, "Cover image")}
-          className="w-full text-left"
-          disabled={!IMAGES.hero}
-          title={IMAGES.hero ? "Click to zoom" : "Hero placeholder — set IMAGES.hero"}
-        >
-          {IMAGES.hero ? (
-            <img src={IMAGES.hero} alt="Cover" className="w-full h-auto object-cover" />
-          ) : (
-            <div className="w-full aspect-[16/7] flex items-center justify-center">
-              <div className="text-center px-6">
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Cover image (hero)</div>
-                <div className={`mt-2 text-xs ${theme.textSub}`}>
-                  Add a wide screenshot of your <span className="font-semibold">Welcome</span> page / dashboard.
-                  <br />
-                  Set it as <span className="font-semibold">IMAGES.hero</span>.
-                </div>
-              </div>
-            </div>
-          )}
-        </button>
-      </div>
-    );
-  }
-
-  const metaPills = ["Personal project", "Notion template", "UX + UI", "Gamification", "Systems design"];
+const metaPills = ["Personal project", "Notion template", "UX + UI", "Gamification", "Systems design"];
 
   const facts = [
     { k: "What it is", v: "A Stardew Valley–inspired productivity template built in Notion" },
@@ -108,15 +74,8 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
   ];
 
   return (
-    <div className="h-full w-full">
-      <div className="h-full overflow-y-auto p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className={`mx-auto w-full max-w-[1150px] rounded-[28px] ${theme.pageCard}`}
-        >
-          <div className="px-6 md:px-10 pt-8 md:pt-10 pb-10">
+    <CaseStudyLayout theme={theme} sections={sections} title="Gamified Notion Template">
+          <div>
             <div className="flex flex-wrap gap-2">
               {metaPills.map((p) => (
                 <CaseStudyPill key={p} theme={theme}>
@@ -125,25 +84,25 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
               ))}
             </div>
 
-            <div className={`mt-5 text-4xl md:text-5xl font-semibold tracking-tight ${theme.textMain}`}>
+            <div className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}>
               Gamified Productivity System — Stardew Valley Notion Template
             </div>
-            <div className={`mt-3 text-base md:text-lg ${theme.textSub}`}>
+            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
               “Welcome to your farm!” A cozy, narrative-driven system that turns everyday tasks into quests, rewards
               consistency with coins, and makes your Notion workspace feel like a tiny valley.
             </div>
 
             {/* CTA row */}
             <div className="mt-6 flex flex-wrap gap-2">
-              <a href="#" target="_blank" rel="noreferrer" className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}>
+              <a href="#" target="_blank" rel="noreferrer" className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}>
                 View this in Notion
               </a>
-              <a href="#" target="_blank" rel="noreferrer" className={`px-4 py-2.5 rounded-2xl text-sm transition-all border ${theme.buttonClass}`}>
+              <a href="#" target="_blank" rel="noreferrer" className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}>
                 Download the PDF
               </a>
             </div>
 
-            <div id="overview" className="mt-8 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-6">
+            <div id="overview" className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16">
               <div>
                 <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
                 <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
@@ -162,7 +121,7 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
               <div>
                 <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
 
-                <div className={`mt-3 rounded-2xl p-5 border ${theme.softCard}`}>
+                <div className={`mt-3`}>
                   <div className="grid grid-cols-1 gap-3">
                     {facts.map((f) => (
                       <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
@@ -183,50 +142,23 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
               </div>
             </div>
 
-            <HeroCover />
-
-            {/* Contents */}
-            <div className={`mt-10 rounded-2xl p-5 border ${theme.softCard}`}>
-              <div className={`text-sm font-semibold ${theme.textMain}`}>Contents</div>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {sections.map((s) => {
-                  const isActive = active === s.id;
-                  const activeClass = theme.isMac || theme.isGlassDarkText
-                    ? `${theme.accentSoftBg} ${theme.accentBorder} ${theme.accentText}`
-                    : "bg-white/20 border-white/15 text-white";
-
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => scrollToSection(s.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
-                        isActive ? activeClass : theme.pillClass
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
 
             <CaseStudySection id="summary" title="Summary" subtitle="Problem → Solution → What makes it work" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
                 <div className="mt-2">
                   Planning tools often don’t create emotional momentum. When motivation is low, systems that feel strict
                   are the first to be abandoned.
                 </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
+                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
                 <div className="mt-2">
                   A narrative Notion template that maps productivity to a cozy game world: tasks become quests, progress
                   becomes “harvest,” and consistency rewards you with coins you can spend in a shop.
                 </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Why it works</div>
+                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Why it works</div>
                 <CaseStudyBulletList
                   items={[
                     "Clear, location-based navigation (you always know where to go)",
@@ -243,7 +175,7 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="role" title="My role" subtitle="I designed the system, structure, and experience" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 <CaseStudyBulletList
                   items={[
                     "Designed the information architecture (three main locations + sub-pages and flows)",
@@ -256,22 +188,22 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="goals" title="Goals" subtitle="Experience goals + system goals" theme={theme}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Experience goals</div>
+              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Experience goals</div>
                   <CaseStudyBulletList items={["Make planning feel cozy and inviting", "Turn tasks into meaningful “quests” with story flavor", "Support low-energy days (no shame spiral)"]} />
                 </div>
 
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>System goals</div>
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>System goals</div>
                   <CaseStudyBulletList items={["Fast daily usage (minimal friction)", "Clear separation between planning, reflection, and rewards", "Scales across tasks, subtasks, projects, habits, and events"]} />
                 </div>
               </div>
             </CaseStudySection>
 
             <CaseStudySection id="ia" title="Information architecture" subtitle="The valley is organized as three locations with clear sub-areas" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Top-level map</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Top-level map</div>
                 <CaseStudyBulletList
                   items={[
                     "Welcome to your farm (entry point + navigation hub)",
@@ -294,8 +226,8 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="farm" title="🥕✨ The Farm" subtitle="Where all planning + execution lives (quests, fields, calendar)" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Core areas</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Core areas</div>
                 <CaseStudyBulletList
                   items={[
                     "📅 The Town Calendar — tasks, events, festivals, seasonal milestones",
@@ -317,8 +249,8 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
                 b={<CaseStudyImageTile src={IMAGES.harvestedMemories} alt="Harvested Memories" caption="Optional: completed archive view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
               />
 
-              <div className={`mt-6 rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Quest taxonomy (how work is modeled)</div>
+              <div className={`mt-6`}>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Quest taxonomy (how work is modeled)</div>
                 <CaseStudyBulletList
                   items={[
                     "Tasks — the main storyline steps (bigger actions that move life forward)",
@@ -344,8 +276,8 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="cozy" title="🕯️✨ Your Cozy Corner of the Valley" subtitle="Your farmhouse: personal stats, vibes, reflection, and life maintenance" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>What lives here</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>What lives here</div>
                 <CaseStudyBulletList
                   items={[
                     "Character Profile — name/bio, coins, health, badges, current mood",
@@ -371,8 +303,8 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="workshopSection" title="🛠️✨ Workshop" subtitle="The gamification center: gold pouch, shop, and inventory" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Workshop spaces</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Workshop spaces</div>
                 <CaseStudyBulletList items={["💰 Gold Pouch — track hard-earned coins and plan purchases", "🎁 Shop — spend coins on cosmetics, upgrades, boosts, and rewards", "🍯 Inventory — what you own (pets, badges, decorations, boosts, etc.)"]} />
                 <div className={`mt-3 text-sm ${theme.textSub}`}>
                   The workshop turns productivity into a gentle economy: effort becomes coins, and coins become rewards
@@ -388,8 +320,8 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="mechanics" title="Gamification mechanics" subtitle="How rewards, feedback, and motivation are designed" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Progress signals</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Progress signals</div>
                 <CaseStudyBulletList
                   items={[
                     "Coins (gold) earned from completing quests and habits",
@@ -399,13 +331,13 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
                   ]}
                 />
 
-                <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>Reward loop</div>
+                <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Reward loop</div>
                 <div className="mt-2">
                   Complete quests → earn coins → spend in the shop → items appear in inventory → your valley feels more
                   “yours” → motivation stays warm and personal.
                 </div>
 
-                <div className={`mt-6 text-sm font-semibold ${theme.textMain}`}>Tone & motivation strategy</div>
+                <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Tone & motivation strategy</div>
                 <CaseStudyBulletList
                   items={[
                     "Cozy language reduces anxiety (quests instead of chores)",
@@ -417,14 +349,14 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="design" title="Design decisions" subtitle="What I intentionally optimized for" theme={theme}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Clarity & scanning</div>
+              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Clarity & scanning</div>
                   <CaseStudyBulletList items={["Location-based structure to reduce navigation confusion", "Daily entry points (Sunrise Quests) to start fast", "Boards + calendar views for flexible planning styles"]} />
                 </div>
 
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Sustainable use</div>
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Sustainable use</div>
                   <CaseStudyBulletList items={["Gamification is supportive, not mandatory", "Reflection is built-in (Harvested Memories)", "Personal life support included (mood/energy, meals, letters, fortune)"]} />
                 </div>
               </div>
@@ -442,7 +374,7 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
             </CaseStudySection>
 
             <CaseStudySection id="outcome" title="Final outcome" subtitle="A cozy, complete system you can actually stick to" theme={theme}>
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 A fully navigable Notion “valley” that blends practical planning with cozy-game motivation: you can plan
                 your week, manage big goals, track habits, reflect on progress, and reward yourself — all inside a world
                 that feels warm.
@@ -462,10 +394,9 @@ export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassC
 
             <div className="mt-10" />
           </div>
-        </motion.div>
+        
 
         <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={closeLightbox} theme={theme} />
-      </div>
-    </div>
+    </CaseStudyLayout>
   );
 }

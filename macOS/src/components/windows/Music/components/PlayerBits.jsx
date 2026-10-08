@@ -143,7 +143,9 @@ export function NowPlayingBar({ player }) {
   const vol = muted ? 0 : volume;
 
   return (
-    <div className="h-[76px] shrink-0 px-4 grid grid-cols-[1fr_minmax(260px,1.4fr)_1fr] items-center gap-4 bg-black border-t border-white/10">
+    <div className="relative h-[76px] shrink-0 px-4 grid grid-cols-[1fr_auto] @2xl:grid-cols-[1fr_minmax(260px,1.4fr)_1fr] items-center gap-4 bg-black border-t border-white/10">
+      {/* narrow: thin progress line along the top edge */}
+      <div className="@2xl:hidden absolute left-0 top-0 h-[2px] bg-[#1ed760]" style={{ width: `${duration ? (time / duration) * 100 : 0}%` }} />
       {/* track */}
       <div className="min-w-0 flex items-center gap-3">
         {current ? (
@@ -165,7 +167,7 @@ export function NowPlayingBar({ player }) {
           <button
             type="button"
             onClick={() => player.setShuffle((s) => !s)}
-            className={`${ctl} relative ${shuffle ? "text-[#1ed760]" : "text-white/65 hover:text-white"}`}
+            className={`${ctl} relative hidden @2xl:flex ${shuffle ? "text-[#1ed760]" : "text-white/65 hover:text-white"}`}
             aria-label="Shuffle"
             aria-pressed={shuffle}
             title="Shuffle"
@@ -192,7 +194,7 @@ export function NowPlayingBar({ player }) {
           <button
             type="button"
             onClick={player.cycleRepeat}
-            className={`${ctl} relative ${repeat !== "off" ? "text-[#1ed760]" : "text-white/65 hover:text-white"}`}
+            className={`${ctl} relative hidden @2xl:flex ${repeat !== "off" ? "text-[#1ed760]" : "text-white/65 hover:text-white"}`}
             aria-label={`Repeat: ${repeat}`}
             title={repeat === "one" ? "Repeat one" : repeat === "all" ? "Repeat all" : "Repeat"}
           >
@@ -205,7 +207,7 @@ export function NowPlayingBar({ player }) {
             {repeat !== "off" && <span className="absolute bottom-0 w-1 h-1 rounded-full bg-[#1ed760]" />}
           </button>
         </div>
-        <div className="w-full flex items-center gap-2 text-[11px] text-white/60 tabular-nums">
+        <div className="w-full hidden @2xl:flex items-center gap-2 text-[11px] text-white/60 tabular-nums">
           <span className="w-9 text-right">{formatTime(time)}</span>
           <ScrubBar label="Seek" value={duration ? time / duration : 0} onChange={player.seek} className="flex-1" />
           <span className="w-9">{formatTime(duration)}</span>
@@ -213,13 +215,13 @@ export function NowPlayingBar({ player }) {
       </div>
 
       {/* extras */}
-      <div className="flex items-center justify-end gap-2">
+      <div className="hidden @2xl:flex items-center justify-end gap-2">
         {current && (
           <a
             href={current.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden lg:flex items-center gap-1.5 text-[11px] text-white/65 hover:text-white mr-2"
+            className="hidden @4xl:flex items-center gap-1.5 text-[11px] text-white/65 hover:text-white mr-2"
             title="Listen to the full song on Spotify"
           >
             <Icon.Spotify className="w-4 h-4 text-[#1ed760]" />

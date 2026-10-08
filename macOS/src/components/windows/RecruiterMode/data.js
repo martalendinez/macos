@@ -1,43 +1,51 @@
 // src/components/windows/RecruiterMode/data.js
+// Content for the 30-second Recruiter Mode overview. ✏️ Edit freely.
 
-export const recruiterSteps = [
+export const PITCH =
+  "I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components.";
+
+export const QUICK_FACTS = [
+  { label: "Current role", value: "Design Engineer @ Royc", sub: "Since Aug 2026", icon: "💼" },
+  { label: "Education", value: "MSc Interactive Media Tech", sub: "KTH Royal Institute of Technology", icon: "🎓" },
+  { label: "Based in", value: "Stockholm, Sweden", sub: "EU / Remote", icon: "📍" },
+  { label: "Specialty", value: "Figma → Code", sub: "Design systems + React", icon: "✨" },
+];
+
+export const STRENGTHS = [
   {
-    kicker: "Role fit",
-    title: "Marta Lendínez — Design Engineer at Royc (Figma + React), Stockholm.",
-    chips: ["Design Engineer @ Royc", "Figma → Code", "Stockholm", "EU/Remote"],
-    body: [
-      "Since Aug 2026 I'm a Design Engineer at Royc: I design the platform's UI in Figma, building a scalable, responsive component library with auto layout, and implement it in TypeScript & React.",
-      "I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components.",
-      "Strong fit for teams that need clarity, structure, and polished delivery.",
-    ],
+    title: "Design + code, one person",
+    text: "I design the platform's UI in Figma, building a scalable, responsive component library with auto layout, and implement it in TypeScript & React.",
+    tint: "#0a84ff",
+    icon: "⌘",
   },
   {
-    kicker: "Best work",
-    title: "Open one of my strongest case studies.",
-    body: ["Employer Branding is the fastest “work-ready” signal."],
-    featured: [
-      {
-        title: "Employer Branding — Case Study",
-        subtitle: "UX strategy + structured narrative + UI execution.",
-        windowId: "employerBrandingCaseStudy",
-      },
-      {
-        title: "Gamified Notion Template — Case Study",
-        subtitle: "Interaction design + product thinking + delightful UX.",
-        windowId: "stardewNotionCaseStudy",
-      },
-      {
-        title: "Master Thesis — AI plugin for designers",
-        subtitle: "Controlled AI assistance inside tools (designer stays in charge).",
-        windowId: "projects", // swap to "thesis" later if you create a dedicated thesis window
-      },
-    ],
+    title: "Research-driven",
+    text: "User interviews and usability testing shape every flow, from research to flows to high-fidelity UI.",
+    tint: "#34c759",
+    icon: "🔬",
   },
   {
-    kicker: "Next step",
-    title: "Resume + quick contact, then pick a deep dive.",
-    body: [
-      "Fast path: open Projects → skim 1 case study end-to-end.",
-    ],
+    title: "Polished delivery",
+    text: "Strong fit for teams that need clarity, structure, and polished delivery.",
+    tint: "#ff9f0a",
+    icon: "✓",
+  },
+];
+
+// projectId refers to Projects/data/projectData.js (for thumbnail + color)
+export const HIGHLIGHTS = [
+  {
+    projectId: "employerBranding",
+    badge: "Graduation Internship",
+    title: "AI platform for employer-branding analysis",
+    subtitle: "Turned manual branding audits into a scalable, automated analysis platform.",
+    windowId: "employerBrandingCaseStudy",
+  },
+  {
+    projectId: "kthTriviaApp",
+    badge: "University Group Project",
+    title: "Trivia App Game",
+    subtitle: "A fast, modern trivia game with ranked challenges and casual play.",
+    windowId: "triviaCaseStudy",
   },
 ];

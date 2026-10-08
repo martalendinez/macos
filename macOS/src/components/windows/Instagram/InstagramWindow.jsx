@@ -19,13 +19,12 @@ function Heart({ filled, className = "w-6 h-6" }) {
   );
 }
 
-function Ring({ children, seen = false, size = 86 }) {
+function Ring({ children, seen = false, size = 86, className = "" }) {
   return (
     <div
-      className="rounded-full p-[3px] shrink-0"
+      className={`rounded-full p-[3px] shrink-0 ${className}`}
       style={{
-        width: size,
-        height: size,
+        ...(className ? {} : { width: size, height: size }),
         background: seen ? "rgba(128,128,128,0.35)" : "conic-gradient(from 200deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75)",
       }}
     >
@@ -180,7 +179,7 @@ function PostModal({ index, setIndex, onClose, liked, toggleLike, comments, addC
 
   return (
     <motion.div
-      className="absolute inset-0 z-20 bg-black/70 flex items-center justify-center p-8"
+      className="absolute inset-0 z-20 bg-black/70 flex items-center justify-center p-0 @2xl:p-8"
       onClick={onClose}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -215,13 +214,13 @@ function PostModal({ index, setIndex, onClose, liked, toggleLike, comments, addC
       )}
 
       <motion.div
-        className={`flex h-full max-h-[600px] w-full max-w-[860px] rounded-md overflow-hidden ${isDark ? "bg-black text-white" : "bg-white text-black"}`}
+        className={`flex flex-col @2xl:flex-row h-full @2xl:max-h-[600px] w-full max-w-[860px] @2xl:rounded-md overflow-hidden ${isDark ? "bg-black text-white" : "bg-white text-black"}`}
         onClick={(e) => e.stopPropagation()}
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
       >
         <div
-          className="relative flex-[1.3] bg-black flex items-center justify-center select-none"
+          className="relative h-[45%] @2xl:h-auto @2xl:flex-[1.3] shrink-0 bg-black flex items-center justify-center select-none"
           onDoubleClick={() => {
             if (!isLiked) toggleLike(post.id);
             setBurst((b) => b + 1);
@@ -246,7 +245,7 @@ function PostModal({ index, setIndex, onClose, liked, toggleLike, comments, addC
           </AnimatePresence>
         </div>
 
-        <div className={`flex-1 min-w-[280px] flex flex-col border-l ${isDark ? "border-white/10" : "border-black/10"}`}>
+        <div className={`flex-1 min-h-0 min-w-0 @2xl:min-w-[280px] flex flex-col @2xl:border-l ${isDark ? "border-white/10" : "border-black/10"}`}>
           <div className={`flex items-center gap-3 p-3 border-b ${isDark ? "border-white/10" : "border-black/10"}`}>
             <img src={AVATAR} alt="" className="w-8 h-8 rounded-full object-cover" />
             <div className="leading-tight">
@@ -346,17 +345,17 @@ export default function InstagramWindow({ theme = "light", onOpenWindow, unlockA
   return (
     <div ref={rootRef} className="no-darkwin relative h-full w-full overflow-hidden" style={{ ...vars, background: "var(--ig-bg)" }}>
       <div className="h-full overflow-y-auto">
-        <div className="max-w-[860px] mx-auto px-6 pt-8 pb-10">
+        <div className="max-w-[860px] mx-auto px-3 @2xl:px-6 pt-6 @2xl:pt-8 pb-10">
           {/* PROFILE HEADER */}
-          <div className="flex items-center gap-10 px-6">
+          <div className="flex flex-col @2xl:flex-row items-center gap-5 @2xl:gap-10 px-2 @2xl:px-6 text-center @2xl:text-left">
             <button onClick={() => setStoryAt(0)} aria-label="Watch stories" className="hover:scale-[1.02] transition">
-              <Ring size={150} seen={HIGHLIGHTS.every((h) => seen[h.key])}>
+              <Ring className="w-[110px] h-[110px] @2xl:w-[150px] @2xl:h-[150px]" seen={HIGHLIGHTS.every((h) => seen[h.key])}>
                 <img src={AVATAR} alt="Marta" className="w-full h-full rounded-full object-cover" />
               </Ring>
             </button>
 
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center justify-center @2xl:justify-start gap-3 flex-wrap">
                 <div className="text-[20px]">{USERNAME}</div>
                 {INSTAGRAM_URL && (
                   <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="px-4 py-1.5 rounded-lg text-[13px] font-semibold bg-[#0095f6] hover:bg-[#1877f2] text-white">
@@ -368,7 +367,7 @@ export default function InstagramWindow({ theme = "light", onOpenWindow, unlockA
                 </button>
               </div>
 
-              <div className="mt-4 flex gap-8 text-[15px]">
+              <div className="mt-4 flex justify-center @2xl:justify-start gap-6 @2xl:gap-8 text-[14px] @2xl:text-[15px]">
                 <span><b>{POSTS.length}</b> posts</span>
                 <span><b>{HIGHLIGHTS.length}</b> countries</span>
                 <span><b>1</b> portfolio</span>
@@ -385,7 +384,7 @@ export default function InstagramWindow({ theme = "light", onOpenWindow, unlockA
           </div>
 
           {/* HIGHLIGHTS */}
-          <div className="mt-10 flex gap-6 px-4 overflow-x-auto pb-2">
+          <div className="mt-8 @2xl:mt-10 flex gap-4 @2xl:gap-6 px-1 @2xl:px-4 overflow-x-auto pb-2 [scrollbar-width:none]">
             {HIGHLIGHTS.map((h, i) => (
               <button key={h.key} onClick={() => setStoryAt(i)} className="flex flex-col items-center gap-2 group">
                 <Ring size={80} seen={seen[h.key]}>
@@ -397,7 +396,7 @@ export default function InstagramWindow({ theme = "light", onOpenWindow, unlockA
           </div>
 
           {/* TABS */}
-          <div className={`mt-6 border-t ${line} flex justify-center gap-14 text-[12px] font-semibold tracking-[0.1em]`}>
+          <div className={`mt-6 border-t ${line} flex justify-center gap-8 @2xl:gap-14 text-[12px] font-semibold tracking-[0.1em]`}>
             {[
               ["posts", "▦ POSTS"],
               ["liked", "♡ LIKED BY YOU"],

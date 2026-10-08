@@ -37,6 +37,7 @@ export default function Dock({
   runningIds = [],
   onLaunch,
   onRestore,
+  hidden = false,
 }) {
   const isDark = theme === "dark";
   const mouseX = useMotionValue(Infinity);
@@ -61,7 +62,7 @@ export default function Dock({
         onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(Infinity)}
         initial={{ y: 110 }}
-        animate={loaded ? { y: 0 } : {}}
+        animate={loaded ? { y: hidden ? 120 : 0 } : {}}
         transition={{ type: "spring", stiffness: 260, damping: 30, delay: 0.25 }}
         role="toolbar"
         aria-label="Dock"

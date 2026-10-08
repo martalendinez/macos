@@ -28,6 +28,7 @@ import Dock from "./components/shell/Dock";
 import WindowsLayer from "./components/shell/WindowsLayer";
 import Loader from "./ui/Loader";
 import { getApps, iconForWindow, RESUME_URL } from "./config/apps";
+import useIsMobile from "./hooks/useIsMobile";
 
 // ✅ import wallpaper pairs from Settings so every wallpaper swaps correctly
 import { ALL_WALLPAPER_PAIRS } from "./components/windows/Settings/constants";
@@ -322,6 +323,10 @@ export default function App() {
     [theme, openWindows.length, openWindow, openResume, resetLayout]
   );
 
+  // phones: apps are full screen, so the Dock tucks away while one is open
+  const mobile = useIsMobile();
+  const dockHidden = mobile && openWindows.some((id) => !minMap[id]);
+
   const dockApps = useMemo(() => apps.filter((a) => a.inDock), [apps]);
   const dockMinimized = useMemo(
     () =>
@@ -461,6 +466,7 @@ export default function App() {
         apps={dockApps}
         minimized={dockMinimized}
         runningIds={openWindows}
+        hidden={dockHidden}
         onLaunch={launch}
         onRestore={restoreWindow}
       />

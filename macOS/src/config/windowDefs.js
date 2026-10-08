@@ -59,43 +59,43 @@ const AiAssistantWindow = lazy(() =>
 
 export const WINDOW_DEFS = {
   settings: {
-    title: "Settings",
+    title: "System Settings",
     Component: SettingsWindow,
-    width: 880,
-    height: 560,
-    initialPos: { x: 220, y: 90 },
+    width: 900,
+    height: 660,
+    initialPos: { x: 240, y: 60 },
   },
 
   about: {
     title: "About me",
     Component: AboutWindow,
-    width: 760,
-    height: 520,
-    initialPos: { x: 260, y: 120 },
+    width: 1080,
+    height: 720,
+    initialPos: { x: 190, y: 50 },
   },
 
   portfolioInfo: {
-    title: "About this portfolio",
+    title: "About This Portfolio",
     Component: PortfolioInfoWindow,
-    width: 760,
-    height: 560,
-    initialPos: { x: 250, y: 110 },
+    width: 700,
+    height: 720,
+    initialPos: { x: 370, y: 40 },
   },
 
   recruiter: {
     title: "Recruiter Mode",
     Component: RecruiterModeWindow,
-    width: 820,
-    height: 560,
-    initialPos: { x: 240, y: 120 },
+    width: 1120,
+    height: 740,
+    initialPos: { x: 170, y: 42 },
   },
 
   projects: {
     title: "Projects",
     Component: ProjectsWindow,
-    width: 920,
-    height: 600,
-    initialPos: { x: 200, y: 110 },
+    width: 1120,
+    height: 720,
+    initialPos: { x: 170, y: 50 },
   },
 
   secretProjects: {
@@ -133,9 +133,9 @@ export const WINDOW_DEFS = {
   fun: {
     title: "Extras & Fun",
     Component: FunWindow,
-    width: 920,
-    height: 600,
-    initialPos: { x: 240, y: 120 },
+    width: 1060,
+    height: 720,
+    initialPos: { x: 190, y: 44 },
   },
 
   music: {
@@ -157,9 +157,9 @@ export const WINDOW_DEFS = {
   terminal: {
     title: "Terminal",
     Component: TerminalWindow,
-    width: 860,
-    height: 560,
-    initialPos: { x: 240, y: 120 },
+    width: 920,
+    height: 640,
+    initialPos: { x: 230, y: 50 },
   },
 
   employerBrandingCaseStudy: {

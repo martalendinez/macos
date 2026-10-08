@@ -25,6 +25,9 @@ export const PROJECTS = [
 
   {
     id: "employerBranding",
+    shortTitle: "Employer Branding",
+    meta: ["2024", "PrideCom", "UX + Full-stack"], // from the case study
+    tint: "#f28b4b",
     title: "Employer Branding Platform (Bachelor Thesis)",
     subtitle: "AI-powered analysis + recommendations for stronger employer brands",
     thumbnail: employerThumb,
@@ -38,6 +41,9 @@ export const PROJECTS = [
   },
   {
   id: "kthTriviaApp",
+  shortTitle: "Trivia App",
+  meta: ["KTH", "University project", "Mobile app"],
+  tint: "#7b6cf6",
   title: "Trivia App (Master Group Project)",
   subtitle: "React Native MVP powered by external trivia API",
   thumbnail: triviaThumb,
@@ -52,6 +58,9 @@ export const PROJECTS = [
 
   {
     id: "restaurantCoordination",
+    shortTitle: "Sällskap",
+    meta: ["2026", "Personal project", "UX + Full-stack"],
+    tint: "#34b27b",
     title: "Group Restaurant Coordination System",
     subtitle: "Smart restaurant discovery + group booking for friends and teams",
     thumbnail: restaurantThumb,

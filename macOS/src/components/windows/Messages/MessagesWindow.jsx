@@ -2,7 +2,7 @@
 // iMessage-style chat with a pre-recorded Marta.
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import avatar from "../../../imgs/avatar/Avatar1.jpg";
+import avatar from "../../../imgs/avatar/profile-photo.jpg";
 import { GREETING, INTENTS, fallbackReply, matchIntent } from "./messagesData";
 
 const BLUE = "#0b84fe";
@@ -108,7 +108,7 @@ export default function MessagesWindow({ theme = "light", onOpenWindow, unlockAc
   return (
     <div className={`no-darkwin h-full flex ${isDark ? "text-white" : "text-black"}`}>
       {/* sidebar */}
-      <aside className={`w-[250px] shrink-0 border-r ${sideBg} p-2 hidden sm:block`}>
+      <aside className={`w-[250px] shrink-0 border-r ${sideBg} p-2 hidden @lg:block`}>
         <div className={`mx-1 mb-2 rounded-[7px] px-2 py-1 text-[13px] ${isDark ? "bg-white/10 text-white/45" : "bg-black/5 text-black/40"}`}>⌕ Search</div>
         <div className="rounded-[10px] p-2 flex items-center gap-2.5" style={{ background: BLUE }}>
           <img src={avatar} alt="" className="w-10 h-10 rounded-full object-cover" />

@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
+import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
+import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
 import CaseStudyPill from "./caseStudy/CaseStudyPill";
 import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
@@ -19,8 +20,8 @@ import finalImg from "../../../imgs/case-study/trivia/Trivia_Final.jpg";
 import uiImg from "../../../imgs/case-study/trivia/Chrome.png";
 import designImg from "../../../imgs/case-study/trivia/designsystem.png";
 
-export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast = "light" }) {
-  const theme = useCaseStudyTheme({ uiTheme, glassContrast });
+export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
+  const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
 
   const IMAGES = useMemo(
     () => ({
@@ -60,41 +61,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
     []
   );
 
-  const [active, setActive] = useState("overview");
-  function scrollToSection(id) {
-    setActive(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function HeroCover() {
-    return (
-      <div className={`mt-10 rounded-[28px] overflow-hidden border ${theme.softCard}`}>
-        <button
-          type="button"
-          onClick={() => openLightbox(IMAGES.hero, "Cover image")}
-          className="w-full text-left"
-          disabled={!IMAGES.hero}
-        >
-          {IMAGES.hero ? (
-            <img src={IMAGES.hero} alt="Cover" className="w-full h-auto object-cover" />
-          ) : (
-            <div className="w-full aspect-[16/7] flex items-center justify-center">
-              <div className="text-center px-6">
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Cover image (hero)</div>
-                <div className={`mt-2 text-xs ${theme.textSub}`}>
-                  Add a wide screenshot of your Trivia App home or onboarding.
-                  <br />
-                  Set it as IMAGES.hero.
-                </div>
-              </div>
-            </div>
-          )}
-        </button>
-      </div>
-    );
-  }
-
-  const metaPills = ["University project", "UX Engineering", "Mobile app", "React Native", "Firebase"];
+const metaPills = ["University project", "UX Engineering", "Mobile app", "React Native", "Firebase"];
 
   const facts = [
     { k: "Project type", v: "KTH university group project (App Development course)" },
@@ -104,15 +71,8 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
   ];
 
   return (
-    <div className="h-full w-full">
-      <div className="h-full overflow-y-auto p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className={`mx-auto w-full max-w-[1150px] rounded-[28px] ${theme.pageCard}`}
-        >
-          <div className="px-6 md:px-10 pt-8 md:pt-10 pb-10">
+    <CaseStudyLayout theme={theme} sections={sections} title="Trivia App">
+          <div>
 
             {/* Meta pills */}
             <div className="flex flex-wrap gap-2">
@@ -124,12 +84,12 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
             </div>
 
             {/* Title */}
-            <div className={`mt-5 text-4xl md:text-5xl font-semibold tracking-tight ${theme.textMain}`}>
+            <div className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}>
               Trivia App — A Mobile Game for Knowledge Exploration
             </div>
 
             {/* Subtitle */}
-            <div className={`mt-3 text-base md:text-lg ${theme.textSub}`}>
+            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
               A mobile trivia experience where players explore categories, difficulty levels, and two game modes — with
               scoring, history, and a global leaderboard for logged‑in users.
             </div>
@@ -140,7 +100,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
   href="https://gits-15.sys.kth.se/iprog-students/arnaupg-ejaco-jintongj-mcli2-vt26-project"
   target="_blank"
   rel="noopener noreferrer"
-  className={`px-4 py-2.5 rounded-2xl text-sm border ${theme.buttonClass}`}
+  className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}
 >
   View GitHub
 </a>
@@ -149,7 +109,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
   href="/pdfs/Trivia_Case_Study.pdf"
   target="_blank"
   rel="noopener noreferrer"
-  className={`px-4 py-2.5 rounded-2xl text-sm border ${theme.buttonClass}`}
+  className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
 >
   View full case study
 </a>
@@ -158,7 +118,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
             </div>
 
             {/* Overview */}
-            <div id="overview" className="mt-8 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-6">
+            <div id="overview" className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16">
               <div>
                 <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
                 <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
@@ -173,7 +133,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               <div>
                 <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
 
-                <div className={`mt-3 rounded-2xl p-5 border ${theme.softCard}`}>
+                <div className={`mt-3`}>
                   <div className="grid grid-cols-1 gap-3">
                     {facts.map((f) => (
                       <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
@@ -194,35 +154,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               </div>
             </div>
 
-            <HeroCover />
-
-            {/* Contents */}
-            <div className={`mt-10 rounded-2xl p-5 border ${theme.softCard}`}>
-              <div className={`text-sm font-semibold ${theme.textMain}`}>Contents</div>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {sections.map((s) => {
-                  const isActive = active === s.id;
-                  const activeClass =
-                    theme.isMac || theme.isGlassDarkText
-                      ? `${theme.accentSoftBg} ${theme.accentBorder} ${theme.accentText}`
-                      : "bg-white/20 border-white/15 text-white";
-
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => scrollToSection(s.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
-                        isActive ? activeClass : theme.pillClass
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
 
             {/* Summary */}
             <CaseStudySection
@@ -231,20 +163,20 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               subtitle="Problem → Solution → Why it works"
               theme={theme}
             >
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                <div className={`text-sm font-semibold ${theme.textMain}`}>Problem</div>
+              <div>
+                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
                 <div className="mt-2">
                   Many trivia apps feel cluttered, generic, or overwhelming. Players struggle to find the right
                   difficulty, understand scoring, or feel motivated to return.
                 </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Solution</div>
+                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
                 <div className="mt-2">
                   A mobile trivia game with two modes (Leisure + Challenge), dynamic questions from OpenTDB,
                   difficulty‑based scoring, and persistent history + leaderboard for logged‑in users.
                 </div>
 
-                <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Why it works</div>
+                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Why it works</div>
                 <CaseStudyBulletList
                   items={[
                     "Clear separation between casual and competitive play.",
@@ -284,7 +216,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               subtitle="UX Engineer across design and frontend"
               theme={theme}
             >
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 <CaseStudyBulletList
                   items={[
                     "Co‑defined the product vision and core flows with the team.",
@@ -305,9 +237,9 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               subtitle="Experience goals + system goals"
               theme={theme}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>Experience goals</div>
+              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Experience goals</div>
                   <CaseStudyBulletList
                     items={[
                       "Make trivia feel modern, intuitive, and enjoyable.",
@@ -317,8 +249,8 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
                   />
                 </div>
 
-                <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
-                  <div className={`text-sm font-semibold ${theme.textMain}`}>System goals</div>
+                <div>
+                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>System goals</div>
                   <CaseStudyBulletList
                     items={[
                       "Fetch questions dynamically from OpenTDB.",
@@ -337,7 +269,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               subtitle="Structuring the app around clear, focused flows"
               theme={theme}
             >
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 <CaseStudyBulletList
                   items={[
                     "Onboarding — guest or Google login.",
@@ -390,7 +322,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               subtitle="From research → IA → wireframes → hi‑fi"
               theme={theme}
             >
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 <CaseStudyBulletList
                   items={[
                     "Competitive scan of trivia apps (onboarding, game flows, scoring, visual style).",
@@ -432,7 +364,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
               subtitle="Bringing the UI to life in React Native"
               theme={theme}
             >
-              <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+              <div>
                 <CaseStudyBulletList
                   items={[
                     "Implemented navigation (stack + tabs) for core flows.",
@@ -476,10 +408,10 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
   subtitle="Conducted with 3–4 participants using the functional prototype"
   theme={theme}
 >
-  <div className={`rounded-2xl p-5 border ${theme.softCard}`}>
+  <div>
 
     {/* Testing procedure */}
-    <div className={`text-sm font-semibold ${theme.textMain}`}>Testing procedure</div>
+    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Testing procedure</div>
     <CaseStudyBulletList
       items={[
         "Think‑aloud sessions with 3–4 participants using the functional app.",
@@ -489,7 +421,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
     />
 
     {/* Results */}
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Results</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Results</div>
     <CaseStudyBulletList
       items={[
         "All participants completed core tasks successfully.",
@@ -501,7 +433,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
     />
 
     {/* Iterations implemented */}
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Iterations implemented</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Iterations implemented</div>
     <CaseStudyBulletList
       items={[
         "Added suspense/loading view to registration and login.",
@@ -513,7 +445,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
     />
 
     {/* Future improvements */}
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Future improvements</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Future improvements</div>
     <CaseStudyBulletList
       items={[
         "Add richer feedback and aggregated stats for Question of the Day.",
@@ -524,7 +456,7 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
     />
 
     {/* Constraints */}
-    <div className={`mt-5 text-sm font-semibold ${theme.textMain}`}>Constraints</div>
+    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Constraints</div>
     <CaseStudyBulletList
       items={[
         "Small sample size limited diversity of player profiles.",
@@ -551,8 +483,8 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
             </CaseStudySection>
 
           </div>
-        </motion.div>
-      </div>
+        
+      
 
     <CaseStudyLightbox
   open={lightbox.open}
@@ -561,6 +493,6 @@ export default function TriviaCaseStudyWindow({ uiTheme = "glass", glassContrast
   onClose={closeLightbox}
   theme={theme}
 />
-    </div>
+    </CaseStudyLayout>
   );
 }
