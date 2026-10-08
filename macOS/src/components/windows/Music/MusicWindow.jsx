@@ -105,7 +105,7 @@ function TrackRow({ tr, idx, isCurrent, isPlaying, onPlay, liked, onLike, onQueu
               e.stopPropagation();
               onQueue(tr);
             }}
-            className="opacity-0 group-hover:opacity-100 hover:text-white"
+            className="@2xl:opacity-0 @2xl:group-hover:opacity-100 hover:text-white"
             title="Add to queue"
             aria-label={`Add ${tr.title} to queue`}
           >
@@ -117,7 +117,7 @@ function TrackRow({ tr, idx, isCurrent, isPlaying, onPlay, liked, onLike, onQueu
             e.stopPropagation();
             onLike(tr.id);
           }}
-          className={`${liked ? "opacity-100" : "opacity-0 group-hover:opacity-100"} hover:scale-110 transition`}
+          className={`${liked ? "opacity-100" : "@2xl:opacity-0 @2xl:group-hover:opacity-100"} hover:scale-110 transition`}
           title={liked ? "Remove from Liked Songs" : "Save to Liked Songs"}
           aria-label={liked ? `Unlike ${tr.title}` : `Like ${tr.title}`}
         >
@@ -220,7 +220,7 @@ export default function MusicWindow({ unlockAchievement }) {
 
   return (
     <div ref={rootRef} tabIndex={0} onKeyDown={onKeyDown} className="no-darkwin relative h-full w-full flex flex-col bg-black text-white outline-none select-none">
-      <div className="flex-1 min-h-0 flex gap-2 p-2">
+      <div className="relative flex-1 min-h-0 flex gap-2 p-2">
         {/* SIDEBAR */}
         <aside className="hidden @3xl:flex w-[250px] shrink-0 flex-col gap-2">
           <div className="rounded-lg bg-[#121212] p-2 space-y-0.5">
@@ -365,12 +365,12 @@ export default function MusicWindow({ unlockAchievement }) {
 
                 {(view.kind === "playlist" || view.kind === "liked") && (
                   <div>
-                    <div className="px-5 pt-16 pb-6 flex items-end gap-5" style={{ background: `linear-gradient(180deg, ${headerBg} 0%, ${view.kind === "liked" ? "rgba(80,56,160,0.55)" : rgba(headerColor, 0.55)} 100%)` }}>
+                    <div className="px-5 pt-16 pb-6 flex flex-col items-start @lg:flex-row @lg:items-end gap-4 @lg:gap-5" style={{ background: `linear-gradient(180deg, ${headerBg} 0%, ${view.kind === "liked" ? "rgba(80,56,160,0.55)" : rgba(headerColor, 0.55)} 100%)` }}>
                       <Mosaic tracks={listTracks} liked={view.kind === "liked"} className="w-[150px] h-[150px] @2xl:w-[190px] @2xl:h-[190px] shrink-0 rounded-md overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.5)]" />
-                      <div className="min-w-0 pb-1">
+                      <div className="min-w-0 w-full pb-1">
                         <div className="text-[12px] font-semibold">Playlist</div>
-                        <div className="text-[34px] @2xl:text-[56px] font-black tracking-[-0.04em] leading-[1.02] truncate">{view.kind === "liked" ? "Liked Songs" : playlist?.title}</div>
-                        <div className="mt-2 text-[13px] text-white/80 truncate">{view.kind === "liked" ? "Songs you’ve hearted, saved in this browser" : playlist?.subtitle}</div>
+                        <div className="text-[32px] @2xl:text-[56px] font-black tracking-[-0.04em] leading-[1.05] line-clamp-2 @lg:truncate">{view.kind === "liked" ? "Liked Songs" : playlist?.title}</div>
+                        <div className="mt-2 text-[13px] text-white/80 @lg:truncate">{view.kind === "liked" ? "Songs you’ve hearted, saved in this browser" : playlist?.subtitle}</div>
                         <div className="mt-1 text-[13px]">
                           <b>martalendi</b> <span className="text-white/70">· {listTracks.length} song{listTracks.length === 1 ? "" : "s"}</span>
                         </div>
@@ -461,7 +461,7 @@ export default function MusicWindow({ unlockAchievement }) {
           {panel && (
             <motion.aside
               key={panel}
-              className="hidden @4xl:flex w-[300px] shrink-0 rounded-lg bg-[#121212] flex-col overflow-hidden"
+              className="absolute inset-2 z-20 flex @4xl:static @4xl:w-[300px] shrink-0 rounded-lg bg-[#121212] flex-col overflow-hidden shadow-2xl @4xl:shadow-none"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}

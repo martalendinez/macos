@@ -215,6 +215,9 @@ export function NowPlayingBar({ player, liked = false, onLike, queueOpen, onQueu
           <button type="button" onClick={player.next} disabled={!current} className={`${ctl} text-white/75 hover:text-white`} aria-label="Next" title="Next">
             <Icon.Next className="w-4 h-4" />
           </button>
+          <button type="button" onClick={onQueue} className={`${ctl} @2xl:hidden ${queueOpen ? "text-[#1ed760]" : "text-white/75"}`} aria-label="Queue" title="Queue">
+            <Icon.Queue className="w-4 h-4" />
+          </button>
           <button
             type="button"
             onClick={player.cycleRepeat}

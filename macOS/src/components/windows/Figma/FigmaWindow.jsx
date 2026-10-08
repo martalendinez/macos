@@ -106,6 +106,40 @@ export default function FigmaWindow({ theme = "light" }) {
   const spaceDown = useRef(false);
 
   const boxes = useMemo(() => layout(doc), [doc]);
+  const [narrow, setNarrow] = useState(() => typeof window !== "undefined" && window.innerWidth < 768);
+
+  // fit the whole page into the canvas (used on open, on small screens and by "Fit")
+  function fitView() {
+    const el = canvasRef.current;
+    if (!el) return;
+    const roots = (doc.nodes.page.children || []).map((c) => boxes[c]).filter(Boolean);
+    if (!roots.length) return setView({ x: 20, y: 20, z: 1 });
+    const minX = Math.min(...roots.map((b) => b.x)), minY = Math.min(...roots.map((b) => b.y));
+    const maxX = Math.max(...roots.map((b) => b.x + b.w)), maxY = Math.max(...roots.map((b) => b.y + b.h));
+    const { width: cw, height: ch } = el.getBoundingClientRect();
+    const z = Math.max(0.25, Math.min(1, (cw - 40) / (maxX - minX), (ch - 90) / (maxY - minY)));
+    setView({ x: Math.round((cw - (maxX - minX) * z) / 2 - minX * z), y: Math.round(Math.max(16, (ch - (maxY - minY) * z) / 2 - 30) - minY * z), z });
+  }
+  const fitRef = useRef(fitView);
+  fitRef.current = fitView;
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    let first = true;
+    const ro = new ResizeObserver(([e]) => {
+      const isNarrow = e.contentRect.width < 768;
+      setNarrow(isNarrow);
+      if (first) {
+        first = false;
+        if (isNarrow) {
+          setSelected(null); // don't open the inspector sheet over the canvas
+          fitRef.current();
+        }
+      }
+    });
+    ro.observe(root);
+    return () => ro.disconnect();
+  }, []);
   const N = doc.nodes;
   const sel = selected && N[selected] ? N[selected] : null;
   const selParent = selected ? parentOf(doc, selected) : null;
@@ -376,7 +410,7 @@ export default function FigmaWindow({ theme = "light" }) {
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 flex">
+      <div className="relative flex-1 min-h-0 flex">
         {/* left: layers / assets */}
         <aside className={`w-[220px] shrink-0 border-r flex-col hidden @2xl:flex ${ui.panel}`}>
           <div className={`flex gap-3 px-3 h-10 items-center border-b text-[11px] font-semibold ${ui.divide}`}>
@@ -489,8 +523,8 @@ export default function FigmaWindow({ theme = "light" }) {
             <button onClick={() => setView((v) => ({ ...v, z: Math.max(0.25, v.z / 1.25) }))} className={`w-8 h-8 ${ui.hover}`} aria-label="Zoom out">
               −
             </button>
-            <button onClick={() => setView({ x: 20, y: 20, z: 1 })} className={`px-2 h-8 text-[11px] ${ui.hover}`}>
-              Reset
+            <button onClick={fitView} className={`px-2 h-8 text-[11px] ${ui.hover}`} title="Fit page to screen">
+              Fit
             </button>
             <button onClick={() => setView((v) => ({ ...v, z: Math.min(4, v.z * 1.25) }))} className={`w-8 h-8 ${ui.hover}`} aria-label="Zoom in">
               +
@@ -499,10 +533,23 @@ export default function FigmaWindow({ theme = "light" }) {
         </div>
 
         {/* right: design panel */}
-        <aside className={`w-[240px] shrink-0 border-l overflow-y-auto hidden @3xl:block ${ui.panel}`}>
-          <div className={`flex gap-3 px-3 h-10 items-center border-b text-[11px] font-semibold ${ui.divide}`}>
+        <aside
+          className={`overflow-y-auto ${ui.panel} ${
+            narrow
+              ? sel
+                ? "absolute inset-x-0 bottom-0 z-30 max-h-[48%] border-t rounded-t-2xl shadow-[0_-10px_30px_rgba(0,0,0,0.25)]"
+                : "hidden"
+              : "w-[240px] shrink-0 border-l"
+          }`}
+        >
+          <div className={`flex gap-3 px-3 h-10 items-center border-b text-[11px] font-semibold ${ui.divide} ${narrow ? "sticky top-0 z-10 " + ui.panel : ""}`}>
             <span>Design</span>
             <span className={ui.sub}>Prototype</span>
+            {narrow && (
+              <button onClick={() => setSelected(null)} className="ml-auto text-[#0d99ff] text-[12px]">
+                Done
+              </button>
+            )}
           </div>
           <AnimatePresence mode="wait">
             {!sel ? (
