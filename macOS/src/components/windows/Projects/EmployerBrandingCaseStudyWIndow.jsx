@@ -1,20 +1,20 @@
+// src/components/windows/Projects/EmployerBrandingCaseStudyWIndow.jsx
+// Case study: Kallos, an AI-assisted employer branding platform (bachelor thesis with PrideCom).
 import { useMemo, useState } from "react";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
 import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
-import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
-import CaseStudyPill from "./caseStudy/CaseStudyPill";
-import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
-import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
-import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
+import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
+import { AtAGlance, BrowserFrame, Caption, Changes, Decision, Figure, H3, Insights, Intro, Lead, PullQuote, Stage, Stats } from "./caseStudy/Editorial";
+
 import interviewImg from "../../../imgs/case-study/kallos/Interview.png";
 import competitorImg from "../../../imgs/case-study/kallos/competitor_analysis.png";
-import architectureIMG from "../../../imgs/case-study/kallos/Architecture.png";
+import architectureImg from "../../../imgs/case-study/kallos/Architecture.png";
 import securityImg from "../../../imgs/case-study/kallos/Security_Model.png";
-import IAImg from "../../../imgs/case-study/kallos/IA.png";
-import personaImg from "../../../imgs/case-study/kallos/Persona.png";
+import iaImg from "../../../imgs/case-study/kallos/IA.png";
+import personaImg from "../../../imgs/case-study/kallos/Persona_web.jpg";
 import empathyMapImg from "../../../imgs/case-study/kallos/Empathy_Map1.jpg";
 import designSystem1Img from "../../../imgs/case-study/kallos/DesignSystem1.png";
 import designSystem2Img from "../../../imgs/case-study/kallos/DesignSystem2.png";
@@ -23,668 +23,225 @@ import testingImg from "../../../imgs/case-study/kallos/Testing.png";
 import iterationsImg from "../../../imgs/case-study/kallos/Survey_Iterations.png";
 import recommendationsImg from "../../../imgs/case-study/kallos/recommendations.png";
 import dashboardImg from "../../../imgs/case-study/kallos/Dashboard.png";
-import mockupImg from "../../../imgs/case-study/kallos/Kallos_Mockup.png";
-import finalImg from "../../../imgs/case-study/kallos/Laptop_Kallos.png";
+import mockupImg from "../../../imgs/case-study/kallos/Kallos_Mockup_web.jpg";
+import laptopImg from "../../../imgs/case-study/kallos/Laptop_Kallos.png";
 
-export default function EmployerBrandingCaseStudyWindow({ uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
+const TINT = "#f28b4b";
+const URL = "localhost:5000";
+
+const SECTIONS = [
+  { id: "glance", label: "At a glance" },
+  { id: "problem", label: "The problem" },
+  { id: "research", label: "Research" },
+  { id: "decisions", label: "Key decisions" },
+  { id: "design", label: "Design" },
+  { id: "build", label: "Build" },
+  { id: "testing", label: "Testing & iteration" },
+  { id: "outcome", label: "Outcome" },
+];
+
+export default function EmployerBrandingCaseStudyWindow({ onOpenWindow, uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
-
-  // Images (plug real imports/urls later)
-  const IMAGES = useMemo(
-    () => ({
-      hero: mockupImg,
-      competitors: competitorImg,
-      interviews: interviewImg,
-      designSystem: designSystem1Img,
-      designSystem2: designSystem2Img,
-      lofi: lofiImg,
-      architecture: architectureIMG,
-      security: securityImg,
-      iaFlow: IAImg,
-      persona: personaImg,
-      empathyMap: empathyMapImg,
-      dashboard: dashboardImg,
-      recommendations: recommendationsImg,
-      testing: testingImg,
-      iterations: iterationsImg,
-      finalScreens: finalImg,
-    }),
-    []
-  );
-
-  // Lightbox state
+  const sections = useMemo(() => SECTIONS, []);
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: "" });
-  const openLightbox = (src, alt = "") => src && setLightbox({ open: true, src, alt });
-  const closeLightbox = () => setLightbox({ open: false, src: null, alt: "" });
-
-  const sections = useMemo(
-    () => [
-      { id: "overview", label: "Overview" },
-      { id: "summary", label: "Summary" },
-      { id: "role", label: "My role" },
-      { id: "research", label: "Research" },
-      { id: "requirements", label: "Requirements" },
-      { id: "concept", label: "Concept" },
-      { id: "uxia", label: "Users & IA" },
-      { id: "ui", label: "UI design" },
-      { id: "development", label: "Development" },
-      { id: "features", label: "Key features" },
-      { id: "testing", label: "Testing & iterations" },
-      { id: "tradeoffs", label: "Trade-offs" },
-      { id: "impact", label: "Impact" },
-      { id: "outcome", label: "Final outcome" },
-    ],
-    []
-  );
-
-const metaPills = ["2024", "PrideCom", "UX + Full-stack", "AI (LLaMA 3)", "Security / GDPR"];
-
-  const facts = [
-    { k: "Role", v: "UX Designer & Developer (hybrid UX engineering)" },
-    { k: "Timeline", v: "Feb–Jun 2024 (4 months)" },
-    { k: "Team", v: "3 designers" },
-    { k: "Industry", v: "HR & Communication" },
-    { k: "Tech", v: "Python · Flask · PostgreSQL · Docker · LM Studio (LLaMA 3)" },
-  ];
-
-function IconChip() {
-    if (!theme.isMac) return null;
-    return (
-      <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-[hsl(var(--accent)/0.10)] border border-[hsl(var(--accent)/0.35)]">
-        <span className="w-2 h-2 rounded-full bg-[hsl(var(--accent))]" />
-      </span>
-    );
-  }
+  const open = (src, alt = "") => src && setLightbox({ open: true, src, alt });
+  const t = { theme, tint: TINT };
 
   return (
-    <CaseStudyLayout theme={theme} sections={sections} title="Employer Branding">
-          <div>
-            {/* Meta pills */}
-            <div className="flex flex-wrap gap-2">
-              {metaPills.map((p) => (
-                <CaseStudyPill key={p} theme={theme}>
-                  {p}
-                </CaseStudyPill>
-              ))}
-            </div>
-
-            {/* Title */}
-            <div className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}>
-              Employer Branding Platform
-            </div>
-            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
-              UX Design & Full-Stack Development for PrideCom — a secure, AI-powered platform that helps SMEs understand
-              and improve their employer brand.
-            </div>
-
-            {/* CTA */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              <a
-  href="https://github.com/martalendinez/Kallos"
-  target="_blank"
-  rel="noreferrer"
-  className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}
->
-  View on GitHub
-</a>
-              <a
-  href="/pdfs/Case-Study-Kallos.pdf"
-  target="_blank"
-  rel="noreferrer"
-  className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
->
-  Read Full Case Study
-</a>
-            </div>
-
-            {/* Overview */}
-            <div id="overview" className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16">
-              <div>
-                <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
-                <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
-                  SMEs often don’t have the budget for employer branding consultancy. Meanwhile, many existing platforms
-                  rely heavily on survey data and focus on single slices of the problem. The result: HR teams struggle to
-                  build a holistic, actionable understanding of their employer brand.
-                  <br />
-                  <br />
-                  This project explored how an AI-assisted workflow could help HR teams synthesize employer branding signals
-                  into a single dashboard, generate a transparent score, and translate insights into practical recommendations —
-                  while meeting high trust and privacy requirements.
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-3">
-                  <CaseStudyIconChip theme={theme} />
-                  <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
-                </div>
-
-                <div className={`mt-3`}>
-                  <div className="grid grid-cols-1 gap-3">
-                    {facts.map((f) => (
-                      <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
-                        <div className={`text-xs ${theme.textSub}`}>{f.k}</div>
-                        <div className={`mt-1 text-sm font-medium ${theme.textMain}`}>{f.v}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["UX", "Product", "AI", "Full-stack", "Security", "GDPR"].map((t) => (
-                      <CaseStudyPill key={t} theme={theme}>
-                        {t}
-                      </CaseStudyPill>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
-
-            {/* Summary */}
-            <CaseStudySection id="summary" title="Summary" subtitle="Problem → Solution → Impact" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
-                <div className="mt-2">
-                  SMEs often lack the budget for employer branding consultancy. Existing tools focus on isolated areas and rely heavily on surveys,
-                  leaving HR teams without a holistic view of their employer brand.
-                </div>
-
-                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
-                <div className="mt-2">
-                  A secure, AI-powered platform that analyzes employer branding, generates a numerical score, and provides tailored recommendations
-                  through a clean, intuitive dashboard.
-                </div>
-
-                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Impact</div>
-                <CaseStudyBulletList
-                  items={[
-                    "All participants completed the full flow without assistance, confirming an intuitive, low-friction experience.",
-                    "Every HR professional interpreted the dashboard and visualizations immediately, showing strong information clarity.",
-                    "Recommendations were described as actionable and aligned with HR best practices.",
-                    "The interface was praised as modern, professional, and visually clean.",
-                  ]}
-                />
-                <div className={`mt-4 text-sm ${theme.textSub}`}>
-                  Quotes: “Everything is very clear.” · “Very good, very in line with HR vocabulary.” · “Very modern and professional.”
-                </div>
-              </div>
-
-              <Gallery2
-                a={
-                  <CaseStudyImageTile
-                    src={IMAGES.dashboard}
-                    alt="Dashboard highlight"
-                    caption="Key dashboard view."
-                    aspect="16/9"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-                b={
-                  <CaseStudyImageTile
-                    src={IMAGES.recommendations}
-                    alt="Recommendations highlight"
-                    caption="Recommendations view."
-                    aspect="16/9"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-              />
-            </CaseStudySection>
-
-            {/* Role */}
-            <CaseStudySection id="role" title="My role" subtitle="I led the full UX + engineering process" theme={theme}>
-              <div>
-                This project let me work as a hybrid UX engineer — designing the experience and building the system behind it.
-                <CaseStudyBulletList
-                  items={[
-                    "Research: competitor analysis, expert interviews, literature review",
-                    "UX: personas, journeys, IA, low-fi and high-fi prototypes",
-                    "UI: design system aligned with PrideCom’s brand",
-                    "Engineering: Flask backend, PostgreSQL database, LLaMA 3 integration (via LM Studio)",
-                    "Security: encryption (PyNaCl), GDPR-aligned data handling",
-                    "Testing: user testing, iterations, refinements",
-                    "Deployment: Docker containerization and VM setup",
-                  ]}
-                />
-              </div>
-            </CaseStudySection>
-
-            {/* Research */}
-<CaseStudySection id="research" title="Research" subtitle="Competitors + expert interviews + what we learned" theme={theme}>
-  <div>
-    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Competitor analysis</div>
-    <div className="mt-2">
-      CultureAmp, Eletive, and Populum were analyzed. None offered a holistic employer branding solution; all relied heavily on surveys.
-    </div>
-
-    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Expert interviews</div>
-    <div className="mt-2">
-      To validate feasibility and trust requirements, I interviewed experts across HR, security, and AI:
-    </div>
-    <CaseStudyBulletList items={["HR Director at Toyota", "Marketing Lead at Accenture", "Cybersecurity expert", "AI engineer"]} />
-
-    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Key insights</div>
-    <CaseStudyBulletList
-      items={[
-        "HR teams want automated data processing and clear dashboards for fast decision-making.",
-        "Strong encryption and GDPR compliance are essential to build trust.",
-        "AI should support recommendations — not replace HR judgment.",
-      ]}
-    />
-  </div>
-<div className="mt-6 grid grid-cols-1 @4xl:grid-cols-[1.5fr_1fr] gap-6 items-stretch">
-  <CaseStudyImageTile
-    src={IMAGES.competitors}
-    alt="Competitor analysis"
-    caption="Competitor matrix / feature comparison."
-    aspect="auto"
-    fit="contain"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-
-  <CaseStudyImageTile
-    src={IMAGES.interviews}
-    alt="Expert interviews"
-    caption="Interview notes / themes / synthesis."
-    aspect="auto"
-    fit="contain"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-</div>
-</CaseStudySection>
-
-            {/* Requirements */}
-            <CaseStudySection id="requirements" title="Requirements" subtitle="Clarity + trust constraints" theme={theme}>
-              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
-                <div>
-                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Design requirements</div>
-                  <CaseStudyBulletList items={["Clear dashboards that support scanning", "Clean, legible, brand-consistent UI", "Simple, intuitive experience for HR users"]} />
-                </div>
-
-                <div>
-                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Engineering requirements</div>
-                  <CaseStudyBulletList items={["Clean architecture (SOLID principles)", "Encrypted data handling (PyNaCl)", "GDPR-aligned data flows and storage", "Secure authentication", "Reliable PostgreSQL schema"]} />
-                </div>
-              </div>
-
-              <Gallery2
-                a={
-                  <CaseStudyImageTile
-                    src={IMAGES.security}
-                    alt="Security / GDPR"
-                    caption="Security model / GDPR considerations."
-                    aspect="16/9"
-                    fit="contain"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-                b={
-                  <CaseStudyImageTile
-                    src={IMAGES.architecture}
-                    alt="Architecture"
-                    caption="System architecture."
-                    aspect="16/9"
-                    fit= "contain"
-                    theme={theme}
-                    onOpen={openLightbox}
-                  />
-                }
-              />
-            </CaseStudySection>
-
-            <CaseStudySection
-  id="concept"
-  title="Concept"
-  subtitle="From options → chosen direction → scoped feature set"
-  theme={theme}
->
-  <div>
-    The chosen concept,{" "}
-    <span className={`font-semibold ${theme.textMain}`}>
-      Holistic Employer Branding
-    </span>
-    , focuses on giving companies a complete, end‑to‑end understanding of their
-    employer brand. Instead of analyzing isolated metrics, this approach brings
-    together survey data, web insights, sentiment analysis, and benchmarking to
-    form a unified picture of strengths, weaknesses, and opportunities. 
-  </div>
-</CaseStudySection>
-
-
-            <CaseStudySection
-  id="uxia"
-  title="Users & Information Architecture"
-  subtitle="Personas, journeys, content inventory, flowchart"
-  theme={theme}
->
-<div>
-  I designed personas, empathy maps, user journeys, a content inventory, and a full design flowchart. 
-  These weren’t just documentation — they shaped the core UX decisions:
-  <ul className="list-disc ml-5 mt-2">
-    <li>
-      <span className={`font-semibold ${theme.textMain}`}>Persona: </span> 
-      distilled the real constraints HR professionals face (time pressure, limited resources, uncertainty around employer branding). 
-      This clarified where the product needed to reduce cognitive load, guide decisions, and build trust.
-    </li>
-    <li className="mt-2">
-      <span className={`font-semibold ${theme.textMain}`}>Design flowchart: </span> 
-      mapped the entire system logic to expose friction points, dependencies, and dead ends. 
-      It ensured the experience felt predictable, supportive, and aligned with how HR teams naturally move through tasks.
-    </li>
-  </ul>
-</div>
-
-
-
-
-
-  <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
-    <CaseStudyImageTile
-      src={IMAGES.persona}
-      alt="Persona"
-      caption="Persona used to define user needs, goals, and pain points."
-      aspect="16/10"
-      fit="cover"
-      theme={theme}
-      onOpen={openLightbox}
-    />
-
-    <CaseStudyImageTile
-      src={IMAGES.empathyMap}
-      alt="Empathy map"
-      caption="Empathy map used to understand user thoughts, feelings, and behaviors."
-      aspect="16/10"
-      fit="cover"
-      theme={theme}
-      onOpen={openLightbox}
-    />
-  </div>
-
-  <div className="mt-6">
-    <CaseStudyImageTile
-      src={IMAGES.iaFlow}
-      alt="Information architecture / user flow"
-      caption="IA and user flow."
-      aspect="4/3"
-      fit="contain"
-      theme={theme}
-      onOpen={openLightbox}
-    />
-  </div>
-</CaseStudySection>
-
-            <CaseStudySection id="ui" title="UI design" subtitle="Design system + low-fi → high-fi" theme={theme}>
-              <div>
-                I created a design system aligned with PrideCom’s brand and developed low-fi and high-fi prototypes.
-              </div>
-
-              <Gallery3
-  a={<CaseStudyImageTile src={IMAGES.designSystem} alt="Design system" caption="Color schema." aspect="16/10" fit="contain" theme={theme} onOpen={openLightbox} />}
-  b={<CaseStudyImageTile src={IMAGES.designSystem2} alt="Design system" caption="Typography, CTA/Buttons." aspect="16/10" fit="contain" theme={theme} onOpen={openLightbox} />}
-  c={<CaseStudyImageTile src={IMAGES.lofi} alt="Low-fi" caption="Low-fi key screens." aspect="16/10" theme={theme} onOpen={openLightbox} />}
-/>
-            </CaseStudySection>
-
-           <CaseStudySection
-  id="development"
-  title="Development"
-  subtitle="How the build supported UX quality, security, and reliability"
-  theme={theme}
->
-  <div>
-    The platform was built using a modern, reliable stack designed to support
-    secure data handling and smooth user experience.
-    <ul className="list-disc ml-5 mt-2">
-      <li>
-        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
-          Python & Flask
-        </span>
-        for a lightweight, fast backend that enabled clean routing, modular
-        logic, and easy integration with AI components.
-      </li>
-
-      <li className="mt-2">
-        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
-          PostgreSQL
-        </span>
-        as a robust relational database for storing surveys, KPIs, and encrypted
-        user data with high reliability.
-      </li>
-
-      <li className="mt-2">
-        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
-          LLaMA 3 via LM Studio
-        </span>
-        powering the employer‑branding analysis through NLP, sentiment
-        extraction, and interpretation of survey data.
-      </li>
-
-      <li className="mt-2">
-        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
-          Docker
-        </span>
-        to containerize the entire system, ensuring consistent environments,
-        reproducible builds, and smooth deployment.
-      </li>
-
-      <li className="mt-2">
-        <span className={`font-semibold ${theme.textMain} inline-block mr-1`}>
-          PyNaCl encryption
-        </span>
-        to securely encrypt sensitive fields before storing them in the
-        database.
-      </li>
-    </ul>
-    Together, these choices ensured a stable backend, secure data flow, and a
-    responsive interface that supported the UX goals of clarity, security, and
-    reliability.
-  </div>
-</CaseStudySection>
-
-
-
-
-           <CaseStudySection
-  id="features"
-  title="Key features"
-  subtitle="Where HR teams get value"
-  theme={theme}
->
- 
-
-  <div className={`mt-6`}>
-    The platform delivers value through three core features:
-    <ul className="list-disc ml-5 mt-2">
-      <li>
-        <span className={`font-semibold ${theme.textMain}`}>
-          LLM‑powered employer branding analysis
-        </span>{" "}
-        combining company surveys, in‑platform questions, and web‑scraped data.
-        The system uses NLP and sentiment analysis to extract themes, identify
-        gaps, and surface insights across all data sources.
-      </li>
-
-      <li className="mt-2">
-        <span className={`font-semibold ${theme.textMain}`}>
-          Employer branding recommendations
-        </span>{" "}
-        tailored to each company’s maturity level. The platform translates
-        insights into clear, actionable steps HR teams can implement immediately.
-      </li>
-
-      <li className="mt-2">
-        <span className={`font-semibold ${theme.textMain}`}>
-          Competitor benchmarking
-        </span>{" "}
-        that compares your employer brand performance against similar companies,
-        helping HR teams understand where they stand and where to improve.
-      </li>
-    </ul>
-    
-  </div>
-   <Gallery2
-    a={
-      <CaseStudyImageTile
-        src={IMAGES.dashboard}
-        alt="Dashboard screen"
-        caption="Dashboard view."
-        aspect="16/9"
-        theme={theme}
-        onOpen={openLightbox}
+    <CaseStudyLayout onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Employer Branding">
+      <Intro
+        {...t}
+        eyebrow="Bachelor thesis · PrideCom · 2024"
+        title="Kallos: turning scattered employer-brand signals into one score HR can act on"
+        lede="Small companies know employer branding matters, but can’t afford a consultant to tell them where they stand. I designed and built Kallos, a secure, AI-assisted platform that brings surveys, web data and benchmarks into one dashboard, a transparent score, and concrete next steps."
+        ctas={[
+          { label: "View on GitHub", href: "https://github.com/martalendinez/Kallos" },
+          { label: "Full case study (PDF)", href: "/pdfs/Case-Study-Kallos.pdf" },
+        ]}
+        facts={[
+          { k: "Role", v: "UX designer & developer" },
+          { k: "Timeline", v: "Feb–Jun 2024 · 4 months" },
+          { k: "Team", v: "3 designers, client PrideCom" },
+          { k: "Stack", v: "Flask · PostgreSQL · LLaMA 3 · Docker" },
+        ]}
       />
-    }
-    b={
-      <CaseStudyImageTile
-        src={IMAGES.recommendations}
-        alt="Recommendations screen"
-        caption="Recommendations view."
-        aspect="16/9"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-  />
-</CaseStudySection>
 
+      <Stage {...t} className="mt-10" pad="p-0">
+        <button type="button" onClick={() => open(mockupImg, "Kallos screens")} className="block w-full cursor-zoom-in">
+          <img src={mockupImg} alt="Kallos platform screens: landing page, dashboard and recommendations" className={`block w-full h-auto ${theme.isDark ? "" : "mix-blend-multiply"}`} />
+        </button>
+      </Stage>
 
-           <CaseStudySection
-  id="testing"
-  title="Testing & iterations"
-  subtitle="What changed after testing with HR professionals"
-  theme={theme}
->
-  <div>
-    <span className={`font-semibold ${theme.textMain}`}>Seven HR professionals</span> tested the prototype, focusing primarily on the{" "}
-    <span className={`font-semibold ${theme.textMain}`}>HR metrics flow</span> as well as the overall interface experience.
-    Their feedback highlighted:
-    <ul className="list-disc ml-5 mt-2">
-      <li><span className={`font-semibold ${theme.textMain}`}>Strong clarity</span> in how metrics were presented and interpreted</li>
-      <li><span className={`font-semibold ${theme.textMain}`}>Smooth navigation</span> across core screens</li>
-      <li><span className={`font-semibold ${theme.textMain}`}>Minor friction</span> in understanding recommendation levels</li>
-      <li>Need for <span className={`font-semibold ${theme.textMain}`}>clearer explanations</span> in certain insight sections</li>
-    </ul>
+      <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
+        <AtAGlance
+          {...t}
+          items={[
+            { label: "Problem", text: "HR teams at SMEs have the raw material (surveys, reviews, KPIs) but no affordable way to see the whole picture or know what to fix first." },
+            { label: "What I did", text: "Led research, IA, UI and the design system, then built the product end to end: Flask backend, encrypted PostgreSQL, a LLaMA 3 analysis pipeline and a Docker deployment." },
+            { label: "Outcome", text: "All seven HR professionals finished the core flow without help and read the dashboard straight away. They called the recommendations “very in line with HR vocabulary”." },
+          ]}
+        />
+        <div className="mt-10">
+          <Stats
+            {...t}
+            items={[
+              { value: "7", label: "HR professionals tested the prototype" },
+              { value: "7/7", label: "completed the full flow unassisted" },
+              { value: "4", label: "expert interviews: HR, marketing, security, AI" },
+              { value: "3", label: "competing platforms analysed" },
+            ]}
+          />
+        </div>
+      </CaseStudySection>
 
-    <div className="mt-4">
-      Based on their feedback, several iterations were implemented:
-      <ul className="list-disc ml-5 mt-2">
-        <li>Added new employer‑branding questions (budget, growth opportunities, recruitment channels)</li>
-        <li>Rephrased the diversity question for clarity and inclusivity</li>
-        <li>Limited competitor inputs to <span className={`font-semibold ${theme.textMain}`}>3–5</span> for more accurate benchmarking</li>
-        <li>Introduced manual KPI input for companies lacking certain surveys</li>
-        <li>Added short descriptions explaining the purpose of each survey</li>
-        <li>Renamed the question & survey section to a more intuitive label</li>
-        <li>Included clearer guidance on how to edit surveys and question banks</li>
-      </ul>
-    </div>
-  </div>
+      <CaseStudySection id="problem" title="The problem" subtitle="Why HR teams were stuck" theme={theme}>
+        <Lead theme={theme}>
+          Existing tools like CultureAmp, Eletive and Populum each measure one slice of the picture, mostly through surveys. Nobody was helping a two-person HR team connect those slices into a
+          story they could act on.
+        </Lead>
+        <p className="mt-5">
+          The options were expensive consultancy or tools that only show part of the picture. Together with PrideCom, we explored whether AI could close that gap without turning employee data
+          into a black box.
+        </p>
+        <p className={`mt-6 pl-4 border-l-2 text-[18px] font-semibold tracking-[-0.01em] ${theme.textMain}`} style={{ borderColor: TINT }}>
+          How might we help a small HR team understand its employer brand in one sitting, and trust what the AI tells them?
+        </p>
+      </CaseStudySection>
 
+      <CaseStudySection id="research" title="Research" subtitle="Competitors, experts, literature" theme={theme}>
+        <p>
+          I mapped the competitive landscape and interviewed four experts who would each break the product in a different way: an HR Director at Toyota, a Marketing Lead at Accenture, a
+          cybersecurity expert and an AI engineer. Three insights shaped everything that followed.
+        </p>
+        <div className="mt-8">
+          <Insights
+            {...t}
+            items={[
+              { title: "HR wants answers, not more data.", text: "Teams wanted automated processing and dashboards they could scan before a meeting, not another survey tool.", so: "a dashboard-first IA, with analysis running in the background." },
+              { title: "Trust is the product.", text: "Strong encryption and GDPR compliance were non-negotiable. Without them, nobody would upload employee data.", so: "security went into the requirements on day one, not the polish phase." },
+              { title: "AI should advise, not decide.", text: "Experts were clear that HR judgment stays in charge; the AI’s job is to surface patterns and suggest.", so: "recommendations are framed as levelled suggestions, never verdicts." },
+            ]}
+          />
+        </div>
+        <div className="mt-10 grid grid-cols-1 @3xl:grid-cols-[1.4fr_1fr] gap-6 items-start">
+          <Figure theme={theme} src={competitorImg} alt="Competitor analysis" caption="Feature comparison: every competitor leaned on surveys, none offered a holistic view." onOpen={open} />
+          <Figure theme={theme} src={interviewImg} alt="Expert interview synthesis" caption="Expert interview synthesis." onOpen={open} />
+        </div>
+        <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
+          <Figure theme={theme} src={personaImg} alt="Persona: Elena, HR coordinator" caption="Elena, our primary persona: an HR coordinator with no budget and no employer-branding playbook." onOpen={open} framed={false} />
+          <Figure theme={theme} src={empathyMapImg} alt="Empathy map" caption="Empathy map: time pressure and uncertainty were the recurring feelings." onOpen={open} />
+        </div>
+      </CaseStudySection>
 
+      <CaseStudySection id="decisions" title="Key decisions" subtitle="What I chose, and what it cost" theme={theme}>
+        <Decision
+          {...t}
+          n={1}
+          title="One score, never a black box"
+          tradeoff="A single number can oversimplify. It is always shown next to the category breakdown and the recommendations that explain it."
+          visual={<BrowserFrame theme={theme} src={dashboardImg} alt="Kallos dashboard" url={`${URL}/dashboard`} onOpen={open} />}
+        >
+          We chose a <b className={theme.textMain}>holistic</b> concept over single-metric tools: survey data, web insights, sentiment and benchmarks roll up into one employer-brand score. The dashboard
+          then shows the breakdown by category (work culture, salary, work-life balance…) so HR can see <i>why</i> the score is what it is.
+        </Decision>
+        <Decision
+          {...t}
+          n={2}
+          title="Recommendations matched to maturity"
+          tradeoff="Levels add a concept users must learn. Testing showed some friction there, so I added short explanations of each level."
+          visual={<BrowserFrame theme={theme} src={recommendationsImg} alt="Kallos recommendations" url={`${URL}/recommendations`} onOpen={open} />}
+        >
+          A company starting from zero needs different advice than one with an established brand. Recommendations are tailored to each company’s maturity level and written as concrete steps HR can
+          take this quarter, in the language HR teams already use.
+        </Decision>
+        <Decision {...t} n={3} title="Privacy by design" tradeoff="Encryption and GDPR flows took real time out of a 4-month build. The experts made it clear the product was worthless without them.">
+          Sensitive fields are encrypted with PyNaCl before they reach PostgreSQL, data handling follows GDPR, and LLaMA 3 runs locally through LM Studio, so survey answers never have to leave our own
+          environment.
+        </Decision>
+      </CaseStudySection>
 
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.testing} alt="Testing" caption="Testing HR metrics" aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.iterations} alt="Iterations" caption="Iterations on Question Banks" aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
+      <CaseStudySection id="design" title="Design" subtitle="Structure first, then a system" theme={theme}>
+        <p>
+          The design flowchart mapped every route through the product and exposed dead ends before any UI existed. From there I built a design system aligned with PrideCom’s brand: a warm orange
+          accent on calm neutrals, so dense data still feels approachable.
+        </p>
+        <div className="mt-8">
+          <Figure theme={theme} src={iaImg} alt="Information architecture and flow" caption="Information architecture and user flow." onOpen={open} />
+        </div>
+        <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-3 gap-6 items-start">
+          <Figure theme={theme} src={designSystem1Img} alt="Colour system" caption="Colour system." onOpen={open} />
+          <Figure theme={theme} src={designSystem2Img} alt="Type and buttons" caption="Typography and buttons." onOpen={open} />
+          <Figure theme={theme} src={lofiImg} alt="Low-fi screens" caption="Low-fi key screens." onOpen={open} />
+        </div>
+      </CaseStudySection>
 
-           <CaseStudySection
-  id="tradeoffs"
-  title="Trade-offs"
-  subtitle="Constraints that shaped the product"
-  theme={theme}
->
-  <div>
-    <CaseStudyBulletList
-      items={[
-        "4‑month timeline (scope had to be tight and prioritized)",
-        "GDPR + encryption requirements (trust first)",
-        "Limited real‑world data (careful framing of results)"
-      ]}
-    />
+      <CaseStudySection id="build" title="Build" subtitle="Designing it and shipping it" theme={theme}>
+        <p>Being the designer <i>and</i> the developer meant the UI never promised something the backend couldn’t deliver. Each technical choice served a UX goal:</p>
+        <CaseStudyBulletList
+          items={[
+            "Python + Flask: a lightweight backend with modular routes, easy to plug the AI pipeline into.",
+            "PostgreSQL: a reliable relational schema for surveys, KPIs and encrypted user data.",
+            "LLaMA 3 via LM Studio: NLP and sentiment analysis across survey answers and web data.",
+            "PyNaCl: field-level encryption before anything is stored.",
+            "Docker: one container setup for consistent environments and smooth deployment.",
+            "SOLID principles throughout, so the codebase stays easy to extend.",
+          ]}
+        />
+        <div className="mt-8 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <Figure theme={theme} src={architectureImg} alt="System architecture" caption="System architecture." onOpen={open} />
+          <Figure theme={theme} src={securityImg} alt="Security model" caption="Security model and GDPR data flow." onOpen={open} />
+        </div>
+      </CaseStudySection>
 
-    <div className="mt-4">
-      <span className={`font-semibold ${theme.textMain}`}>
-        What I would do differently next time:
-      </span>
-      <ul className="list-disc ml-5 mt-2">
-        <li>
-          Expand testing earlier with a broader range of HR roles to validate
-          edge cases and different organizational contexts.
-        </li>
-        <li>
-          Integrate more real‑world datasets sooner to stress‑test the analysis
-          logic and refine recommendations with higher fidelity.
-        </li>
-        <li>
-          Prototype the AI explanation layer earlier to explore how to make
-          insights more transparent and trustworthy.
-        </li>
-      </ul>
-    </div>
-  </div>
-</CaseStudySection>
+      <CaseStudySection id="testing" title="Testing & iteration" subtitle="7 HR professionals, one core flow" theme={theme}>
+        <p>
+          Seven HR professionals tested the prototype, focusing on the HR metrics flow and the interface as a whole. Clarity and navigation came out strong, and the friction we did find was specific
+          enough to fix.
+        </p>
+        <PullQuote {...t} quotes={["“Everything is very clear.”", "“Very good, very in line with HR vocabulary.”", "“Very modern and professional.”"]} who="HR professionals during usability testing" />
+        <H3 theme={theme}>What changed after testing</H3>
+        <div className="mt-4">
+          <Changes
+            {...t}
+            items={[
+              { found: "Recommendation levels weren’t immediately understood.", changed: "Short explanations for each level and the purpose of every survey." },
+              { found: "Some companies don’t run every survey.", changed: "Manual KPI input as a fallback, so nobody gets stuck." },
+              { found: "Open-ended competitor lists made benchmarks less precise.", changed: "Competitor input limited to 3–5 for more accurate comparisons." },
+              { found: "Key topics were missing and one question felt off.", changed: "New questions on budget, growth and recruitment channels; diversity question rephrased for clarity and inclusivity." },
+              { found: "Editing surveys and question banks was hard to discover.", changed: "Renamed the section and added guidance on how to edit them." },
+            ]}
+          />
+        </div>
+        <div className="mt-8 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <BrowserFrame theme={theme} src={testingImg} alt="HR metrics flow tested" url={`${URL}/metrics`} onOpen={open} />
+          <BrowserFrame theme={theme} src={iterationsImg} alt="Iterated question banks" url={`${URL}/questions`} onOpen={open} />
+        </div>
+        <Caption theme={theme}>Left: the HR metrics flow we tested. Right: question banks after iteration.</Caption>
+      </CaseStudySection>
 
+      <CaseStudySection id="outcome" title="Outcome" subtitle="What shipped and what I learned" theme={theme}>
+        <Stage {...t} pad="px-4 pt-6 pb-2 @2xl:px-16 @2xl:pt-10">
+          <button type="button" onClick={() => open(laptopImg, "Kallos final")} className="block w-full cursor-zoom-in">
+            <img src={laptopImg} alt="Kallos dashboard on a laptop" className={`block w-full max-w-[640px] mx-auto h-auto ${theme.isDark ? "rounded-xl" : "mix-blend-multiply"}`} />
+          </button>
+        </Stage>
+        <p className="mt-8">
+          A working, containerised platform that helps SMEs understand and improve their employer brand, validated by the people it’s for. Even without production metrics, testing showed it
+          delivered on its core UX goals: less cognitive load, trust built through familiar HR language, and complex insights that feel actionable.
+        </p>
+        <H3 theme={theme} className="mt-8">
+          What I’d do differently
+        </H3>
+        <CaseStudyBulletList
+          items={[
+            "Test earlier with a wider range of HR roles and company sizes to catch edge cases sooner.",
+            "Bring in real-world datasets earlier to stress-test the analysis and sharpen the recommendations.",
+            "Prototype the AI explanation layer from the start: transparency is what makes people trust the score.",
+          ]}
+        />
+      </CaseStudySection>
 
-            <CaseStudySection
-  id="impact"
-  title="Impact"
-  subtitle="What HR professionals validated"
-  theme={theme}
->
-  <div>
-    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>What resonated</div>
-    <div className={`mt-3 ${theme.textBody}`}>
-      HR professionals consistently highlighted three things: the clarity of the
-      interface, the relevance of the language, and the sense of guidance the
-      platform provided throughout the workflow.
-    </div>
-
-    <div className={`text-sm font-semibold mt-4 ${theme.textMain}`}>Quotes</div>
-    <div className={`mt-3 ${theme.textBody}`}>
-      “Everything is very clear.” · “Very good, very in line with HR vocabulary.” ·
-      “Very modern and professional.”
-    </div>
-
-    <div className={`text-sm font-semibold mt-4 ${theme.textMain}`}>Why it matters</div>
-    <div className={`mt-3 ${theme.textBody}`}>
-      Even without quantitative metrics, the feedback showed that the product
-      delivered on its core UX goals: reducing cognitive load, building trust
-      through familiar HR language, and making complex employer‑branding insights
-      feel accessible and actionable.
-    </div>
-  </div>
-</CaseStudySection>
-
-
-            <CaseStudySection id="outcome" title="Final outcome" subtitle="What was delivered and why it matters" theme={theme}>
-              <div>
-                A secure, AI-powered platform that helps SMEs understand and improve their employer brand.
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.finalScreens}
-                  alt="Final screens"
-                  caption="Final mockup."
-                  fit="contain"
-                  aspect="16/9"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
-
-            <div className="mt-10" />
-          </div>
-        
-
-        <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={closeLightbox} theme={theme} />
+      <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox({ open: false, src: null, alt: "" })} theme={theme} />
     </CaseStudyLayout>
   );
 }

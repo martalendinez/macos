@@ -1,763 +1,289 @@
+// src/components/windows/Projects/GroupDiningCaseStudyWindow.jsx
+// Case study: Sällskap, a group dining coordination web app (personal project, live).
 import { useMemo, useState } from "react";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
 import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
-import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
-import CaseStudyPill from "./caseStudy/CaseStudyPill";
-import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
-import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
-import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
+import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
+import { AtAGlance, BrowserFrame, Caption, Changes, Decision, Figure, FlowSteps, H3, Insights, Intro, Lead, Stage, Stats } from "./caseStudy/Editorial";
 
 import interviewImg from "../../../imgs/case-study/sallskap/Sakura_Interview.png";
 import competitorImg from "../../../imgs/case-study/sallskap/Competitor_Analysis_Sakura.png";
-import architectureIMG from "../../../imgs/case-study/sallskap/Sakura_Architecture.png";
-import securityImg from "../../../imgs/case-study/sallskap/Flowchart_Sakura_Data.png";
-import IAImg from "../../../imgs/case-study/sallskap/Dining_Flowchart.png";
+import architectureImg from "../../../imgs/case-study/sallskap/Sakura_Architecture.png";
+import dataFlowImg from "../../../imgs/case-study/sallskap/Flowchart_Sakura_Data.png";
+import flowchartImg from "../../../imgs/case-study/sallskap/Dining_Flowchart.png";
 import personaImg from "../../../imgs/case-study/sallskap/Elina_Persona.png";
 import empathyMapImg from "../../../imgs/case-study/sallskap/Elina_Empathy_Map.png";
-import designSystem1Img from "../../../imgs/case-study/sallskap/Dining_System1.png";
-import designSystem2Img from "../../../imgs/case-study/sallskap/Dining_System2.png";
-import lofiImg from "../../../imgs/case-study/sallskap/Dining_System3.png";
-import lofiImg2 from "../../../imgs/case-study/sallskap/Dining_System4.png";
-import testingImg from "../../../imgs/case-study/sallskap/Dining_Reviews.png";
-import iterationsImg from "../../../imgs/case-study/sallskap/Dining_Dark.png";
-import recommendationsImg from "../../../imgs/case-study/sallskap/Dining_Restaurant.png";
-import dashboardImg from "../../../imgs/case-study/sallskap/Dining_Restrictions.png";
-import mockupImg from "../../../imgs/case-study/sallskap/Dining_Overall.png";
-import finalImg from "../../../imgs/case-study/sallskap/Dining_Mockup.png";
+import system1Img from "../../../imgs/case-study/sallskap/Dining_System1.png";
+import system2Img from "../../../imgs/case-study/sallskap/Dining_System2.png";
+import system3Img from "../../../imgs/case-study/sallskap/Dining_System3.png";
+import system4Img from "../../../imgs/case-study/sallskap/Dining_System4.png";
+import reviewsImg from "../../../imgs/case-study/sallskap/Dining_Reviews.png";
+import darkImg from "../../../imgs/case-study/sallskap/Dining_Dark.png";
+import restaurantImg from "../../../imgs/case-study/sallskap/Dining_Restaurant.png";
+import restrictionsImg from "../../../imgs/case-study/sallskap/Dining_Restrictions.png";
+import groupImg from "../../../imgs/case-study/sallskap/Dining_Group.png";
+import heroImg from "../../../imgs/case-study/sallskap/Dining_Overall_web.jpg";
+import mockupImg from "../../../imgs/case-study/sallskap/Dining_Mockup.png";
 
-export default function GroupDiningCaseStudyWindow({
-  uiTheme = "glass",
-  glassContrast = "light", theme: appearance = "light",
-}) {
+const TINT = "#34b27b";
+const LIVE = "https://sallskap-git-main-martalendinezs-projects.vercel.app";
+const URL = "sallskap.vercel.app";
+
+const SECTIONS = [
+  { id: "glance", label: "At a glance" },
+  { id: "problem", label: "The problem" },
+  { id: "research", label: "Research & pivot" },
+  { id: "decisions", label: "Key decisions" },
+  { id: "design", label: "Design" },
+  { id: "build", label: "Build" },
+  { id: "testing", label: "Testing & iteration" },
+  { id: "outcome", label: "Outcome" },
+];
+
+export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
-
-  const IMAGES = useMemo(
-    () => ({
-      hero: mockupImg,
-      competitors: competitorImg,
-      interviews: interviewImg,
-      designSystem: designSystem1Img,
-      designSystem2: designSystem2Img,
-      lofi: lofiImg,
-      lofi2: lofiImg2,
-      architecture: architectureIMG,
-      security: securityImg,
-      iaFlow: IAImg,
-      persona: personaImg,
-      empathyMap: empathyMapImg,
-      dashboard: dashboardImg,
-      recommendations: recommendationsImg,
-      testing: testingImg,
-      iterations: iterationsImg,
-      finalScreens: finalImg,
-    }),
-    []
-  );
-
-const [lightbox, setLightbox] = useState({
-  open: false,
-  src: null,
-  alt: "",
-});
-
-const openLightbox = (src, alt = "") => {
-  if (src) {
-    setLightbox({
-      open: true,
-      src,
-      alt,
-    });
-  }
-};
-
-  const closeLightbox = () => {
-    setLightbox({ open: false, src: null, alt: "" });
-  };
-
-  const sections = useMemo(
-    () => [
-      { id: "overview", label: "Overview" },
-      { id: "summary", label: "Summary" },
-      { id: "role", label: "My role" },
-      { id: "research", label: "Research" },
-      { id: "requirements", label: "Requirements" },
-      { id: "concept", label: "Concept" },
-      { id: "uxia", label: "Users & IA" },
-      { id: "ui", label: "UI design" },
-      { id: "development", label: "Development" },
-      { id: "features", label: "Key features" },
-      { id: "testing", label: "Testing & iterations" },
-      { id: "tradeoffs", label: "Trade-offs" },
-      { id: "impact", label: "Impact" },
-      { id: "outcome", label: "Final outcome" },
-    ],
-    []
-  );
-
-
-const metaPills = [
-    "2026",
-    "Sällskap",
-    "Personal project",
-    "UX + Full-stack",
-    "Supabase",
-    "Lovable · AI-focused",
-  ];
-
-  const facts = [
-    { k: "Role", v: "UX Designer & Full-stack Developer (UX engineering)" },
-    { k: "Timeline", v: "2026 (self-initiated, time-boxed)" },
-    { k: "Type", v: "Concept prototype · Web platform" },
-    { k: "Focus", v: "Group dining coordination & decision-making" },
-    { k: "Tech", v: "React · Supabase · Lovable" },
-  ];
-
-function IconChip() {
-    if (!theme.isMac) return null;
-    return (
-      <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-[hsl(var(--accent)/0.10)] border border-[hsl(var(--accent)/0.35)]">
-        <span className="w-2 h-2 rounded-full bg-[hsl(var(--accent))]" />
-      </span>
-    );
-  }
+  const sections = useMemo(() => SECTIONS, []);
+  const [lightbox, setLightbox] = useState({ open: false, src: null, alt: "" });
+  const open = (src, alt = "") => src && setLightbox({ open: true, src, alt });
+  const t = { theme, tint: TINT };
 
   return (
-    <CaseStudyLayout theme={theme} sections={sections} title="Sällskap">
-          <div>
-            {/* Meta pills */}
-            <div className="flex flex-wrap gap-2">
-              {metaPills.map((p) => (
-                <CaseStudyPill key={p} theme={theme}>
-                  {p}
-                </CaseStudyPill>
-              ))}
-            </div>
-
-            {/* Title */}
-            <div
-              className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}
-            >
-              Sällskap — Group Dining Coordination Platform
-            </div>
-            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
-              A web-based platform that helps groups coordinate restaurant outings by aligning
-              availability, dietary needs, and preferences — designed and built as a UX + full‑stack
-              concept prototype.
-            </div>
-{/* CTAs: Live app + GitHub + Full Case Study */}
-<div className="mt-6 flex flex-wrap gap-2">
-  <a
-    href="https://sallskap-git-main-martalendinezs-projects.vercel.app"
-    target="_blank"
-    rel="noreferrer"
-    className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}
-  >
-    View Live App
-  </a>
-
-  <a
-    href="https://github.com/martalendinez/Sallskap"
-    target="_blank"
-    rel="noreferrer"
-    className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
-  >
-    View GitHub Repo
-  </a>
-
-  <a
-    href="https://flair-fabrica.vercel.app" 
-    target="_blank"
-    rel="noreferrer"
-    className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}
-  >
-    Read Full Case Study
-  </a>
-</div>
-
-
-            {/* Overview */}
-            <div
-              id="overview"
-              className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16"
-            >
-              <div>
-                <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
-<div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
-  Coordinating group dinners sounds simple, but in reality it’s a messy, fragmented process.
-  Different schedules, dietary needs, budgets, and preferences quickly turn into long chat
-  threads, unclear decisions, and last‑minute compromises.
-  <br /><br />
-  Most restaurant platforms are built for individual bookings — not for helping a group align
-  on who’s coming, when they’re free, and which restaurants actually work for everyone.
-  <br /><br />
-  Sällskap introduces a structured, web‑based flow that brings clarity to group coordination:
-  collecting availability, capturing dietary needs, and surfacing restaurants that fit the
-  whole group. The goal is to make planning feel light, social, and low‑friction.
-</div>
-
-              </div>
-
-              <div>
-                <div className="flex items-center gap-3">
-                  <CaseStudyIconChip theme={theme} />
-                  <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
-                </div>
-
-                <div className={`mt-3`}>
-                  <div className="grid grid-cols-1 gap-3">
-                    {facts.map((f) => (
-                      <div
-                        key={f.k}
-                        className={`pb-3 border-b last:border-b-0 ${theme.divider}`}
-                      >
-                        <div className={`text-xs ${theme.textSub}`}>{f.k}</div>
-                        <div className={`mt-1 text-sm font-medium ${theme.textMain}`}>{f.v}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["UX", "Product", "Full-stack", "Supabase", "Lovable", "AI"].map((t) => (
-                      <CaseStudyPill key={t} theme={theme}>
-                        {t}
-                      </CaseStudyPill>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
-
-{/* Summary */}
-<CaseStudySection
-  id="summary"
-  title="Summary"
-  subtitle="Problem → Solution → Impact"
-  theme={theme}
->
-  <div>
-    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
-    <div className="mt-2">
-      Group dining decisions are messy: coordinating schedules, dietary needs, and preferences
-      usually happens in long chat threads with no structure. Existing restaurant apps optimize
-      for discovery and booking, not for group alignment and decision‑making.
-    </div>
-
-    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
-    <div className="mt-2">
-      A web-based coordination platform where one person creates a group, collects availability
-      and dietary information, and then gets a curated set of restaurant options that work for
-      everyone — with a clear, guided flow from invite to confirmation.
-    </div>
-
-    <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Impact (conceptual)</div>
-    <CaseStudyBulletList
-      items={[
-        "Reduces back‑and‑forth in group chats by centralizing decisions in one flow.",
-        "Makes dietary needs visible and respected without putting pressure on individuals.",
-        "Supports faster, more confident restaurant choices for groups.",
-        "Demonstrates how UX + full‑stack thinking can shape coordination tools, not just UIs.",
-      ]}
-    />
-    <div className={`mt-4 text-sm ${theme.textSub}`}>
-      As a concept prototype, impact is framed qualitatively — focusing on flow clarity,
-      perceived ease, and how well the experience supports real‑world coordination.
-    </div>
-  </div>
-
-  <Gallery2
-    a={
-      <CaseStudyImageTile
-        src={IMAGES.dashboard}
-        alt="Flow highlight"
-        caption="Private dietary restrictions."
-        aspect="16/9"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-    b={
-      <CaseStudyImageTile
-        src={IMAGES.recommendations}
-        alt="Restaurant selection highlight"
-        caption="Restaurant selection decision view."
-        aspect="16/9"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-  />
-</CaseStudySection>
-
-{/* Role */}
-<CaseStudySection
-  id="role"
-  title="My role"
-  subtitle="I led the full UX + engineering process"
-  theme={theme}
->
-  <div>
-    This project was a chance to work as a hybrid UX engineer — shaping the experience and
-    building the underlying system.
-    <CaseStudyBulletList
-      items={[
-        "Research: competitive analysis, 5 user interviews, discovery of unmet needs",
-        "UX: flows, low‑fi wireframes, interaction patterns for coordination",
-        "UI: Scandinavian minimalism with soft neutrals and calm geometry",
-        "Engineering: React + Supabase backend, Lovable for rapid iteration",
-        "Architecture: schema for groups, members, preferences, and reservations",
-      ]}
-    />
-  </div>
-</CaseStudySection>
-{/* Research */}
-<CaseStudySection
-  id="research"
-  title="Research"
-  subtitle="Competitive landscape, user interviews, and a shift in direction"
-  theme={theme}
->
-  <div>
-
-    {/* Initial Direction */}
-    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Initial direction</div>
-    <div className="mt-2">
-      The concept originally aimed to support both <strong>solo diners</strong> and <strong>groups</strong>.
-      To understand the opportunity, I ran a competitive analysis and interviewed five people (20-45 years-old) who
-      regularly organize or join group dinners.
-    </div>
-
-    {/* Competitive Analysis Summary */}
-    <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>
-      Competitive analysis — key takeaways
-    </div>
-    <div className="mt-2 text-[15px] leading-7">
-      Reviewing major platforms (OpenTable, Resy, TheFork, Bookatable, Quandoo) revealed three consistent gaps:
-      <ul className="list-disc ml-5 mt-2">
-        <li><strong>No support for group decision‑making</strong> — coordination still happens in chat apps.</li>
-        <li><strong>Dietary needs are handled superficially</strong> — usually a free‑text “special request.”</li>
-        <li><strong>Minimal personalization</strong> — recommendations don’t adapt to group constraints.</li>
-      </ul>
-    </div>
-
-    {/* Interview Summary */}
-    <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>
-      User interviews — biggest insights
-    </div>
-    <div className="mt-2 text-[15px] leading-7">
-      Interviews reinforced the same themes: planning happens across scattered chats and polls,
-      dietary needs are sensitive, discovery is fragmented, and organizers carry most of the mental load.
-    </div>
-
-    {/* Pivot */}
-    <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>
-      Why I shifted the concept
-    </div>
-    <div className="mt-2 text-[15px] leading-7">
-      Both research streams pointed to the same conclusion:
-      <strong> group dining coordination is the real, underserved problem.</strong>
-      This led to a focused direction: a structured, low‑friction flow designed specifically for
-      helping groups align on availability, dietary needs, and restaurant choices.
-    </div>
-  </div>
-
-
-
- {/* Competitor Analysis Image */}
-<div className="mt-6">
-  <CaseStudyImageTile
-    src={IMAGES.competitors}
-    alt="Competitor analysis"
-    caption="Snapshot of competitive analysis."
-    aspect="16/9"
-    fit="contain"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-</div>
-
-</CaseStudySection>
-{/* Requirements */}
-<CaseStudySection
-  id="requirements"
-  title="Requirements"
-  subtitle="Clarity, inclusivity, and low‑friction coordination"
-  theme={theme}
->
-  <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
-    <div>
-      <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Design requirements</div>
-      <CaseStudyBulletList
-        items={[
-          "Clear, guided flow from group creation to confirmation",
-          "Inclusive handling of dietary needs without singling people out",
-          "Mobile‑friendly, scannable UI with minimal cognitive load",
-          "Calm, welcoming visual language for mixed groups",
+    <CaseStudyLayout onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Sällskap">
+      <Intro
+        {...t}
+        eyebrow="Personal project · 2026 · Live"
+        title="Sällskap: from a messy group chat to a table that works for everyone"
+        lede="Group dinners fall apart in chat threads: who’s free, who’s vegan, who’s actually booking? I researched, designed and built Sällskap, a web app that collects everyone’s availability and dietary needs privately, then recommends restaurants that fit the whole group."
+        ctas={[
+          { label: "Try the live app", href: LIVE },
+          { label: "GitHub", href: "https://github.com/martalendinez/Sallskap" },
+          { label: "Full case study", href: "https://flair-fabrica.vercel.app" },
+        ]}
+        facts={[
+          { k: "Role", v: "UX designer & full-stack developer" },
+          { k: "Timeline", v: "2026 · self-initiated" },
+          { k: "Platform", v: "Responsive web app" },
+          { k: "Stack", v: "React · Supabase · Lovable" },
         ]}
       />
-    </div>
 
-    <div>
-      <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Engineering requirements</div>
-      <CaseStudyBulletList
-        items={[
-          "Simple, robust schema for groups, members, preferences, and reservations",
-          "Supabase as a reliable backend with RLS for basic data safety",
-          "Clean React architecture for future extensibility",
-          "Lovable‑friendly structure for rapid iteration and deployment",
-        ]}
-      />
-    </div>
-  </div>
+      <Stage {...t} className="mt-10" pad="p-0">
+        <button type="button" onClick={() => open(heroImg, "Sällskap screens")} className="block w-full cursor-zoom-in">
+          <img src={heroImg} alt="Sällskap screens: landing page, reservations, availability and restaurants" className={`block w-full h-auto ${theme.isDark ? "" : "mix-blend-multiply"}`} />
+        </button>
+      </Stage>
 
-  <Gallery2
-    a={
-      <CaseStudyImageTile
-        src={IMAGES.security}
-        alt="Architecture / data model"
-        caption="Early thinking on data model and flows."
-        aspect="16/9"
-        fit="contain"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-    b={
-      <CaseStudyImageTile
-        src={IMAGES.architecture}
-        alt="System architecture"
-        caption="High‑level architecture for the web app."
-        aspect="16/9"
-        fit="contain"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-  />
-</CaseStudySection>
+      <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
+        <AtAGlance
+          {...t}
+          items={[
+            { label: "Problem", text: "Booking apps are built for one person. Groups still coordinate in chats, dietary needs end up as a free-text note, and the organizer carries all the mental load." },
+            { label: "What I did", text: "Ran the research, pivoted the concept to focus on groups, designed the flow and design system, and built a working app on React and Supabase." },
+            { label: "Outcome", text: "A live app that takes a group from “we should have dinner” to a confirmed reservation. After iterating, organizers said they felt more in control and less worried about mistakes." },
+          ]}
+        />
+        <div className="mt-10">
+          <Stats
+            {...t}
+            items={[
+              { value: "5", label: "user interviews, ages 20–45" },
+              { value: "5", label: "booking platforms analysed" },
+              { value: "5", label: "task-based usability sessions" },
+              { value: "6", label: "improvements shipped after testing" },
+            ]}
+          />
+        </div>
+      </CaseStudySection>
 
-{/* Concept */}
-<CaseStudySection
-  id="concept"
-  title="Concept"
-  subtitle="From messy chats → structured, gentle coordination"
-  theme={theme}
->
-  <div>
-    The core concept behind{" "}
-    <span className={`font-semibold ${theme.textMain}`}>Sällskap</span> is to turn chaotic group
-    chats into a structured, gentle flow that respects everyone’s needs. Instead of asking people
-    to argue about restaurants, the platform:
-    <CaseStudyBulletList
-      items={[
-        "Collects who’s joining and when they’re available",
-        "Captures dietary restrictions and preferences in a respectful way",
-        "Surfaces restaurants that work for the whole group",
-        "Guides the organizer to a clear, confident confirmation",
-      ]}
-    />
-  </div>
-</CaseStudySection>
+      <CaseStudySection id="problem" title="The problem" subtitle="Restaurants are booked by one person, eaten by many" theme={theme}>
+        <Lead theme={theme}>
+          OpenTable, TheFork and friends are great at helping <i>one</i> person book a table. But a group dinner is a negotiation, and that negotiation still happens in scattered chats and polls.
+        </Lead>
+        <p className="mt-5">
+          Different schedules, budgets and dietary needs quickly turn into long threads, unclear decisions and last-minute compromises. Someone always ends up as the organizer, holding everyone’s
+          constraints in their head.
+        </p>
+        <p className={`mt-6 pl-4 border-l-2 text-[18px] font-semibold tracking-[-0.01em] ${theme.textMain}`} style={{ borderColor: TINT }}>
+          How might we help a group agree on when and where to eat, without anyone having to explain their dietary needs in the group chat?
+        </p>
+      </CaseStudySection>
 
-{/* Users & IA */}
-<CaseStudySection
-  id="uxia"
-  title="Users & Information Architecture"
-  subtitle="Organizer vs. participant, flows, and content"
-  theme={theme}
->
-  <div>
-    I mapped a for the role of the organizer and designed flows
-    that keep them in control without overloading them. The IA focuses on a single,
-    linear journey:
-    <CaseStudyBulletList
-      items={[
-        "Create group → define context (occasion, city, date range)",
-        "Add members → collect availability and dietary needs",
-        "Browse restaurants → filtered by group constraints",
-        "Confirm reservation → share outcome back to the group",
-      ]}
-    />
-  </div>
+      <CaseStudySection id="research" title="Research & pivot" subtitle="Following the evidence" theme={theme}>
+        <p>
+          The idea started broader: a dining app for <b className={theme.textMain}>solo diners and groups</b>. To test it, I analysed five platforms (OpenTable, Resy, TheFork, Bookatable, Quandoo) and
+          interviewed five people aged 20–45 who regularly organise or join group dinners.
+        </p>
+        <div className="mt-8">
+          <Insights
+            {...t}
+            items={[
+              { title: "Nobody supports the group decision.", text: "Every platform optimises for discovery and booking. Coordination still happens outside the product, in chat apps.", so: "the product starts before the booking: at “who’s in, and when?”" },
+              { title: "Dietary needs are an afterthought, and personal.", text: "They’re handled as a free-text “special request”, and people don’t always want to discuss them in front of the group.", so: "private, structured dietary input." },
+              { title: "The organizer carries the mental load.", text: "One person ends up collecting everyone’s constraints and taking the blame if the choice doesn’t work.", so: "the system does the matching; the organizer just confirms." },
+            ]}
+          />
+        </div>
+        <div className={`mt-10 py-5 border-y ${theme.divider}`}>
+          <div className="text-[12px] font-semibold uppercase tracking-[0.1em]" style={{ color: TINT }}>
+            The pivot
+          </div>
+          <p className={`mt-2 text-[18px] leading-snug font-semibold tracking-[-0.01em] ${theme.textMain}`}>
+            Both research streams pointed the same way: group coordination was the real, underserved problem. I dropped the solo-diner use case and focused the whole product on it.
+          </p>
+        </div>
+        <div className="mt-10 grid grid-cols-1 @3xl:grid-cols-[1.4fr_1fr] gap-6 items-start">
+          <Figure theme={theme} src={competitorImg} alt="Competitive analysis" caption="Competitive analysis of five booking platforms." onOpen={open} />
+          <Figure theme={theme} src={interviewImg} alt="Interview synthesis" caption="Interview synthesis." onOpen={open} />
+        </div>
+        <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <Figure theme={theme} src={personaImg} alt="Organizer persona" caption="Elina, the organizer: social, responsible, short on time." onOpen={open} />
+          <Figure theme={theme} src={empathyMapImg} alt="Empathy map" caption="What the organizer thinks, feels and worries about." onOpen={open} />
+        </div>
+      </CaseStudySection>
 
-  <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
-    <CaseStudyImageTile
-      src={IMAGES.persona}
-      alt="Persona"
-      caption="Organizer persona: social, responsible, time‑poor."
-      aspect="16/10"
-      fit="cover"
-      theme={theme}
-      onOpen={openLightbox}
-    />
+      <CaseStudySection id="decisions" title="Key decisions" subtitle="What I chose, and what it cost" theme={theme}>
+        <Decision
+          {...t}
+          n={1}
+          title="Dietary needs are private by default"
+          tradeoff="Keeping needs private means the group doesn’t discuss them openly. The system still respects every need in the recommendations, so nobody has to explain themselves."
+          visual={<BrowserFrame theme={theme} src={restrictionsImg} alt="Private dietary restrictions" url={URL} onOpen={open} />}
+        >
+          Each member submits their dietary needs privately, in a structured form instead of a free-text note. That removes the social pressure and gives the matching engine accurate, usable data.
+        </Decision>
+        <Decision
+          {...t}
+          n={2}
+          title="Availability as a picker, not a poll"
+          tradeoff="A structured picker is less flexible than a chat message, which is exactly why it works: the system can compute the overlap."
+          visual={<BrowserFrame theme={theme} src={groupImg} alt="Group overview with availability and dietary needs" url={URL} onOpen={open} />}
+        >
+          A visual time selector replaces the “does Thursday work?” thread. The app computes overlapping availability windows automatically and shows the result, with everyone’s needs, in a single group overview.
+        </Decision>
+        <Decision
+          {...t}
+          n={3}
+          title="A shortlist, not a search page"
+          tradeoff="Showing fewer options means trusting the matching. Compatibility tags and per-person breakdowns make that trust earned, not assumed."
+          visual={<BrowserFrame theme={theme} src={restaurantImg} alt="Restaurant shortlist" url={URL} onOpen={open} />}
+        >
+          The recommendation engine merges availability, dietary needs and preferences into a curated shortlist, so the organizer chooses between a few good options instead of searching from
+          scratch.
+        </Decision>
+      </CaseStudySection>
 
-    <CaseStudyImageTile
-      src={IMAGES.empathyMap}
-      alt="Empathy map"
-      caption="Mapping organizer frustrations and motivations."
-      aspect="16/10"
-      fit="cover"
-      theme={theme}
-      onOpen={openLightbox}
-    />
-  </div>
+      <CaseStudySection id="design" title="Design" subtitle="One linear flow, Scandinavian calm" theme={theme}>
+        <p>
+          The IA is a single, linear journey for the organizer: create a group, collect availability and dietary needs, pick from the shortlist, confirm and share. Visually it’s Scandinavian
+          minimalism: light backgrounds, soft shadows, rounded geometry and a calm green accent.
+        </p>
+        <div className="mt-8">
+          <Figure theme={theme} src={flowchartImg} alt="User flow" caption="User flow from group creation to confirmed reservation." onOpen={open} />
+        </div>
+        <div className="mt-8">
+          <FlowSteps
+            {...t}
+            url={URL}
+            onOpen={open}
+            steps={[
+              { title: "Share needs privately", text: "Each member picks their dietary restrictions on their own.", src: restrictionsImg },
+              { title: "See the group at a glance", text: "Everyone’s availability and needs on one screen.", src: groupImg },
+              { title: "Choose from the shortlist", text: "Restaurants that already fit everyone.", src: restaurantImg },
+            ]}
+          />
+        </div>
+        <div className="mt-10 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <Figure theme={theme} src={system1Img} alt="Typography" caption="Typography." onOpen={open} />
+          <Figure theme={theme} src={system2Img} alt="Colours" caption="Colour." onOpen={open} />
+          <Figure theme={theme} src={system3Img} alt="Icons" caption="Iconography." onOpen={open} />
+          <Figure theme={theme} src={system4Img} alt="Grid and layout" caption="Grid and layout." onOpen={open} />
+        </div>
+      </CaseStudySection>
 
-  <div className="mt-6">
-    <CaseStudyImageTile
-      src={IMAGES.iaFlow}
-      alt="Information architecture / user flow"
-      caption="High‑level flow from group creation to confirmation."
-      aspect="2/1"
-      fit="contain"
-      theme={theme}
-      onOpen={openLightbox}
-    />
-  </div>
-</CaseStudySection>
+      <CaseStudySection id="build" title="Build" subtitle="A real app, not just a prototype" theme={theme}>
+        <p>I built Sällskap as a working web app, using Lovable to iterate fast and keeping the architecture clean enough to grow into a production tool.</p>
+        <CaseStudyBulletList
+          items={[
+            "React frontend with modular flows: group creation, availability, dietary needs, restaurants and reservations.",
+            "Supabase for groups, members, preferences, restaurants and reservations, with row-level security for basic data safety.",
+            "Routing and state structured around the booking journey.",
+            "Room to add AI-assisted suggestions and smart defaults later.",
+          ]}
+        />
+        <div className="mt-8 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <Figure theme={theme} src={dataFlowImg} alt="Data model and flow" caption="Data model and flow." onOpen={open} />
+          <Figure theme={theme} src={architectureImg} alt="System architecture" caption="High-level architecture." onOpen={open} />
+        </div>
+      </CaseStudySection>
 
-{/* UI design */}
-<CaseStudySection
-  id="ui"
-  title="UI design"
-  subtitle="Scandinavian minimalism with playful, social touches"
-  theme={theme}
->
-  <div>
-   The interface uses a Scandinavian‑inspired aesthetic: light backgrounds, soft shadows, rounded
-geometry, and a calm green accent that carries the brand. The spacing is generous, the typography
-is approachable, and the components feel airy and modern.
+      <CaseStudySection id="testing" title="Testing & iteration" subtitle="5 participants, 5 real tasks" theme={theme}>
+        <p>I brought back the five interview participants for short, task-based sessions on the working app, watching for clarity, friction and confidence:</p>
+        <ol className={`mt-4 grid grid-cols-1 @2xl:grid-cols-2 gap-x-8 gap-y-2 text-[15px] ${theme.textBody}`}>
+          {["Create a group and add at least two members", "Set availability and dietary restrictions for each member", "Choose a restaurant that fits the group", "Open a menu and confirm the booking", "Find the reservation in My Reservations"].map((task, i) => (
+            <li key={task} className="flex gap-3">
+              <span className="font-semibold tabular-nums" style={{ color: TINT }}>
+                {i + 1}
+              </span>
+              {task}
+            </li>
+          ))}
+        </ol>
+        <H3 theme={theme} className="mt-10">
+          What I shipped after testing
+        </H3>
+        <div className="mt-4">
+          <Changes
+            {...t}
+            labels={["Goal", "What I shipped"]}
+            items={[
+              { found: "Never leave people stuck mid-flow.", changed: "A Back button across the entire flow." },
+              { found: "Make navigation scannable.", changed: "Redesigned nav icons, now with labels." },
+              { found: "Give enough information to decide.", changed: "Full restaurant details: reviews, address, phone and dietary tags." },
+              { found: "Close the loop for organizers.", changed: "Clear confirmation messaging after booking." },
+              { found: "Share where groups already talk.", changed: "Native share options instead of a generic copy link." },
+              { found: "Comfort and accessibility.", changed: "Dark mode across the whole experience." },
+            ]}
+          />
+        </div>
+        <div className="mt-8 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <BrowserFrame theme={theme} src={reviewsImg} alt="Restaurant reviews" url={URL} onOpen={open} />
+          <BrowserFrame theme={theme} src={darkImg} alt="Dark mode" url={URL} onOpen={open} />
+        </div>
+        <Caption theme={theme}>Left: restaurant details with reviews. Right: dark mode.</Caption>
+        <p className="mt-8">
+          After these changes, people moved through the flow faster and with fewer clarifying questions. Participants understood their role more clearly, and confidence went up most at the
+          booking confirmation step.
+        </p>
+      </CaseStudySection>
 
+      <CaseStudySection id="outcome" title="Outcome" subtitle="Live, usable, and ready to grow" theme={theme}>
+        <Stage {...t} pad="px-4 pt-6 pb-2 @2xl:px-16 @2xl:pt-10">
+          <button type="button" onClick={() => open(mockupImg, "Sällskap final")} className="block w-full cursor-zoom-in">
+            <img src={mockupImg} alt="Sällskap on a laptop" className={`block w-full max-w-[640px] mx-auto h-auto ${theme.isDark ? "rounded-xl" : "mix-blend-multiply"}`} loading="lazy" />
+          </button>
+        </Stage>
+        <p className="mt-8">
+          A working web app, live on Vercel, that takes a group from “we should have dinner” to a confirmed reservation while respecting everyone’s constraints.{" "}
+          <a href={LIVE} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-4" style={{ color: TINT }}>
+            Try it yourself ↗
+          </a>
+        </p>
+        <H3 theme={theme} className="mt-8">
+          What’s next
+        </H3>
+        <CaseStudyBulletList
+          items={[
+            "AI-assisted restaurant suggestions and smart defaults based on the group’s history.",
+            "Measure time-to-booking against a plain group chat to quantify the improvement.",
+            "Test with larger and more diverse groups.",
+          ]}
+        />
+      </CaseStudySection>
 
-<div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6">
-  <CaseStudyImageTile
-    src={IMAGES.designSystem}
-    alt="Design system"
-    caption="Design system: typography."
-    aspect="2/1"
-    fit="cover"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-
-  <CaseStudyImageTile
-    src={IMAGES.designSystem2}
-    alt="Design system 2"
-    caption="Design system: colors."
-    aspect="18/9"
-    fit="cover"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-
-  <CaseStudyImageTile
-    src={IMAGES.lofi}
-    alt="Low‑fi sketches"
-    caption="Design system: icons."
-    aspect="18/9"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-
-  <CaseStudyImageTile
-    src={IMAGES.lofi2}
-    alt="Low‑fi sketches 2"
-    caption="Design system: grids & layout."
-    aspect="18/9"
-    theme={theme}
-    onOpen={openLightbox}
-  />
-</div>
-
-</div>
-
-</CaseStudySection>
-{/* Development */}
-<CaseStudySection
-  id="development"
-  title="Development"
-  subtitle="How the build supports the experience"
-  theme={theme}
->
-  <div>
-    The prototype is built as a web app using React and Supabase, with Lovable enabling rapid
-    iteration. The goal was to create a clean, modular foundation that could scale into a
-    production‑ready coordination tool.
-    <CaseStudyBulletList
-      items={[
-        "React front‑end with modular flows (group creation, availability, dietary, restaurants, reservations)",
-        "Supabase for groups, members, restaurants, and reservations data",
-        "Routing and state structured around the booking journey",
-        "Room to later integrate AI‑assisted restaurant suggestions and smart defaults",
-      ]}
-    />
-  </div>
-</CaseStudySection>
-
-{/* Key features */}
-<CaseStudySection
-  id="features"
-  title="Key features"
-  subtitle="Where groups get value"
-  theme={theme}
->
-  <p>
-    <strong>Private dietary input.</strong> Each group member privately submits their dietary needs, 
-    removing social pressure and ensuring the system can generate accurate, inclusive recommendations.
-  </p>
-
-  <p>
-    <strong>Structured availability collection.</strong> A visual selector replaces chaotic chat threads, 
-    allowing the system to automatically compute overlapping availability windows for the group.
-  </p>
-
-  <p>
-    <strong>Smart restaurant matching.</strong> The recommendation engine merges availability, dietary 
-    needs, and preferences into a curated shortlist with compatibility tags and per‑person breakdowns.
-  </p>
-  <Gallery2
-    a={
-      <CaseStudyImageTile
-        src={IMAGES.dashboard}
-        alt="Flow screen"
-        caption="Private dietary restrictions."
-        aspect="16/9"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-    b={
-      <CaseStudyImageTile
-        src={IMAGES.recommendations}
-        alt="Restaurant selection"
-        caption="Filtered restaurant options that respect group constraints."
-        aspect="16/9"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-  />
-</CaseStudySection>
-
-
-{/* Testing & iterations */}
-<CaseStudySection
-  id="testing"
-  title="Testing & iterations"
-  subtitle="Usability testing with real tasks"
-  theme={theme}
->
-  <div>
-    I tested the prototype with 5 participants (from the intial interviews).
-    Sessions were short, task‑based, and focused on clarity, friction, and confidence.
-
-    <div className="mt-4 text-sm font-semibold">Tasks used in testing</div>
-    <ul className="list-disc ml-5 mt-2 text-sm leading-6">
-      <li><strong>Task 1 — Create a group:</strong> “Create a new group and add at least two members.”</li>
-      <li><strong>Task 2 — Add availability & restrictions:</strong> “Set availability for each member.” / “Add dietary restrictions for each member.”</li>
-      <li><strong>Task 3 — Browse restaurants:</strong> “Choose a restaurant that fits your group’s needs.”</li>
-      <li><strong>Task 4 — View menu & confirm:</strong> “Open the menu of a restaurant you’re interested in.” / “Confirm the booking.”</li>
-      <li><strong>Task 5 — Review reservation:</strong> “Find your reservation in the My Reservations section.”</li>
-    </ul>
-  </div>
-
-  <Gallery2
-    a={
-      <CaseStudyImageTile
-        src={IMAGES.testing}
-        alt="Testing artifacts"
-        caption="Restaurant Reviews - Iteration."
-        aspect="4/3"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-    b={
-      <CaseStudyImageTile
-        src={IMAGES.iterations}
-        alt="Iterations"
-        caption="Dark Mode - Iteration."
-        aspect="4/3"
-        theme={theme}
-        onOpen={openLightbox}
-      />
-    }
-  />
-
-{/* Iterations */}
-<div className="mt-10">
-  <div className={`text-lg font-semibold ${theme.textMain}`}>Iterations</div>
-
-  <div className="mt-6">
-    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Key improvements made after testing</div>
-    <CaseStudyBulletList
-      items={[
-        "Introduced Dark Mode to improve accessibility, comfort, and visual polish across the experience",
-        "Added a Back button across the entire flow to reduce dead-ends and increase confidence",
-        "Redesigned navigation icons and added labels to improve scannability and reduce guesswork",
-        "Added full restaurant details (reviews, address, phone, dietary tags) to support decision-making",
-        "Reworked the share action to use native sharing options instead of a generic copy link",
-        "Added clearer confirmation messaging after booking to close the loop for organizers",
-
-      ]}
-    />
-  </div>
-
-  <div className="mt-6">
-    <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Impact of these changes</div>
-    <CaseStudyBulletList
-      items={[
-        "Users moved through the flow faster and with fewer clarifying questions",
-        "Organizers reported feeling more in control and less worried about making mistakes",
-        "Participants understood their role more clearly and completed tasks with less friction",
-        "Overall confidence in the product increased, especially around the booking confirmation step",
-      ]}
-    />
-  </div>
-</div>
-
-</CaseStudySection>
-
-{/* Final outcome */}
-<CaseStudySection
-  id="outcome"
-  title="Final outcome"
-  subtitle="What was delivered and why it matters"
-  theme={theme}
->
-  <div>
-    A working web prototype that takes a group from “we should have dinner” to a concrete
-    restaurant reservation — while respecting constraints, reducing friction, and leaving room
-    for future AI‑powered enhancements.
-  </div>
-
-  <div className="mt-6">
-    <CaseStudyImageTile
-      src={IMAGES.finalScreens}
-      alt="Final screens"
-      caption="Final mockup."
-      fit="contain"
-      aspect="16/9"
-      theme={theme}
-      onOpen={openLightbox}
-    />
-  </div>
-</CaseStudySection>
-
-<div className="mt-10" />
-</div>
-
-
-<CaseStudyLightbox
-  open={lightbox.open}
-  src={lightbox.src || ""}
-  alt={lightbox.alt}
-  onClose={closeLightbox}
-  theme={theme}
-/>
+      <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox({ open: false, src: null, alt: "" })} theme={theme} />
     </CaseStudyLayout>
   );
 }

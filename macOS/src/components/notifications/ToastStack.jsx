@@ -2,7 +2,7 @@
 // macOS-style notification banners: slide in from the right, close button on hover.
 import { AnimatePresence, motion } from "framer-motion";
 import { MENU_BAR_H } from "../../config/shell";
-import AppleLogo from "../../ui/AppleLogo";
+import { ACH_RE, AppIcon, appOf } from "./notifApps";
 
 export default function ToastStack({ uiTheme = "glass", theme = "light", toasts = [], onDismiss }) {
   const isDark = theme === "dark" || uiTheme !== "macos";
@@ -49,12 +49,12 @@ export default function ToastStack({ uiTheme = "glass", theme = "light", toasts 
             </button>
 
             <div className="px-[14px] py-[12px] flex items-start gap-3">
-              <span className="mt-[2px] shrink-0 w-[34px] h-[34px] rounded-[9px] bg-gradient-to-b from-[#5ac8fa] to-[#007aff] text-white flex items-center justify-center shadow-sm">
-                <AppleLogo className="w-[17px] h-[17px] -mt-[2px]" />
+              <span className="mt-[2px]">
+                <AppIcon app={appOf(t)} />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
-                  <div className="text-[13px] font-semibold truncate">{t.title}</div>
+                  <div className="text-[13px] font-semibold truncate">{t.title.replace(ACH_RE, "🏆 ")}</div>
                   <div className="text-[11px] opacity-50 shrink-0">now</div>
                 </div>
                 {t.message && <div className="mt-[1px] text-[13px] leading-snug opacity-80">{t.message}</div>}

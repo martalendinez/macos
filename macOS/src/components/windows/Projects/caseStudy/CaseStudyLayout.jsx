@@ -10,7 +10,7 @@ export const useCaseStudyContext = () => useContext(CaseStudyContext);
 const TOOLBAR_H = 48;
 const COMPACT_BELOW = 860; // hide the sidebar in narrow windows
 
-export default function CaseStudyLayout({ theme, sections = [], title, children }) {
+export default function CaseStudyLayout({ theme, sections = [], title, children, onOpenWindow }) {
   const rootRef = useRef(null);
   const scrollRef = useRef(null);
   const [active, setActive] = useState(sections[0]?.id);
@@ -145,7 +145,18 @@ export default function CaseStudyLayout({ theme, sections = [], title, children 
             )}
 
             <div className="min-w-0 flex items-center gap-1.5 text-[13px]">
-              <span className={theme.textSub}>Projects</span>
+              {onOpenWindow ? (
+                <button
+                  type="button"
+                  onClick={() => onOpenWindow("projects")}
+                  className={`rounded-md px-1.5 -mx-1.5 py-0.5 transition-colors ${theme.textSub} ${theme.hoverBg} hover:text-[hsl(var(--accent))]`}
+                  title="Back to all projects"
+                >
+                  Projects
+                </button>
+              ) : (
+                <span className={theme.textSub}>Projects</span>
+              )}
               <span className={theme.textSub}>›</span>
               <span className={`font-semibold truncate ${theme.textMain}`}>{title}</span>
             </div>

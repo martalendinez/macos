@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
 import { PROJECTS } from "./data/projectData";
+import ProjectCover from "./ui/ProjectCover";
 
 const ACTION_TO_WINDOW = {
   openEmployerBrandingCaseStudy: "employerBrandingCaseStudy",
@@ -30,18 +31,7 @@ function Arrow({ className = "w-3.5 h-3.5" }) {
 }
 
 function Cover({ project, className = "" }) {
-  // thumbnails already include their own backdrop, so they fill the cover; the project tint frames it
-  return (
-    <div className={`relative overflow-hidden ${className}`} style={{ background: `${project.tint}14` }}>
-      <img
-        src={project.thumbnail}
-        alt=""
-        draggable={false}
-        className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-[1.04]"
-      />
-      <div className="absolute inset-x-0 bottom-0 h-1" style={{ background: project.tint }} />
-    </div>
-  );
+  return <ProjectCover project={project} className={className} />;
 }
 
 // module-level so clicks aren't lost to remounts

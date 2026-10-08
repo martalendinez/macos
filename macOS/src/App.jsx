@@ -431,6 +431,8 @@ export default function App() {
           onClearAll={notif.clearAllNotifications}
           onMarkAllRead={notif.markAllRead}
           onRemoveOne={notif.removeOneNotification}
+          unlocked={notif.unlocked}
+          onOpenAchievements={() => openWindow("achievements")}
         />
       </Suspense>
 

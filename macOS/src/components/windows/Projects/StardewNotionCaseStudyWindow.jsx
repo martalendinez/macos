@@ -10,7 +10,7 @@ import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
 import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 
-export default function StardewNotionCaseStudyWindow({ uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
+export default function StardewNotionCaseStudyWindow({ onOpenWindow, uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
 
   const IMAGES = useMemo(
@@ -74,7 +74,7 @@ const metaPills = ["Personal project", "Notion template", "UX + UI", "Gamificati
   ];
 
   return (
-    <CaseStudyLayout theme={theme} sections={sections} title="Gamified Notion Template">
+    <CaseStudyLayout onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Gamified Notion Template">
           <div>
             <div className="flex flex-wrap gap-2">
               {metaPills.map((p) => (
