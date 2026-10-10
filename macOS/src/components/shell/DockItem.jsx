@@ -18,6 +18,7 @@ export default function DockItem({
   isDark,
   running = false,
   bounceOnClick = false,
+  active = false,
   onClick,
   children,
 }) {
@@ -34,14 +35,14 @@ export default function DockItem({
   const target = useTransform(distance, [-DOCK_RANGE, 0, DOCK_RANGE], [DOCK_BASE, DOCK_MAX, DOCK_BASE]);
   const size = useSpring(target, { mass: 0.1, stiffness: 170, damping: 14 });
 
-  function handleClick() {
+  function handleClick(e) {
     if (bounceOnClick && !running) {
       bounce.start({
         y: [0, -26, 0, -14, 0, -5, 0],
         transition: { duration: 1.05, times: [0, 0.18, 0.38, 0.55, 0.72, 0.86, 1], ease: "easeOut" },
       });
     }
-    onClick?.();
+    onClick?.(e);
   }
 
   return (
@@ -53,7 +54,7 @@ export default function DockItem({
       onMouseLeave={() => setHover(false)}
     >
       <AnimatePresence>
-        {hover && (
+        {hover && !active && (
           <motion.div
             className={[
               "absolute bottom-full mb-3 left-1/2 px-[10px] py-[3px] rounded-[7px] text-[13px] whitespace-nowrap pointer-events-none",

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
 import { FEATURED, GAMES, getFunApps } from "./data/funApps";
 import { requestTerminalGame } from "../terminal/terminalBus";
+import { clearPendingCategory, onFunCategoryRequest, peekPendingCategory } from "./funBus";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -327,7 +328,11 @@ function SideRow({ c, active, onSelect, t }) {
 export default function FunWindow({ uiTheme = "glass", glassContrast = "light", theme = "light", iconTheme = "glass", onOpenWindow }) {
   const t = useCaseStudyTheme({ uiTheme, glassContrast, appearance: theme });
   const apps = useMemo(() => getFunApps(onOpenWindow, iconTheme), [onOpenWindow, iconTheme]);
-  const [cat, setCat] = useState("discover");
+  const [cat, setCat] = useState(() => peekPendingCategory() ?? "discover");
+  useEffect(() => {
+    clearPendingCategory();
+    return onFunCategoryRequest(setCat);
+  }, []);
   const [query, setQuery] = useState("");
 
   const playGame = (key) => {

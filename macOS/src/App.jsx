@@ -28,7 +28,11 @@ import BootOverlay from "./components/shell/BootOverlay";
 import Dock from "./components/shell/Dock";
 import WindowsLayer from "./components/shell/WindowsLayer";
 import Loader from "./ui/Loader";
-import { getApps, iconForWindow, RESUME_URL } from "./config/apps";
+import { getApps, getIcons, iconForWindow, RESUME_URL } from "./config/apps";
+import { DOCK_STACKS } from "./config/dockStacks";
+import { GAMES } from "./components/windows/Fun/data/funApps";
+import { requestTerminalGame } from "./components/windows/terminal/terminalBus";
+import { requestFunCategory } from "./components/windows/Fun/funBus";
 import useIsMobile from "./hooks/useIsMobile";
 
 // ✅ import wallpaper pairs from Settings so every wallpaper swaps correctly
@@ -328,7 +332,34 @@ export default function App() {
   const mobile = useIsMobile();
   const dockHidden = mobile && openWindows.some((id) => !minMap[id]);
 
-  const dockApps = useMemo(() => apps.filter((a) => a.inDock), [apps]);
+  // Dock: About me, the four Stacks, then Extras & Fun (all apps)
+  const dockApps = useMemo(() => {
+    const icons = getIcons(iconTheme);
+    const stacks = DOCK_STACKS.map((st) => ({
+      id: `stack-${st.id}`,
+      label: st.label,
+      icon: icons[st.iconKey],
+      stack: {
+        label: st.label,
+        onSeeAll: () => {
+          requestFunCategory(st.category);
+          openWindow("fun");
+        },
+        items: st.items
+          .map((it) => {
+            if (it.game) {
+              const g = GAMES.find((x) => x.key === it.game);
+              return g && { key: `game-${g.key}`, label: g.title, emoji: g.emoji, gradient: g.gradient, windowId: null, onOpen: () => { openWindow("terminal"); requestTerminalGame(g.key); } };
+            }
+            const a = apps.find((x) => x.id === it.app);
+            return a && { key: a.id, label: a.label, icon: a.icon, windowId: a.windowId, onOpen: () => openWindow(a.windowId) };
+          })
+          .filter(Boolean),
+      },
+    }));
+    const inDock = apps.filter((a) => a.inDock);
+    return [...inDock.filter((a) => a.id !== "fun"), ...stacks, ...inDock.filter((a) => a.id === "fun")];
+  }, [apps, iconTheme, openWindow]);
   const dockMinimized = useMemo(
     () =>
       openWindows

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><filter id="s" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.28"/></filter><linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.28"/><stop offset="0.5" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2c2e"/><stop offset="1" stop-color="#0b0b0c"/></linearGradient><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#30d158" stop-opacity="0.45"/><stop offset="1" stop-color="#30d158" stop-opacity="0"/></linearGradient></defs>
+<rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/><rect x="100" y="100" width="824" height="824" rx="185" fill="url(#gloss)"/><rect x="100.5" y="100.5" width="823" height="823" rx="184.5" fill="none" stroke="#000" stroke-opacity="0.12"/>
+<g stroke="#fff" stroke-opacity="0.08" stroke-width="4"><path d="M190 380H834M190 520H834M190 660H834"/></g>
+<path d="M190 700 L330 610 L430 650 L560 470 L660 520 L834 300 L834 800 L190 800 Z" fill="url(#area)"/>
+<path d="M190 700 L330 610 L430 650 L560 470 L660 520 L834 300" fill="none" stroke="#30d158" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" filter="url(#s)"/>
+<circle cx="834" cy="300" r="26" fill="#30d158"/>
+<text x="190" y="260" font-family="-apple-system, Helvetica, Arial" font-weight="700" font-size="92" fill="#fff">IRR</text>
+</svg>
