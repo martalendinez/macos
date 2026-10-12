@@ -109,3 +109,8 @@ body {
     font-size: 16px !important;
   }
 }
+
+/* Trace poster: the AI buddy gently floats */
+@keyframes trace-ai-float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+.trace-ai-float { animation: trace-ai-float 3.2s ease-in-out infinite; transform-box: fill-box; }
+@media (prefers-reduced-motion: reduce) { .trace-ai-float { animation: none } }

@@ -9,16 +9,11 @@ import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
 import CaseStudySection from "./caseStudy/CaseStudySection";
 import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
-import { AtAGlance, Caption, Changes, Decision, Figure, H3, Insights, Intro, Lead, PanelShot, PullQuote, Stage, Stats } from "./caseStudy/Editorial";
+import { AtAGlance, Caption, Changes, Decision, Figure, H3, Insights, Intro, Lead, Learnings, MetricsPlan, PullQuote, Stats } from "./caseStudy/Editorial";
+import { ExperimentCompare, FrameworkExplorer, MixMatch, SynthesisBoard, TraceArchitecture, TraceLofi, TraceProblems, TraceStack, TryTrace } from "./caseStudy/TraceVisuals";
+import { CodeToggle } from "./caseStudy/KallosDeep";
+import { TraceGallery, TraceHero, TraceIterations, TracePanel } from "./caseStudy/TracePanels";
 
-import heroImg from "../../../imgs/case-study/trace/Trace_Shot_web.jpg";
-import traceScreen from "../../../imgs/case-study/trace/screen_trace.png";
-import optionsScreen from "../../../imgs/case-study/trace/screen_options.png";
-import fig2Img from "../../../imgs/case-study/trace/fig2_figma.jpg";
-import fig3Img from "../../../imgs/case-study/trace/fig3_features.jpg";
-import fig4Img from "../../../imgs/case-study/trace/fig4_features.jpg";
-import fig5Img from "../../../imgs/case-study/trace/fig5_lofi_iteration.jpg";
-import fig6Img from "../../../imgs/case-study/trace/fig6_hifi_iteration.jpg";
 
 const TINT = "#5b5bd6";
 const REPO = "https://github.com/martalendinez/Trace_Plugin";
@@ -28,12 +23,16 @@ const SECTIONS = [
   { id: "glance", label: "At a glance" },
   { id: "problem", label: "The problem" },
   { id: "research", label: "Research" },
+  { id: "synthesis", label: "Synthesis" },
   { id: "flow", label: "The framework" },
+  { id: "lofi", label: "Lo-fi" },
   { id: "decisions", label: "Key decisions" },
+  { id: "try", label: "Try Trace" },
   { id: "testing", label: "Testing & iteration" },
-  { id: "build", label: "Build" },
-  { id: "outcome", label: "Outcome & next" },
-];
+  { id: "build", label: "Design → code" },
+  { id: "outcome", label: "Impact & metrics" },
+  { id: "learnings", label: "What I learned" },
+]
 
 /* ---------- local visuals ---------- */
 
@@ -70,34 +69,6 @@ function Spectrum({ theme }) {
   );
 }
 
-const STAGES = [
-  { n: "Intent", d: "Say what you’re trying to achieve, and for whom." },
-  { n: "Context", d: "Design stage, constraints, user problems, hypotheses, anything else." },
-  { n: "Options", d: "3–5 directions, each with its principle, trade-off and reasoning." },
-  { n: "Critique", d: "Each option reviewed through lenses like accessibility and edge cases." },
-  { n: "Improve", d: "Refine an option in a chat, mix fields across options, apply suggestions." },
-  { n: "Trace", d: "An editable log of intent, critiques and what you decided." },
-];
-
-function StageFlow({ theme }) {
-  return (
-    <ol className="grid grid-cols-2 @3xl:grid-cols-6 gap-x-4 gap-y-6">
-      {STAGES.map((s, i) => (
-        <motion.li key={s.n} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}>
-          <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style={{ background: i === 5 ? TINT : `${TINT}${i === 0 ? "88" : "aa"}` }}>
-              {i + 1}
-            </span>
-            <span className={`hidden @3xl:block flex-1 h-px ${i === 5 ? "opacity-0" : ""}`} style={{ background: theme.isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.12)" }} />
-          </div>
-          <div className={`mt-2.5 text-[15px] font-semibold ${theme.textMain}`}>{s.n}</div>
-          <p className={`mt-1 text-[13px] leading-snug ${theme.textSub}`}>{s.d}</p>
-        </motion.li>
-      ))}
-    </ol>
-  );
-}
-
 /** Small code excerpt, styled like an editor. */
 function CodeBlock({ theme, title, children }) {
   return (
@@ -125,7 +96,7 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
   const t = { theme, tint: TINT };
 
   return (
-    <CaseStudyLayout tint={TINT} onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Trace · Master thesis">
+    <CaseStudyLayout tint={TINT} canvas={false} onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Trace · Master thesis">
       <Intro
         {...t}
         eyebrow="Master thesis · KTH · 2026"
@@ -143,11 +114,9 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
         ]}
       />
 
-      <Stage {...t} className="mt-10" pad="p-0">
-        <button type="button" onClick={() => open(heroImg, "Trace screens")} className="block w-full cursor-zoom-in">
-          <img src={heroImg} alt="Trace plugin screens: trace log, option refinement chat and critiques" className={`block w-full h-auto ${theme.isDark ? "" : "mix-blend-multiply"}`} />
-        </button>
-      </Stage>
+      <div className="mt-10">
+        <TraceHero onOpen={open} />
+      </div>
 
       <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
         <AtAGlance
@@ -180,6 +149,9 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
           and prompting that doesn’t fit visual, iterative work. When AI hands over finished answers with little insight into how they were made, designers become passive recipients
           instead of active participants, and the reflective thinking design depends on starts to fade.
         </p>
+        <div className="mt-8 mb-8">
+          <TraceProblems theme={theme} />
+        </div>
         <p className={`mt-2 text-[12px] font-semibold uppercase tracking-[0.08em] ${theme.textSub}`}>Research question</p>
         <p className={`mt-2 pl-4 border-l-2 text-[18px] font-semibold tracking-[-0.01em] ${theme.textMain}`} style={{ borderColor: TINT }}>
           What design principles enable task-aware AI assistance to support UX designers’ exploration and decision-making while preserving transparency and human agency?
@@ -213,15 +185,21 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
         <H3 theme={theme} className="mt-12">
           Designing with and without AI
         </H3>
-        <p className="mt-2">
-          The experiment made the difference tangible. Without AI, I structured problems and reasoned iteratively. With AI, I caught myself offloading thinking, changing direction because a suggestion
-          said so, and struggling to put visual intent into words. Those were exactly the patterns the experts described.
-        </p>
+        <p className="mt-2 mb-5">The experiment made the difference tangible, and it matched exactly what the experts described.</p>
+        <ExperimentCompare theme={theme} />
         <H3 theme={theme} className="mt-12">
           From automation to partnership
         </H3>
         <p className="mt-2 mb-6">Most AI design tools sit at the automation end. The research pointed Trace towards partnership.</p>
         <Spectrum theme={theme} />
+      </CaseStudySection>
+
+      <CaseStudySection id="synthesis" title="Synthesis" subtitle="From three sources of evidence to one framework" theme={theme}>
+        <p className="mb-8">
+          I built the framework abductively: notes from the literature, the expert interviews and my own design experiment went on one board, were clustered, and the recurring patterns
+          became six workflow stages.
+        </p>
+        <SynthesisBoard theme={theme} />
       </CaseStudySection>
 
       <CaseStudySection id="flow" title="The framework" subtitle="Task-aware, human-centred AI assistance" theme={theme}>
@@ -243,21 +221,24 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
             </li>
           ))}
         </ol>
-        <p className="mb-8">It organises AI-assisted design into six stages, with cross-cutting components (steerable outputs, visible uncertainty, built-in verification and recovery paths) running through all of them.</p>
-        <StageFlow theme={theme} />
-        <div className="mt-10">
-          <Figure theme={theme} src={fig3Img} alt="Intent, context and options screens" caption="Stages 1–3: intent, context and option generation." onOpen={open} />
-        </div>
-        <div className="mt-6">
-          <Figure theme={theme} src={fig4Img} alt="Mix and match, critiques and trace" caption="Mix & match, critiques, and the trace where designers consolidate their reasoning." onOpen={open} />
-        </div>
-        <div className="mt-6">
-          <Figure theme={theme} src={fig2Img} alt="Trace as a plugin inside a design tool" caption="The vision: Trace as a panel inside a design tool, next to the canvas." onOpen={open} />
-        </div>
+        <p className="mb-8">It organises AI-assisted design into six stages, with cross-cutting guardrails running through all of them. Hover a stage to see who does what:</p>
+        <FrameworkExplorer theme={theme} />
+      </CaseStudySection>
+
+      <CaseStudySection id="lofi" title="Lo-fi" subtitle="A panel next to the canvas" theme={theme}>
+        <p className="mb-8">
+          Trace was designed as a plugin panel that sits beside the designer’s canvas, never on top of it. I wireframed each stage in greyscale to test the structure before any visual design:
+        </p>
+        <TraceLofi theme={theme} />
+        <H3 theme={theme} className="mt-14">
+          From lo-fi to hi-fi
+        </H3>
+        <p className="mt-2 mb-6">The coded prototype brought each stage to life as a panel beside the canvas:</p>
+        <TraceGallery theme={theme} />
       </CaseStudySection>
 
       <CaseStudySection id="decisions" title="Key decisions" subtitle="What I chose, and what it cost" theme={theme}>
-        <Decision {...t} n={1} title="No generated UI. Ever." tradeoff="It’s less flashy than a tool that spits out screens. That’s the point: the thinking stays with the designer." visual={<PanelShot {...t} src={optionsScreen} alt="Options step: generated directions with principle and trade-off" onOpen={open} maxW={300} />}>
+        <Decision {...t} n={1} title="No generated UI. Ever." tradeoff="It’s less flashy than a tool that spits out screens. That’s the point: the thinking stays with the designer." visual={<div className="flex justify-center"><TracePanel screen="Options" width={300} /></div>}>
           Trace outputs <b className={theme.textMain}>3–5 options</b>, each with a title, summary, the problem it addresses, its underlying assumption, a design principle and an explicit trade-off.
           Options are things to reason about, not artefacts to paste in. The reasoning plays in progressively, so designers can see how the AI got there without being overwhelmed.
         </Decision>
@@ -266,20 +247,6 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
           n={2}
           title="Feedback that knows where you are"
           tradeoff="The designer has to tell Trace which stage they’re in. One extra input, but it stops pixel-level feedback from derailing a problem-definition session."
-          visual={
-            <CodeBlock theme={theme} title="server/reflect.ts">
-              {cm("// prompt rules change with the design stage")}
-              {"\n"}
-              {k("If")} stage includes {str('"problem-definition"')}:{"\n"}
-              {"  "}- Focus on the problem, constraints, user needs.{"\n"}
-              {"  "}- Avoid UI-level feedback.{"\n\n"}
-              {k("If")} stage includes {str('"wireframe"')}:{"\n"}
-              {"  "}- Focus on hierarchy, navigation, usability.{"\n"}
-              {"  "}- Avoid visual styling feedback.{"\n\n"}
-              {k("If")} stage includes {str('"high-fidelity"')}:{"\n"}
-              {"  "}- Focus on polish, accessibility, consistency.
-            </CodeBlock>
-          }
         >
           Feedback on a wireframe shouldn’t be about colours. Trace adapts what the AI focuses on, and what it must avoid, across <b className={theme.textMain}>eight design stages</b>, from problem
           definition to usability testing.
@@ -292,13 +259,17 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
           Good solutions are often hybrids. Designers can drag a title, principle or trade-off from one option onto another to compose their own, or open a refinement chat to push one option
           further.
         </Decision>
+        <div className="mb-10">
+          <MixMatch theme={theme} />
+          <p className={`mt-2 text-[11.5px] ${theme.textSub}`}>Example options for an onboarding flow, like the task in the usability study.</p>
+        </div>
         <Decision
           {...t}
           n={5}
           title="A trace you can edit and keep"
           tradeoff="Documenting takes a moment at the end. In return, the reasoning is still there in the review, the hand-off, and three months later."
           visual={
-<PanelShot {...t} src={traceScreen} alt="Trace log: intent, critiques and improvements" onOpen={open} />
+<div className="flex justify-center"><TracePanel screen="Trace" width={300} /></div>
           }
         >
           The final stage turns the session into a <b className={theme.textMain}>trace log</b>: the intent, the critiques reviewed and the improvements applied, all editable. It makes AI-assisted
@@ -306,11 +277,30 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
         </Decision>
       </CaseStudySection>
 
+      <CaseStudySection id="try" title="Try Trace" subtitle="The critique stage, live" theme={theme}>
+        <p className="mb-8">
+          This runs on Trace’s real critique library and stage rules. Change the design stage to see how the AI’s focus shifts, choose your lenses, then apply or reject critiques. Rejected ones
+          never come back, the fix testers asked for most.
+        </p>
+        <TryTrace theme={theme} />
+      </CaseStudySection>
+
       <CaseStudySection id="testing" title="Testing & iteration" subtitle="Two studies, 12 participants" theme={theme}>
         <p>
           I evaluated Trace twice, at different levels of fidelity, using think-aloud tasks around improving an onboarding flow, followed by interviews on usefulness, transparency, control and
           trust.
         </p>
+        <div className="mt-8">
+          <Stats
+            {...t}
+            items={[
+              { value: "12", label: "participants across both studies" },
+              { value: "45–60", label: "minutes per session" },
+              { value: "5", label: "task scenarios in the hi-fi study" },
+              { value: "9", label: "iterations shipped from the findings" },
+            ]}
+          />
+        </div>
 
         <H3 theme={theme} className="mt-10">
           Round 1 · Low fidelity, 4 participants
@@ -329,9 +319,6 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
             { found: "The trace felt fixed and not theirs.", changed: "An editable, structured trace log." },
           ]}
         />
-        <div className="mt-8">
-          <Figure theme={theme} src={fig5Img} alt="Changes after the low-fidelity study" caption="Before → after the first study." onOpen={open} />
-        </div>
 
         <H3 theme={theme} className="mt-12">
           Round 2 · High fidelity, 8 participants
@@ -358,68 +345,94 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
             ]}
           />
         </div>
-        <div className="mt-8">
-          <Figure theme={theme} src={fig6Img} alt="Changes after the high-fidelity study" caption="Before → after the second study." onOpen={open} />
-        </div>
+        <H3 theme={theme} className="mt-12">
+          Before and after, side by side
+        </H3>
+        <p className="mt-2 mb-6">The screens as tested and as shipped after each round.</p>
+        <TraceIterations theme={theme} />
       </CaseStudySection>
 
-      <CaseStudySection id="build" title="Build" subtitle="From research to a working prototype" theme={theme}>
+      <CaseStudySection id="build" title="Design → code" subtitle="From research to a working prototype" theme={theme}>
         <p>I built Trace myself, so every research principle had to survive contact with real code and a real model.</p>
-        <div className="mt-6 grid grid-cols-1 @3xl:grid-cols-2 gap-8">
-          <div>
-            <H3 theme={theme}>Frontend</H3>
-            <CaseStudyBulletList
-              items={[
-                "React 19 + TypeScript, built with Vite and styled with Tailwind.",
-                "The six-stage flow runs on a React Context + reducer, so every stage shares one source of truth.",
-                "dnd-kit for mix-and-match, Framer Motion for the reasoning animations.",
-              ]}
-            />
-          </div>
-          <div>
-            <H3 theme={theme}>Backend & AI</H3>
-            <CaseStudyBulletList
-              items={[
-                "Node + Express, calling a LLaMA model hosted on Groq.",
-                "Strict JSON responses, validated and normalised before they reach the UI.",
-                "Stateless by design, so the model layer can be swapped without touching the interaction design.",
-              ]}
-            />
-          </div>
+        <div className="mt-8">
+          <TraceStack theme={theme} />
         </div>
+        <H3 theme={theme} className="mt-12">
+          1 · One request, end to end
+        </H3>
+        <p className="mt-2 mb-5">Follow a critique request from the designer’s input to the cards on screen:</p>
+        <TraceArchitecture theme={theme} />
+        <H3 theme={theme} className="mt-12">
+          2 · Prompt design is UX design
+        </H3>
+        <p className="mt-2 mb-5">
+          The stage rules are the most important “screen” in Trace: they decide what the AI talks about and, just as important, what it must not. Accessibility needs mentioned by the designer are
+          always prioritised.
+        </p>
+        <CodeToggle label="View the stage rules">
+          <CodeBlock theme={theme} title="server/reflect.ts">
+            {cm("// prompt rules change with the design stage")}
+            {"\n"}
+            {k("If")} stage includes {str('"problem-definition"')}:{"\n"}
+            {"  "}- Focus on the problem, constraints, user needs.{"\n"}
+            {"  "}- Avoid UI-level feedback.{"\n\n"}
+            {k("If")} stage includes {str('"wireframe"')}:{"\n"}
+            {"  "}- Focus on hierarchy, navigation, usability.{"\n"}
+            {"  "}- Avoid visual styling feedback.{"\n\n"}
+            {k("If")} stage includes {str('"high-fidelity"')}:{"\n"}
+            {"  "}- Focus on polish, accessibility, consistency.{"\n\n"}
+            {cm("// if the designer mentions accessibility needs,")}
+            {"\n"}
+            {cm("// you MUST prioritise accessibility issues")}
+          </CodeBlock>
+        </CodeToggle>
         <p className={`mt-8 text-[14px] ${theme.textSub}`}>
           The response format already includes change instructions tied to design nodes: groundwork for applying suggestions directly on a canvas once Trace is connected to a design tool.
         </p>
       </CaseStudySection>
 
-      <CaseStudySection id="outcome" title="Outcome & next" subtitle="Where Trace goes from here" theme={theme}>
+      <CaseStudySection id="outcome" title="Impact & metrics" subtitle="What it showed, and how I’d measure it next" theme={theme}>
         <Lead theme={theme}>
           Designers don’t mainly want AI that produces solutions for them. They want tools that help them think. The question isn’t “how good is AI at wireframing?” but “how should designers
           think with AI?”
         </Lead>
         <div className="mt-8 grid grid-cols-1 @3xl:grid-cols-2 gap-8">
           <div>
+            <H3 theme={theme}>Contributions</H3>
+            <CaseStudyBulletList
+              items={[
+                "Empirical insights on how designers and experts use, trust and resist AI.",
+                "A framework for task-aware, human-centred AI assistance.",
+                "A working prototype showing AI as a collaborative design partner.",
+              ]}
+            />
+          </div>
+          <div>
             <H3 theme={theme}>What’s next</H3>
             <CaseStudyBulletList
               items={[
                 "Integrate with Figma and other tools so Trace works on real design files.",
                 "Support uploads, screenshots and visual previews, which participants asked for most.",
-                "Study long-term use: how trust and reliance evolve over weeks, not one session.",
+                "Study long-term use: how trust and reliance evolve over weeks.",
                 "Extend the framework to teams and asynchronous collaboration.",
               ]}
             />
           </div>
-          <div>
-            <H3 theme={theme}>What it taught me</H3>
-            <CaseStudyBulletList
-              items={[
-                "Structure beats prompting: guiding the AI through stages lifted the burden of writing the perfect prompt.",
-                "Agency is fragile. One rejected idea coming back was enough to make people feel unheard.",
-                "There’s a real tension with an industry that rewards speed. Reflective tools have to earn their place by making decisions better.",
-              ]}
-            />
-          </div>
         </div>
+        <H3 theme={theme} className="mt-12">
+          How I’d measure success in the field
+        </H3>
+        <p className="mt-2 mb-6">The thesis evaluated short sessions. In real use, these signals would show whether Trace keeps designers in charge over time.</p>
+        <MetricsPlan
+          {...t}
+          items={[
+            { metric: "Rejection rate", why: "If designers never reject anything, they may be over-relying on the AI.", how: "Share of critiques rejected or edited vs. accepted as-is.", target: "Agency" },
+            { metric: "Own ideas added", why: "The goal is thinking with AI, so designers should keep contributing.", how: "Designer-written options and improvements per session.", target: "Engagement" },
+            { metric: "Trace reuse", why: "A trace only matters if it’s used in reviews and hand-offs.", how: "Trace logs exported or revisited after the session.", target: "Accountability" },
+            { metric: "Perceived control", why: "The core promise: “I still decide what matters.”", how: "Post-session agency and trust ratings over repeated use.", target: "North star" },
+          ]}
+          note="Planned metrics, not results: the thesis evaluation was qualitative and short-term."
+        />
         <Caption theme={theme}>
           Read the full thesis{" "}
           <a href={THESIS_PDF} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-4" style={{ color: TINT }}>
@@ -430,6 +443,18 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
             GitHub ↗
           </a>
         </Caption>
+      </CaseStudySection>
+
+      <CaseStudySection id="learnings" title="What I learned" subtitle="Reflection" theme={theme}>
+        <Learnings
+          {...t}
+          items={[
+            { title: "Structure beats prompting.", text: "Guiding the AI through stages lifted the burden of writing the perfect prompt, for designers and for the model." },
+            { title: "Agency is fragile.", text: "One rejected idea coming back was enough to make people feel unheard. Respecting a “no” became a core feature." },
+            { title: "Researching and building keep each other honest.", text: "Every principle from the literature had to survive real code, a real model and real participants." },
+            { title: "Reflective tools have to earn their place.", text: "In an industry that rewards speed, slowing down only works if it clearly makes decisions better." },
+          ]}
+        />
       </CaseStudySection>
 
       <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox({ open: false, src: null, alt: "" })} theme={theme} />

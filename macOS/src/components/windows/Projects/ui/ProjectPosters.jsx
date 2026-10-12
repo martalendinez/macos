@@ -5,7 +5,7 @@
 //   Kallos        → Poppins, white + orange, radar chart
 //   Trace         → Inter, lavender + indigo, the six-stage nav
 // Sizes are in container units (cqw) so a poster scales from small cards to the hero.
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import elinImg from "../../../../imgs/case-study/sallskap/poster/elin_full.png";
 import diningImg from "../../../../imgs/case-study/sallskap/Dining_Restaurant.png";
 import kallosDash from "../../../../imgs/case-study/kallos/Dashboard.png";
@@ -13,6 +13,7 @@ import kallosScore from "../../../../imgs/case-study/kallos/poster/score.png";
 import kallosRadar from "../../../../imgs/case-study/kallos/poster/radar.png";
 import triviaChallenge from "../../../../imgs/case-study/trivia/screens/TriviaChallenge.jpg";
 import traceScreen from "../../../../imgs/case-study/trace/screen_trace.png";
+import { TracePanel } from "../caseStudy/TracePanels";
 
 const FONTS = "https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=Luckiest+Guy&family=Rammetto+One&family=Alegreya+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap";
 
@@ -79,6 +80,8 @@ function SallskapPoster() {
         className={`z-[1] ${hover} [transform:rotate(-3deg)] group-hover:[transform:rotate(-1deg)_translateY(-2%)]`}
         style={{ right: "-8cqw", top: "11cqw", width: "50cqw" }}
       />
+
+
 
       {/* Elin in front */}
       <img
@@ -259,37 +262,137 @@ function RadarWhite() {
 /* ---------------- Trace ---------------- */
 const INTER = 'Inter, system-ui, sans-serif';
 const STAGES = ["Intent", "Context", "Options", "Critique", "Improve", "Trace"];
-function TracePoster() {
+function FitPanel({ screen, style, className = "" }) {
+  const ref = useRef(null);
+  const [w, setW] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setW(e.contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   return (
-    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(140deg, #f3f2ff 0%, #e6e5ff 55%, #d9d8ff 100%)", fontFamily: INTER }}>
-      <span className="absolute rounded-full" style={{ width: "40cqw", height: "40cqw", left: "-10cqw", bottom: "-18cqw", background: "radial-gradient(circle, rgba(91,91,214,0.22), transparent 70%)" }} />
-      <div className="absolute left-[5.5cqw] top-[4.6cqw] flex items-center gap-[0.8cqw] font-semibold text-[#3b3aa8]" style={fs(1.5, 9)}>
-        <span className="w-[2.2cqw] h-[2.2cqw] rounded-full flex items-center justify-center text-white" style={{ background: "#5b5bd6", ...fs(1.1, 7) }}>
-          ✦
-        </span>
-        Trace · Design Reflection
-      </div>
-      <div className="absolute left-[5.5cqw] top-1/2 -translate-y-[45%] w-[50cqw] z-[2]">
-        <div className="font-extrabold tracking-[-0.045em] leading-[0.98] text-[#16163a]" style={{ fontSize: "6.6cqw" }}>
-          Think <span style={{ color: "#5b5bd6" }}>with</span> AI,
+    <div ref={ref} className={`absolute ${className}`} style={style}>
+      {w > 0 && <TracePanel screen={screen} width={w} />}
+    </div>
+  );
+}
+
+/** Notion-style robot: thick even black strokes, white fills, dot eyes, minimal shapes. */
+function AICritic({ className = "", style }) {
+  const K = "#111";
+  const st = { stroke: K, strokeWidth: 6, strokeLinecap: "round", strokeLinejoin: "round" };
+  return (
+    <svg viewBox="0 0 240 300" className={className} style={style} aria-hidden="true">
+      <ellipse cx="112" cy="278" rx="56" ry="7" fill="#000" opacity="0.08" />
+      {/* antenna */}
+      <path d="M112 44 Q108 28 120 20" {...st} fill="none" />
+      <circle cx="122" cy="17" r="6" fill={K} />
+      {/* head: big rounded square */}
+      <rect x="56" y="44" width="112" height="96" rx="34" fill="#f4f4f4" {...st} />
+      <path d="M66 112 Q70 132 92 136 L134 136 Q158 134 162 112 L162 120 Q160 138 138 139 H88 Q62 138 60 116 Z" fill="#d9d9d9" />
+      <rect x="74" y="66" width="76" height="52" rx="22" fill="#fff" stroke={K} strokeWidth="4" />
+      {/* dot eyes + small smile, Notion faces */}
+      <circle cx="94" cy="92" r="6" fill={K} />
+      <circle cx="132" cy="92" r="6" fill={K} />
+      <path d="M104 112 Q113 119 122 112" {...st} strokeWidth="5" fill="none" />
+      {/* simple ear bolts */}
+      <rect x="40" y="82" width="16" height="20" rx="6" fill="#bdbdbd" {...st} strokeWidth="5" />
+      <rect x="168" y="82" width="16" height="20" rx="6" fill="#bdbdbd" {...st} strokeWidth="5" />
+      {/* body */}
+      <path d="M78 150 H146 Q154 150 154 160 L158 222 Q158 234 146 234 H78 Q66 234 66 222 L70 160 Q70 150 78 150 Z" fill="#e6e6e6" {...st} />
+      <path d="M71 196 L157 196 L158 222 Q158 231 146 231 H78 Q69 231 69 222 Z" fill="#c9c9c9" />
+      <path d="M100 140 V150 M124 140 V150" {...st} />
+      {/* single black chest square, a Notion-like solid accent */}
+      <rect x="98" y="166" width="28" height="24" rx="6" fill={K} />
+      {/* legs */}
+      <path d="M92 234 V272 H80" {...st} fill="none" />
+      <path d="M132 234 V272 H144" {...st} fill="none" />
+      {/* arm on hip */}
+      <path d="M70 168 Q44 182 64 204" {...st} fill="none" />
+      {/* arm raising a magnifier */}
+      <path d="M154 168 Q182 156 186 122" {...st} fill="none" />
+      <path d="M188 116 L198 98" {...st} />
+      <circle cx="208" cy="80" r="20" fill="#ededed" {...st} />
+      <path d="M200 72 q6 -6 14 -4" stroke="#fff" strokeWidth="4" strokeLinecap="round" fill="none" />
+      {/* motion ticks */}
+      <path d="M30 56 L40 64 M24 78 H36" {...st} strokeWidth="4" fill="none" />
+    </svg>
+  );
+}
+
+function TracePoster() {
+  const I = "#4f5ae8", INK = "#1d1f5a";
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "#f3f2fb", fontFamily: INTER }}>
+      {/* soft indigo glow behind the plugin */}
+      <span className="absolute rounded-full" style={{ width: "60cqw", height: "60cqw", right: "-14cqw", top: "-8cqw", background: "radial-gradient(circle, rgba(79,90,232,0.18), transparent 65%)" }} />
+
+      <div className="absolute left-[5cqw] top-1/2 -translate-y-1/2 z-[3] w-[42cqw]">
+        <div className="font-bold tracking-[0.32em]" style={{ color: I, ...fs(1.6, 10) }}>
+          TRACE
+        </div>
+        <div className="mt-[1.8cqw] font-black tracking-[-0.05em] leading-[0.98] whitespace-nowrap" style={{ color: INK, fontSize: "6.2cqw" }}>
+          Think with AI,
           <br />
           not for it.
         </div>
-        <div className="mt-[2.2cqw] flex flex-wrap gap-[0.6cqw]">
-          {STAGES.map((s, i) => (
-            <span
-              key={s}
-              className="rounded-full px-[1.2cqw] py-[0.5cqw] font-medium"
-              style={{ ...fs(1.15, 8), ...(i === 5 ? { background: "#5b5bd6", color: "#fff" } : { background: "rgba(255,255,255,0.75)", color: "#4a4a7a" }) }}
-            >
-              {i + 1} {s}
-            </span>
-          ))}
+        <div className="mt-[1.8cqw] text-[#4a4a66] max-w-[34cqw]" style={fs(2.1, 12)}>
+          An AI co-pilot that keeps designers in charge.
         </div>
       </div>
-      <div className={`absolute ${hover} [transform:rotate(4deg)] group-hover:[transform:rotate(1deg)_translateY(-2%)]`} style={{ right: "6cqw", top: "8cqw", width: "28cqw" }}>
-        <img src={traceScreen} alt="" draggable={false} loading="lazy" className="block w-full h-auto rounded-[1.8cqw] bg-white" style={{ boxShadow: "0 0 0 1px rgba(60,60,160,0.08), 0 3cqw 6cqw -1.5cqw rgba(50,40,140,0.4)" }} />
+
+      {/* the plugin */}
+      <FitPanel screen="Critique" className={`z-[1] ${hover} [transform:rotate(-3deg)] group-hover:[transform:rotate(-1deg)_translateY(-2%)]`} style={{ right: "2cqw", top: "9cqw", width: "32cqw" }} />
+
+      {/* Figma connection */}
+      <div className={`absolute z-[3] ${hover} group-hover:-translate-y-[0.8cqw]`} style={{ left: "47cqw", top: "47cqw" }}>
+        {/* selected frame with Figma handles */}
+        <div className="relative bg-white" style={{ width: "13cqw", height: "9cqw", borderRadius: "0.6cqw", boxShadow: "0 1.4cqw 3cqw -1.2cqw rgba(30,30,90,0.35)" }}>
+          <div style={{ padding: "1cqw" }}>
+            <span className="block rounded-full" style={{ width: "55%", height: "0.8cqw", background: "#d9dbf6" }} />
+            <span className="block rounded-full mt-[0.6cqw]" style={{ width: "80%", height: "0.6cqw", background: "#eceefb" }} />
+            <span className="block rounded-[0.4cqw] mt-[1.2cqw]" style={{ width: "50%", height: "1.6cqw", background: "#a7e3bd" }} />
+          </div>
+          <div className="absolute inset-[-0.3cqw]" style={{ border: "2px solid #0d99ff", borderRadius: "0.6cqw" }} />
+          {[["-0.7cqw", "-0.7cqw"], ["-0.7cqw", "auto"], ["auto", "-0.7cqw"], ["auto", "auto"]].map(([t, l], k) => (
+            <span key={k} className="absolute bg-white" style={{ width: "1cqw", height: "1cqw", border: "2px solid #0d99ff", top: k < 2 ? "-0.7cqw" : "auto", bottom: k >= 2 ? "-0.7cqw" : "auto", left: k % 2 === 0 ? "-0.7cqw" : "auto", right: k % 2 === 1 ? "-0.7cqw" : "auto" }} />
+          ))}
+          <span className="absolute font-semibold text-white" style={{ top: "-2.6cqw", left: "-0.4cqw", fontSize: "max(7px,0.95cqw)", background: "#0d99ff", padding: "0.15cqw 0.6cqw", borderRadius: "0.3cqw" }}>
+            Onboarding
+          </span>
+          {/* cursor */}
+          <svg viewBox="0 0 24 24" className="absolute" style={{ right: "-2.4cqw", bottom: "-2.6cqw", width: "2.4cqw" }} aria-hidden="true">
+            <path d="M4 3l15 7-6.5 2L10 19z" fill="#111" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" />
+          </svg>
+        </div>
+        {/* figma tile + connector */}
+        <div className="absolute flex items-center" style={{ left: "-1cqw", top: "12.5cqw", gap: "0.8cqw" }}>
+          <span className="flex items-center justify-center bg-[#1e1e1e]" style={{ width: "4cqw", height: "4cqw", borderRadius: "1cqw", boxShadow: "0 1cqw 2cqw -1cqw rgba(0,0,0,0.4)" }}>
+            <svg viewBox="0 0 38 57" style={{ height: "2.2cqw" }} aria-hidden="true">
+              <path d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z" fill="#1abcfe" />
+              <path d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z" fill="#0acf83" />
+              <path d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z" fill="#ff7262" />
+              <path d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z" fill="#f24e1e" />
+              <path d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z" fill="#a259ff" />
+            </svg>
+          </span>
+          <span style={{ width: "4.5cqw", borderTop: "2px dashed rgba(79,90,232,0.5)" }} />
+          <span className="inline-flex items-center bg-white font-semibold whitespace-nowrap" style={{ gap: "0.5cqw", padding: "0.6cqw 1.1cqw", borderRadius: "999px", color: "#2b2e7a", fontSize: "max(8px,1.1cqw)", boxShadow: "0 0 0 1px rgba(79,90,232,0.15), 0 1cqw 2cqw -1cqw rgba(30,30,90,0.3)" }}>
+            <span className="rounded-full" style={{ width: "0.8cqw", height: "0.8cqw", background: "#22c55e" }} />
+            Plugin connected
+          </span>
+        </div>
       </div>
+
+      {/* one bubble */}
+      <span
+        className={`absolute z-[3] rounded-[1.8cqw] rounded-bl-[0.4cqw] font-bold text-white whitespace-nowrap ${hover} group-hover:-translate-y-[0.6cqw]`}
+        style={{ left: "36cqw", top: "6cqw", background: I, padding: "1cqw 1.8cqw", rotate: "-3deg", boxShadow: "0 1.4cqw 3cqw -1cqw rgba(40,40,140,0.45)", ...fs(1.45, 9) }}
+      >
+        Here’s my reasoning. You decide.
+      </span>
     </div>
   );
 }
