@@ -3,15 +3,27 @@
 // browser/phone frames bleeding off the edge, floating UI chips taken from the product,
 // a mesh gradient and film grain. Everything is sized in container units (cqw), so a cover
 // looks the same from the small grid card to the big featured card.
+import { POSTERS, POSTER_BG, usePosterFonts } from "./ProjectPosters";
 import kallosDashboard from "../../../../imgs/case-study/kallos/Dashboard.png";
 import diningRestaurant from "../../../../imgs/case-study/sallskap/Dining_Restaurant.png";
 import triviaChallenge from "../../../../imgs/case-study/trivia/screens/TriviaChallenge.jpg";
 import triviaRanking from "../../../../imgs/case-study/trivia/screens/TriviaRanking.jpg";
+import traceScreen from "../../../../imgs/case-study/trace/screen_trace.png";
+import optionsScreen from "../../../../imgs/case-study/trace/screen_options.png";
 
 const GRAIN =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
 const COVERS = {
+  thesis: {
+    bg: "radial-gradient(55% 80% at 0% 0%, #8d8cff 0%, transparent 60%), radial-gradient(50% 70% at 100% 100%, #c58bff 0%, transparent 60%), linear-gradient(135deg, #4b49c9 0%, #2f2d93 55%, #1c1a5e 100%)",
+    ink: "#fff",
+    sub: "rgba(255,255,255,0.82)",
+    brand: "Trace",
+    title: ["AI that helps", "you think."],
+    tagline: "A co-pilot for design decisions",
+    tags: ["Master thesis", "AI", "UX"],
+  },
   employerBranding: {
     bg: "radial-gradient(60% 80% at 10% 10%, #ffd3ad 0%, transparent 60%), radial-gradient(50% 70% at 90% 100%, #ff5d5d 0%, transparent 60%), linear-gradient(135deg, #ff9a52 0%, #f0722f 55%, #c94b1c 100%)",
     ink: "#fff",
@@ -157,16 +169,69 @@ function SallskapArt() {
   );
 }
 
-const ART = { employerBranding: KallosArt, kthTriviaApp: TriviaArt, restaurantCoordination: SallskapArt };
+function TraceArt() {
+  return (
+    <>
+      <div className={`absolute ${tiltBase} [transform:rotate(-7deg)] group-hover:[transform:rotate(-4deg)_translateY(-2%)]`} style={{ left: "52%", top: "14%", width: "21%" }}>
+        <img src={optionsScreen} alt="" draggable={false} loading="lazy" decoding="async" className="block w-full h-auto rounded-[1.6cqw] bg-white" style={{ boxShadow: "0 4cqw 8cqw -2cqw rgba(0,0,0,0.55)" }} />
+      </div>
+      <div className={`absolute ${tiltBase} [transform:rotate(5deg)] group-hover:[transform:rotate(2deg)_translateY(-3%)]`} style={{ left: "70%", top: "10%", width: "25%" }}>
+        <img src={traceScreen} alt="" draggable={false} loading="lazy" decoding="async" className="block w-full h-auto rounded-[1.8cqw] bg-white" style={{ boxShadow: "0 4cqw 8cqw -2cqw rgba(0,0,0,0.55)" }} />
+      </div>
+      <Chip className="group-hover:-translate-y-[0.8cqw]" style={{ left: "44%", top: "60%" }}>
+        <div className="text-[max(8px,1.1cqw)] font-semibold uppercase tracking-wide text-black/45">Critique · Accessibility</div>
+        <div className="mt-[0.3cqw] text-[max(9px,1.4cqw)] font-bold">Insufficient color contrast</div>
+        <div className="mt-[0.2cqw] text-[max(8px,1.1cqw)] text-[#5b5bd6] font-semibold">Uncertainty: needs real users to confirm</div>
+      </Chip>
+      <Chip className="group-hover:-translate-y-[0.6cqw]" style={{ left: "82%", top: "74%" }}>
+        <span className="flex items-center gap-[0.6cqw] text-[max(9px,1.3cqw)] font-bold text-[#2f2d93]">
+          <span className="w-[1.8cqw] h-[1.8cqw] rounded-full bg-[#5b5bd6] text-white flex items-center justify-center text-[max(8px,1.1cqw)]">✓</span>
+          You decide
+        </span>
+      </Chip>
+    </>
+  );
+}
 
-export default function ProjectCover({ project, className = "" }) {
+const ART = { thesis: TraceArt, employerBranding: KallosArt, kthTriviaApp: TriviaArt, restaurantCoordination: SallskapArt };
+
+// compact thumbnails (e.g. Recruiter Mode): just the key screen, centred on the gradient
+const COMPACT = { thesis: traceScreen, employerBranding: kallosDashboard, kthTriviaApp: triviaChallenge, restaurantCoordination: diningRestaurant };
+
+export default function ProjectCover({ project, className = "", compact = false }) {
+  usePosterFonts();
   const cover = COVERS[project.id];
   const Art = ART[project.id];
+  const Poster = POSTERS[project.id];
 
   if (!cover || !Art) {
     return (
       <div className={`relative overflow-hidden ${className}`} style={{ background: `${project.tint}14` }}>
         <img src={project.thumbnail} alt="" draggable={false} className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+      </div>
+    );
+  }
+
+  if (compact) {
+    const phone = project.id === "kthTriviaApp";
+    return (
+      <div className={`overflow-hidden ${className || "relative"}`} style={{ background: POSTER_BG[project.id] ?? cover.bg }}>
+        <div className="absolute inset-0 opacity-[0.16] mix-blend-overlay pointer-events-none" style={{ backgroundImage: GRAIN }} />
+        <img
+          src={COMPACT[project.id]}
+          alt=""
+          draggable={false}
+          loading="lazy"
+          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${phone ? "h-[84%] w-auto rounded-[12px] border-[3px] border-[#0e0e10]" : project.id === "thesis" ? "h-[82%] w-auto rounded-[10px]" : "w-[82%] h-auto rounded-[6px]"} shadow-[0_14px_30px_-10px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-[1.06] group-hover:-rotate-1`}
+        />
+      </div>
+    );
+  }
+
+  if (Poster) {
+    return (
+      <div className={`relative overflow-hidden [container-type:inline-size] ${className}`}>
+        <Poster />
       </div>
     );
   }

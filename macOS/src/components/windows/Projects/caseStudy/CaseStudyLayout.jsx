@@ -10,7 +10,7 @@ export const useCaseStudyContext = () => useContext(CaseStudyContext);
 const TOOLBAR_H = 48;
 const COMPACT_BELOW = 860; // hide the sidebar in narrow windows
 
-export default function CaseStudyLayout({ theme, sections = [], title, children, onOpenWindow }) {
+export default function CaseStudyLayout({ theme, sections = [], title, children, onOpenWindow, tint = "#0a84ff", canvas = true, device = "browser" }) {
   const rootRef = useRef(null);
   const scrollRef = useRef(null);
   const [active, setActive] = useState(sections[0]?.id);
@@ -68,7 +68,7 @@ export default function CaseStudyLayout({ theme, sections = [], title, children,
   const activeIdx = Math.max(0, sections.findIndex((s) => s.id === active));
 
   return (
-    <CaseStudyContext.Provider value={{ sections, theme }}>
+    <CaseStudyContext.Provider value={{ sections, theme, tint, canvas, device }}>
       <div ref={rootRef} className={`no-darkwin relative h-full w-full flex ${theme.windowBg}`}>
         {/* SIDEBAR */}
         <motion.aside

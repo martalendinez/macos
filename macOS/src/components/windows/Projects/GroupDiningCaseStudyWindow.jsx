@@ -7,26 +7,24 @@ import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
 import CaseStudySection from "./caseStudy/CaseStudySection";
 import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
-import { AtAGlance, BrowserFrame, Caption, Changes, Decision, Figure, FlowSteps, H3, Insights, Intro, Lead, Stage, Stats } from "./caseStudy/Editorial";
+import SallskapSystem from "./caseStudy/SallskapSystem";
+import SallskapLofi from "./caseStudy/SallskapLofi";
+import heroImg from "../../../imgs/case-study/sallskap/Dining_Overall_web.jpg";
+import SallskapEngineering from "./caseStudy/SallskapEngineering";
+import { AvailabilityOverlap, CompetitiveMatrix, GroupMatcher, InterviewClusters } from "./caseStudy/SallskapPlay";
+import { AtAGlance, BrowserFrame, Caption, Changes, Decision, Figure, FlowSteps, H3, Insights, Intro, Lead, Learnings, MetricsPlan, Stats } from "./caseStudy/Editorial";
 
-import interviewImg from "../../../imgs/case-study/sallskap/Sakura_Interview.png";
-import competitorImg from "../../../imgs/case-study/sallskap/Competitor_Analysis_Sakura.png";
 import architectureImg from "../../../imgs/case-study/sallskap/Sakura_Architecture.png";
 import dataFlowImg from "../../../imgs/case-study/sallskap/Flowchart_Sakura_Data.png";
 import flowchartImg from "../../../imgs/case-study/sallskap/Dining_Flowchart.png";
 import personaImg from "../../../imgs/case-study/sallskap/Elina_Persona.png";
 import empathyMapImg from "../../../imgs/case-study/sallskap/Elina_Empathy_Map.png";
-import system1Img from "../../../imgs/case-study/sallskap/Dining_System1.png";
-import system2Img from "../../../imgs/case-study/sallskap/Dining_System2.png";
-import system3Img from "../../../imgs/case-study/sallskap/Dining_System3.png";
-import system4Img from "../../../imgs/case-study/sallskap/Dining_System4.png";
 import reviewsImg from "../../../imgs/case-study/sallskap/Dining_Reviews.png";
 import darkImg from "../../../imgs/case-study/sallskap/Dining_Dark.png";
 import restaurantImg from "../../../imgs/case-study/sallskap/Dining_Restaurant.png";
 import restrictionsImg from "../../../imgs/case-study/sallskap/Dining_Restrictions.png";
 import groupImg from "../../../imgs/case-study/sallskap/Dining_Group.png";
-import heroImg from "../../../imgs/case-study/sallskap/Dining_Overall_web.jpg";
-import mockupImg from "../../../imgs/case-study/sallskap/Dining_Mockup.png";
+import mockupImg from "../../../imgs/case-study/sallskap/Sallskap_Shot_web.jpg";
 
 const TINT = "#34b27b";
 const LIVE = "https://sallskap-git-main-martalendinezs-projects.vercel.app";
@@ -36,11 +34,14 @@ const SECTIONS = [
   { id: "glance", label: "At a glance" },
   { id: "problem", label: "The problem" },
   { id: "research", label: "Research & pivot" },
+  { id: "lofi", label: "Sketches & lo-fi" },
   { id: "decisions", label: "Key decisions" },
   { id: "design", label: "Design" },
-  { id: "build", label: "Build" },
+  { id: "build", label: "Design → code" },
   { id: "testing", label: "Testing & iteration" },
+  { id: "metrics", label: "Measuring success" },
   { id: "outcome", label: "Outcome" },
+  { id: "learnings", label: "What I learned" },
 ];
 
 export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
@@ -51,7 +52,7 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
   const t = { theme, tint: TINT };
 
   return (
-    <CaseStudyLayout onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Sällskap">
+    <CaseStudyLayout tint={TINT} canvas={false} device="laptop" onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Sällskap">
       <Intro
         {...t}
         eyebrow="Personal project · 2026 · Live"
@@ -60,7 +61,6 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
         ctas={[
           { label: "Try the live app", href: LIVE },
           { label: "GitHub", href: "https://github.com/martalendinez/Sallskap" },
-          { label: "Full case study", href: "https://flair-fabrica.vercel.app" },
         ]}
         facts={[
           { k: "Role", v: "UX designer & full-stack developer" },
@@ -70,11 +70,9 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
         ]}
       />
 
-      <Stage {...t} className="mt-10" pad="p-0">
-        <button type="button" onClick={() => open(heroImg, "Sällskap screens")} className="block w-full cursor-zoom-in">
-          <img src={heroImg} alt="Sällskap screens: landing page, reservations, availability and restaurants" className={`block w-full h-auto ${theme.isDark ? "" : "mix-blend-multiply"}`} />
-        </button>
-      </Stage>
+      <button type="button" onClick={() => open(heroImg, "Sällskap screens")} className="mt-10 block w-full cursor-zoom-in">
+        <img src={heroImg} alt="Sällskap screens: landing page, reservations, availability and restaurants" className="block w-full h-auto rounded-[20px]" />
+      </button>
 
       <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
         <AtAGlance
@@ -134,14 +132,31 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
             Both research streams pointed the same way: group coordination was the real, underserved problem. I dropped the solo-diner use case and focused the whole product on it.
           </p>
         </div>
-        <div className="mt-10 grid grid-cols-1 @3xl:grid-cols-[1.4fr_1fr] gap-6 items-start">
-          <Figure theme={theme} src={competitorImg} alt="Competitive analysis" caption="Competitive analysis of five booking platforms." onOpen={open} />
-          <Figure theme={theme} src={interviewImg} alt="Interview synthesis" caption="Interview synthesis." onOpen={open} />
-        </div>
+        <H3 theme={theme}>
+          What five people told me
+        </H3>
+        <p className="mt-2 mb-5">Interview notes, clustered into themes. The highlighted notes are the ones that shaped the product.</p>
+        <InterviewClusters theme={theme} />
+        <H3 theme={theme} className="mt-12">
+          Competitive matrix
+        </H3>
+        <p className="mt-2 mb-5">Five booking platforms compared on what a group actually needs. None of them help a group decide together.</p>
+        <CompetitiveMatrix theme={theme} />
         <div className="mt-6 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
-          <Figure theme={theme} src={personaImg} alt="Organizer persona" caption="Elina, the organizer: social, responsible, short on time." onOpen={open} />
+          <Figure theme={theme} src={personaImg} alt="Organizer persona" caption="Elin, the organizer: social, responsible, short on time." onOpen={open} />
           <Figure theme={theme} src={empathyMapImg} alt="Empathy map" caption="What the organizer thinks, feels and worries about." onOpen={open} />
         </div>
+      </CaseStudySection>
+
+      <CaseStudySection id="lofi" title="Sketches & lo-fi" subtitle="Thinking on paper before pixels" theme={theme}>
+        <p>
+          Before any UI, I sketched the three moments the research pointed to: forming the group, sharing time and dietary needs, and choosing from a shortlist. Paper kept it fast and
+          cheap to throw ideas away, and the notes in the margins became the key decisions below.
+        </p>
+        <p className="mt-4 mb-8">
+          Then I moved to greyscale wireframes to validate structure and flow without colour or imagery getting in the way, so every review was about the journey, not the styling.
+        </p>
+        <SallskapLofi theme={theme} />
       </CaseStudySection>
 
       <CaseStudySection id="decisions" title="Key decisions" subtitle="What I chose, and what it cost" theme={theme}>
@@ -173,6 +188,18 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
           The recommendation engine merges availability, dietary needs and preferences into a curated shortlist, so the organizer chooses between a few good options instead of searching from
           scratch.
         </Decision>
+        <H3 theme={theme} className="mt-6">
+          Try it: the matching, live
+        </H3>
+        <p className="mt-2 mb-5">
+          Built on the real app’s restaurant data and filtering logic. Switch between members and change their (private) dietary needs, then watch the shortlist update.
+        </p>
+        <GroupMatcher theme={theme} />
+        <H3 theme={theme} className="mt-12">
+          Try it: finding a time
+        </H3>
+        <p className="mt-2 mb-5">Tap any slot to change someone’s availability. The group row shows where everyone overlaps.</p>
+        <AvailabilityOverlap theme={theme} />
       </CaseStudySection>
 
       <CaseStudySection id="design" title="Design" subtitle="One linear flow, Scandinavian calm" theme={theme}>
@@ -195,26 +222,25 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
             ]}
           />
         </div>
-        <div className="mt-10 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
-          <Figure theme={theme} src={system1Img} alt="Typography" caption="Typography." onOpen={open} />
-          <Figure theme={theme} src={system2Img} alt="Colours" caption="Colour." onOpen={open} />
-          <Figure theme={theme} src={system3Img} alt="Icons" caption="Iconography." onOpen={open} />
-          <Figure theme={theme} src={system4Img} alt="Grid and layout" caption="Grid and layout." onOpen={open} />
+        <div className="mt-10">
+          <SallskapSystem />
+          <p className={`mt-3 flex gap-2 text-[13px] leading-snug ${theme.textSub}`}>
+            <span className="mt-[6px] w-1.5 h-1.5 rounded-full shrink-0" style={{ background: TINT }} />
+            The Sällskap design system: DM Serif Display + Inter, three 11-step palettes, components from the real UI, Phosphor icons and an 8px spacing grid.
+          </p>
         </div>
       </CaseStudySection>
 
-      <CaseStudySection id="build" title="Build" subtitle="A real app, not just a prototype" theme={theme}>
-        <p>I built Sällskap as a working web app, using Lovable to iterate fast and keeping the architecture clean enough to grow into a production tool.</p>
-        <CaseStudyBulletList
-          items={[
-            "React frontend with modular flows: group creation, availability, dietary needs, restaurants and reservations.",
-            "Supabase for groups, members, preferences, restaurants and reservations, with row-level security for basic data safety.",
-            "Routing and state structured around the booking journey.",
-            "Room to add AI-assisted suggestions and smart defaults later.",
-          ]}
-        />
-        <div className="mt-8 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
-          <Figure theme={theme} src={dataFlowImg} alt="Data model and flow" caption="Data model and flow." onOpen={open} />
+      <CaseStudySection id="build" title="Design → code" subtitle="How the design system became the product" theme={theme}>
+        <p>
+          I designed and built Sällskap myself, using Lovable to move fast and shadcn/ui primitives as a base, on React, TypeScript, Tailwind and Supabase. The interesting part isn’t the stack;
+          it’s how decisions from Figma survive into code. Three examples, straight from the repo:
+        </p>
+        <div className="mt-10">
+          <SallskapEngineering theme={theme} tint={TINT} />
+        </div>
+        <div className="mt-12 grid grid-cols-1 @2xl:grid-cols-2 gap-6 items-start">
+          <Figure theme={theme} src={dataFlowImg} alt="Data model and flow" caption="Data model and flow, planned before building." onOpen={open} />
           <Figure theme={theme} src={architectureImg} alt="System architecture" caption="High-level architecture." onOpen={open} />
         </div>
       </CaseStudySection>
@@ -259,12 +285,26 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
         </p>
       </CaseStudySection>
 
+      <CaseStudySection id="metrics" title="Measuring success" subtitle="What I’d track in production" theme={theme}>
+        <p className="mb-8">
+          Usability testing told me the flow works. In production, these are the numbers I’d use to know whether Sällskap actually beats the group chat, and where to iterate next.
+        </p>
+        <MetricsPlan
+          {...t}
+          items={[
+            { metric: "Time to booking", why: "The core promise: from “we should have dinner” to a confirmed table faster than a group chat.", how: "Timestamp from group creation to booking confirmation, compared with a chat-based baseline.", target: "North star" },
+            { metric: "Step completion", why: "Shows exactly where people drop off: invite, availability, dietary needs or restaurant choice.", how: "Funnel events per step, segmented by organizer vs. member.", target: "Funnel" },
+            { metric: "Invite response rate", why: "Coordination only works if everyone answers. A low rate means the share link or the ask isn’t landing.", how: "Members who submit availability ÷ members invited.", target: "Engagement" },
+            { metric: "Matches found", why: "If strict dietary filtering leaves no restaurants, the experience fails at the last step.", how: "Share of groups with at least 3 matching restaurants after filtering.", target: "Quality" },
+          ]}
+          note="These are planned metrics, not results: Sällskap is a live prototype without production analytics yet."
+        />
+      </CaseStudySection>
+
       <CaseStudySection id="outcome" title="Outcome" subtitle="Live, usable, and ready to grow" theme={theme}>
-        <Stage {...t} pad="px-4 pt-6 pb-2 @2xl:px-16 @2xl:pt-10">
-          <button type="button" onClick={() => open(mockupImg, "Sällskap final")} className="block w-full cursor-zoom-in">
-            <img src={mockupImg} alt="Sällskap on a laptop" className={`block w-full max-w-[640px] mx-auto h-auto ${theme.isDark ? "rounded-xl" : "mix-blend-multiply"}`} loading="lazy" />
-          </button>
-        </Stage>
+        <button type="button" onClick={() => open(mockupImg, "Sällskap final screens")} className="block w-full cursor-zoom-in">
+          <img src={mockupImg} alt="Sällskap final screens: landing, favourites, availability and reservations" className="block w-full h-auto rounded-[20px]" loading="lazy" />
+        </button>
         <p className="mt-8">
           A working web app, live on Vercel, that takes a group from “we should have dinner” to a confirmed reservation while respecting everyone’s constraints.{" "}
           <a href={LIVE} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-4" style={{ color: TINT }}>
@@ -279,6 +319,18 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
             "AI-assisted restaurant suggestions and smart defaults based on the group’s history.",
             "Measure time-to-booking against a plain group chat to quantify the improvement.",
             "Test with larger and more diverse groups.",
+          ]}
+        />
+      </CaseStudySection>
+
+      <CaseStudySection id="learnings" title="What I learned" subtitle="Reflection" theme={theme}>
+        <Learnings
+          {...t}
+          items={[
+            { title: "Let research kill your favourite idea.", text: "I started out designing for solo diners and groups. Both research streams said groups were the real, unsolved problem, and narrowing the scope made every later decision easier." },
+            { title: "Privacy is a UX feature, not a setting.", text: "Interviews showed dietary needs are personal, and nobody wants to explain them in a group chat. Making them private by default removes that social cost, and it’s a decision no single screen shows." },
+            { title: "Tokens first saves time later.", text: "Setting up colours and radii as tokens before building screens meant dark mode was a class swap, not a redesign, when testing asked for it." },
+            { title: "Fast tools still need a designer’s judgment.", text: "Lovable got a working app up quickly, but the structure, the flow and the details that made testers trust it still came from the research and the design system." },
           ]}
         />
       </CaseStudySection>

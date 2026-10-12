@@ -122,7 +122,7 @@ export const WINDOW_DEFS = {
   },
 
   thesisCaseStudy: {
-  title: "Master Thesis — Human–AI Collaboration",
+  title: "Trace — Master Thesis",
   Component: ThesisCaseStudyWindow,
   width: 1180,
   height: 760,

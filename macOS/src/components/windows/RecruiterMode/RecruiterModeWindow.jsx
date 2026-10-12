@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
 import { PROJECTS } from "../Projects/data/projectData";
+import ProjectCover from "../Projects/ui/ProjectCover";
 import { CONTACT, PROFILE } from "../About/aboutData";
 import { HIGHLIGHTS, PITCH, QUICK_FACTS, STRENGTHS } from "./data";
 import heroImg from "../../../imgs/avatar/model1.jpeg";
@@ -34,11 +35,8 @@ function WorkCard({ item, t, onOpen, i }) {
       {...rise(6 + i)}
       whileHover={{ y: -2 }}
     >
-      <span className="relative w-[132px] shrink-0 overflow-hidden" style={{ background: `${tint}18` }}>
-        {project?.thumbnail && (
-          <img src={project.thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110" />
-        )}
-        <span className="absolute left-0 top-0 bottom-0 w-1" style={{ background: tint }} />
+      <span className="relative w-[132px] @2xl:w-[190px] shrink-0 overflow-hidden" style={{ background: `${tint}18` }}>
+        {project && <ProjectCover project={project} compact className="absolute inset-0" />}
       </span>
       <span className="flex-1 min-w-0 p-4">
         <span className="text-[11px] font-semibold uppercase tracking-[0.06em]" style={{ color: tint }}>

@@ -1,4 +1,4 @@
-import thesisThumb from "../../../../imgs/case-study/trace/Trace_Shot.png";
+import thesisThumb from "../../../../imgs/case-study/trace/Trace_Shot_web.jpg";
 import employerThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
 import restaurantThumb from "../../../../imgs/case-study/sallskap/Sallskap_Shot.png";
 import loyaltyThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
@@ -6,22 +6,22 @@ import stardewThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.av
 import triviaThumb from "../../../../imgs/case-study/trivia/Trivia_Shot.png";
 
 export const PROJECTS = [
- /*{
-  id: "thesis",
-  title: "Human–AI Collaboration in UX Design (Master Thesis)",
-  subtitle: "Designing AI as a thinking partner for UX workflows",
-  thumbnail: thesisThumb,
-  tags: ["Research", "AI", "UX"],
-  bullets: [
-    "Investigates how designers collaborate with AI during early-stage ideation and wireframing",
-    "Combines literature review, interviews, and comparative analysis of AI-assisted design tools",
-    "Explores collaboration models: automation, augmentation, and true partnership",
-    "Proposes a concept for an AI-supported UX tool that enhances designer cognition",
-  ],
-  links: [
-    { label: "Case Study", action: "openThesisCaseStudy" }, // ✅ THIS
-  ],
-},*/
+  {
+    id: "thesis",
+    shortTitle: "Trace · AI Co-Pilot",
+    meta: ["2026", "Master thesis · KTH", "Research + Build"],
+    tint: "#5b5bd6",
+    title: "Trace: Human-Centered AI Assistance in Design Tools (Master Thesis)",
+    subtitle: "A task-aware AI co-pilot that helps designers think, not just generate",
+    thumbnail: thesisThumb,
+    tags: ["UX", "AI", "Research", "Frontend"],
+    bullets: [
+      "Master thesis at KTH on how AI can support UX designers’ exploration and decision-making without taking away their agency",
+      "Expert interviews and a with/without-AI design experiment shaped a six-stage framework: Intent → Context → Options → Critique → Improve → Trace",
+      "Built a working React + LLaMA prototype and iterated it through two usability studies with 12 participants",
+    ],
+    links: [{ label: "Case Study", action: "openThesisCaseStudy" }],
+  },
 
   {
     id: "employerBranding",

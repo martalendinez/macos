@@ -1,402 +1,438 @@
+// src/components/windows/Projects/ThesisCaseStudyWindow.jsx
+// Case study: Trace, an AI design-reflection plugin (master thesis on human–AI collaboration in UX).
+// Content from the thesis "Human-Centered AI Assistance in Design Tools" (KTH, 2026) and the Trace_Plugin repo.
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
 
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
 import CaseStudyLayout from "./caseStudy/CaseStudyLayout";
-import CaseStudyHero, { CaseStudyIconChip } from "./caseStudy/CaseStudyHero";
-import CaseStudyPill from "./caseStudy/CaseStudyPill";
-import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudySection from "./caseStudy/CaseStudySection";
-import { Gallery2, Gallery3 } from "./caseStudy/CaseStudyGalleries";
-import CaseStudyImageTile from "./caseStudy/CaseStudyImageTile";
+import CaseStudyBulletList from "./caseStudy/CaseStudyBulletList";
 import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
+import { AtAGlance, Caption, Changes, Decision, Figure, H3, Insights, Intro, Lead, PanelShot, PullQuote, Stage, Stats } from "./caseStudy/Editorial";
+
+import heroImg from "../../../imgs/case-study/trace/Trace_Shot_web.jpg";
+import traceScreen from "../../../imgs/case-study/trace/screen_trace.png";
+import optionsScreen from "../../../imgs/case-study/trace/screen_options.png";
+import fig2Img from "../../../imgs/case-study/trace/fig2_figma.jpg";
+import fig3Img from "../../../imgs/case-study/trace/fig3_features.jpg";
+import fig4Img from "../../../imgs/case-study/trace/fig4_features.jpg";
+import fig5Img from "../../../imgs/case-study/trace/fig5_lofi_iteration.jpg";
+import fig6Img from "../../../imgs/case-study/trace/fig6_hifi_iteration.jpg";
+
+const TINT = "#5b5bd6";
+const REPO = "https://github.com/martalendinez/Trace_Plugin";
+const THESIS_PDF = "/pdfs/Human-Centered-AI-Assistance-in-Design-Tools.pdf";
+
+const SECTIONS = [
+  { id: "glance", label: "At a glance" },
+  { id: "problem", label: "The problem" },
+  { id: "research", label: "Research" },
+  { id: "flow", label: "The framework" },
+  { id: "decisions", label: "Key decisions" },
+  { id: "testing", label: "Testing & iteration" },
+  { id: "build", label: "Build" },
+  { id: "outcome", label: "Outcome & next" },
+];
+
+/* ---------- local visuals ---------- */
+
+/** Automation → Augmentation → Partnership, with Trace placed on the spectrum. */
+function Spectrum({ theme }) {
+  const models = [
+    { name: "Automation", line: "AI does the task for you.", eg: "“Generate me a login screen.”" },
+    { name: "Augmentation", line: "AI makes you faster at the task.", eg: "“Suggest spacing for this card.”" },
+    { name: "Partnership", line: "AI thinks with you about the task.", eg: "“What am I missing in this flow?”", trace: true },
+  ];
+  return (
+    <div>
+      <div className="relative h-1.5 rounded-full overflow-hidden" style={{ background: theme.isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.06)" }}>
+        <motion.div className="absolute inset-y-0 left-0 rounded-full" style={{ background: `linear-gradient(90deg, #c7c7d1, ${TINT})` }} initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} />
+      </div>
+      <div className="mt-5 grid grid-cols-1 @3xl:grid-cols-3 gap-6">
+        {models.map((m, i) => (
+          <div key={m.name}>
+            <div className="flex items-center gap-2">
+              <span className={`text-[12px] font-semibold tabular-nums ${theme.textSub}`}>{String(i + 1).padStart(2, "0")}</span>
+              <span className={`text-[17px] font-semibold ${theme.textMain}`}>{m.name}</span>
+              {m.trace && (
+                <span className="px-2 py-[2px] rounded-full text-[11px] font-bold text-white" style={{ background: TINT }}>
+                  Trace lives here
+                </span>
+              )}
+            </div>
+            <p className="mt-1.5 text-[15px]">{m.line}</p>
+            <p className={`mt-1 text-[13px] italic ${theme.textSub}`}>{m.eg}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const STAGES = [
+  { n: "Intent", d: "Say what you’re trying to achieve, and for whom." },
+  { n: "Context", d: "Design stage, constraints, user problems, hypotheses, anything else." },
+  { n: "Options", d: "3–5 directions, each with its principle, trade-off and reasoning." },
+  { n: "Critique", d: "Each option reviewed through lenses like accessibility and edge cases." },
+  { n: "Improve", d: "Refine an option in a chat, mix fields across options, apply suggestions." },
+  { n: "Trace", d: "An editable log of intent, critiques and what you decided." },
+];
+
+function StageFlow({ theme }) {
+  return (
+    <ol className="grid grid-cols-2 @3xl:grid-cols-6 gap-x-4 gap-y-6">
+      {STAGES.map((s, i) => (
+        <motion.li key={s.n} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}>
+          <div className="flex items-center gap-2">
+            <span className="w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style={{ background: i === 5 ? TINT : `${TINT}${i === 0 ? "88" : "aa"}` }}>
+              {i + 1}
+            </span>
+            <span className={`hidden @3xl:block flex-1 h-px ${i === 5 ? "opacity-0" : ""}`} style={{ background: theme.isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.12)" }} />
+          </div>
+          <div className={`mt-2.5 text-[15px] font-semibold ${theme.textMain}`}>{s.n}</div>
+          <p className={`mt-1 text-[13px] leading-snug ${theme.textSub}`}>{s.d}</p>
+        </motion.li>
+      ))}
+    </ol>
+  );
+}
+
+/** Small code excerpt, styled like an editor. */
+function CodeBlock({ theme, title, children }) {
+  return (
+    <figure className="rounded-[14px] overflow-hidden" style={{ background: "#16161d", boxShadow: theme.isDark ? "0 0 0 0.5px rgba(255,255,255,0.12)" : "0 20px 40px -24px rgba(0,0,0,0.45)" }}>
+      <div className="h-8 px-3 flex items-center gap-1.5 border-b border-white/[0.06]">
+        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+        <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        <span className="ml-3 text-[11px] text-white/45 font-mono">{title}</span>
+      </div>
+      <pre className="p-4 overflow-x-auto text-[12.5px] leading-[1.7] font-mono text-[#d6d6e7]">{children}</pre>
+    </figure>
+  );
+}
+
+const k = (s) => <span className="text-[#c792ea]">{s}</span>;
+const str = (s) => <span className="text-[#c3e88d]">{s}</span>;
+const cm = (s) => <span className="text-white/35">{s}</span>;
 
 export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass", glassContrast = "light", theme: appearance = "light" }) {
   const theme = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
-
-  const IMAGES = useMemo(
-    () => ({
-      hero: null,
-      welcome: null,
-      farmOverview: null,
-      cozyCorner: null,
-      workshop: null,
-
-      calendar: null,
-      sunriseQuests: null,
-      weeklyFields: null,
-      questsDatabases: null,
-      harvestedMemories: null,
-
-      goldPouch: null,
-      shop: null,
-      inventory: null,
-
-      skillTree: null,
-      characterProfile: null,
-      dailyFortune: null,
-      letters: null,
-      mealPlanner: null,
-
-      uiDetails: null,
-      finalScreens: null,
-    }),
-    []
-  );
-
+  const sections = useMemo(() => SECTIONS, []);
   const [lightbox, setLightbox] = useState({ open: false, src: null, alt: "" });
-  const openLightbox = (src, alt = "") => src && setLightbox({ open: true, src, alt });
-  const closeLightbox = () => setLightbox({ open: false, src: null, alt: "" });
-
-  const sections = useMemo(
-    () => [
-      { id: "overview", label: "Overview" },
-      { id: "summary", label: "Summary" },
-      { id: "role", label: "My role" },
-      { id: "goals", label: "Goals" },
-      { id: "ia", label: "Information architecture" },
-      { id: "farm", label: "The Farm" },
-      { id: "cozy", label: "Cozy Corner" },
-      { id: "workshopSection", label: "Workshop" },
-      { id: "mechanics", label: "Gamification mechanics" },
-      { id: "design", label: "Design decisions" },
-      { id: "outcome", label: "Final outcome" },
-    ],
-    []
-  );
-
-const metaPills = ["Personal project", "Notion template", "UX + UI", "Gamification", "Systems design"];
-
-  const facts = [
-    { k: "What it is", v: "A Stardew Valley–inspired productivity template built in Notion" },
-    { k: "Core promise", v: "Make planning feel cozy + motivating (not punishing)" },
-    { k: "Structure", v: "Three “locations”: The Farm · Cozy Corner · Workshop" },
-    { k: "Mechanics", v: "Coins, inventory, shop, skills, badges, daily fortune" },
-  ];
+  const open = (src, alt = "") => src && setLightbox({ open: true, src, alt });
+  const t = { theme, tint: TINT };
 
   return (
-    <CaseStudyLayout onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Master Thesis">
+    <CaseStudyLayout tint={TINT} onOpenWindow={onOpenWindow} theme={theme} sections={sections} title="Trace · Master thesis">
+      <Intro
+        {...t}
+        eyebrow="Master thesis · KTH · 2026"
+        title="Trace: an AI co-pilot that helps designers think, instead of thinking for them"
+        lede="Most AI design tools race to generate screens. My master thesis asked how AI could support UX designers’ exploration and decision-making without taking away their agency. I combined a literature review, expert interviews and a design experiment into a framework, then built Trace, a task-aware AI co-pilot, and tested it with 12 people."
+        ctas={[
+          { label: "Read the thesis", href: THESIS_PDF },
+          { label: "View on GitHub", href: REPO },
+        ]}
+        facts={[
+          { k: "Role", v: "Researcher, UX designer & developer" },
+          { k: "Programme", v: "MSc Interactive Media Technology, KTH" },
+          { k: "Method", v: "Research through design" },
+          { k: "Stack", v: "React · TypeScript · Express · LLaMA" },
+        ]}
+      />
+
+      <Stage {...t} className="mt-10" pad="p-0">
+        <button type="button" onClick={() => open(heroImg, "Trace screens")} className="block w-full cursor-zoom-in">
+          <img src={heroImg} alt="Trace plugin screens: trace log, option refinement chat and critiques" className={`block w-full h-auto ${theme.isDark ? "" : "mix-blend-multiply"}`} />
+        </button>
+      </Stage>
+
+      <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
+        <AtAGlance
+          {...t}
+          items={[
+            { label: "Problem", text: "AI design tools prioritise automation over collaboration. Designers get output faster, but lose control, transparency and ownership, and become passive reviewers of answers they can’t explain." },
+            { label: "What I did", text: "Interviewed 5 experts, designed the same feature with and without AI, and turned the findings into a six-stage framework. Then I built Trace on it and tested two versions with 12 participants." },
+            { label: "Outcome", text: "Designers described Trace as a thinking partner, not a decision-maker. They felt in control throughout: “It feels like the AI is giving me angles to think about, but I still decide what matters.”" },
+          ]}
+        />
+        <div className="mt-10">
+          <Stats
+            {...t}
+            items={[
+              { value: "5", label: "expert interviews in the formative study" },
+              { value: "12", label: "participants across two usability studies" },
+              { value: "6", label: "stages in the framework, from intent to trace" },
+              { value: "2", label: "rounds of iteration on the prototype" },
+            ]}
+          />
+        </div>
+      </CaseStudySection>
+
+      <CaseStudySection id="problem" title="The problem" subtitle="Faster isn’t the same as better" theme={theme}>
+        <Lead theme={theme}>
+          Generative tools can produce a layout in seconds. But the most valuable part of design isn’t the layout. It’s the reasoning behind it: why this option, for whom, and at what cost.
+        </Lead>
+        <p className="mt-5">
+          AI assistants are now built into developers’ everyday tools, but in UX design they mostly generate interfaces. Designers report hallucinated elements, outputs that miss their intent,
+          and prompting that doesn’t fit visual, iterative work. When AI hands over finished answers with little insight into how they were made, designers become passive recipients
+          instead of active participants, and the reflective thinking design depends on starts to fade.
+        </p>
+        <p className={`mt-2 text-[12px] font-semibold uppercase tracking-[0.08em] ${theme.textSub}`}>Research question</p>
+        <p className={`mt-2 pl-4 border-l-2 text-[18px] font-semibold tracking-[-0.01em] ${theme.textMain}`} style={{ borderColor: TINT }}>
+          What design principles enable task-aware AI assistance to support UX designers’ exploration and decision-making while preserving transparency and human agency?
+        </p>
+      </CaseStudySection>
+
+      <CaseStudySection id="research" title="Research" subtitle="Literature, experts and a design experiment" theme={theme}>
+        <p>I combined three sources of evidence so the framework wouldn’t rest on any single one:</p>
+        <CaseStudyBulletList
+          items={[
+            "Literature review across the ACM Digital Library, IEEE Xplore and Google Scholar on generative AI in UX, human–AI collaboration and AI design tools.",
+            "Formative study: semi-structured interviews with 5 experts in UX design, software engineering and human–AI interaction research, analysed thematically.",
+            "Design experiment: I designed the same loyalty feature twice, with and without AI, logging decisions, prompts, artefacts and moments of friction.",
+          ]}
+        />
+        <H3 theme={theme} className="mt-10">
+          What the experts told me
+        </H3>
+        <div className="mt-5">
+          <Insights
+            {...t}
+            items={[
+              { title: "AI shines early, then fades.", text: "Experts used AI to draft, organise and diverge early on. Its value dropped as work became complex, contextual or sensitive.", so: "Trace focuses on early- and mid-stage exploration." },
+              { title: "Over-automation kills engagement.", text: "One expert called it “cognitive offloading”: the system does the thinking and the user becomes a passive evaluator.", so: "options and critiques, never finished answers." },
+              { title: "Confident tone, miscalibrated trust.", text: "Polished answers lead to either over-reliance or exhausting verification.", so: "visible reasoning and honest uncertainty." },
+              { title: "Nobody knows where AI belongs.", text: "The hard part isn’t how AI works, but knowing when it’s appropriate to rely on it.", so: "the designer states the task type and stage up front." },
+              { title: "Failures break the flow.", text: "Repetitive outputs, hallucinations and loops forced manual correction.", so: "steerable outputs and recovery paths at every step." },
+            ]}
+          />
+        </div>
+        <H3 theme={theme} className="mt-12">
+          Designing with and without AI
+        </H3>
+        <p className="mt-2">
+          The experiment made the difference tangible. Without AI, I structured problems and reasoned iteratively. With AI, I caught myself offloading thinking, changing direction because a suggestion
+          said so, and struggling to put visual intent into words. Those were exactly the patterns the experts described.
+        </p>
+        <H3 theme={theme} className="mt-12">
+          From automation to partnership
+        </H3>
+        <p className="mt-2 mb-6">Most AI design tools sit at the automation end. The research pointed Trace towards partnership.</p>
+        <Spectrum theme={theme} />
+      </CaseStudySection>
+
+      <CaseStudySection id="flow" title="The framework" subtitle="Task-aware, human-centred AI assistance" theme={theme}>
+        <p>The framework rests on four foundations from the research:</p>
+        <ol className="mt-4 mb-10 space-y-3">
+          {[
+            ["Keep designers reasoning.", "AI scaffolds engagement; it doesn’t replace it."],
+            ["Make reasoning visible.", "Designers need to see why an output was produced to judge it."],
+            ["Treat AI output as provisional.", "Everything is material for critique, not a final answer."],
+            ["Context is everything.", "AI works best when the task, information and constraints are explicit."],
+          ].map(([h, d], i) => (
+            <li key={h} className="grid grid-cols-[36px_1fr] gap-x-3">
+              <span className="text-[13px] font-semibold tabular-nums pt-[3px]" style={{ color: TINT }}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <span className={`font-semibold ${theme.textMain}`}>{h}</span> {d}
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="mb-8">It organises AI-assisted design into six stages, with cross-cutting components (steerable outputs, visible uncertainty, built-in verification and recovery paths) running through all of them.</p>
+        <StageFlow theme={theme} />
+        <div className="mt-10">
+          <Figure theme={theme} src={fig3Img} alt="Intent, context and options screens" caption="Stages 1–3: intent, context and option generation." onOpen={open} />
+        </div>
+        <div className="mt-6">
+          <Figure theme={theme} src={fig4Img} alt="Mix and match, critiques and trace" caption="Mix & match, critiques, and the trace where designers consolidate their reasoning." onOpen={open} />
+        </div>
+        <div className="mt-6">
+          <Figure theme={theme} src={fig2Img} alt="Trace as a plugin inside a design tool" caption="The vision: Trace as a panel inside a design tool, next to the canvas." onOpen={open} />
+        </div>
+      </CaseStudySection>
+
+      <CaseStudySection id="decisions" title="Key decisions" subtitle="What I chose, and what it cost" theme={theme}>
+        <Decision {...t} n={1} title="No generated UI. Ever." tradeoff="It’s less flashy than a tool that spits out screens. That’s the point: the thinking stays with the designer." visual={<PanelShot {...t} src={optionsScreen} alt="Options step: generated directions with principle and trade-off" onOpen={open} maxW={300} />}>
+          Trace outputs <b className={theme.textMain}>3–5 options</b>, each with a title, summary, the problem it addresses, its underlying assumption, a design principle and an explicit trade-off.
+          Options are things to reason about, not artefacts to paste in. The reasoning plays in progressively, so designers can see how the AI got there without being overwhelmed.
+        </Decision>
+        <Decision
+          {...t}
+          n={2}
+          title="Feedback that knows where you are"
+          tradeoff="The designer has to tell Trace which stage they’re in. One extra input, but it stops pixel-level feedback from derailing a problem-definition session."
+          visual={
+            <CodeBlock theme={theme} title="server/reflect.ts">
+              {cm("// prompt rules change with the design stage")}
+              {"\n"}
+              {k("If")} stage includes {str('"problem-definition"')}:{"\n"}
+              {"  "}- Focus on the problem, constraints, user needs.{"\n"}
+              {"  "}- Avoid UI-level feedback.{"\n\n"}
+              {k("If")} stage includes {str('"wireframe"')}:{"\n"}
+              {"  "}- Focus on hierarchy, navigation, usability.{"\n"}
+              {"  "}- Avoid visual styling feedback.{"\n\n"}
+              {k("If")} stage includes {str('"high-fidelity"')}:{"\n"}
+              {"  "}- Focus on polish, accessibility, consistency.
+            </CodeBlock>
+          }
+        >
+          Feedback on a wireframe shouldn’t be about colours. Trace adapts what the AI focuses on, and what it must avoid, across <b className={theme.textMain}>eight design stages</b>, from problem
+          definition to usability testing.
+        </Decision>
+        <Decision {...t} n={3} title="Critiques that admit uncertainty" tradeoff="Hedged feedback can feel less authoritative. That’s deliberate: the designer, not the model, makes the call.">
+          Each critique has a category, a concern, a concrete suggestion, and an <b className={theme.textMain}>uncertainty note</b> explaining what the AI can’t know. Designers choose the lenses
+          (accessibility, usability, consistency, edge cases, interaction complexity), and if they mention accessibility needs, the AI is instructed to prioritise them.
+        </Decision>
+        <Decision {...t} n={4} title="Mix and match, don’t just pick one" tradeoff="More freedom means more decisions. The drag-and-drop keeps it playful and fast.">
+          Good solutions are often hybrids. Designers can drag a title, principle or trade-off from one option onto another to compose their own, or open a refinement chat to push one option
+          further.
+        </Decision>
+        <Decision
+          {...t}
+          n={5}
+          title="A trace you can edit and keep"
+          tradeoff="Documenting takes a moment at the end. In return, the reasoning is still there in the review, the hand-off, and three months later."
+          visual={
+<PanelShot {...t} src={traceScreen} alt="Trace log: intent, critiques and improvements" onOpen={open} />
+          }
+        >
+          The final stage turns the session into a <b className={theme.textMain}>trace log</b>: the intent, the critiques reviewed and the improvements applied, all editable. It makes AI-assisted
+          decisions auditable instead of invisible.
+        </Decision>
+      </CaseStudySection>
+
+      <CaseStudySection id="testing" title="Testing & iteration" subtitle="Two studies, 12 participants" theme={theme}>
+        <p>
+          I evaluated Trace twice, at different levels of fidelity, using think-aloud tasks around improving an onboarding flow, followed by interviews on usefulness, transparency, control and
+          trust.
+        </p>
+
+        <H3 theme={theme} className="mt-10">
+          Round 1 · Low fidelity, 4 participants
+        </H3>
+        <p className="mt-2">
+          A clickable prototype of all six stages, tested with UX designers, non-designers and students. People understood the logic and called the interface clean and trustworthy, but the flow felt
+          rigid and some inputs were unclear.
+        </p>
+        <PullQuote {...t} quotes={["“I want to ask the AI to elaborate, not just read static cards.”"]} who="Participant, low-fidelity study" />
+        <Changes
+          {...t}
+          items={[
+            { found: "“I’m not always sure what the system expects me to write here.”", changed: "Rewrote labels, added one-line descriptions, placeholder examples and tooltips." },
+            { found: "The steps felt rigid; people wanted to skip and revisit.", changed: "Non-linear navigation: skip buttons, a sidebar and go-back." },
+            { found: "Critique cards felt static.", changed: "A refinement chat to iterate on any option conversationally." },
+            { found: "The trace felt fixed and not theirs.", changed: "An editable, structured trace log." },
+          ]}
+        />
+        <div className="mt-8">
+          <Figure theme={theme} src={fig5Img} alt="Changes after the low-fidelity study" caption="Before → after the first study." onOpen={open} />
+        </div>
+
+        <H3 theme={theme} className="mt-12">
+          Round 2 · High fidelity, 8 participants
+        </H3>
+        <p className="mt-2">
+          The coded prototype, tested with UX and product designers, researchers and students with 1–9 years of experience, on a realistic task: exploring onboarding directions for a fintech app
+          across five scenarios, plus a questionnaire covering eight UX dimensions.
+        </p>
+        <PullQuote
+          {...t}
+          quotes={["“It feels like the AI is giving me angles to think about, but I still decide what matters.”", "“I could always add my own inputs and wasn’t forced to choose an option.”"]}
+          who="Participants, high-fidelity study"
+        />
+        <p>Everyone valued the structure and the sense of control. The pain points were specific:</p>
+        <div className="mt-4">
+          <Changes
+            {...t}
+            items={[
+              { found: "“If I say no, I want the system to drop it.” The AI reintroduced rejected ideas.", changed: "Memory of rejected ideas, plus Apply / Suggest / Reject controls." },
+              { found: "Critiques felt like “reminders rather than deep insights.”", changed: "More varied critiques, grounded in the design stage." },
+              { found: "“I want to see how the AI thinks.”", changed: "Visible reasoning explaining why a suggestion might help." },
+              { found: "Options lacked variety and couldn’t be combined.", changed: "Mix & match across options." },
+              { found: "Navigation felt stuck, especially after the trace.", changed: "A global “Go back” and fixes for improvement bugs." },
+            ]}
+          />
+        </div>
+        <div className="mt-8">
+          <Figure theme={theme} src={fig6Img} alt="Changes after the high-fidelity study" caption="Before → after the second study." onOpen={open} />
+        </div>
+      </CaseStudySection>
+
+      <CaseStudySection id="build" title="Build" subtitle="From research to a working prototype" theme={theme}>
+        <p>I built Trace myself, so every research principle had to survive contact with real code and a real model.</p>
+        <div className="mt-6 grid grid-cols-1 @3xl:grid-cols-2 gap-8">
           <div>
-            <div className="flex flex-wrap gap-2">
-              {metaPills.map((p) => (
-                <CaseStudyPill key={p} theme={theme}>
-                  {p}
-                </CaseStudyPill>
-              ))}
-            </div>
-
-            <div className={`mt-5 text-[40px] @2xl:text-[48px] font-bold tracking-[-0.03em] leading-[1.05] ${theme.textMain}`}>
-              Gamified Productivity System — Stardew Valley Notion Template
-            </div>
-            <div className={`mt-3 text-base @2xl:text-lg ${theme.textSub}`}>
-              “Welcome to your farm!” A cozy, narrative-driven system that turns everyday tasks into quests, rewards
-              consistency with coins, and makes your Notion workspace feel like a tiny valley.
-            </div>
-
-            {/* CTA row */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              <a href="#" target="_blank" rel="noreferrer" className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.primaryButtonClass}`}>
-                View this in Notion
-              </a>
-              <a href="#" target="_blank" rel="noreferrer" className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all ${theme.buttonClass}`}>
-                Download the PDF
-              </a>
-            </div>
-
-            <div id="overview" className="mt-8 grid grid-cols-1 @4xl:grid-cols-[1.35fr_1fr] gap-8 scroll-mt-16">
-              <div>
-                <div className={`text-lg font-semibold ${theme.textMain}`}>Overview</div>
-                <div className={`mt-3 text-[15px] leading-7 ${theme.textBody}`}>
-                  Traditional productivity tools can feel like judgment: when you fall behind, the system becomes a list
-                  of failures. This template reframes planning as a cozy game world — with locations, characters, and
-                  progression mechanics that turn “to-dos” into small adventures.
-                  <br />
-                  <br />
-                  The valley is organized into three spaces:
-                  <span className={`font-semibold ${theme.textMain}`}> The Farm</span> (work + planning),
-                  <span className={`font-semibold ${theme.textMain}`}> Your Cozy Corner</span> (stats + vibes),
-                  and <span className={`font-semibold ${theme.textMain}`}> the Workshop</span> (gamification hub).
-                </div>
-              </div>
-
-              <div>
-                <div className={`text-lg font-semibold ${theme.textMain}`}>Quick facts</div>
-
-                <div className={`mt-3`}>
-                  <div className="grid grid-cols-1 gap-3">
-                    {facts.map((f) => (
-                      <div key={f.k} className={`pb-3 border-b last:border-b-0 ${theme.divider}`}>
-                        <div className={`text-xs ${theme.textSub}`}>{f.k}</div>
-                        <div className={`mt-1 text-sm font-medium ${theme.textMain}`}>{f.v}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["UX", "UI", "Notion", "Quests", "Rewards", "Systems"].map((t) => (
-                      <CaseStudyPill key={t} theme={theme}>
-                        {t}
-                      </CaseStudyPill>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <CaseStudyHero src={IMAGES.hero} onOpen={openLightbox} theme={theme} />
-
-            <CaseStudySection id="summary" title="Summary" subtitle="Problem → Solution → What makes it work" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Problem</div>
-                <div className="mt-2">
-                  Planning tools often don’t create emotional momentum. When motivation is low, systems that feel strict
-                  are the first to be abandoned.
-                </div>
-
-                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Solution</div>
-                <div className="mt-2">
-                  A narrative Notion template that maps productivity to a cozy game world: tasks become quests, progress
-                  becomes “harvest,” and consistency rewards you with coins you can spend in a shop.
-                </div>
-
-                <div className={`mt-5 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Why it works</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Clear, location-based navigation (you always know where to go)",
-                    "Progress is visible and celebratory (harvested memories, coins, badges)",
-                    "Gamification is optional + supportive (designed to reduce guilt, not increase pressure)",
-                  ]}
-                />
-              </div>
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.welcome} alt="Welcome page" caption="Optional: Welcome to your farm page." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.farmOverview} alt="The Farm overview" caption="Optional: The Farm overview page." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="role" title="My role" subtitle="I designed the system, structure, and experience" theme={theme}>
-              <div>
-                <CaseStudyBulletList
-                  items={[
-                    "Designed the information architecture (three main locations + sub-pages and flows)",
-                    "Defined the database model conceptually (tasks, subtasks, projects, habits, events, memories)",
-                    "Created the gamification layer (coins, shop, inventory, skill tree, badges, pets)",
-                    "Wrote the narrative microcopy to make interactions feel like a world (quests, harvest, valley vibes)",
-                  ]}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="goals" title="Goals" subtitle="Experience goals + system goals" theme={theme}>
-              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
-                <div>
-                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Experience goals</div>
-                  <CaseStudyBulletList items={["Make planning feel cozy and inviting", "Turn tasks into meaningful “quests” with story flavor", "Support low-energy days (no shame spiral)"]} />
-                </div>
-
-                <div>
-                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>System goals</div>
-                  <CaseStudyBulletList items={["Fast daily usage (minimal friction)", "Clear separation between planning, reflection, and rewards", "Scales across tasks, subtasks, projects, habits, and events"]} />
-                </div>
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="ia" title="Information architecture" subtitle="The valley is organized as three locations with clear sub-areas" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Top-level map</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Welcome to your farm (entry point + navigation hub)",
-                    "🥕✨ The Farm — productivity fields (tasks, habits, planning, calendar, memories)",
-                    "🕯️✨ Cozy Corner — your farmhouse (stats, mood/energy, skill tree, letters, fortune, meal planning)",
-                    "🛠️✨ Workshop — gamification hub (gold pouch, shop, inventory)",
-                  ]}
-                />
-                <div className={`mt-3 text-sm ${theme.textSub}`}>
-                  The goal is to make navigation feel like a world map: you “go” somewhere depending on what you need
-                  (plan, do, reflect, or reward).
-                </div>
-              </div>
-
-              <Gallery3
-                a={<CaseStudyImageTile src={IMAGES.cozyCorner} alt="Cozy Corner" caption="Optional: Cozy Corner page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.workshop} alt="Workshop" caption="Optional: Workshop hub page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                c={<CaseStudyImageTile src={IMAGES.farmOverview} alt="Farm hub" caption="Optional: Farm hub page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="farm" title="🥕✨ The Farm" subtitle="Where all planning + execution lives (quests, fields, calendar)" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Core areas</div>
-                <CaseStudyBulletList
-                  items={[
-                    "📅 The Town Calendar — tasks, events, festivals, seasonal milestones",
-                    "🌅🌾 Sunrise Quests — daily tasks, subtasks, habits in one place (start the day with purpose)",
-                    "🪴📅 Weekly and Daily Fields — Trello-style board + calendar views for planning and tracking",
-                    "🧙‍♂️🏰 Main Quests & Side Adventures — big goals broken down into Tasks + Subtasks, grouped by Projects",
-                    "🌾🕰️ Harvested Memories — archive of completed quests and achievements to reflect on progress",
-                  ]}
-                />
-              </div>
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.calendar} alt="Town Calendar" caption="Optional: calendar view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.sunriseQuests} alt="Sunrise Quests" caption="Optional: daily quests hub." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.weeklyFields} alt="Weekly & Daily Fields" caption="Optional: Trello board / weekly plan." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.harvestedMemories} alt="Harvested Memories" caption="Optional: completed archive view." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-
-              <div className={`mt-6`}>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Quest taxonomy (how work is modeled)</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Tasks — the main storyline steps (bigger actions that move life forward)",
-                    "Subtasks — small supporting steps (lightweight actions that keep momentum)",
-                    "Projects — long-term sagas (themes that group tasks + subtasks)",
-                    "Habits — daily rituals (streak-friendly routines that keep the farm alive)",
-                    "Events — time-based items (appointments, deadlines, festivals)",
-                  ]}
-                />
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.questsDatabases}
-                  alt="Tasks / Subtasks / Projects / Habits"
-                  caption="Optional: collage showing the four databases and key views."
-                  aspect="16/9"
-                  fit="contain"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="cozy" title="🕯️✨ Your Cozy Corner of the Valley" subtitle="Your farmhouse: personal stats, vibes, reflection, and life maintenance" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>What lives here</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Character Profile — name/bio, coins, health, badges, current mood",
-                    "Skill Tree — attach skills to tasks/subtasks/projects/habits to show growth over time",
-                    "Daily Fortune — a motivational quote / tip (soft nudge, not pressure)",
-                    "Letters — narrative messages from “NPCs” (fun, cozy, sometimes hints/quests)",
-                    "Kitchen — meal planning to support energy and routines",
-                    "Pets & badges — collectibles that make progress feel tangible",
-                  ]}
-                />
-              </div>
-
-              <Gallery3
-                a={<CaseStudyImageTile src={IMAGES.characterProfile} alt="Character profile" caption="Optional: character profile." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.skillTree} alt="Skill tree" caption="Optional: skill tree page." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                c={<CaseStudyImageTile src={IMAGES.dailyFortune} alt="Daily fortune" caption="Optional: daily fortune view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-
-              <Gallery2
-                a={<CaseStudyImageTile src={IMAGES.letters} alt="Letters" caption="Optional: letters page." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.mealPlanner} alt="Kitchen / meal planner" caption="Optional: kitchen & meal planning." aspect="16/9" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="workshopSection" title="🛠️✨ Workshop" subtitle="The gamification center: gold pouch, shop, and inventory" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Workshop spaces</div>
-                <CaseStudyBulletList items={["💰 Gold Pouch — track hard-earned coins and plan purchases", "🎁 Shop — spend coins on cosmetics, upgrades, boosts, and rewards", "🍯 Inventory — what you own (pets, badges, decorations, boosts, etc.)"]} />
-                <div className={`mt-3 text-sm ${theme.textSub}`}>
-                  The workshop turns productivity into a gentle economy: effort becomes coins, and coins become rewards
-                  that reinforce consistency.
-                </div>
-              </div>
-
-              <Gallery3
-                a={<CaseStudyImageTile src={IMAGES.goldPouch} alt="Gold Pouch" caption="Optional: gold pouch view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                b={<CaseStudyImageTile src={IMAGES.inventory} alt="Inventory" caption="Optional: inventory view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-                c={<CaseStudyImageTile src={IMAGES.shop} alt="Shop" caption="Optional: shop view." aspect="4/3" theme={theme} onOpen={openLightbox} />}
-              />
-            </CaseStudySection>
-
-            <CaseStudySection id="mechanics" title="Gamification mechanics" subtitle="How rewards, feedback, and motivation are designed" theme={theme}>
-              <div>
-                <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Progress signals</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Coins (gold) earned from completing quests and habits",
-                    "Badges and pets as collectible milestones",
-                    "Skill growth via Skill Tree (skills attached to work items)",
-                    "Harvested Memories as an archive of wins (reflection + identity reinforcement)",
-                  ]}
-                />
-
-                <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Reward loop</div>
-                <div className="mt-2">
-                  Complete quests → earn coins → spend in the shop → items appear in inventory → your valley feels more
-                  “yours” → motivation stays warm and personal.
-                </div>
-
-                <div className={`mt-6 text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Tone & motivation strategy</div>
-                <CaseStudyBulletList
-                  items={[
-                    "Cozy language reduces anxiety (quests instead of chores)",
-                    "Narrative cues make the system feel alive (morning on the farm, NPC letters)",
-                    "Encouragement over pressure (fortune as gentle nudge, not demand)",
-                  ]}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="design" title="Design decisions" subtitle="What I intentionally optimized for" theme={theme}>
-              <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-5">
-                <div>
-                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Clarity & scanning</div>
-                  <CaseStudyBulletList items={["Location-based structure to reduce navigation confusion", "Daily entry points (Sunrise Quests) to start fast", "Boards + calendar views for flexible planning styles"]} />
-                </div>
-
-                <div>
-                  <div className={`text-[17px] font-semibold tracking-[-0.01em] ${theme.textMain}`}>Sustainable use</div>
-                  <CaseStudyBulletList items={["Gamification is supportive, not mandatory", "Reflection is built-in (Harvested Memories)", "Personal life support included (mood/energy, meals, letters, fortune)"]} />
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.uiDetails}
-                  alt="UI details"
-                  caption="Optional: collage of key UI patterns (cards, headings, icons, spacing)."
-                  aspect="16/9"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="outcome" title="Final outcome" subtitle="A cozy, complete system you can actually stick to" theme={theme}>
-              <div>
-                A fully navigable Notion “valley” that blends practical planning with cozy-game motivation: you can plan
-                your week, manage big goals, track habits, reflect on progress, and reward yourself — all inside a world
-                that feels warm.
-              </div>
-
-              <div className="mt-6">
-                <CaseStudyImageTile
-                  src={IMAGES.finalScreens}
-                  alt="Final screens"
-                  caption="Optional: collage of best final screens (Welcome + Farm + Cozy Corner + Workshop)."
-                  aspect="16/9"
-                  theme={theme}
-                  onOpen={openLightbox}
-                />
-              </div>
-            </CaseStudySection>
-
-            <div className="mt-10" />
+            <H3 theme={theme}>Frontend</H3>
+            <CaseStudyBulletList
+              items={[
+                "React 19 + TypeScript, built with Vite and styled with Tailwind.",
+                "The six-stage flow runs on a React Context + reducer, so every stage shares one source of truth.",
+                "dnd-kit for mix-and-match, Framer Motion for the reasoning animations.",
+              ]}
+            />
           </div>
-        
+          <div>
+            <H3 theme={theme}>Backend & AI</H3>
+            <CaseStudyBulletList
+              items={[
+                "Node + Express, calling a LLaMA model hosted on Groq.",
+                "Strict JSON responses, validated and normalised before they reach the UI.",
+                "Stateless by design, so the model layer can be swapped without touching the interaction design.",
+              ]}
+            />
+          </div>
+        </div>
+        <p className={`mt-8 text-[14px] ${theme.textSub}`}>
+          The response format already includes change instructions tied to design nodes: groundwork for applying suggestions directly on a canvas once Trace is connected to a design tool.
+        </p>
+      </CaseStudySection>
 
-        <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={closeLightbox} theme={theme} />
+      <CaseStudySection id="outcome" title="Outcome & next" subtitle="Where Trace goes from here" theme={theme}>
+        <Lead theme={theme}>
+          Designers don’t mainly want AI that produces solutions for them. They want tools that help them think. The question isn’t “how good is AI at wireframing?” but “how should designers
+          think with AI?”
+        </Lead>
+        <div className="mt-8 grid grid-cols-1 @3xl:grid-cols-2 gap-8">
+          <div>
+            <H3 theme={theme}>What’s next</H3>
+            <CaseStudyBulletList
+              items={[
+                "Integrate with Figma and other tools so Trace works on real design files.",
+                "Support uploads, screenshots and visual previews, which participants asked for most.",
+                "Study long-term use: how trust and reliance evolve over weeks, not one session.",
+                "Extend the framework to teams and asynchronous collaboration.",
+              ]}
+            />
+          </div>
+          <div>
+            <H3 theme={theme}>What it taught me</H3>
+            <CaseStudyBulletList
+              items={[
+                "Structure beats prompting: guiding the AI through stages lifted the burden of writing the perfect prompt.",
+                "Agency is fragile. One rejected idea coming back was enough to make people feel unheard.",
+                "There’s a real tension with an industry that rewards speed. Reflective tools have to earn their place by making decisions better.",
+              ]}
+            />
+          </div>
+        </div>
+        <Caption theme={theme}>
+          Read the full thesis{" "}
+          <a href={THESIS_PDF} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-4" style={{ color: TINT }}>
+            here ↗
+          </a>
+          . Code and setup instructions are on{" "}
+          <a href={REPO} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-4" style={{ color: TINT }}>
+            GitHub ↗
+          </a>
+        </Caption>
+      </CaseStudySection>
+
+      <CaseStudyLightbox open={lightbox.open} src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox({ open: false, src: null, alt: "" })} theme={theme} />
     </CaseStudyLayout>
   );
 }

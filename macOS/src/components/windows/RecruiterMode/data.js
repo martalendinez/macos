@@ -35,17 +35,17 @@ export const STRENGTHS = [
 // projectId refers to Projects/data/projectData.js (for thumbnail + color)
 export const HIGHLIGHTS = [
   {
-    projectId: "employerBranding",
-    badge: "Graduation Internship",
-    title: "AI platform for employer-branding analysis",
-    subtitle: "Turned manual branding audits into a scalable, automated analysis platform.",
-    windowId: "employerBrandingCaseStudy",
+    projectId: "thesis",
+    badge: "Master Thesis · KTH",
+    title: "Trace: an AI co-pilot for design decisions",
+    subtitle: "Research + build: a task-aware AI that helps designers think, tested with 12 participants.",
+    windowId: "thesisCaseStudy",
   },
   {
-    projectId: "kthTriviaApp",
-    badge: "University Group Project",
-    title: "Trivia App Game",
-    subtitle: "A fast, modern trivia game with ranked challenges and casual play.",
-    windowId: "triviaCaseStudy",
+    projectId: "employerBranding",
+    badge: "Bachelor Thesis · PrideCom",
+    title: "AI platform for employer-branding analysis",
+    subtitle: "Designed and built end to end: one score and concrete next steps for HR teams.",
+    windowId: "employerBrandingCaseStudy",
   },
 ];
