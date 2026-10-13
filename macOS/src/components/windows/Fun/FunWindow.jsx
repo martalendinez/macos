@@ -88,6 +88,13 @@ function Shelf({ title, apps, t, onSeeAll }) {
   );
 }
 
+// near-black tints (e.g. Notion) vanish on dark cards, so those fall back to grey text
+const isVeryDark = (hex = "") => {
+  const n = parseInt(hex.replace("#", "").slice(0, 6), 16);
+  if (Number.isNaN(n)) return false;
+  return ((n >> 16) & 255) * 0.299 + ((n >> 8) & 255) * 0.587 + (n & 255) * 0.114 < 60;
+};
+
 function FeaturedBanner({ apps, t }) {
   const row = useRef(null);
   const [edge, setEdge] = useState({ start: true, end: false });
@@ -135,15 +142,14 @@ function FeaturedBanner({ apps, t }) {
             whileHover={{ y: -4 }}
             className="group relative snap-start shrink-0 w-[78%] @2xl:w-[calc((100%-2rem)/3)] h-[300px] rounded-[22px] overflow-hidden text-left"
             style={{
-              background: t.isDark ? `linear-gradient(160deg, ${app.tint}38, ${app.tint}12 60%, rgba(255,255,255,0.03))` : `linear-gradient(160deg, ${app.tint}26, ${app.tint}0d 55%, #ffffff)`,
-              boxShadow: t.isDark ? "inset 0 0 0 1px rgba(255,255,255,0.08)" : "inset 0 0 0 1px rgba(0,0,0,0.06), 0 14px 30px -24px rgba(0,0,0,0.35)",
+              background: t.isDark ? "rgba(255,255,255,0.05)" : "#f5f5f7",
+              boxShadow: t.isDark ? "inset 0 0 0 1px rgba(255,255,255,0.08)" : "none",
             }}
           >
-            <div className="absolute -right-10 -top-10 w-[160px] h-[160px] rounded-full blur-3xl opacity-40" style={{ background: app.tint }} />
             <div className="relative h-full p-5 flex flex-col">
               <img src={app.icon} alt="" draggable={false} className="w-16 h-16 object-contain drop-shadow-[0_8px_14px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" />
               <div className="mt-auto">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.12em] truncate" style={{ color: app.tint }}>{app.subtitle}</div>
+                <div className={`text-[10.5px] font-bold uppercase tracking-[0.12em] truncate ${t.isDark && isVeryDark(app.tint) ? t.textSub : ""}`} style={t.isDark && isVeryDark(app.tint) ? undefined : { color: app.tint }}>{app.subtitle}</div>
                 <div className={`mt-1 text-[22px] font-bold tracking-[-0.02em] leading-tight ${t.textMain}`}>{app.title}</div>
                 <p className={`mt-1.5 text-[13px] leading-snug line-clamp-3 ${t.textSub}`}>{app.blurb ?? app.subtitle}</p>
                 <span className={`mt-3 inline-block px-4 py-1 rounded-full text-[12px] font-bold ${t.isDark ? "bg-white/[0.12] text-[#4aa3ff]" : "bg-white text-[#0a6fe0] shadow-sm"}`}>Open</span>
