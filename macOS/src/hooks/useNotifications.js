@@ -52,6 +52,7 @@ export default function useNotifications() {
     }
     if (unlocked[key]) return;
 
+    window.dispatchEvent(new Event("portfolio:confetti"));
     notify({
       title: title || "Achievement unlocked",
       message,

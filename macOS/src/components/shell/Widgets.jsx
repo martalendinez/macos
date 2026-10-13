@@ -1,7 +1,7 @@
 // src/components/shell/Widgets.jsx
 // macOS Sonoma-style desktop widgets. Each one is a shortcut into an app.
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { MENU_BAR_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
 import { ACCENTS } from "../../config/accents";
@@ -68,6 +68,101 @@ function Widget({ children, onClick, wide = false, i = 0, isDark, className = ""
   );
 }
 
+/* ---------- cute details: fika timer + mood ring ---------- */
+const MOODS = [
+  ["☕", "2nd coffee of the day"],
+  ["🎧", "The Weeknd on repeat"],
+  ["📐", "Nudging a button 1px left"],
+  ["🧠", "Thinking about kerning"],
+  ["🥐", "Planning the next fika"],
+  ["🐛", "Negotiating with a bug"],
+  ["🇪🇸", "Missing Spanish sunshine"],
+  ["✨", "Renaming layers in Figma"],
+  ["🌨️", "Pretending it isn’t cold"],
+];
+
+function useStockholmNow() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 20_000);
+    return () => clearInterval(id);
+  }, []);
+  return new Date(now.toLocaleString("en-US", { timeZone: TZ }));
+}
+
+function FikaWidget({ isDark, text, sub }) {
+  const sth = useStockholmNow();
+  const mins = sth.getHours() * 60 + sth.getMinutes();
+  const FIKA = 15 * 60;
+  const now = mins >= FIKA && mins < FIKA + 30;
+  const left = mins < FIKA ? FIKA - mins : 24 * 60 - mins + FIKA;
+  const h = Math.floor(left / 60);
+  const m = left % 60;
+  const pct = now ? 1 : 1 - left / (24 * 60);
+  return (
+    <div className="relative h-full p-4 flex flex-col">
+      <div className="flex items-center gap-1.5">
+        <span className="text-[14px]">☕</span>
+        <span className={`text-[11px] font-semibold ${sub}`}>Fika timer</span>
+      </div>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="relative">
+          <span className="text-[44px] leading-none">{now ? "🥐" : "☕"}</span>
+          {[0, 1, 2].map((i) => (
+            <motion.span
+              key={i}
+              className={`absolute -top-3 w-1 h-3 rounded-full ${isDark ? "bg-white/50" : "bg-black/25"}`}
+              style={{ left: 14 + i * 7 }}
+              animate={{ y: [-2, -12], opacity: [0, 0.8, 0] }}
+              transition={{ duration: now ? 1.2 : 2.4, repeat: Infinity, delay: i * 0.4 }}
+            />
+          ))}
+        </div>
+      </div>
+      {now ? (
+        <div className={`text-[13px] font-bold ${text}`}>Fika is NOW.<div className={`text-[10.5px] font-normal ${sub}`}>Drop everything 🏃‍♀️</div></div>
+      ) : (
+        <>
+          <div className={`text-[13px] font-semibold tabular-nums ${text}`}>
+            in {h > 0 ? `${h}h ` : ""}{m}m
+          </div>
+          <div className={`text-[10.5px] ${sub}`}>{mins >= FIKA + 30 ? "Today’s fika: done ✓" : h < 1 ? "Almost there… 🥐" : "Until 15:00 in Stockholm"}</div>
+          <div className={`mt-1 h-1 rounded-full overflow-hidden ${isDark ? "bg-white/15" : "bg-black/10"}`}>
+            <div className="h-full rounded-full bg-[#c8925a]" style={{ width: `${Math.round(pct * 100)}%` }} />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function MoodWidget({ isDark, text, sub }) {
+  const [i, setI] = useState(() => Math.floor(Math.random() * MOODS.length));
+  useEffect(() => {
+    const id = setInterval(() => setI((x) => (x + 1) % MOODS.length), 4500);
+    return () => clearInterval(id);
+  }, []);
+  const [emoji, label] = MOODS[i];
+  return (
+    <div className="relative h-full p-4 flex flex-col">
+      <div className="absolute -right-6 -bottom-6 w-28 h-28 rounded-full blur-2xl opacity-60" style={{ background: "conic-gradient(from 0deg, #ff6b9a, #ffd166, #5ee6b0, #6aa7ff, #b78bff, #ff6b9a)" }} />
+      <div className="relative flex items-center gap-1.5">
+        <span className="relative flex w-2 h-2">
+          <span className="absolute inset-0 rounded-full bg-[#34c759] animate-ping opacity-60" />
+          <span className="relative w-2 h-2 rounded-full bg-[#34c759]" />
+        </span>
+        <span className={`text-[11px] font-semibold ${sub}`}>Currently</span>
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.div key={i} className="relative flex-1 flex flex-col justify-end" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35 }}>
+          <div className="text-[34px] leading-none">{emoji}</div>
+          <div className={`mt-2 text-[13px] font-semibold leading-snug ${text}`}>{label}</div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function useStockholmWeather() {
   const [w, setW] = useState(null);
   useEffect(() => {
@@ -131,7 +226,7 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
   // fit the column between the menu bar and the Dock: scale down on shorter screens instead of hiding
   const [scale, setScale] = useState(1);
   useEffect(() => {
-    const NATURAL_H = SMALL * 4 + GAP * 3; // 4 rows
+    const NATURAL_H = SMALL * 5 + GAP * 4; // 5 rows
     const fit = () => setScale(Math.min(1, (window.innerHeight - MENU_BAR_H - 16 - 96) / NATURAL_H));
     fit();
     window.addEventListener("resize", fit);
@@ -288,6 +383,16 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
           </div>
           <div className="mt-1.5 text-[10px] text-white/60 truncate">Live components ❖</div>
         </div>
+      </Widget>
+
+      {/* Fika timer */}
+      <Widget i={7} isDark={isDark} label="Fika timer: minutes until 15:00 in Stockholm">
+        <FikaWidget isDark={isDark} text={text} sub={sub} />
+      </Widget>
+
+      {/* Mood ring */}
+      <Widget i={8} isDark={isDark} label="What Marta is up to">
+        <MoodWidget isDark={isDark} text={text} sub={sub} />
       </Widget>
 
       {/* Achievements */}

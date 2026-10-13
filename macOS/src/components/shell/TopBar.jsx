@@ -10,6 +10,17 @@ const isMacPlatform =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 const MOD = isMacPlatform ? "⌘" : "Ctrl+";
 
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 5) return "Still up? 🌙";
+  if (h < 12) return "Buenos días ☀️";
+  if (h < 14) return "Lunch o’clock? 🥗";
+  if (h < 15) return "God eftermiddag 🇸🇪";
+  if (h < 16) return "Fika time ☕";
+  if (h < 20) return "Buenas tardes 🌇";
+  return "Buenas noches 🌙";
+}
+
 function SearchGlyph() {
   return (
     <svg viewBox="0 0 16 16" className="w-[14px] h-[14px]" fill="none" aria-hidden="true">
@@ -241,6 +252,11 @@ export default function TopBar({
           <button onClick={onOpenSettings} className={`${statusBtn} hidden sm:flex`} aria-label="Open settings" title="System Settings">
             <img src={gearIcon} alt="" className="h-[14px] w-[14px] opacity-95" />
           </button>
+
+          {/* a little hello, based on the visitor's own time */}
+          <span className="hidden xl:inline px-2 text-[13px] font-medium opacity-90" title="Hello from Marta">
+            {greeting()}
+          </span>
 
           {/* Clock — click opens Notification Center, like macOS */}
           <button
