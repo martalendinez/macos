@@ -140,20 +140,33 @@ function FeaturedBanner({ apps, t }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05, duration: 0.45, ease: EASE }}
             whileHover={{ y: -4 }}
-            className="group relative snap-start shrink-0 w-[78%] @2xl:w-[calc((100%-2rem)/3)] h-[300px] rounded-[22px] overflow-hidden text-left"
+            className="group relative snap-start shrink-0 w-[78%] @2xl:w-[calc((100%-2rem)/3)] rounded-[22px] overflow-hidden text-left flex flex-col"
             style={{
               background: t.isDark ? "rgba(255,255,255,0.05)" : "#ffffff",
               boxShadow: t.isDark ? "inset 0 0 0 1px rgba(255,255,255,0.08)" : "inset 0 0 0 1px rgba(0,0,0,0.1)",
             }}
           >
-            <div className="relative h-full p-5 flex flex-col">
-              <img src={app.icon} alt="" draggable={false} className="w-16 h-16 object-contain drop-shadow-[0_8px_14px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" />
-              <div className="mt-auto">
-                <div className={`text-[10.5px] font-bold uppercase tracking-[0.12em] truncate ${t.isDark && isVeryDark(app.tint) ? t.textSub : ""}`} style={t.isDark && isVeryDark(app.tint) ? undefined : { color: app.tint }}>{app.subtitle}</div>
-                <div className={`mt-1 text-[22px] font-bold tracking-[-0.02em] leading-tight ${t.textMain}`}>{app.title}</div>
-                <p className={`mt-1.5 text-[13px] leading-snug line-clamp-3 ${t.textSub}`}>{app.blurb ?? app.subtitle}</p>
-                <span className={`mt-3 inline-block px-4 py-1 rounded-full text-[12px] font-bold ${t.isDark ? "bg-white/[0.12] text-[#4aa3ff]" : "bg-black/[0.05] text-[#0a6fe0]"}`}>Open</span>
-              </div>
+            {/* stage: a soft tint of the app's colour with a dot grid, the icon front and centre */}
+            <div
+              className="relative h-[132px] flex items-center justify-center overflow-hidden"
+              style={{
+                backgroundColor: `${app.tint}${t.isDark ? "26" : "1c"}`,
+                backgroundImage: `radial-gradient(${app.tint}${t.isDark ? "40" : "38"} 1px, transparent 1.2px)`,
+                backgroundSize: "14px 14px",
+              }}
+            >
+              <img
+                src={app.icon}
+                alt=""
+                draggable={false}
+                className="w-[72px] h-[72px] object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.22)] transition-transform duration-500 ease-out group-hover:scale-110 group-hover:-rotate-6"
+              />
+            </div>
+            <div className="p-5 pt-4 flex flex-col">
+              <div className={`text-[10.5px] font-bold uppercase tracking-[0.12em] truncate ${t.isDark && isVeryDark(app.tint) ? t.textSub : ""}`} style={t.isDark && isVeryDark(app.tint) ? undefined : { color: app.tint }}>{app.subtitle}</div>
+              <div className={`mt-1 text-[20px] font-bold tracking-[-0.02em] leading-tight ${t.textMain}`}>{app.title}</div>
+              <p className={`mt-1 text-[13px] leading-snug line-clamp-2 ${t.textSub}`}>{app.blurb ?? app.subtitle}</p>
+              <span className={`mt-3 self-start inline-flex items-center gap-1 px-4 py-1 rounded-full text-[12px] font-bold transition-colors ${t.isDark ? "bg-white/[0.12] text-[#4aa3ff] group-hover:bg-white/[0.18]" : "bg-black/[0.05] text-[#0a6fe0] group-hover:bg-[#0a6fe0] group-hover:text-white"}`}>Open</span>
             </div>
           </motion.button>
         ))}
