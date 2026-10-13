@@ -176,7 +176,7 @@ export const PROJECT_DOCS = {
     cover: "linear-gradient(120deg,#e6e3ff 0%,#dcd8ff 50%,#ece0ff 100%)",
     status: ["Done", "green"],
     props: [
-      ["Type", "KTH group project"],
+      ["Type", "KTH group project · 2026"],
       ["Team", "4 people · 2 UI/frontend, 2 backend"],
       ["Role", "UI design & frontend"],
       ["Platform", "Mobile app (React Native)"],

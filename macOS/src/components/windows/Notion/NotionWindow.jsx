@@ -51,7 +51,7 @@ const BRIEFS = [
     id: "trivia",
     status: ["Done", "green"],
     type: "KTH group project",
-    year: "2025",
+    year: "2026",
     problem: "Trivia apps either take too long to start or give competitive players no reason to return.",
     hmw: "How might we get someone into a game in seconds, and still give competitive players a reason to come back?",
     did: ["Led the UI design", "Built the React Native front end", "Integrated a public trivia API"],

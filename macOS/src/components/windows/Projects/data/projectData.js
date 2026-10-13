@@ -42,7 +42,7 @@ export const PROJECTS = [
   {
   id: "kthTriviaApp",
   shortTitle: "Trivia App",
-  meta: ["KTH", "University project", "Mobile app"],
+  meta: ["2026", "KTH group project", "Mobile app"],
   tint: "#7b6cf6",
   title: "Trivia App (Master Group Project)",
   subtitle: "React Native MVP powered by external trivia API",

@@ -26,7 +26,7 @@ const MEMORIES = [
   { src: memMadrid, label: "Madrid" },
   { src: memGroningen, label: "Groningen" },
   { src: memLake, label: "Canada" },
-  { src: memSkyline, label: "North America" },
+  { src: memSkyline, label: "New York" },
 ];
 
 function describe(code, isDay) {
