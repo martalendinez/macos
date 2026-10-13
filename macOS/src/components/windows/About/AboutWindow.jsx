@@ -7,6 +7,7 @@ import { placeDetails } from "../Map/data/placesData";
 import avatar from "../../../imgs/avatar/profile-photo.jpg";
 import photo from "../../../imgs/avatar/profile.jpeg";
 import { CONTACT, CORE_TOOLBOX, DOMAINS, EXPERIENCE, LEVELS, PROFILE, SKILL_GROUPS, STATS } from "./aboutData";
+import EasterEgg from "../../ui/EasterEgg";
 
 const SECTIONS = [
   { id: "overview", label: "Overview", tint: "#0a84ff", d: "M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5" },
@@ -502,9 +503,11 @@ export default function AboutWindow({ uiTheme = "glass", glassContrast = "light"
 
       <aside className={`hidden @3xl:flex w-[220px] shrink-0 h-full flex-col border-r ${t.divider} ${t.sidebarBg}`}>
         <div className="px-4 pt-6 pb-4 flex flex-col items-center text-center">
-          <div className="p-[3px] rounded-full" style={{ background: "conic-gradient(from 180deg, #0a84ff, #bf5af2, #ff9f0a, #34c759, #0a84ff)" }}>
-            <img src={avatar} alt="Marta" className={`w-[72px] h-[72px] rounded-full object-cover border-[3px] ${t.isDark ? "border-[#262628]" : "border-[#f3f3f5]"}`} />
-          </div>
+          <EasterEgg say="Yes, that’s me. No, I don’t always smile this much at Figma." side="bottom" bubbleClass="max-w-[220px] text-[12.5px]">
+            <div className="p-[3px] rounded-full" style={{ background: "conic-gradient(from 180deg, #0a84ff, #bf5af2, #ff9f0a, #34c759, #0a84ff)" }}>
+              <img src={avatar} alt="Marta" className={`w-[72px] h-[72px] rounded-full object-cover border-[3px] ${t.isDark ? "border-[#262628]" : "border-[#f3f3f5]"}`} />
+            </div>
+          </EasterEgg>
           <div className={`mt-3 text-[15px] font-semibold ${t.textMain}`}>{PROFILE.name}</div>
           <div className={`text-[12px] ${t.textSub}`}>
             {PROFILE.role} @ {PROFILE.company.name}
@@ -518,14 +521,16 @@ export default function AboutWindow({ uiTheme = "glass", glassContrast = "light"
         </nav>
 
         <div className="p-3">
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-2 w-full px-3 py-2 rounded-lg text-[13px] font-medium ${t.buttonClass}`}
-          >
-            📄 Download résumé
-          </a>
+          <EasterEgg say="One page. I promise. Okay, it’s one page." side="top" focusable={false} className="block w-full" bubbleClass="max-w-[200px] text-[12.5px]">
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center justify-center gap-2 w-full px-3 py-2 rounded-lg text-[13px] font-medium ${t.buttonClass}`}
+            >
+              📄 Download résumé
+            </a>
+          </EasterEgg>
         </div>
       </aside>
 

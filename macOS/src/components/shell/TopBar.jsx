@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import MenuPanel from "./menu/MenuPanel";
 import AppleLogo from "../../ui/AppleLogo";
 import { MENU_BAR_H } from "../../config/shell";
+import EasterEgg from "../ui/EasterEgg";
 
 const isMacPlatform =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
@@ -76,7 +77,11 @@ export default function TopBar({
   const menus = [
     {
       key: "apple",
-      title: <AppleLogo className="w-[14px] h-[14px] -mt-px" />,
+      title: (
+        <EasterEgg say="Not Apple. Just a very dedicated fan 🍎" side="bottom" focusable={false} bubbleClass="max-w-[260px] text-[12.5px] font-normal">
+          <AppleLogo className="w-[14px] h-[14px] -mt-px" />
+        </EasterEgg>
+      ),
       ariaLabel: "Apple menu",
       items: [
         { label: "About This Portfolio", onSelect: () => actions.openWindow?.("portfolioInfo") },

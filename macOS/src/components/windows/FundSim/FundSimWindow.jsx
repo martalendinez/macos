@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
 import { GLOSSARY, SCENARIOS, STRATEGIES, simulate } from "./fundModel";
+import EasterEgg from "../../ui/EasterEgg";
 
 const EASE = [0.22, 1, 0.36, 1];
 // validated pair (dataviz validator, light + dark): calls = orange, distributions = blue
@@ -233,7 +234,17 @@ export default function FundSimWindow({ uiTheme = "glass", glassContrast = "ligh
 
               {/* metrics */}
               <div className="mt-5 grid grid-cols-2 @3xl:grid-cols-4 gap-3">
-                <Stat t={t} i={0} label="Net IRR (full life)" value={pct(result.irr)} sub="annualised return" />
+                <Stat
+                  t={t}
+                  i={0}
+                  label={
+                    <EasterEgg say="IRR: Internal Rate of Return. Or, how I explain my coffee spending ☕" side="top" bubbleClass="max-w-[240px] text-[12.5px]">
+                      Net IRR (full life)
+                    </EasterEgg>
+                  }
+                  value={pct(result.irr)}
+                  sub="annualised return"
+                />
                 <Stat t={t} i={1} label={`TVPI · year ${yr.year}`} value={`${tvpiAt.toFixed(2)}x`} sub="total value ÷ paid in" />
                 <Stat t={t} i={2} label={`DPI · year ${yr.year}`} value={`${dpiAt.toFixed(2)}x`} sub="cash back ÷ paid in" />
                 <Stat t={t} i={3} label="Breakeven" value={result.breakeven ? `Year ${result.breakeven}` : "—"} sub={`deepest point ${signed(result.trough)}`} />

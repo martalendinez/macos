@@ -15,6 +15,7 @@ import memSkyline from "../../imgs/map/canada6.jpg";
 import { simulate } from "../windows/FundSim/fundModel";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 import { myPicks } from "../windows/Music/data/myPicks";
+import EasterEgg from "../ui/EasterEgg";
 
 const SMALL = 150;
 const GAP = 12;
@@ -229,7 +230,9 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
         <div className="absolute inset-0 opacity-90" style={{ background: "radial-gradient(120% 120% at 100% 0%, rgba(94,92,230,0.35), transparent 55%)" }} />
         <div className="relative h-full p-4 flex flex-col">
           <div className="flex items-center gap-2.5">
-            <img src={avatar} alt="" className="w-10 h-10 rounded-full object-cover ring-2 ring-white/60" />
+            <EasterEgg say="Yes, that’s me. No, I don’t always smile this much at Figma." side="bottom" focusable={false} bubbleClass="max-w-[230px] text-[12px] !py-1.5">
+              <img src={avatar} alt="" className="w-10 h-10 rounded-full object-cover ring-2 ring-white/60" />
+            </EasterEgg>
             <div className="min-w-0">
               <div className={`text-[13px] font-semibold leading-tight ${text}`}>{PROFILE.name}</div>
               <div className={`text-[11px] leading-tight ${sub}`}>

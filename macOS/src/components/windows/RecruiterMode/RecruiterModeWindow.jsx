@@ -228,7 +228,15 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
                     >
                       {s.icon}
                     </span>
-                    <div className={`mt-2.5 text-[15px] font-semibold tracking-[-0.01em] ${t.textMain}`}>{s.title}</div>
+                    <div className={`mt-2.5 text-[15px] font-semibold tracking-[-0.01em] ${t.textMain}`}>
+                      {s.title === "Research-driven" ? (
+                        <EasterEgg say="I’ve asked “why?” so many times my friends think I’m 4 years old." side="top" bubbleClass="max-w-[240px] text-[12.5px]">
+                          {s.title}
+                        </EasterEgg>
+                      ) : (
+                        s.title
+                      )}
+                    </div>
                     <p className={`mt-1 text-[13px] leading-relaxed ${t.textSub}`}>{s.text}</p>
                   </motion.div>
                 ))}
@@ -286,9 +294,11 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
       {/* ACTION BAR */}
       <div data-tour="rm-actions" className={`shrink-0 px-4 @lg:px-6 py-3 flex flex-wrap items-center justify-center @lg:justify-end gap-2 border-t ${t.divider} ${t.toolbarBg}`}>
         <span className={`hidden @lg:inline mr-auto text-[12px] ${t.textSub}`}>Like what you see? 👋</span>
-        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.primaryButtonClass}`}>
-          Download résumé
-        </a>
+        <EasterEgg say="One page. I promise. Okay, it’s one page." side="top" focusable={false} bubbleClass="max-w-[220px] text-[12.5px]">
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className={`inline-block px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.primaryButtonClass}`}>
+            Download résumé
+          </a>
+        </EasterEgg>
         <button onClick={copySummary} title="Copy a short summary to paste into your ATS or send to a hiring manager" className={`min-w-[132px] px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.span key={summaryCopied ? "c" : "n"} className="inline-block" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
