@@ -45,27 +45,11 @@ const GLANCE_ICONS = {
 };
 function GlanceIcon({ k, tint }) {
   return (
-    <span className="shrink-0 w-[26px] h-[26px] mt-0.5 rounded-[7px] flex items-center justify-center text-white" style={{ background: tint }}>
-      <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <span className="shrink-0 w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: `${tint}1c`, color: tint }}>
+      <svg viewBox="0 0 20 20" className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d={GLANCE_ICONS[k] || GLANCE_ICONS.role} />
       </svg>
     </span>
-  );
-}
-function ToolLogo({ kind }) {
-  if (kind === "ts")
-    return (
-      <span className="w-4 h-4 rounded-[3px] bg-[#3178c6] text-white text-[7px] font-bold flex items-end justify-end pr-[1.5px] pb-[1px]" title="TypeScript">
-        TS
-      </span>
-    );
-  return (
-    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="#61dafb" strokeWidth="1.4" aria-label="React">
-      <ellipse cx="12" cy="12" rx="10" ry="4" />
-      <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" />
-      <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" />
-      <circle cx="12" cy="12" r="1.8" fill="#61dafb" />
-    </svg>
   );
 }
 
@@ -187,24 +171,30 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
                   {STATUS}
                 </span>
               </div>
-              <div className={`grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-3 gap-px overflow-hidden rounded-[14px] ${t.isDark ? "bg-white/[0.08] ring-1 ring-white/[0.08]" : "bg-black/[0.06] ring-1 ring-black/[0.06]"}`}>
+              <div className="grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-3 gap-3">
                 {GLANCE.map((g) => (
-                  <div key={g.key} className={`flex items-start gap-3 px-4 py-3.5 ${t.isDark ? "bg-[#2a2a2c]" : "bg-white"}`}>
-                    <GlanceIcon k={g.key} tint={g.tint} />
-                    <div className="min-w-0">
-                      <div className={`text-[11.5px] ${t.textSub}`}>{g.label}</div>
-                      <div className={`mt-0.5 text-[14px] font-semibold leading-snug ${t.textMain}`}>{g.value}</div>
-                      {g.key === "tools" ? (
-                        <div className="mt-1 flex items-center gap-1.5">
-                          <img src="/icons/apps/figma.svg" alt="Figma" className="w-4 h-4" />
-                          <ToolLogo kind="react" />
-                          <ToolLogo kind="ts" />
-                          <span className={`text-[12px] ${t.textSub}`}>+ research</span>
-                        </div>
-                      ) : (
-                        <div className={`text-[12px] leading-snug ${t.textSub}`}>{g.sub}</div>
-                      )}
+                  <div key={g.key} className={`flex flex-col p-5 rounded-2xl ${tile}`}>
+                    <div className="flex items-center gap-2.5">
+                      <GlanceIcon k={g.key} tint={g.tint} />
+                      <span className={`text-[12.5px] font-medium ${t.textSub}`}>{g.label}</span>
                     </div>
+                    {g.chips ? (
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {g.chips.map((c) => (
+                          <span
+                            key={c}
+                            className={`px-2.5 py-[3px] rounded-full text-[12.5px] font-medium ${t.isDark ? "bg-white/[0.08] text-white/90" : "bg-white text-black/80 ring-1 ring-black/[0.06]"}`}
+                          >
+                            {c}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        <div className={`mt-4 text-[17px] font-semibold leading-snug tracking-[-0.01em] ${t.textMain}`}>{g.value}</div>
+                        <div className={`mt-1 text-[13px] leading-snug ${t.textSub}`}>{g.sub}</div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
