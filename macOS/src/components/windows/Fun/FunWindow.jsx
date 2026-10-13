@@ -142,8 +142,8 @@ function FeaturedBanner({ apps, t }) {
             whileHover={{ y: -4 }}
             className="group relative snap-start shrink-0 w-[78%] @2xl:w-[calc((100%-2rem)/3)] h-[300px] rounded-[22px] overflow-hidden text-left"
             style={{
-              background: t.isDark ? "rgba(255,255,255,0.05)" : "#f5f5f7",
-              boxShadow: t.isDark ? "inset 0 0 0 1px rgba(255,255,255,0.08)" : "none",
+              background: t.isDark ? "rgba(255,255,255,0.05)" : "#ffffff",
+              boxShadow: t.isDark ? "inset 0 0 0 1px rgba(255,255,255,0.08)" : "inset 0 0 0 1px rgba(0,0,0,0.1)",
             }}
           >
             <div className="relative h-full p-5 flex flex-col">
@@ -152,7 +152,7 @@ function FeaturedBanner({ apps, t }) {
                 <div className={`text-[10.5px] font-bold uppercase tracking-[0.12em] truncate ${t.isDark && isVeryDark(app.tint) ? t.textSub : ""}`} style={t.isDark && isVeryDark(app.tint) ? undefined : { color: app.tint }}>{app.subtitle}</div>
                 <div className={`mt-1 text-[22px] font-bold tracking-[-0.02em] leading-tight ${t.textMain}`}>{app.title}</div>
                 <p className={`mt-1.5 text-[13px] leading-snug line-clamp-3 ${t.textSub}`}>{app.blurb ?? app.subtitle}</p>
-                <span className={`mt-3 inline-block px-4 py-1 rounded-full text-[12px] font-bold ${t.isDark ? "bg-white/[0.12] text-[#4aa3ff]" : "bg-white text-[#0a6fe0] shadow-sm"}`}>Open</span>
+                <span className={`mt-3 inline-block px-4 py-1 rounded-full text-[12px] font-bold ${t.isDark ? "bg-white/[0.12] text-[#4aa3ff]" : "bg-black/[0.05] text-[#0a6fe0]"}`}>Open</span>
               </div>
             </div>
           </motion.button>
