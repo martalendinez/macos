@@ -100,7 +100,7 @@ export const INTENTS = [
       ],
       actions: [
         { label: "Open Fund Simulator", windowId: "fundsim" },
-        { label: "Fintech notes", windowId: "notes" },
+        { label: "Open Excel", windowId: "excel" },
       ],
     }),
   },

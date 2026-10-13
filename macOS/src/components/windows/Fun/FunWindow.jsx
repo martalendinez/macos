@@ -17,11 +17,10 @@ const CATEGORIES = [
   { id: "me", label: "Get to know me", tint: "#ff375f", d: "M8 7.5a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM3 13.8c0-2.6 2.2-4.2 5-4.2s5 1.6 5 4.2" },
   { id: "play", label: "Just for fun", tint: "#ff9f0a", d: "M5 3.5v9l7-4.5z" },
   { id: "mac", label: "This Mac", tint: "#5d6782", d: "M2.5 3.5h11v7.5h-11zM8 11v2.5M5 13.5h6" },
-  { id: "tools", label: "Utilities", tint: "#8e8e93", d: "M10.5 2.5a3 3 0 0 0-3.4 4L2.8 10.8a1.3 1.3 0 0 0 1.9 1.9L9 8.4a3 3 0 0 0 4-3.4l-1.8 1.8-1.7-.4-.4-1.7z" },
   { id: "games", label: "Games", tint: "#34c759", d: "M4.5 5h7a2.5 2.5 0 0 1 2.4 3.2l-.8 2.7a1.6 1.6 0 0 1-2.7.6L9 10H7l-1.4 1.5a1.6 1.6 0 0 1-2.7-.6l-.8-2.7A2.5 2.5 0 0 1 4.5 5zM5.5 6.8v2M4.5 7.8h2" },
 ];
 
-const SHELF_TITLES = { fintech: "Fintech", design: "Design", code: "Code", me: "Get to know Marta", play: "Just for fun", mac: "This Mac", tools: "Utilities" };
+const SHELF_TITLES = { fintech: "Fintech", design: "Design", code: "Code", me: "Get to know Marta", play: "Just for fun", mac: "This Mac" };
 
 function Glyph({ d }) {
   return (
@@ -418,7 +417,7 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
                 </div>
                 <h1 className={`mb-5 text-[32px] font-bold tracking-[-0.03em] ${t.textMain}`}>Discover</h1>
                 <FeaturedBanner apps={featured} t={t} />
-                {["design", "code", "fintech", "mac", "me", "play", "tools"].map((c) => (
+                {["design", "code", "fintech", "mac", "me", "play"].map((c) => (
                   <Shelf key={c} title={SHELF_TITLES[c]} apps={byCat(c)} t={t} onSeeAll={() => setCat(c)} />
                 ))}
                 <GameCarousel games={GAMES} t={t} onPlay={playGame} onSeeAll={() => setCat("games")} />
@@ -445,7 +444,6 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
                       me: "Apps that tell you who I am beyond the CV.",
                       play: "Little toys to make you smile.",
                       mac: "The apps that make up this OS: its design system, its processes, its terminal and your trophies.",
-                      tools: "Small, real utilities, rebuilt for the web.",
                     }[cat]
                   }
                 </p>

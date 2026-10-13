@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { MENU_BAR_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
 import { ACCENTS } from "../../config/accents";
-import { PROFILE } from "../windows/About/aboutData";
+import { CONTACT, PROFILE } from "../windows/About/aboutData";
 import memStockholm from "../../imgs/map/sweden9.jpg";
 import memLakeLouise from "../../imgs/map/canada3.jpg";
 import memMadrid from "../../imgs/map/spain2.jpg";
@@ -168,7 +168,7 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                onOpenWindow?.("facetime");
+                window.location.href = CONTACT.bookingHref;
               }}
               className="px-2.5 py-1 rounded-full bg-[#30d158] text-white text-[11px] font-semibold hover:brightness-110"
             >
@@ -179,7 +179,7 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
       </Widget>
 
       {/* Clock + weather */}
-      <Widget i={1} isDark={isDark} onClick={() => onOpenWindow?.("weather")} label="Stockholm time and weather">
+      <Widget i={1} isDark={isDark} onClick={() => onOpenWindow?.("map")} label="Stockholm time and weather">
         <div className="h-full p-4 flex flex-col">
           <div className={`text-[11px] font-semibold ${sub}`}>Stockholm</div>
           <div className={`text-[38px] font-light leading-none tracking-[-0.02em] tabular-nums mt-1 ${text}`}>{time}</div>

@@ -178,6 +178,8 @@ export const LEVELS = { Basic: 1, Intermediate: 2, Proficient: 3, Advanced: 4, E
 
 export const CONTACT = {
   email: "casandra.lendinez@outlook.com",
+  // "Book a call" opens an email with a short template (swap for a Calendly/Cal.com link if you get one)
+  bookingHref: `mailto:casandra.lendinez@outlook.com?subject=${encodeURIComponent("Let's book a call")}&body=${encodeURIComponent("Hi Marta,\n\nI found your portfolio and would love to set up a quick call.\nHere are a few times that work for me:\n\n- \n- \n\nBest,\n")}`,
   links: [
     { label: "LinkedIn", value: "linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200", href: "https://www.linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200", icon: "in", tint: "#0a66c2" },
     { label: "GitHub", value: "github.com/martalendinez", href: "https://github.com/martalendinez", icon: "⌘", tint: "#24292f" },

@@ -396,7 +396,7 @@ export default function App() {
       trackTerminalCommand: ach.trackTerminalCommand,
       trackGameLaunch: ach.trackGameLaunch,
 
-      // live system state for Activity Monitor & Achievements
+      // live system state for Achievements
       unlockedAchievements: notif.unlocked,
       resetAchievements: notif.resetAchievements,
       openWindows,

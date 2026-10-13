@@ -46,16 +46,8 @@ const RecruiterModeWindow = lazy(() =>
 // Extras & Fun apps
 const InstagramWindow = lazy(() => import("../components/windows/Instagram/InstagramWindow"));
 const MessagesWindow = lazy(() => import("../components/windows/Messages/MessagesWindow"));
-const PhotoBoothWindow = lazy(() => import("../components/windows/PhotoBooth/PhotoBoothWindow"));
-const NotesWindow = lazy(() => import("../components/windows/Notes/NotesWindow"));
-const WeatherWindow = lazy(() => import("../components/windows/Weather/WeatherWindow"));
-const StickiesWindow = lazy(() => import("../components/windows/Stickies/StickiesWindow"));
-const CalculatorWindow = lazy(() => import("../components/windows/Calculator/CalculatorWindow"));
-const PaintWindow = lazy(() => import("../components/windows/Paint/PaintWindow"));
 const FundSimWindow = lazy(() => import("../components/windows/FundSim/FundSimWindow"));
 const FigmaWindow = lazy(() => import("../components/windows/Figma/FigmaWindow"));
-const FaceTimeWindow = lazy(() => import("../components/windows/FaceTime/FaceTimeWindow"));
-const ActivityMonitorWindow = lazy(() => import("../components/windows/ActivityMonitor/ActivityMonitorWindow"));
 const DesignSystemWindow = lazy(() => import("../components/windows/DesignSystem/DesignSystemWindow"));
 const GitHubWindow = lazy(() => import("../components/windows/GitHub/GitHubWindow"));
 const ClaudeWindow = lazy(() => import("../components/windows/Claude/ClaudeWindow"));
@@ -219,14 +211,7 @@ export const WINDOW_DEFS = {
 
   instagram: { title: "Instagram", Component: InstagramWindow, width: 980, height: 720, initialPos: { x: 200, y: 40 } },
   messages: { title: "Messages", Component: MessagesWindow, width: 820, height: 600, initialPos: { x: 260, y: 90 } },
-  photobooth: { title: "Photo Booth", Component: PhotoBoothWindow, width: 840, height: 640, initialPos: { x: 240, y: 60 } },
-  notes: { title: "Notes", Component: NotesWindow, width: 880, height: 580, initialPos: { x: 230, y: 90 } },
-  weather: { title: "Weather", Component: WeatherWindow, width: 920, height: 660, initialPos: { x: 210, y: 50 } },
-  stickies: { title: "Stickies", Component: StickiesWindow, width: 780, height: 560, initialPos: { x: 280, y: 100 } },
-  calculator: { title: "Calculator", Component: CalculatorWindow, width: 240, height: 412, initialPos: { x: 620, y: 140 }, resizable: false },
   figma: { title: "Figma", Component: FigmaWindow, width: 1180, height: 740, initialPos: { x: 140, y: 40 } },
-  facetime: { title: "FaceTime", Component: FaceTimeWindow, width: 560, height: 720, initialPos: { x: 440, y: 40 } },
-  activitymonitor: { title: "Activity Monitor", Component: ActivityMonitorWindow, width: 860, height: 600, initialPos: { x: 260, y: 70 } },
   designsystem: { title: "Design System", Component: DesignSystemWindow, width: 1040, height: 720, initialPos: { x: 200, y: 44 } },
   achievements: { title: "Achievements", Component: AchievementsWindow, width: 900, height: 700, initialPos: { x: 240, y: 50 } },
   fundsim: { title: "Fund Simulator", Component: FundSimWindow, width: 1060, height: 760, initialPos: { x: 190, y: 36 } },
@@ -236,5 +221,4 @@ export const WINDOW_DEFS = {
   excel: { title: "Excel", Component: ExcelWindow, width: 860, height: 700, initialPos: { x: 240, y: 50 } },
   journey: { title: "Marta’s Journey", Component: JourneyWindow, width: 980, height: 600, initialPos: { x: 200, y: 60 } },
   vscode: { title: "Visual Studio Code", Component: VSCodeWindow, width: 1120, height: 720, initialPos: { x: 150, y: 40 } },
-  paint: { title: "Paint", Component: PaintWindow, width: 920, height: 640, initialPos: { x: 200, y: 60 } },
 };

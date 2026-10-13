@@ -305,7 +305,7 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
             LinkedIn
           </a>
         )}
-        <button onClick={() => onOpenWindow?.("facetime")} className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
+        <button onClick={() => (window.location.href = CONTACT.bookingHref)} className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
           📞 Book a call
         </button>
         <button onClick={() => onOpenWindow?.("about")} className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>

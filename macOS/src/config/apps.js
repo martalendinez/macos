@@ -3,7 +3,7 @@
 
 // new Extras apps share one icon set (public/icons/apps)
 const APP_ICONS = Object.fromEntries(
-  ["instagram", "messages", "photobooth", "notes", "weather", "stickies", "calculator", "paint", "fundsim", "figma", "facetime", "activitymonitor", "designsystem", "achievements", "spotify", "github", "claude", "notion", "excel", "journey", "vscode", "accessibility"].map((k) => [k, `/icons/apps/${k}.svg`])
+  ["instagram", "messages", "fundsim", "figma", "designsystem", "achievements", "spotify", "github", "claude", "notion", "excel", "journey", "vscode", "accessibility"].map((k) => [k, `/icons/apps/${k}.svg`])
 );
 
 const ICONS = {
@@ -74,19 +74,11 @@ export function getApps(iconTheme = "glass") {
     { id: "github", label: "GitHub", windowId: "github", icon: i.github, kind: "app", extra: true, keywords: "code repos pull request pr merge review ci developer engineering git" },
     { id: "excel", label: "Excel", windowId: "excel", icon: i.excel, kind: "app", extra: true, keywords: "spreadsheet fund model irr dpi j-curve cash flows excel to product fintech b2b" },
     { id: "figma", label: "Figma", windowId: "figma", icon: i.figma, kind: "app", extra: true, keywords: "design canvas auto layout components prototype ui ux tool" },
-    { id: "facetime", label: "FaceTime", windowId: "facetime", icon: i.facetime, kind: "app", extra: true, keywords: "call book meeting contact video talk hire" },
     { id: "designsystem", label: "Design System", windowId: "designsystem", icon: i.designsystem, kind: "app", extra: true, keywords: "tokens colors typography components motion ui" },
-    { id: "activitymonitor", label: "Activity Monitor", windowId: "activitymonitor", icon: i.activitymonitor, kind: "app", extra: true, keywords: "processes cpu skills windows task manager" },
     { id: "achievements", label: "Achievements", windowId: "achievements", icon: i.achievements, kind: "app", extra: true, keywords: "trophies badges unlock game center progress" },
     { id: "fundsim", label: "Fund Simulator", windowId: "fundsim", icon: i.fundsim, kind: "app", extra: true, keywords: "fintech private markets fund j-curve irr tvpi investing royc finance" },
     { id: "instagram", label: "Instagram", windowId: "instagram", icon: i.instagram, kind: "app", extra: true, keywords: "photos pictures stories travel" },
     { id: "messages", label: "Messages", windowId: "messages", icon: i.messages, kind: "app", extra: true, keywords: "chat imessage talk ask contact" },
-    { id: "photobooth", label: "Photo Booth", windowId: "photobooth", icon: i.photobooth, kind: "app", extra: true, keywords: "camera selfie webcam filters" },
-    { id: "notes", label: "Notes", windowId: "notes", icon: i.notes, kind: "app", extra: true, keywords: "philosophy toolbox timeline write" },
-    { id: "weather", label: "Weather", windowId: "weather", icon: i.weather, kind: "app", extra: true, keywords: "forecast temperature stockholm" },
-    { id: "stickies", label: "Stickies", windowId: "stickies", icon: i.stickies, kind: "app", extra: true, keywords: "sticky notes post-it" },
-    { id: "calculator", label: "Calculator", windowId: "calculator", icon: i.calculator, kind: "app", extra: true, keywords: "math numbers" },
-    { id: "paint", label: "Paint", windowId: "paint", icon: i.paint, kind: "app", extra: true, keywords: "draw drawing sketch canvas" },
 
     { id: "employerBrandingCaseStudy", label: "Employer Branding — Case Study", windowId: "employerBrandingCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "bachelor thesis pridecom ai" },
     { id: "thesisCaseStudy", label: "Trace — Master Thesis Case Study", windowId: "thesisCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "master thesis kth ai co-pilot human ai collaboration llm plugin trace research" },

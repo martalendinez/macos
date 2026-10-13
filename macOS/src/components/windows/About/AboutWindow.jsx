@@ -405,7 +405,7 @@ function Contact({ t, onOpenWindow }) {
             <a href={`mailto:${CONTACT.email}`} className="px-3.5 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-[13px] font-medium backdrop-blur-md transition">
               Send email
             </a>
-            <button onClick={() => onOpenWindow?.("facetime")} className="px-3.5 py-1.5 rounded-lg bg-white text-[13px] font-semibold text-[#1d1d1f] hover:bg-white/90 transition">
+            <button onClick={() => (window.location.href = CONTACT.bookingHref)} className="px-3.5 py-1.5 rounded-lg bg-white text-[13px] font-semibold text-[#1d1d1f] hover:bg-white/90 transition">
               📞 Book a call
             </button>
           </div>
