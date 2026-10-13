@@ -45,7 +45,7 @@ const GLANCE_ICONS = {
 };
 function GlanceIcon({ k, tint }) {
   return (
-    <span className="w-7 h-7 rounded-[9px] flex items-center justify-center text-white shadow-sm" style={{ background: `linear-gradient(140deg, ${tint}, ${tint}cc)` }}>
+    <span className="shrink-0 w-[26px] h-[26px] mt-0.5 rounded-[7px] flex items-center justify-center text-white" style={{ background: tint }}>
       <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d={GLANCE_ICONS[k] || GLANCE_ICONS.role} />
       </svg>
@@ -55,12 +55,12 @@ function GlanceIcon({ k, tint }) {
 function ToolLogo({ kind }) {
   if (kind === "ts")
     return (
-      <span className="w-5 h-5 rounded-[4px] bg-[#3178c6] text-white text-[8.5px] font-bold flex items-end justify-end pr-[2px] pb-[1px]" title="TypeScript">
+      <span className="w-4 h-4 rounded-[3px] bg-[#3178c6] text-white text-[7px] font-bold flex items-end justify-end pr-[1.5px] pb-[1px]" title="TypeScript">
         TS
       </span>
     );
   return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#61dafb" strokeWidth="1.4" aria-label="React">
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="#61dafb" strokeWidth="1.4" aria-label="React">
       <ellipse cx="12" cy="12" rx="10" ry="4" />
       <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" />
       <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" />
@@ -187,31 +187,25 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
                   {STATUS}
                 </span>
               </div>
-              <div className="grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-3 gap-2.5">
-                {GLANCE.map((g, i) => (
-                  <motion.div
-                    key={g.key}
-                    {...rise(4.3 + i * 0.4)}
-                    whileHover={{ y: -2 }}
-                    className={`relative overflow-hidden rounded-2xl p-3.5 ${t.isDark ? "bg-white/[0.05] ring-1 ring-white/[0.08]" : "bg-white ring-1 ring-black/[0.06] shadow-[0_6px_16px_-14px_rgba(0,0,0,0.35)]"} ${g.key === "tools" && GLANCE.length % 3 === 2 ? "@md:col-span-2 @2xl:col-span-2" : ""}`}
-                  >
-                    <div className="absolute -right-6 -top-6 w-20 h-20 rounded-full blur-2xl opacity-25" style={{ background: g.tint }} />
-                    <div className="relative flex items-center gap-2.5">
-                      <GlanceIcon k={g.key} tint={g.tint} />
-                      <span className={`text-[10.5px] font-semibold uppercase tracking-[0.1em] ${t.textSub}`}>{g.label}</span>
+              <div className={`grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-3 gap-px overflow-hidden rounded-[14px] ${t.isDark ? "bg-white/[0.08] ring-1 ring-white/[0.08]" : "bg-black/[0.06] ring-1 ring-black/[0.06]"}`}>
+                {GLANCE.map((g) => (
+                  <div key={g.key} className={`flex items-start gap-3 px-4 py-3.5 ${t.isDark ? "bg-[#2a2a2c]" : "bg-white"}`}>
+                    <GlanceIcon k={g.key} tint={g.tint} />
+                    <div className="min-w-0">
+                      <div className={`text-[11.5px] ${t.textSub}`}>{g.label}</div>
+                      <div className={`mt-0.5 text-[14px] font-semibold leading-snug ${t.textMain}`}>{g.value}</div>
+                      {g.key === "tools" ? (
+                        <div className="mt-1 flex items-center gap-1.5">
+                          <img src="/icons/apps/figma.svg" alt="Figma" className="w-4 h-4" />
+                          <ToolLogo kind="react" />
+                          <ToolLogo kind="ts" />
+                          <span className={`text-[12px] ${t.textSub}`}>+ research</span>
+                        </div>
+                      ) : (
+                        <div className={`text-[12px] leading-snug ${t.textSub}`}>{g.sub}</div>
+                      )}
                     </div>
-                    <div className={`relative mt-2.5 text-[14.5px] font-semibold leading-snug tracking-[-0.01em] ${t.textMain}`}>{g.value}</div>
-                    {g.key === "tools" ? (
-                      <div className="relative mt-1.5 flex items-center gap-1.5">
-                        <img src="/icons/apps/figma.svg" alt="Figma" className="w-5 h-5" />
-                        <ToolLogo kind="react" />
-                        <ToolLogo kind="ts" />
-                        <span className={`ml-1 text-[12px] ${t.textSub}`}>+ research</span>
-                      </div>
-                    ) : (
-                      <div className={`relative mt-0.5 text-[12px] leading-snug ${t.textSub}`}>{g.sub}</div>
-                    )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </motion.div>
