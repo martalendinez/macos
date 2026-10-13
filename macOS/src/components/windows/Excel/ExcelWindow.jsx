@@ -221,11 +221,11 @@ function Sheet({ calls, dists, setCalls, setDists, m, dark }) {
           )}
         </AnimatePresence>
       </div>
-      <div className="shrink-0 flex items-center gap-1 px-2 text-[12px]" style={{ background: g.head, borderTop: `1px solid ${g.grid}`, color: g.headText }}>
+      <div className="shrink-0 flex items-center gap-1 px-2 text-[12px] whitespace-nowrap overflow-hidden" style={{ background: g.head, borderTop: `1px solid ${g.grid}`, color: g.headText }}>
         <span className="px-3 py-1 font-semibold" style={{ background: g.cell, color: g.sel, borderBottom: `2px solid ${g.sel}` }}>Cash flows</span>
         <span className="px-3 py-1">Assumptions</span>
         <span className="px-3 py-1">Fees</span>
-        <span className="ml-auto pr-2 tabular-nums">DPI {m.dpi.toFixed(2)}x · IRR {m.irr == null ? "–" : `${(m.irr * 100).toFixed(1)}%`}</span>
+        <span className="ml-auto pl-2 pr-2 tabular-nums">DPI {m.dpi.toFixed(2)}x · IRR {m.irr == null ? "–" : `${(m.irr * 100).toFixed(1)}%`}</span>
       </div>
     </div>
   );

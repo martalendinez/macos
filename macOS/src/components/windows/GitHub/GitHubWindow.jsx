@@ -933,13 +933,13 @@ export default function GitHubWindow({ theme = "light", onOpenWindow, notify, un
             </>
           )}
         </div>
-        <nav className="flex gap-1 mt-2 text-[13.5px]">
+        <nav className="flex gap-1 mt-2 text-[13.5px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {[
             ["profile", "Overview", "repo"],
             ["pr", "Pull requests", "pr"],
             ["repos", "Repositories", "repo"],
           ].map(([k, l, ic]) => (
-            <button key={k} type="button" onClick={() => go(k)} className="flex items-center gap-1.5 px-2.5 py-2 -mb-px" style={view === k || (k === "repos" && repoId) ? { borderBottom: "2px solid #fd8c73", fontWeight: 600 } : { color: c.muted, borderBottom: "2px solid transparent" }}>
+            <button key={k} type="button" onClick={() => go(k)} className="shrink-0 whitespace-nowrap flex items-center gap-1.5 px-2.5 py-2 -mb-px" style={view === k || (k === "repos" && repoId) ? { borderBottom: "2px solid #fd8c73", fontWeight: 600 } : { color: c.muted, borderBottom: "2px solid transparent" }}>
               <I n={ic} style={{ color: c.muted }} />
               {l}
               {k === "pr" && !pr.merged && <span className="ml-0.5 rounded-full px-1.5 text-[11.5px] font-semibold" style={{ background: dark ? "rgba(101,108,118,0.4)" : "rgba(129,139,152,0.2)" }}>1</span>}

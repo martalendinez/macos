@@ -22,6 +22,7 @@ export default function DockItem({
   onClick,
   children,
   tourId,
+  base = DOCK_BASE, // icon size at rest (smaller on phones so the Dock fits)
   peek = [], // folder stacks: icons of the apps inside, shown in the hover label
 }) {
   const ref = useRef(null);
@@ -35,7 +36,7 @@ export default function DockItem({
     if (!b || !Number.isFinite(v)) return Infinity;
     return v - (b.left + b.width / 2);
   });
-  const target = useTransform(distance, [-DOCK_RANGE, 0, DOCK_RANGE], [DOCK_BASE, DOCK_MAX, DOCK_BASE]);
+  const target = useTransform(distance, [-DOCK_RANGE, 0, DOCK_RANGE], [base, (base * DOCK_MAX) / DOCK_BASE, base]);
   const size = useSpring(target, { mass: 0.1, stiffness: 170, damping: 14 });
 
   function handleClick(e) {

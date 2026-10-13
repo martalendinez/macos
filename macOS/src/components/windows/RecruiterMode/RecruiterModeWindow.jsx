@@ -260,7 +260,7 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
       </div>
 
       {/* ACTION BAR */}
-      <div data-tour="rm-actions" className={`shrink-0 px-4 @lg:px-6 py-3 flex flex-wrap items-center justify-center @lg:justify-end gap-2 border-t ${t.divider} ${t.toolbarBg}`}>
+      <div data-tour="rm-actions" className={`shrink-0 px-4 @lg:px-6 py-3 flex items-center @lg:justify-end gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:shrink-0 [&>*]:whitespace-nowrap border-t ${t.divider} ${t.toolbarBg}`}>
         <span className={`hidden @lg:inline mr-auto text-[12px] ${t.textSub}`}>Like what you see? 👋</span>
         <EasterEgg say="One page. I promise. Okay, it’s one page." side="top" focusable={false} bubbleClass="max-w-[220px] text-[12.5px]">
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className={`inline-block px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.primaryButtonClass}`}>

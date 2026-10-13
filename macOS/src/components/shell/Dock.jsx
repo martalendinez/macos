@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import DockItem, { DOCK_BASE } from "./DockItem";
+import useIsMobile from "../../hooks/useIsMobile";
 
 /** A Dock stack: a frosted grid of apps that pops up above its Dock icon. */
 function StackPopover({ stack, anchorX, isDark, onClose }) {
@@ -121,6 +122,10 @@ export default function Dock({
   const mouseX = useMotionValue(Infinity);
   const [openStack, setOpenStack] = useState(null); // { id, x }
   const activeStack = openStack && apps.find((a) => a.id === openStack.id);
+  // phones: shrink the icons just enough that the whole Dock fits the screen width
+  const mobile = useIsMobile();
+  const count = apps.length + minimized.length + docs.length;
+  const base = mobile ? Math.min(DOCK_BASE, Math.floor((window.innerWidth - 24 - 12 - 6 * (count - 1)) / count)) : DOCK_BASE;
 
   // close the stack when the Dock hides (e.g. a phone app goes full screen)
   useEffect(() => {
@@ -143,7 +148,7 @@ export default function Dock({
     <div className="fixed bottom-[6px] inset-x-0 z-[5000] flex justify-center pointer-events-none">
       <motion.div
         className="pointer-events-auto flex items-end gap-[6px] px-[6px] pb-[6px] rounded-[22px] backdrop-blur-2xl backdrop-saturate-[1.8]"
-        style={{ ...surface, height: DOCK_BASE + 12 }}
+        style={{ ...surface, height: base + 12 }}
         // magnify only for a real mouse; on touch screens the icons stay put
         onPointerMove={(e) => e.pointerType === "mouse" && mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(Infinity)}
@@ -158,6 +163,7 @@ export default function Dock({
             key={app.id}
             tourId={`dock-${app.id}`}
             mouseX={mouseX}
+            base={base}
             label={app.label}
             isDark={isDark}
             running={app.stack ? app.stack.items.some((it) => it.windowId && runningIds.includes(it.windowId)) : runningIds.includes(app.windowId)}
@@ -188,7 +194,7 @@ export default function Dock({
               transition={{ type: "spring", stiffness: 380, damping: 34 }}
               className="flex items-end"
             >
-              <DockItem mouseX={mouseX} label={m.title} isDark={isDark} onClick={() => onRestore?.(m.id)}>
+              <DockItem mouseX={mouseX} base={base} label={m.title} isDark={isDark} onClick={() => onRestore?.(m.id)}>
                 <MinimizedTile title={m.title} icon={m.icon} isDark={isDark} />
               </DockItem>
             </motion.div>
@@ -196,7 +202,7 @@ export default function Dock({
         </AnimatePresence>
 
         {docs.map((d) => (
-          <DockItem key={d.id} mouseX={mouseX} label={d.label} isDark={isDark} onClick={d.onOpen}>
+          <DockItem key={d.id} mouseX={mouseX} base={base} label={d.label} isDark={isDark} onClick={d.onOpen}>
             <img src={d.icon} alt="" draggable={false} className="w-full h-full object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.25)]" />
           </DockItem>
         ))}

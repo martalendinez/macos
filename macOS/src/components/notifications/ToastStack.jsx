@@ -3,9 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { MENU_BAR_H } from "../../config/shell";
 import { ACH_RE, AppIcon, appOf } from "./notifApps";
+import useIsMobile from "../../hooks/useIsMobile";
 
 export default function ToastStack({ uiTheme = "glass", theme = "light", toasts = [], onDismiss }) {
   const isDark = theme === "dark" || uiTheme !== "macos";
+  // phones: one banner at a time, so they never stack over the app
+  const shown = useIsMobile() ? toasts.slice(-1) : toasts;
 
   const surface = isDark
     ? {
@@ -24,7 +27,7 @@ export default function ToastStack({ uiTheme = "glass", theme = "light", toasts 
       style={{ top: MENU_BAR_H + (typeof window !== "undefined" && window.innerWidth < 768 ? 52 : 8) }}
     >
       <AnimatePresence initial={false}>
-        {toasts.map((t) => (
+        {shown.map((t) => (
           <motion.div
             key={t.id}
             layout
