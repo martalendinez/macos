@@ -1,15 +1,9 @@
 // src/components/windows/terminal/GameHost.jsx
-// Runs a game "full screen" inside the Terminal pane, like an ncurses app.
+// Runs full-screen Terminal programs (the `matrix` easter egg) inside the pane.
 import { useEffect, useRef } from "react";
 import { useKeys } from "./games/kit";
-import SnakeGame from "./games/SnakeGame";
-import PongGame from "./games/PongGame";
-import TetrisGame from "./games/TetrisGame";
-import Game2048 from "./games/Game2048";
-import BreakoutGame from "./games/BreakoutGame";
-import FlappyGame from "./games/FlappyGame";
 
-const GAMES = { snake: SnakeGame, pong: PongGame, tetris: TetrisGame, 2048: Game2048, breakout: BreakoutGame, flappy: FlappyGame };
+const GAMES = {}; // arcade games removed; the Matrix easter egg stays
 
 function MatrixRain({ onExit }) {
   const ref = useRef(null);

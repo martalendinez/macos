@@ -1,7 +1,6 @@
 // src/config/dockStacks.js
 // Dock "Stacks": each opens a macOS-style grid of apps above the Dock.
 // ✏️ Reorder or move apps between stacks here. `app` = an id from config/apps.js,
-// `game` = a Terminal arcade game key (see Fun/data/funApps.js GAMES).
 // `category` = the Extras & Fun section the "Open in Extras" link jumps to.
 // The three work stacks tell one story: Design decides, Code builds, Finance ships to users.
 // "This Mac" holds the apps that are about this OS itself.
@@ -46,8 +45,6 @@ export const DOCK_STACKS = [
       { app: "messages" },
       { app: "music" },
       { app: "map" },
-      { game: "snake" },
-      { game: "tetris" },
     ],
   },
 ];

@@ -12,7 +12,6 @@ export const ACHIEVEMENTS = [
   { key: "case_study_collector", title: "Case Study Collector", icon: "📚", tint: "#bf5af2", hint: "Open 2 different case studies" },
   { key: "terminal_explorer", title: "Terminal Explorer", icon: "⌨️", tint: "#1c1c1e", hint: "Open Terminal" },
   { key: "command_runner", title: "Command Runner", icon: "💻", tint: "#32d74b", hint: "Run 5 Terminal commands" },
-  { key: "gamer", title: "Gamer", icon: "🎮", tint: "#ff375f", hint: "Launch an arcade game" },
   { key: "ig_fan", title: "Biggest Fan", icon: "💛", tint: "#e1306c", hint: "Like 3 photos on Instagram" },
   { key: "chatty", title: "Great Conversationalist", icon: "💬", tint: "#34c759", hint: "Ask Marta 4 different questions" },
   { key: "fintech_curious", title: "Fintech Curious", icon: "📈", tint: "#5e5ce6", hint: "Open the Fund Simulator" },

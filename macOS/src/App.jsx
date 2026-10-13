@@ -33,8 +33,6 @@ import WindowsLayer from "./components/shell/WindowsLayer";
 import Loader from "./ui/Loader";
 import { getApps, getIcons, iconForWindow, RESUME_URL } from "./config/apps";
 import { DOCK_STACKS } from "./config/dockStacks";
-import { GAMES } from "./components/windows/Fun/data/funApps";
-import { requestTerminalGame } from "./components/windows/terminal/terminalBus";
 import { requestFunCategory } from "./components/windows/Fun/funBus";
 import useIsMobile from "./hooks/useIsMobile";
 
@@ -347,10 +345,6 @@ export default function App() {
         },
         items: st.items
           .map((it) => {
-            if (it.game) {
-              const g = GAMES.find((x) => x.key === it.game);
-              return g && { key: `game-${g.key}`, label: g.title, emoji: g.emoji, gradient: g.gradient, windowId: null, onOpen: () => { openWindow("terminal"); requestTerminalGame(g.key); } };
-            }
             const a = apps.find((x) => x.id === it.app);
             return a && { key: a.id, label: a.label, icon: a.icon, windowId: a.windowId, onOpen: () => openWindow(a.windowId) };
           })

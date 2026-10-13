@@ -3,8 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
-import { FEATURED, GAMES, getFunApps } from "./data/funApps";
-import { requestTerminalGame } from "../terminal/terminalBus";
+import { FEATURED, getFunApps } from "./data/funApps";
 import { clearPendingCategory, onFunCategoryRequest, peekPendingCategory } from "./funBus";
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -17,7 +16,6 @@ const CATEGORIES = [
   { id: "me", label: "Get to know me", tint: "#ff375f", d: "M8 7.5a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM3 13.8c0-2.6 2.2-4.2 5-4.2s5 1.6 5 4.2" },
   { id: "play", label: "Just for fun", tint: "#ff9f0a", d: "M5 3.5v9l7-4.5z" },
   { id: "mac", label: "This Mac", tint: "#5d6782", d: "M2.5 3.5h11v7.5h-11zM8 11v2.5M5 13.5h6" },
-  { id: "games", label: "Games", tint: "#34c759", d: "M4.5 5h7a2.5 2.5 0 0 1 2.4 3.2l-.8 2.7a1.6 1.6 0 0 1-2.7.6L9 10H7l-1.4 1.5a1.6 1.6 0 0 1-2.7-.6l-.8-2.7A2.5 2.5 0 0 1 4.5 5zM5.5 6.8v2M4.5 7.8h2" },
 ];
 
 const SHELF_TITLES = { fintech: "Fintech", design: "Design", code: "Code", me: "Get to know Marta", play: "Just for fun", mac: "This Mac" };
@@ -90,117 +88,6 @@ function Shelf({ title, apps, t, onSeeAll }) {
   );
 }
 
-function GameCard({ g, onPlay, i }) {
-  return (
-    <motion.button
-      onClick={onPlay}
-      className="group relative text-left rounded-2xl overflow-hidden p-4 h-[150px] flex flex-col justify-between text-white shadow-[0_14px_30px_-16px_rgba(0,0,0,0.5)]"
-      style={{ background: `linear-gradient(135deg, ${g.gradient[0]}, ${g.gradient[1]})` }}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: i * 0.06, ease: EASE }}
-      whileHover={{ y: -3 }}
-    >
-      <span className="absolute -right-3 -bottom-4 text-[84px] leading-none opacity-90 transition duration-500 group-hover:rotate-12 group-hover:scale-110">{g.emoji}</span>
-      <span className="relative text-[10px] font-bold uppercase tracking-[0.1em] text-white/75">Arcade · in Terminal</span>
-      <span className="relative">
-        <span className="block text-[20px] font-bold leading-tight">{g.title}</span>
-        <span className="block text-[12px] text-white/80">{g.subtitle}</span>
-        <span className="mt-2 inline-block px-3 py-0.5 rounded-full bg-white/25 backdrop-blur text-[11px] font-bold">▶ Play</span>
-      </span>
-    </motion.button>
-  );
-}
-
-/** App Store-style shelf: 3 games per page, slide with arrows, dots or a swipe. */
-function GameCarousel({ games, t, onPlay, onSeeAll }) {
-  const sectionRef = useRef(null);
-  const [PER, setPer] = useState(3);
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([e]) => setPer(e.contentRect.width < 560 ? 1 : 3));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  const pages = Math.ceil(games.length / PER);
-  const [page, setPage] = useState(0);
-  const dragged = useRef(false);
-  const go = (p) => setPage(Math.max(0, Math.min(pages - 1, p)));
-  useEffect(() => setPage((p) => Math.min(p, pages - 1)), [pages]);
-  const arrow = (dir, disabled) => (
-    <button
-      onClick={() => go(page + dir)}
-      disabled={disabled}
-      aria-label={dir < 0 ? "Previous games" : "Next games"}
-      className={`w-7 h-7 rounded-full flex items-center justify-center transition disabled:opacity-30 ${t.isDark ? "bg-white/10 hover:bg-white/20" : "bg-black/[0.06] hover:bg-black/10"} ${t.textMain}`}
-    >
-      <svg viewBox="0 0 12 12" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d={dir < 0 ? "M7.5 2.5 4 6l3.5 3.5" : "M4.5 2.5 8 6l-3.5 3.5"} />
-      </svg>
-    </button>
-  );
-
-  return (
-    <section ref={sectionRef} className="mt-9">
-      <div className={`flex items-center justify-between border-t pt-4 ${t.divider}`}>
-        <h2 className={`text-[19px] font-bold tracking-[-0.01em] ${t.textMain}`}>Arcade</h2>
-        <div className="flex items-center gap-2">
-          <button onClick={onSeeAll} className={`mr-2 text-[13px] font-medium hover:underline ${t.accentText}`}>
-            See All
-          </button>
-          {arrow(-1, page === 0)}
-          {arrow(1, page === pages - 1)}
-        </div>
-      </div>
-
-      <div className="mt-3 py-2 overflow-hidden">
-        <motion.div
-          className="flex"
-          animate={{ x: `${-page * 100}%` }}
-          transition={{ type: "spring", stiffness: 260, damping: 32 }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.18}
-          onDragStart={() => (dragged.current = true)}
-          onClickCapture={(e) => {
-            // a swipe shouldn't launch the game under the cursor
-            if (dragged.current) {
-              e.stopPropagation();
-              e.preventDefault();
-              dragged.current = false;
-            }
-          }}
-          onDragEnd={(_, info) => {
-            if (info.offset.x < -60) go(page + 1);
-            else if (info.offset.x > 60) go(page - 1);
-          }}
-        >
-          {Array.from({ length: pages }).map((_, p) => (
-            <div key={p} className={`w-full shrink-0 grid gap-4 pr-[1px] ${PER === 3 ? "grid-cols-3" : "grid-cols-1"}`}>
-              {games.slice(p * PER, p * PER + PER).map((g, i) => (
-                <GameCard key={g.key} g={g} i={i} onPlay={() => onPlay(g.key)} />
-              ))}
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      <div className="mt-2 flex justify-center gap-1.5">
-        {Array.from({ length: pages }).map((_, p) => (
-          <button
-            key={p}
-            onClick={() => go(p)}
-            aria-label={`Page ${p + 1}`}
-            className={`h-1.5 rounded-full transition-all ${p === page ? "w-5 bg-[hsl(var(--accent))]" : `w-1.5 ${t.isDark ? "bg-white/25" : "bg-black/20"}`}`}
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/** App Store "Today"-style row: tall editorial cards that scroll and snap, with arrow controls. */
 function FeaturedBanner({ apps, t }) {
   const row = useRef(null);
   const [edge, setEdge] = useState({ start: true, end: false });
@@ -294,17 +181,11 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
   }, []);
   const [query, setQuery] = useState("");
 
-  const playGame = (key) => {
-    onOpenWindow?.("terminal");
-    requestTerminalGame(key);
-  };
-
   const q = query.trim().toLowerCase();
   const results = useMemo(
     () => (q ? apps.filter((a) => `${a.title} ${a.subtitle}`.toLowerCase().includes(q)) : []),
     [apps, q]
   );
-  const gameResults = q ? GAMES.filter((g) => `${g.title} ${g.subtitle} game`.toLowerCase().includes(q)) : [];
   const byCat = (c) => apps.filter((a) => a.category === c);
   const featured = FEATURED.map((k) => apps.find((a) => a.key === k)).filter(Boolean);
   const current = CATEGORIES.find((c) => c.id === cat);
@@ -400,15 +281,8 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
             {q ? (
               <>
                 <h1 className={`text-[28px] font-bold tracking-[-0.02em] ${t.textMain}`}>Results for “{query}”</h1>
-                {results.length === 0 && gameResults.length === 0 && <p className={`mt-6 text-[14px] ${t.textSub}`}>No apps found. Try “photo”, “music” or “game”.</p>}
+                {results.length === 0 && <p className={`mt-6 text-[14px] ${t.textSub}`}>No apps found. Try “design”, “code” or “music”.</p>}
                 {results.length > 0 && <Shelf title="Apps" apps={results} t={t} />}
-                {gameResults.length > 0 && (
-                  <div className="mt-6 grid grid-cols-1 @lg:grid-cols-3 gap-4">
-                    {gameResults.map((g, i) => (
-                      <GameCard key={g.key} g={g} i={i} onPlay={() => playGame(g.key)} />
-                    ))}
-                  </div>
-                )}
               </>
             ) : cat === "discover" ? (
               <>
@@ -420,17 +294,6 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
                 {["design", "code", "fintech", "mac", "me", "play"].map((c) => (
                   <Shelf key={c} title={SHELF_TITLES[c]} apps={byCat(c)} t={t} onSeeAll={() => setCat(c)} />
                 ))}
-                <GameCarousel games={GAMES} t={t} onPlay={playGame} onSeeAll={() => setCat("games")} />
-              </>
-            ) : cat === "games" ? (
-              <>
-                <h1 className={`text-[32px] font-bold tracking-[-0.03em] ${t.textMain}`}>Games</h1>
-                <p className={`mt-1 text-[14px] ${t.textSub}`}>Six neon arcade games running right inside Terminal. Your best scores are saved. Press Esc to quit a game.</p>
-                <div className="mt-6 grid grid-cols-1 @lg:grid-cols-3 gap-4">
-                  {GAMES.map((g, i) => (
-                    <GameCard key={g.key} g={g} i={i} onPlay={() => playGame(g.key)} />
-                  ))}
-                </div>
               </>
             ) : (
               <>

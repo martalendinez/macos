@@ -49,8 +49,6 @@ export const COMMANDS = {
   tree: "Show the folder tree",
   neofetch: "System info, the cool way",
   whoami: "Who is Marta?",
-  games: "List arcade games",
-  play: "Play a game (play tetris)",
   theme: "Change profile: pro | basic | homebrew | ocean",
   history: "Show command history",
   echo: "Print text",
@@ -67,7 +65,6 @@ const MAN = {
   cd: "cd [path] — change directory. `cd ..` goes up, `cd` or `cd ~` goes home.",
   cat: "cat <file> — print a file. Try `cat about.txt` or `cat places/stockholm.txt`.",
   open: "open <file|app> — open with the default app. `open resume.pdf`, `open -a Maps`, `open projects/sallskap.md`.",
-  play: `play <game> — start a game: ${GAME_LIST.join(", ")}. Esc quits.`,
   theme: "theme <pro|basic|homebrew|ocean> — switch the Terminal profile.",
 };
 
@@ -257,18 +254,6 @@ export function runCommand(raw, ctx) {
       }
       return print(...out, "");
     }
-
-    case "games":
-      return print(
-        color("🕹  Arcade", undefined, true),
-        ...GAME_LIST.map((g) => line(seg(`  ${g.padEnd(10)}`, "green"), seg(`play ${g}`, "dim"))),
-        color("Your best scores are saved in this browser.", "dim"),
-        ""
-      );
-
-    case "play":
-      if (GAME_LIST.includes(args[0])) return ctx.startGame(args[0]);
-      return print(color(`usage: play ${GAME_LIST.join(" | ")}`, "yellow"));
 
     case "theme":
       if (PROFILES.includes(args[0])) {

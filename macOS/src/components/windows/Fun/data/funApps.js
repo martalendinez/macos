@@ -22,15 +22,6 @@ const APPS = [
   { key: "terminal", title: "Terminal", subtitle: "Play games & commands", category: "mac", tint: "#1c1c1e", iconKey: "terminal" },
 ];
 
-// Mini games that live inside Terminal
-export const GAMES = [
-  { key: "snake", title: "Snake", subtitle: "Grow fast, chase golden apples", emoji: "🐍", gradient: ["#34c759", "#0f8f3a"] },
-  { key: "pong", title: "Pong", subtitle: "Beat the CPU, first to 7", emoji: "🏓", gradient: ["#64d2ff", "#0a5fd1"] },
-  { key: "tetris", title: "Tetris", subtitle: "Ghost piece, hold & levels", emoji: "🧱", gradient: ["#af52de", "#5e2ca5"] },
-  { key: "2048", title: "2048", subtitle: "Slide, merge, reach 2048", emoji: "🔢", gradient: ["#ff9f0a", "#c93400"] },
-  { key: "breakout", title: "Breakout", subtitle: "Smash the rainbow bricks", emoji: "🧨", gradient: ["#ff375f", "#a0003a"] },
-  { key: "flappy", title: "Flappy", subtitle: "One button. Endless pipes.", emoji: "🐤", gradient: ["#0a84ff", "#003a8c"] },
-];
 
 export const FEATURED = ["journey", "excel", "claude", "notion", "github", "figma", "fundsim", "designsystem"];
 

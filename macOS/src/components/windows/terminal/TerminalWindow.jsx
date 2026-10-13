@@ -1,6 +1,6 @@
 // src/components/windows/terminal/TerminalWindow.jsx
 // macOS Terminal.app look-alike: tab bar, profiles, inline prompt with block cursor,
-// virtual file system, history, Tab completion, Ctrl shortcuts and full-screen games.
+// virtual file system, history, Tab completion, Ctrl shortcuts and the matrix easter egg.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import GameHost from "./GameHost";
 import { HOME, buildFS, prettyPath } from "./fs";
@@ -77,7 +77,7 @@ function welcome() {
   const stamp = d.toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).replace(",", "");
   return [
     `Last login: ${stamp} on ttys000`,
-    { segs: [{ t: "Welcome to MartaOS 2.0 ✨ ", b: true }, { t: "type ", c: "dim" }, { t: "help", c: "green" }, { t: " for commands, ", c: "dim" }, { t: "neofetch", c: "green" }, { t: " to show off, or ", c: "dim" }, { t: "games", c: "green" }, { t: " to play.", c: "dim" }] },
+    { segs: [{ t: "Welcome to MartaOS 2.0 ✨ ", b: true }, { t: "type ", c: "dim" }, { t: "help", c: "green" }, { t: " for commands, ", c: "dim" }, { t: "neofetch", c: "green" }, { t: " to show off, or ", c: "dim" }, { t: "matrix", c: "green" }, { t: " if you dare.", c: "dim" }] },
     "",
   ];
 }

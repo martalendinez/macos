@@ -5,7 +5,7 @@ import { PROJECTS } from "../Projects/data/projectData";
 import { placeDetails } from "../Map/data/placesData";
 
 export const HOME = "/Users/marta";
-export const GAME_LIST = ["snake", "pong", "tetris", "2048", "breakout", "flappy"];
+export const GAME_LIST = [];
 
 const dir = (children) => ({ type: "dir", children });
 const file = (lines, extra = {}) => ({ type: "file", lines, ...extra });
@@ -76,7 +76,6 @@ export function buildFS() {
         "resume.pdf": file(["%PDF-1.7 … (binary file — run `open resume.pdf`)"], { open: { url: "/resume.pdf" } }),
         projects: dir(projectFiles()),
         places: dir(placeFiles()),
-        games: dir(Object.fromEntries(GAME_LIST.map((g) => [g, file(["(binary executable — run ./" + g + ")"], { exec: g })]))),
       }),
     }),
   });
