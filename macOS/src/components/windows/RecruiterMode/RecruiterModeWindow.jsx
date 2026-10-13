@@ -35,6 +35,24 @@ const inView = (i = 0, root) => ({
   transition: { delay: i * 0.07, duration: 0.55, ease: EASE },
 });
 
+const GLANCE_ICONS = {
+  role: "M4 7.5h12v8.5H4zM7.5 7.5V5.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2M4 11h12",
+  edu: "M2.5 7.5 10 4l7.5 3.5L10 11zM5.5 9v3.5c0 1.2 2 2.5 4.5 2.5s4.5-1.3 4.5-2.5V9M17.5 7.5V12",
+  loc: "M10 17.5s5-4.6 5-8.5a5 5 0 0 0-10 0c0 3.9 5 8.5 5 8.5zM10 10.5a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6z",
+  domain: "M3.5 16h13M5.5 13l3.2-3.5 2.6 2 3.7-5M12.5 6.5h2.5V9",
+  tools: "M11.5 4.5 15.5 8.5 8 16H4v-4zM10 6l4 4",
+  lang: "M3 5h8M7 3v2M5 5c0 3 2 5.5 5 6.5M9 5c0 3-2.5 6-6 7M11 17l3.5-8 3.5 8M12.2 14.5h4.6",
+};
+function GlanceIcon({ k, tint }) {
+  return (
+    <span className="shrink-0 w-[26px] h-[26px] rounded-[8px] flex items-center justify-center" style={{ background: `${tint}1f`, color: tint }}>
+      <svg viewBox="0 0 20 20" className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d={GLANCE_ICONS[k] || GLANCE_ICONS.role} />
+      </svg>
+    </span>
+  );
+}
+
 function Label({ t, children }) {
   return <div className={`text-[11px] font-semibold uppercase tracking-[0.08em] ${t.textSub}`}>{children}</div>;
 }
@@ -155,8 +173,11 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
               <dl className="grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-3 gap-x-8">
                 {GLANCE.map((g) => (
                   <div key={g.key} className={`pt-3.5 pb-5 border-t ${t.divider}`}>
-                    <dt className={`text-[11px] font-semibold uppercase tracking-[0.08em] ${t.textSub}`}>{g.label}</dt>
-                    <dd className={`mt-1.5 text-[16px] font-semibold leading-snug tracking-[-0.01em] ${t.textMain}`}>{g.value}</dd>
+                    <dt className={`flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] ${t.textSub}`}>
+                      <GlanceIcon k={g.key} tint={g.tint} />
+                      {g.label}
+                    </dt>
+                    <dd className={`mt-2.5 text-[16px] font-semibold leading-snug tracking-[-0.01em] ${t.textMain}`}>{g.value}</dd>
                     <dd className={`mt-0.5 text-[13px] leading-snug ${t.textSub}`}>{g.sub}</dd>
                   </div>
                 ))}
