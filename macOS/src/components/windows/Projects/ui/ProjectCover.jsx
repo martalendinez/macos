@@ -3,6 +3,7 @@
 // browser/phone frames bleeding off the edge, floating UI chips taken from the product,
 // a mesh gradient and film grain. Everything is sized in container units (cqw), so a cover
 // looks the same from the small grid card to the big featured card.
+import { useEffect, useRef, useState } from "react";
 import { POSTERS, POSTER_BG, usePosterFonts } from "./ProjectPosters";
 import kallosDashboard from "../../../../imgs/case-study/kallos/Dashboard.png";
 import diningRestaurant from "../../../../imgs/case-study/sallskap/Dining_Restaurant.png";
@@ -268,3 +269,26 @@ export default function ProjectCover({ project, className = "", compact = false 
     </div>
   );
 }
+
+// Posters lay out in container units, so render them at Projects-card width and the cell's aspect, then scale down.
+const POSTER_W = 520;
+export function PosterThumb({ project }) {
+  const ref = useRef(null);
+  const [box, setBox] = useState({ scale: 0.6, h: 240 });
+  useEffect(() => {
+    const ro = new ResizeObserver(([e]) => {
+      const { width, height } = e.contentRect;
+      if (width) setBox({ scale: width / POSTER_W, h: (height / width) * POSTER_W });
+    });
+    ro.observe(ref.current);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <span ref={ref} className="absolute inset-0 overflow-hidden">
+      <span className="absolute left-0 top-0 origin-top-left" style={{ width: POSTER_W, height: box.h, transform: `scale(${box.scale})` }}>
+        <ProjectCover project={project} className="!absolute inset-0" />
+      </span>
+    </span>
+  );
+}
+

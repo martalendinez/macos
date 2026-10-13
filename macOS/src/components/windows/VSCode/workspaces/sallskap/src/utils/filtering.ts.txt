@@ -1,0 +1,65 @@
+import { Member } from '@/context/GroupContext';
+
+export interface MenuItem {
+  name: string;
+  price: number;
+  dietary: string[];
+  description: string;
+}
+
+export interface Restaurant {
+  id: string;
+  name: string;
+  cuisine: string;
+  priceRange: string;
+  rating: number;
+  tags: string[];
+  restrictionsAccommodated: string[];
+  description: string;
+  address: string;
+  hours: string;
+  capacity: number;
+  crowdLevel: string;
+  image: string; // ⭐ Added so RestaurantCard can show photos
+  menu: MenuItem[];
+}
+
+export const RESTRICTIONS = [
+  'vegan',
+  'vegetarian',
+  'gluten-free',
+  'dairy-free',
+  'nut-free',
+  'halal',
+] as const;
+
+export type Restriction = (typeof RESTRICTIONS)[number];
+
+export function getGroupRestrictions(members: Member[]): string[] {
+  return [...new Set(members.flatMap((m) => m.restrictions))];
+}
+
+export function filterRestaurants(
+  restaurants: Restaurant[],
+  members: Member[]
+): Restaurant[] {
+  const needed = getGroupRestrictions(members);
+  if (needed.length === 0) return restaurants;
+
+  return restaurants.filter((r) =>
+    needed.every((n) => r.restrictionsAccommodated.includes(n))
+  );
+}
+
+export function getCrowdLabel(level: string): string {
+  switch (level) {
+    case 'quiet':
+      return 'Quiet';
+    case 'moderate':
+      return 'Moderate';
+    case 'busy':
+      return 'Busy';
+    default:
+      return level;
+  }
+}

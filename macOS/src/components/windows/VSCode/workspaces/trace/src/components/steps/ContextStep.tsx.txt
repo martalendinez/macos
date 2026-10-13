@@ -1,0 +1,359 @@
+import { motion } from "framer-motion";
+import { Check, AlertTriangle, ChevronDown } from "lucide-react";
+import { cn } from "../../lib/utils";
+import { useReflection } from "../../features/reflection/state/ReflectionContext";
+import type {
+  ContextItem,
+  DesignStage,
+  TaskMode,
+} from "../../features/reflection/types";
+
+/* -----------------------------
+   DESIGN STAGES (EXPANDED)
+----------------------------- */
+
+const DESIGN_STAGES: { value: DesignStage; label: string }[] = [
+  { value: "problem-definition", label: "Problem definition" },
+  { value: "user-flows", label: "User flows" },
+  { value: "low-fidelity", label: "Low‑fidelity sketches" },
+  { value: "wireframe", label: "Wireframes" },
+  { value: "mid-fidelity", label: "Mid‑fidelity mockups" },
+  { value: "high-fidelity", label: "High‑fidelity design" },
+  { value: "prototype", label: "Interactive prototype" },
+  { value: "usability-testing", label: "Usability testing" },
+];
+
+/* -----------------------------
+   CONTEXT BY TASK MODE
+----------------------------- */
+
+const CONTEXT_BY_MODE: Record<
+  TaskMode,
+  { items: { value: ContextItem; label: string; sensitive?: boolean }[] }
+> = {
+  design: {
+    items: [
+      { value: "selected-ui", label: "UI frames / screens" },
+      { value: "button-labels", label: "Buttons & CTAs" },
+      { value: "input-fields", label: "Forms & inputs" },
+    ],
+  },
+
+  evaluation: {
+    items: [
+      { value: "selected-ui", label: "UI frame" },
+      { value: "button-labels", label: "Button labels" },
+      { value: "input-fields", label: "Input fields" },
+      { value: "internal-docs", label: "Design specs", sensitive: true },
+    ],
+  },
+
+  research: {
+    items: [
+      { value: "user-research", label: "User research", sensitive: true },
+      { value: "internal-docs", label: "Research notes", sensitive: true },
+    ],
+  },
+
+  content: {
+    items: [
+      { value: "button-labels", label: "Buttons & CTAs" },
+      { value: "input-fields", label: "Form labels" },
+      { value: "internal-docs", label: "Brand voice / guidelines", sensitive: true },
+    ],
+  },
+
+  strategy: {
+    items: [
+      { value: "selected-ui", label: "Flows / screens" },
+      { value: "user-research", label: "User research", sensitive: true },
+      { value: "internal-docs", label: "Product docs", sensitive: true },
+    ],
+  },
+};
+
+/* -----------------------------
+   CONTEXT BY DESIGN STAGE
+----------------------------- */
+
+const CONTEXT_BY_STAGE: Record<DesignStage, ContextItem[]> = {
+  "problem-definition": ["user-research", "internal-docs"],
+  "user-flows": ["selected-ui", "internal-docs"],
+  "low-fidelity": ["selected-ui", "button-labels"],
+  "wireframe": ["selected-ui", "button-labels", "input-fields"],
+  "mid-fidelity": ["selected-ui", "button-labels", "input-fields"],
+  "high-fidelity": ["selected-ui", "button-labels", "input-fields"],
+  "prototype": ["selected-ui", "button-labels", "input-fields"],
+  "usability-testing": ["selected-ui", "user-research"],
+};
+
+/* -----------------------------
+   LABELS
+----------------------------- */
+
+const CONTEXT_LABEL_BY_MODE: Record<TaskMode, string> = {
+  design: "What design elements should the AI consider?",
+  evaluation: "What parts of the UI should be evaluated?",
+  research: "What research material should the AI use?",
+  content: "What content should the AI use?",
+  strategy: "What context should inform decisions?",
+};
+
+/* -----------------------------
+   UI COMPONENTS
+----------------------------- */
+
+const Field = ({
+  label,
+  helper,
+  children,
+}: {
+  label: string;
+  helper?: string;
+  children: React.ReactNode;
+}) => (
+  <div className="space-y-1.5">
+    <label className="text-xs font-medium text-foreground block">
+      {label}
+    </label>
+    {children}
+    {helper && (
+      <p className="text-[11px] text-muted-foreground">{helper}</p>
+    )}
+  </div>
+);
+
+const CheckboxChip = ({
+  label,
+  checked,
+  sensitive,
+  onToggle,
+}: {
+  label: string;
+  checked: boolean;
+  sensitive?: boolean;
+  onToggle: () => void;
+}) => (
+  <button
+    onClick={onToggle}
+    className={cn(
+      "flex items-center gap-2 px-3 py-2 rounded-lg border text-xs transition-all duration-150 text-left w-full",
+      checked
+        ? "border-primary/40 bg-primary/5 text-primary"
+        : "border-border bg-card text-foreground hover:bg-muted/40"
+    )}
+  >
+    <div
+      className={cn(
+        "w-4 h-4 rounded flex items-center justify-center border shrink-0 transition-colors",
+        checked ? "bg-primary border-primary" : "border-border"
+      )}
+    >
+      {checked && <Check className="w-2.5 h-2.5 text-primary-foreground" />}
+    </div>
+
+    <span className="flex-1">{label}</span>
+
+    {sensitive && (
+      <span className="flex items-center gap-1 text-[10px] text-amber-600 font-medium">
+        <AlertTriangle className="w-3 h-3" />
+        sensitive
+      </span>
+    )}
+  </button>
+);
+
+/* -----------------------------
+   MAIN COMPONENT
+----------------------------- */
+
+export function ContextStep() {
+  const { state, dispatch } = useReflection();
+
+  const stage = state.designStage[0] as DesignStage | undefined;
+
+  const baseContextOptions =
+    CONTEXT_BY_MODE[state.taskMode]?.items || [];
+
+  const dynamicContextOptions = stage
+    ? baseContextOptions.filter((item) =>
+        CONTEXT_BY_STAGE[stage]?.includes(item.value)
+      )
+    : baseContextOptions;
+
+  const contextLabel =
+    CONTEXT_LABEL_BY_MODE[state.taskMode] ||
+    "What information should the AI use?";
+
+  const toggleContext = (value: ContextItem) => {
+    dispatch({ type: "TOGGLE_CONTEXT", value });
+  };
+
+  const canContinue =
+    Boolean(state.selectedElement) ||
+    Boolean(state.productContext) ||
+    state.designStage.length > 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.28, ease: "easeOut" }}
+      className="flex-1 overflow-y-auto panel-scroll p-5 space-y-6"
+    >
+      <div className="space-y-1">
+        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-[0.16em]">
+          STEP 2 OF 6
+        </p>
+
+        <h3 className="text-sm font-semibold text-foreground">
+          Provide design context
+        </h3>
+
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          Help the AI understand your design so it can give more relevant feedback.
+        </p>
+      </div>
+
+      <Field label="What part of the design are you working on?">
+        <input
+          value={state.selectedElement}
+          onChange={(e) =>
+            dispatch({
+              type: "SET_FIELD",
+              field: "selectedElement",
+              value: e.target.value,
+            })
+          }
+          placeholder="Onboarding screen – Figma Frame"
+          className="w-full bg-card border border-border rounded-lg px-3 py-2.5 text-xs outline-none"
+        />
+      </Field>
+
+      <Field label="What is this product or feature?">
+        <input
+          value={state.productContext}
+          onChange={(e) =>
+            dispatch({
+              type: "SET_FIELD",
+              field: "productContext",
+              value: e.target.value,
+            })
+          }
+          placeholder="Fitness tracking app"
+          className="w-full bg-card border border-border rounded-lg px-3 py-2.5 text-xs outline-none"
+        />
+      </Field>
+
+      <Field
+        label="What stage are you in?"
+        helper="Select the stage that best matches your current work."
+      >
+        <div className="relative">
+          <button
+            onClick={() =>
+              dispatch({
+                type: "TOGGLE_DROPDOWN",
+                field: "designStageDropdown",
+              })
+            }
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-xs bg-card"
+          >
+            <span className="text-foreground">
+              {state.designStage.length === 0
+                ? "Select stage..."
+                : DESIGN_STAGES.find(
+                    (s) => s.value === state.designStage[0]
+                  )?.label}
+            </span>
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
+
+          {state.designStageDropdown && (
+            <div className="absolute z-10 mt-1 w-full bg-card border border-border rounded-lg shadow-lg p-1">
+              {DESIGN_STAGES.map((stage) => (
+                <button
+                  key={stage.value}
+                  onClick={() => {
+                    dispatch({
+                      type: "SET_FIELD",
+                      field: "designStage",
+                      value: [stage.value],
+                    });
+                    dispatch({
+                      type: "SET_FIELD",
+                      field: "designStageDropdown",
+                      value: false,
+                    });
+                  }}
+                  className={cn(
+                    "w-full text-left px-3 py-2 text-xs rounded-md transition-colors",
+                    state.designStage.includes(stage.value)
+                      ? "bg-primary/10 text-primary"
+                      : "hover:bg-muted/40"
+                  )}
+                >
+                  {stage.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </Field>
+
+      <Field
+        label={contextLabel}
+        helper="This simulates what the AI has access to."
+      >
+        <div className="space-y-1.5">
+          {dynamicContextOptions.map((item) => (
+            <CheckboxChip
+              key={item.value}
+              label={item.label}
+              checked={state.contextSelection.includes(item.value)}
+              sensitive={item.sensitive}
+              onToggle={() => toggleContext(item.value)}
+            />
+          ))}
+        </div>
+      </Field>
+
+      <Field label="Anything else the AI should know?">
+        <textarea
+          value={state.designerNotes}
+          onChange={(e) =>
+            dispatch({
+              type: "SET_FIELD",
+              field: "designerNotes",
+              value: e.target.value,
+            })
+          }
+          rows={3}
+          className="w-full bg-card border border-border rounded-lg px-3 py-2.5 text-xs outline-none resize-none"
+        />
+      </Field>
+
+      <div className="flex gap-2 pt-2">
+        <button
+          onClick={() => dispatch({ type: "SET_STEP", step: 0 })}
+          className="flex-1 py-2.5 rounded-lg text-xs border border-border bg-card"
+        >
+          Back
+        </button>
+
+        <button
+          disabled={!canContinue}
+          onClick={() => dispatch({ type: "NEXT_STEP" })}
+          className={cn(
+            "flex-1 py-2.5 rounded-lg text-xs",
+            canContinue
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          )}
+        >
+          Continue
+        </button>
+      </div>
+    </motion.div>
+  );
+}

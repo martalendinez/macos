@@ -1,0 +1,72 @@
+import { Restaurant } from "@/utils/filtering";
+import Tooltip from "@/components/Tooltip";
+import { Star } from "lucide-react";
+
+interface RestaurantCardProps {
+  restaurant: Restaurant;
+  onViewMenu: (r: Restaurant) => void;
+  onSelect: (r: Restaurant) => void;
+  onViewReviews: (r: Restaurant) => void;
+}
+
+export default function RestaurantCard({
+  restaurant,
+  onViewMenu,
+  onSelect,
+  onViewReviews,
+}: RestaurantCardProps) {
+  const priceLabels: Record<string, string> = {
+    "$": "Budget-friendly",
+    "$$": "Moderate",
+    "$$$": "Higher-end",
+    "$$$$": "Premium dining",
+  };
+
+  return (
+    <div
+      onClick={() => onViewMenu(restaurant)}
+      className="surface-card rounded-xl border border-border p-4 flex flex-col gap-2 
+                 cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-all"
+    >
+      <img
+        src={restaurant.image}
+        alt={`Photo of ${restaurant.name}`}
+        className="w-full h-40 object-cover rounded-sm"
+      />
+
+      <h3 className="text-lg font-semibold text-foreground">{restaurant.name}</h3>
+
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <Tooltip label={priceLabels[restaurant.priceRange]}>
+          <span>{restaurant.priceRange}</span>
+        </Tooltip>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onViewReviews(restaurant);
+          }}
+          className="flex items-center gap-1 text-yellow-500 hover:opacity-80"
+        >
+          <Star className="w-4 h-4 fill-yellow-500" />
+          {restaurant.rating}
+        </button>
+      </div>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect(restaurant);
+        }}
+        className="
+          mt-2 w-full rounded-sm py-2 text-sm font-medium
+          bg-[hsl(var(--button-primary))]
+          text-[hsl(var(--button-primary-foreground))]
+          hover:opacity-90 transition
+        "
+      >
+        Select
+      </button>
+    </div>
+  );
+}

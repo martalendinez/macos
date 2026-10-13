@@ -143,8 +143,10 @@ export default function TopBar({
       key: "help",
       title: "Help",
       items: [
+        { label: "Welcome guide", onSelect: actions.showWelcome },
         { label: "Take the 2-minute tour", onSelect: () => actions.openWindow?.("recruiter") },
         { label: "Contact Marta", onSelect: () => actions.openWindow?.("about") },
+        { label: "Simple version (plain page)", onSelect: () => window.open("/simple.html", "_blank", "noopener") },
         { separator: true },
         { label: "Keyboard Shortcuts", onSelect: actions.showShortcuts },
       ],

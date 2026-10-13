@@ -21,6 +21,7 @@ export default function DockItem({
   active = false,
   onClick,
   children,
+  tourId,
 }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(false);
@@ -48,6 +49,7 @@ export default function DockItem({
   return (
     <motion.div
       ref={ref}
+      data-tour={tourId}
       className="relative flex flex-col items-center justify-end shrink-0"
       style={{ width: size, height: size }}
       onMouseEnter={() => setHover(true)}

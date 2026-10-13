@@ -1,0 +1,209 @@
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import restaurantsData from "@/data/restaurants.json";
+import { Restaurant } from "@/utils/filtering";
+import RestaurantCard from "@/components/RestaurantCard";
+import MenuModal from "@/components/MenuModal";
+import ReviewsModal from "@/components/ReviewsModal";
+import BackButton from "@/components/BackButton";
+import ProgressStep from "@/components/ProgressStep";
+import { X, SlidersHorizontal } from "lucide-react";
+
+export default function BrowseRestaurants() {
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const groupId = params.get("groupId");
+
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+  const [reviewRestaurant, setReviewRestaurant] = useState<Restaurant | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const [locationFilter, setLocationFilter] = useState("");
+  const [dietaryFilter, setDietaryFilter] = useState<string[]>([]);
+  const [priceFilter, setPriceFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState<string[]>([]);
+
+  const restaurants = restaurantsData as Restaurant[];
+
+  const uniqueLocations = [...new Set(restaurants.map(r => r.address.split(",")[0]))];
+  const uniqueDietary = [...new Set(restaurants.flatMap(r => r.restrictionsAccommodated))];
+  const uniqueTags = [...new Set(restaurants.flatMap(r => r.tags))];
+
+  function toggleArrayFilter(value: string, setter: (v: string[]) => void, current: string[]) {
+    if (current.includes(value)) {
+      setter(current.filter(v => v !== value));
+    } else {
+      setter([...current, value]);
+    }
+  }
+
+  const filteredRestaurants = restaurants.filter(r => {
+    if (locationFilter && !r.address.includes(locationFilter)) return false;
+    if (priceFilter && r.priceRange !== priceFilter) return false;
+    if (dietaryFilter.length > 0 && !dietaryFilter.every(d => r.restrictionsAccommodated.includes(d)))
+      return false;
+    if (tagFilter.length > 0 && !tagFilter.every(t => r.tags.includes(t))) return false;
+    return true;
+  });
+
+  function handleSelect(restaurant: Restaurant) {
+    navigate(`/confirmation?restaurant=${restaurant.id}&groupId=${groupId}`);
+  }
+
+  return (
+    <div className="min-h-screen bg-background pt-20 pb-8 px-4">
+      <div className="max-w-2xl mx-auto">
+
+        <BackButton />
+        <ProgressStep step={4} total={4} />
+
+        <h1 className="text-2xl font-bold text-foreground mb-1">Choose a Restaurant</h1>
+        <p className="text-sm text-muted-foreground mb-6">
+          Based on your group's dietary needs, here are the best matches.
+        </p>
+
+        <button
+          onClick={() => setFiltersOpen(true)}
+          className="flex items-center gap-2 bg-muted px-4 py-2 rounded-sm text-sm font-medium mb-6 hover:bg-muted/80 transition"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          Filters
+        </button>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          {filteredRestaurants.map((r) => (
+            <RestaurantCard
+              key={r.id}
+              restaurant={r}
+              onViewMenu={setSelectedRestaurant}
+              onSelect={handleSelect}
+              onViewReviews={setReviewRestaurant}
+            />
+          ))}
+        </div>
+
+        {filteredRestaurants.length === 0 && (
+          <p className="text-center text-muted-foreground py-12">
+            No restaurants match your filters.
+          </p>
+        )}
+      </div>
+
+      <MenuModal
+        restaurant={selectedRestaurant}
+        onClose={() => setSelectedRestaurant(null)}
+      />
+
+      <ReviewsModal
+        restaurant={reviewRestaurant}
+        onClose={() => setReviewRestaurant(null)}
+      />
+
+      {filtersOpen && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-card w-full max-w-md rounded-sm shadow-lg p-6 relative">
+
+            <button
+              onClick={() => setFiltersOpen(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-muted rounded-sm"
+            >
+              <X className="w-5 h-5 text-muted-foreground" />
+            </button>
+
+            <h2 className="text-xl font-bold mb-4">Filters</h2>
+
+            {/* LOCATION DROPDOWN — BLACK */}
+            <div className="mb-6">
+              <p className="text-sm font-medium mb-2">Location</p>
+              <select
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="w-full border rounded-sm px-3 py-2 bg-black text-white"
+              >
+                <option value="">Any</option>
+                {uniqueLocations.map((loc) => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-sm font-medium mb-2">Price</p>
+              <div className="flex gap-2">
+                {["$", "$$", "$$$", "$$$$"].map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setPriceFilter(p === priceFilter ? "" : p)}
+                    className={`px-3 py-1 rounded-sm border ${
+                      priceFilter === p ? "bg-primary text-primary-foreground" : "bg-muted"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-sm font-medium mb-2">Dietary</p>
+              <div className="flex flex-wrap gap-2">
+                {uniqueDietary.map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => toggleArrayFilter(d, setDietaryFilter, dietaryFilter)}
+                    className={`px-3 py-1 rounded-sm border text-xs uppercase tracking-wide ${
+                      dietaryFilter.includes(d)
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-sm font-medium mb-2">Preferences</p>
+              <div className="flex flex-wrap gap-2">
+                {uniqueTags.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => toggleArrayFilter(t, setTagFilter, tagFilter)}
+                    className={`px-3 py-1 rounded-sm border text-xs ${
+                      tagFilter.includes(t)
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* APPLY FILTERS — NOW USING THE SAME GREEN AS OTHER SCREENS */}
+            <button
+              onClick={() => setFiltersOpen(false)}
+              className="
+                w-full
+                py-2
+                rounded-md
+                text-sm
+                font-medium
+                tracking-tight
+                bg-[hsl(var(--button-primary))]
+                text-[hsl(var(--button-primary-foreground))]
+                hover:opacity-90
+                transition
+              "
+            >
+              Apply Filters
+            </button>
+
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

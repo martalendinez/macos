@@ -16,6 +16,7 @@ import challengeImg from "../../../imgs/case-study/trivia/screens/TriviaChalleng
 import rankingImg from "../../../imgs/case-study/trivia/screens/TriviaRanking.jpg";
 import profileImg from "../../../imgs/case-study/trivia/screens/TriviaProfile.jpg";
 import { ComponentToCode, FetchQuestions, HifiWall, Iphone, LofiToHifi, OutcomeStage, TriviaArchitecture, TriviaBlueprint, TriviaSystem } from "./caseStudy/TriviaVisuals";
+import BehindTheScenes from "./caseStudy/BehindTheScenes";
 
 const TINT = "#7b6cf6";
 
@@ -63,6 +64,10 @@ export default function TriviaCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
       <button type="button" onClick={() => open(heroImg, "Trivia Master screens")} className="mt-10 block w-full cursor-zoom-in">
           <img src={heroImg} alt="Trivia Master ranking and challenge screens on phones" className="block w-full h-auto rounded-[20px]" />
         </button>
+
+      <div className="mt-6">
+        <BehindTheScenes project="trivia" theme={theme} tint={TINT} onOpenWindow={onOpenWindow} />
+      </div>
 
       <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
         <AtAGlance

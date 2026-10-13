@@ -11,6 +11,9 @@ const ToastStack = lazy(() => import("./components/notifications/ToastStack"));
 // ✅ new config + hooks
 import { WINDOW_DEFS } from "./config/windowDefs";
 import useAccentVar from "./hooks/useAccentVar";
+import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
+import Tour from "./components/shell/Tour";
+import { useA11y } from "./config/a11yStore";
 import useClock from "./hooks/useClock";
 import useGlassContrast from "./hooks/useGlassContrast";
 import useNotifications from "./hooks/useNotifications";
@@ -87,6 +90,7 @@ export default function App() {
   const [iconTheme, setIconTheme] = useState("glass");
 
   const [fontScale, setFontScale] = useState(1);
+  const a11y = useA11y();
 
   // Boot screen: keep it up briefly so the progress bar can finish, then reveal the desktop
   const [loaded, setLoaded] = useState(false);
@@ -151,18 +155,13 @@ export default function App() {
     notifyOnce: notif.notifyOnce,
   });
 
+  // first visit: a short welcome guide (work first, then the extras); reopen it from Help
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
   useEffect(() => {
-    if (!loaded) return;
-    const t = window.setTimeout(() => {
-      notif.notifyOnce("tip_30sec", {
-        title: "Tip",
-        message: "Want the quick version? Open ⚡ Recruiter Mode on your desktop, or press ⌘K to search.",
-        toast: true,
-      });
-    }, 1400);
-
+    if (!loaded || !shouldShowWelcome()) return;
+    const t = window.setTimeout(() => setWelcomeOpen(true), 900);
     return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
 
   function setThemeAndSyncWallpaper(nextTheme) {
@@ -271,6 +270,7 @@ export default function App() {
       resetLayout,
       restart,
       lockScreen: () => setLocked(true),
+      showWelcome: () => setWelcomeOpen(true),
       openSpotlight: () => setSpotlightOpen(true),
       closeActive: () => activeWindow && closeWindow(activeWindow),
       minimizeActive: () => activeWindow && minimizeWindow(activeWindow),
@@ -429,7 +429,7 @@ export default function App() {
   );
 
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={a11y.motion ? "always" : "user"}>
     <Shell
       fontScale={fontScale}
       baseTextClass={baseTextClass}
@@ -529,6 +529,15 @@ export default function App() {
         onPick={launch}
       />
 
+      <Welcome
+        open={welcomeOpen}
+        onClose={() => setWelcomeOpen(false)}
+        onOpenWindow={openWindow}
+        onOpenResume={openResume}
+        onStartTour={mobile ? undefined : () => { setWelcomeOpen(false); setTimeout(() => setTourOpen(true), 350); }}
+        isDark={theme === "dark"}
+      />
+      <Tour open={tourOpen} onClose={() => setTourOpen(false)} onOpenWindow={openWindow} isDark={theme === "dark"} />
       <LockScreen open={locked} onUnlock={unlock} wallpaperUrl={activeWallpaper} timeZone={timeZone} />
       <BootOverlay open={booting} onDone={finishBoot} />
     </Shell>

@@ -12,61 +12,16 @@ const EASE = [0.22, 1, 0.36, 1];
 const CATEGORIES = [
   { id: "discover", label: "Discover", tint: "#0a84ff", d: "M8 1.8l1.7 4.5 4.5 1.7-4.5 1.7L8 14.2l-1.7-4.5L1.8 8l4.5-1.7z" },
   { id: "fintech", label: "Fintech", tint: "#5e5ce6", d: "M2.5 12.5l3.5-4 3 2.5 4.5-6M10.5 5h3v3" },
-  { id: "design", label: "Design & Build", tint: "#ff9f0a", d: "M3 13l1.2-3.6L10.8 2.8a1.4 1.4 0 0 1 2 2L6.2 11.4z M9.5 4l2 2" },
+  { id: "design", label: "Design", tint: "#ff9f0a", d: "M3 13l1.2-3.6L10.8 2.8a1.4 1.4 0 0 1 2 2L6.2 11.4z M9.5 4l2 2" },
+  { id: "code", label: "Code", tint: "#30d158", d: "M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5" },
   { id: "me", label: "Get to know me", tint: "#ff375f", d: "M8 7.5a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM3 13.8c0-2.6 2.2-4.2 5-4.2s5 1.6 5 4.2" },
   { id: "play", label: "Just for fun", tint: "#ff9f0a", d: "M5 3.5v9l7-4.5z" },
+  { id: "mac", label: "This Mac", tint: "#5d6782", d: "M2.5 3.5h11v7.5h-11zM8 11v2.5M5 13.5h6" },
   { id: "tools", label: "Utilities", tint: "#8e8e93", d: "M10.5 2.5a3 3 0 0 0-3.4 4L2.8 10.8a1.3 1.3 0 0 0 1.9 1.9L9 8.4a3 3 0 0 0 4-3.4l-1.8 1.8-1.7-.4-.4-1.7z" },
   { id: "games", label: "Games", tint: "#34c759", d: "M4.5 5h7a2.5 2.5 0 0 1 2.4 3.2l-.8 2.7a1.6 1.6 0 0 1-2.7.6L9 10H7l-1.4 1.5a1.6 1.6 0 0 1-2.7-.6l-.8-2.7A2.5 2.5 0 0 1 4.5 5zM5.5 6.8v2M4.5 7.8h2" },
 ];
 
-const SHELF_TITLES = { design: "Design & Build", me: "Get to know Marta", play: "Just for fun", tools: "Utilities" };
-
-/** Fintech gets a feature card: the simulator, the fintech notes and Marta's role at ROYC. */
-function FintechSection({ t, apps, onOpenWindow }) {
-  const sim = apps.find((a) => a.key === "fundsim");
-  const tiles = [
-    { title: "Fund Quest", sub: "Learn private markets, game-style", icon: "/icons/apps/fundquest.svg", open: () => onOpenWindow?.("fundquest") },
-    { title: "Fund Simulator", sub: "Play with the J-curve, IRR & TVPI", icon: sim?.icon, open: () => onOpenWindow?.("fundsim") },
-    { title: "Designing for fintech", sub: "My principles, in Notes", emoji: "💳", open: () => onOpenWindow?.("notes") },
-    { title: "My role at ROYC", sub: "Design Engineer · private markets", emoji: "💼", open: () => onOpenWindow?.("about") },
-  ];
-  return (
-    <section className="mt-9">
-      <div className={`flex items-baseline justify-between border-t pt-4 ${t.divider}`}>
-        <h2 className={`text-[19px] font-bold tracking-[-0.01em] ${t.textMain}`}>Fintech</h2>
-      </div>
-      <div
-        className="mt-3 rounded-[20px] p-5 @2xl:p-6 text-white relative overflow-hidden"
-        style={{ background: "radial-gradient(120% 140% at 100% 0%, #5e5ce6 0%, #2a2f6b 45%, #11142b 100%)" }}
-      >
-        <div className="absolute -right-10 -bottom-16 w-64 h-64 rounded-full bg-[#30d158]/20 blur-3xl" />
-        <div className="relative max-w-[460px]">
-          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/70">Private markets · B2B SaaS</div>
-          <div className="mt-1 text-[24px] font-bold tracking-[-0.02em] leading-tight">I design the operating system for private markets</div>
-          <p className="mt-2 text-[13px] leading-relaxed text-white/80">
-            At ROYC I work on a white-label platform that lets banks, wealth and asset managers launch and run funds. Here’s that side of me.
-          </p>
-        </div>
-        <div className="relative mt-5 grid grid-cols-1 @2xl:grid-cols-2 gap-2.5">
-          {tiles.map((x) => (
-            <button key={x.title} onClick={x.open} className="group flex items-center gap-3 rounded-2xl p-3 text-left bg-white/10 hover:bg-white/[0.16] backdrop-blur-md transition">
-              {x.icon ? (
-                <img src={x.icon} alt="" className="w-10 h-10 shrink-0" />
-              ) : (
-                <span className="w-10 h-10 shrink-0 rounded-[11px] bg-white/15 flex items-center justify-center text-[20px]">{x.emoji}</span>
-              )}
-              <span className="min-w-0 flex-1">
-                <span className="block text-[13px] font-semibold">{x.title}</span>
-                <span className="block text-[11px] text-white/70 truncate">{x.sub}</span>
-              </span>
-              <span className="text-white/60 transition group-hover:translate-x-0.5">›</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+const SHELF_TITLES = { fintech: "Fintech", design: "Design", code: "Code", me: "Get to know Marta", play: "Just for fun", mac: "This Mac", tools: "Utilities" };
 
 function Glyph({ d }) {
   return (
@@ -246,67 +201,72 @@ function GameCarousel({ games, t, onPlay, onSeeAll }) {
   );
 }
 
+/** App Store "Today"-style row: tall editorial cards that scroll and snap, with arrow controls. */
 function FeaturedBanner({ apps, t }) {
-  const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused) return;
-    const id = setInterval(() => setI((x) => (x + 1) % apps.length), 5000);
-    return () => clearInterval(id);
-  }, [paused, apps.length]);
-
-  const app = apps[i];
+  const row = useRef(null);
+  const [edge, setEdge] = useState({ start: true, end: false });
+  const onScroll = () => {
+    const el = row.current;
+    if (!el) return;
+    setEdge({ start: el.scrollLeft < 8, end: el.scrollLeft + el.clientWidth > el.scrollWidth - 8 });
+  };
+  useEffect(onScroll, []);
+  const page = (dir) => {
+    const el = row.current;
+    el?.scrollBy({ left: dir * el.clientWidth * 0.9, behavior: "smooth" });
+  };
+  const arrow = (dir, disabled) => (
+    <button
+      type="button"
+      onClick={() => page(dir)}
+      disabled={disabled}
+      aria-label={dir < 0 ? "Previous" : "Next"}
+      className={`w-8 h-8 rounded-full flex items-center justify-center transition disabled:opacity-30 ${t.isDark ? "bg-white/10 hover:bg-white/15 text-white" : "bg-black/[0.05] hover:bg-black/[0.08] text-black"}`}
+    >
+      <svg viewBox="0 0 16 16" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d={dir < 0 ? "M10 3L5 8l5 5" : "M6 3l5 5-5 5"} />
+      </svg>
+    </button>
+  );
   return (
-    <div className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      <div className="relative h-[230px] rounded-[20px] overflow-hidden">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.div
-            key={app.key}
-            className="absolute inset-0 p-7 flex items-center gap-7 cursor-pointer"
-            style={{ background: `radial-gradient(120% 140% at 85% 20%, ${app.tint}cc, ${app.tint}55 45%, #111 120%)` }}
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            onClick={app.onClick}
-          >
-            <div className="flex-1 min-w-0 text-white">
-              <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/70">Featured app</div>
-              <div className="mt-1 text-[34px] font-bold tracking-[-0.03em] leading-none">{app.title}</div>
-              <p className="mt-2 max-w-[360px] text-[14px] leading-snug text-white/85">{app.blurb ?? app.subtitle}</p>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  app.onClick();
-                }}
-                className="mt-4 px-5 py-1.5 rounded-full bg-white text-[13px] font-bold text-black/85 hover:bg-white/90 active:scale-95 transition"
-              >
-                Open
-              </button>
-            </div>
-            <motion.img
-              src={app.icon}
-              alt=""
-              className="w-[130px] h-[130px] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.45)] hidden @lg:block"
-              initial={{ rotate: -10, scale: 0.8 }}
-              animate={{ rotate: -6, scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 14 }}
-            />
-          </motion.div>
-        </AnimatePresence>
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className={`text-[19px] font-bold tracking-[-0.01em] ${t.textMain}`}>Featured</h2>
+        <div className="flex gap-1.5">
+          {arrow(-1, edge.start)}
+          {arrow(1, edge.end)}
+        </div>
       </div>
-      <div className="mt-3 flex justify-center gap-1.5">
-        {apps.map((a, idx) => (
-          <button
-            key={a.key}
-            onClick={() => setI(idx)}
-            aria-label={`Show ${a.title}`}
-            className={`h-1.5 rounded-full transition-all ${idx === i ? "w-5 bg-[hsl(var(--accent))]" : `w-1.5 ${t.isDark ? "bg-white/25" : "bg-black/20"}`}`}
-          />
+      <div ref={row} onScroll={onScroll} className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {apps.map((app, i) => (
+          <motion.button
+            key={app.key}
+            type="button"
+            onClick={app.onClick}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05, duration: 0.45, ease: EASE }}
+            whileHover={{ y: -4 }}
+            className="group relative snap-start shrink-0 w-[78%] @2xl:w-[calc((100%-2rem)/3)] h-[300px] rounded-[22px] overflow-hidden text-left"
+            style={{
+              background: t.isDark ? `linear-gradient(160deg, ${app.tint}38, ${app.tint}12 60%, rgba(255,255,255,0.03))` : `linear-gradient(160deg, ${app.tint}26, ${app.tint}0d 55%, #ffffff)`,
+              boxShadow: t.isDark ? "inset 0 0 0 1px rgba(255,255,255,0.08)" : "inset 0 0 0 1px rgba(0,0,0,0.06), 0 14px 30px -24px rgba(0,0,0,0.35)",
+            }}
+          >
+            <div className="absolute -right-10 -top-10 w-[160px] h-[160px] rounded-full blur-3xl opacity-40" style={{ background: app.tint }} />
+            <div className="relative h-full p-5 flex flex-col">
+              <img src={app.icon} alt="" draggable={false} className="w-16 h-16 object-contain drop-shadow-[0_8px_14px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" />
+              <div className="mt-auto">
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.12em] truncate" style={{ color: app.tint }}>{app.subtitle}</div>
+                <div className={`mt-1 text-[22px] font-bold tracking-[-0.02em] leading-tight ${t.textMain}`}>{app.title}</div>
+                <p className={`mt-1.5 text-[13px] leading-snug line-clamp-3 ${t.textSub}`}>{app.blurb ?? app.subtitle}</p>
+                <span className={`mt-3 inline-block px-4 py-1 rounded-full text-[12px] font-bold ${t.isDark ? "bg-white/[0.12] text-[#4aa3ff]" : "bg-white text-[#0a6fe0] shadow-sm"}`}>Open</span>
+              </div>
+            </div>
+          </motion.button>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -458,8 +418,7 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
                 </div>
                 <h1 className={`mb-5 text-[32px] font-bold tracking-[-0.03em] ${t.textMain}`}>Discover</h1>
                 <FeaturedBanner apps={featured} t={t} />
-                <FintechSection t={t} apps={apps} onOpenWindow={onOpenWindow} />
-                {["design", "me", "play", "tools"].map((c) => (
+                {["design", "code", "fintech", "mac", "me", "play", "tools"].map((c) => (
                   <Shelf key={c} title={SHELF_TITLES[c]} apps={byCat(c)} t={t} onSeeAll={() => setCat(c)} />
                 ))}
                 <GameCarousel games={GAMES} t={t} onPlay={playGame} onSeeAll={() => setCat("games")} />
@@ -481,14 +440,15 @@ export default function FunWindow({ uiTheme = "glass", glassContrast = "light", 
                   {
                     {
                       fintech: "The fintech side of me: private markets, explained.",
-                      design: "The craft: my design system and the tools I build with.",
+                      design: "The craft: how I explore, test and systemise design.",
+                      code: "How I build: repos, pull requests and the command line.",
                       me: "Apps that tell you who I am beyond the CV.",
                       play: "Little toys to make you smile.",
+                      mac: "The apps that make up this OS: its design system, its processes, its terminal and your trophies.",
                       tools: "Small, real utilities, rebuilt for the web.",
                     }[cat]
                   }
                 </p>
-                {cat === "fintech" && <FintechSection t={t} apps={apps} onOpenWindow={onOpenWindow} />}
                 <div className="mt-6 grid grid-cols-2 @4xl:grid-cols-3 gap-4">
                   {byCat(cat).map((a, i) => (
                     <motion.button

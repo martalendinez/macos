@@ -411,7 +411,7 @@ export function TraceGallery({ theme }) {
 }
 
 /* ---------- iterations: before / after ---------- */
-function OldLog() {
+export function OldLog() {
   return (
     <div className="bg-white rounded-[12px] overflow-hidden" style={{ width: 300, fontFamily: INTER, boxShadow: "0 0 0 1px rgba(0,0,0,0.08)" }}>
       <div className="h-7 px-3 flex items-center gap-1.5" style={{ background: "#f3f3f5", borderBottom: `1px solid ${line}` }}>
@@ -447,7 +447,7 @@ function OldLog() {
     </div>
   );
 }
-function OldOptions() {
+export function OldOptions() {
   return (
     <div className="bg-white rounded-[12px] overflow-hidden" style={{ width: 300, fontFamily: INTER, boxShadow: "0 0 0 1px rgba(0,0,0,0.08)" }}>
       <div className="p-4">

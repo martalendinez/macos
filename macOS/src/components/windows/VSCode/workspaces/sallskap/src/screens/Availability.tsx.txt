@@ -1,0 +1,126 @@
+import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+import BackButton from "@/components/BackButton";
+import ProgressStep from "@/components/ProgressStep";
+
+export default function Availability() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  const memberId = params.get("memberId");
+  const groupId = params.get("groupId");
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const times = [
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+  ];
+
+  const [selected, setSelected] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  function toggleTime(time: string) {
+    setSelected((prev) =>
+      prev.includes(time)
+        ? prev.filter((t) => t !== time)
+        : [...prev, time]
+    );
+  }
+
+  async function handleSubmit() {
+    if (!memberId) {
+      setError("Missing member ID");
+      return;
+    }
+
+    if (selected.length === 0) {
+      setError("Please select at least one time");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    const rows = selected.map((time) => ({
+      member_id: memberId,
+      date: today,
+      time_slot: time,
+    }));
+
+    const { error } = await supabase.from("availability").insert(rows);
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    navigate(`/dietary?groupId=${groupId}&memberId=${memberId}`);
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <div className="w-full max-w-md bg-card shadow-lg rounded-xl p-6 border border-border">
+
+        <BackButton />
+
+        <ProgressStep step={2} total={4} />
+
+        <h1 className="text-2xl font-semibold mb-4 text-foreground">
+          Your Availability
+        </h1>
+
+        <p className="text-sm text-muted-foreground mb-4">
+          Select all the times you’re available today.
+        </p>
+
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          {times.map((time) => {
+            const isSelected = selected.includes(time);
+            return (
+              <button
+                key={time}
+                onClick={() => toggleTime(time)}
+                className={`
+                  py-2 rounded-md text-sm font-medium tracking-tight border border-border transition
+                  ${
+                    isSelected
+                      ? "bg-[hsl(var(--button-primary))] text-[hsl(var(--button-primary-foreground))]"
+                      : "bg-background text-foreground hover:bg-muted"
+                  }
+                `}
+              >
+                {time}
+              </button>
+            );
+          })}
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm mb-3">{error}</p>
+        )}
+
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="
+            w-full py-2 rounded-md text-sm font-medium tracking-tight disabled:opacity-50
+            bg-[hsl(var(--button-primary))]
+            text-[hsl(var(--button-primary-foreground))]
+          "
+        >
+          {loading ? "Saving..." : "Continue"}
+        </button>
+      </div>
+    </div>
+  );
+}

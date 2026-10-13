@@ -3,6 +3,7 @@ import { lazy } from "react";
 
 
 const SettingsWindow = lazy(() => import("../components/windows/Settings/SettingsWindow"));
+const AccessibilityWindow = lazy(() => import("../components/windows/Settings/AccessibilityWindow"));
 const AboutWindow = lazy(() => import("../components/windows/About/AboutWindow"));
 const ProjectsWindow = lazy(() => import("../components/windows/Projects/ProjectsWindow"));
 const VideosWindow = lazy(() => import("../components/windows/VideosWindow"));
@@ -52,11 +53,16 @@ const StickiesWindow = lazy(() => import("../components/windows/Stickies/Stickie
 const CalculatorWindow = lazy(() => import("../components/windows/Calculator/CalculatorWindow"));
 const PaintWindow = lazy(() => import("../components/windows/Paint/PaintWindow"));
 const FundSimWindow = lazy(() => import("../components/windows/FundSim/FundSimWindow"));
-const FundQuestWindow = lazy(() => import("../components/windows/FundQuest/FundQuestWindow"));
 const FigmaWindow = lazy(() => import("../components/windows/Figma/FigmaWindow"));
 const FaceTimeWindow = lazy(() => import("../components/windows/FaceTime/FaceTimeWindow"));
 const ActivityMonitorWindow = lazy(() => import("../components/windows/ActivityMonitor/ActivityMonitorWindow"));
 const DesignSystemWindow = lazy(() => import("../components/windows/DesignSystem/DesignSystemWindow"));
+const GitHubWindow = lazy(() => import("../components/windows/GitHub/GitHubWindow"));
+const ClaudeWindow = lazy(() => import("../components/windows/Claude/ClaudeWindow"));
+const NotionWindow = lazy(() => import("../components/windows/Notion/NotionWindow"));
+const ExcelWindow = lazy(() => import("../components/windows/Excel/ExcelWindow"));
+const JourneyWindow = lazy(() => import("../components/windows/Journey/JourneyWindow"));
+const VSCodeWindow = lazy(() => import("../components/windows/VSCode/VSCodeWindow"));
 const AchievementsWindow = lazy(() => import("../components/windows/Achievements/AchievementsWindow"));
 
 // ⭐ NEW AI ASSISTANT
@@ -72,6 +78,8 @@ export const WINDOW_DEFS = {
     height: 660,
     initialPos: { x: 240, y: 60 },
   },
+
+  accessibility: { title: "Accessibility", Component: AccessibilityWindow, width: 900, height: 660, initialPos: { x: 260, y: 70 } },
 
   about: {
     title: "About me",
@@ -216,12 +224,17 @@ export const WINDOW_DEFS = {
   weather: { title: "Weather", Component: WeatherWindow, width: 920, height: 660, initialPos: { x: 210, y: 50 } },
   stickies: { title: "Stickies", Component: StickiesWindow, width: 780, height: 560, initialPos: { x: 280, y: 100 } },
   calculator: { title: "Calculator", Component: CalculatorWindow, width: 240, height: 412, initialPos: { x: 620, y: 140 }, resizable: false },
-  fundquest: { title: "Fund Quest", Component: FundQuestWindow, width: 700, height: 760, initialPos: { x: 370, y: 36 } },
   figma: { title: "Figma", Component: FigmaWindow, width: 1180, height: 740, initialPos: { x: 140, y: 40 } },
   facetime: { title: "FaceTime", Component: FaceTimeWindow, width: 560, height: 720, initialPos: { x: 440, y: 40 } },
   activitymonitor: { title: "Activity Monitor", Component: ActivityMonitorWindow, width: 860, height: 600, initialPos: { x: 260, y: 70 } },
   designsystem: { title: "Design System", Component: DesignSystemWindow, width: 1040, height: 720, initialPos: { x: 200, y: 44 } },
   achievements: { title: "Achievements", Component: AchievementsWindow, width: 900, height: 700, initialPos: { x: 240, y: 50 } },
   fundsim: { title: "Fund Simulator", Component: FundSimWindow, width: 1060, height: 760, initialPos: { x: 190, y: 36 } },
+  github: { title: "GitHub", Component: GitHubWindow, width: 1080, height: 760, initialPos: { x: 170, y: 36 } },
+  claude: { title: "Claude", Component: ClaudeWindow, width: 1000, height: 720, initialPos: { x: 200, y: 44 } },
+  notion: { title: "Notion", Component: NotionWindow, width: 1080, height: 740, initialPos: { x: 170, y: 40 } },
+  excel: { title: "Excel", Component: ExcelWindow, width: 860, height: 700, initialPos: { x: 240, y: 50 } },
+  journey: { title: "Marta’s Journey", Component: JourneyWindow, width: 980, height: 600, initialPos: { x: 200, y: 60 } },
+  vscode: { title: "Visual Studio Code", Component: VSCodeWindow, width: 1120, height: 720, initialPos: { x: 150, y: 40 } },
   paint: { title: "Paint", Component: PaintWindow, width: 920, height: 640, initialPos: { x: 200, y: 60 } },
 };

@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "./caseStudy/useCaseStudyTheme";
 import { PROJECTS } from "./data/projectData";
-import ProjectCover from "./ui/ProjectCover";
+import ProjectCover, { PosterThumb } from "./ui/ProjectCover";
 
 const ACTION_TO_WINDOW = {
   openEmployerBrandingCaseStudy: "employerBrandingCaseStudy",
@@ -266,7 +266,7 @@ export default function ProjectsWindow({ uiTheme = "glass", glassContrast = "lig
             ) : (
               /* LIST */
               <div className={`rounded-xl overflow-hidden ${card}`}>
-                <div className={`grid grid-cols-[56px_1fr_64px] @2xl:grid-cols-[64px_1.5fr_1fr_1fr_80px] gap-3 @2xl:gap-4 px-4 py-2 text-[11px] font-medium border-b ${t.divider} ${t.textSub}`}>
+                <div className={`grid grid-cols-[72px_1fr_64px] @2xl:grid-cols-[84px_1.5fr_1fr_1fr_80px] gap-3 @2xl:gap-4 px-4 py-2 text-[11px] font-medium border-b ${t.divider} ${t.textSub}`}>
                   <span />
                   <span>Name</span>
                   <span className="hidden @2xl:block">Details</span>
@@ -278,15 +278,15 @@ export default function ProjectsWindow({ uiTheme = "glass", glassContrast = "lig
                     key={p.id}
                     type="button"
                     onClick={() => open(p)}
-                    className={`group w-full grid grid-cols-[56px_1fr_64px] @2xl:grid-cols-[64px_1.5fr_1fr_1fr_80px] gap-3 @2xl:gap-4 items-center px-4 py-3 text-left ${
+                    className={`group w-full grid grid-cols-[72px_1fr_64px] @2xl:grid-cols-[84px_1.5fr_1fr_1fr_80px] gap-3 @2xl:gap-4 items-center px-4 py-3 text-left ${
                       i % 2 ? (t.isDark ? "bg-white/[0.02]" : "bg-black/[0.015]") : ""
                     } ${t.hoverBg}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
                   >
-                    <span className="w-16 h-11 rounded-lg overflow-hidden flex items-center justify-center" style={{ background: `${p.tint}22` }}>
-                      <img src={p.thumbnail} alt="" className="max-w-full max-h-full object-contain p-1" />
+                    <span className="relative w-full h-[48px] rounded-lg overflow-hidden" style={{ background: `${p.tint}22`, boxShadow: "0 0 0 1px rgba(0,0,0,0.06)" }}>
+                      <PosterThumb project={p} />
                     </span>
                     <span className="min-w-0">
                       <span className={`block text-[14px] font-semibold truncate ${t.textMain}`}>{p.shortTitle ?? p.title}</span>

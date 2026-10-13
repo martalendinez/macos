@@ -3,44 +3,55 @@
 // ✏️ Reorder or move apps between stacks here. `app` = an id from config/apps.js,
 // `game` = a Terminal arcade game key (see Fun/data/funApps.js GAMES).
 // `category` = the Extras & Fun section the "Open in Extras" link jumps to.
+// The three work stacks tell one story: Design decides, Code builds, Finance ships to users.
+// "This Mac" holds the apps that are about this OS itself.
 
 export const DOCK_STACKS = [
+  {
+    id: "design",
+    label: "Design",
+    iconKey: "stackDesign",
+    category: "design",
+    items: [{ app: "figma" }, { app: "notion" }],
+  },
+  {
+    id: "code",
+    label: "Code",
+    iconKey: "stackCode",
+    category: "code",
+    items: [{ app: "vscode" }, { app: "claude" }, { app: "github" }],
+  },
   {
     id: "finance",
     label: "Finance",
     iconKey: "stackFinance",
     category: "fintech",
-    items: [{ app: "fundquest" }, { app: "fundsim" }],
+    items: [{ app: "excel" }, { app: "fundsim" }],
   },
   {
-    id: "design",
-    label: "Design & Build",
-    iconKey: "stackDesign",
-    category: "design",
-    items: [{ app: "figma" }, { app: "designsystem" }, { app: "activitymonitor" }, { app: "terminal" }],
-  },
-  {
-    id: "world",
-    label: "My World",
-    iconKey: "stackWorld",
-    category: "me",
-    items: [{ app: "instagram" }, { app: "messages" }, { app: "music" }, { app: "map" }, { app: "notes" }, { app: "facetime" }],
+    id: "mac",
+    label: "This Mac",
+    iconKey: "stackMac",
+    category: "mac",
+    items: [{ app: "designsystem" }, { app: "accessibility" }, { app: "activitymonitor" }, { app: "terminal" }, { app: "achievements" }],
   },
   {
     id: "play",
-    label: "Games & Play",
+    label: "Play & Me",
     iconKey: "stackPlay",
-    category: "games",
+    category: "me",
     items: [
-      { game: "snake" },
-      { game: "tetris" },
-      { game: "2048" },
-      { game: "pong" },
-      { game: "breakout" },
-      { game: "flappy" },
+      { app: "journey" },
+      { app: "instagram" },
+      { app: "messages" },
+      { app: "music" },
+      { app: "map" },
+      { app: "facetime" },
+      { app: "notes" },
       { app: "photobooth" },
       { app: "paint" },
-      { app: "achievements" },
+      { game: "snake" },
+      { game: "tetris" },
     ],
   },
 ];

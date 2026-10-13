@@ -263,7 +263,7 @@ export default function MacWindow({
     >
       <motion.div
         className={[
-          `relative w-full h-full overflow-hidden flex flex-col ${mobile ? "rounded-t-xl" : "rounded-xl"}`,
+          `a11y-win relative w-full h-full overflow-hidden flex flex-col ${mobile ? "rounded-t-xl" : "rounded-xl"}`,
           surfaceClass,
           isDark ? "darkwin" : "",
           isMac ? (isDark ? "text-white" : "text-black") : "text-white",
@@ -313,7 +313,7 @@ export default function MacWindow({
 
         {/* Scrollable Content */}
         {/* @container: apps adapt to the window's width (narrow windows + phones get compact layouts) */}
-        <div className="@container flex-1 overflow-y-auto min-h-0">{children}</div>
+        <div className="a11y-win-body @container flex-1 overflow-y-auto min-h-0">{children}</div>
         </div>
       </motion.div>
 

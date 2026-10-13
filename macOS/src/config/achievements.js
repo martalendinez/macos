@@ -17,12 +17,12 @@ export const ACHIEVEMENTS = [
   { key: "ig_fan", title: "Biggest Fan", icon: "💛", tint: "#e1306c", hint: "Like 3 photos on Instagram" },
   { key: "chatty", title: "Great Conversationalist", icon: "💬", tint: "#34c759", hint: "Ask Marta 4 different questions" },
   { key: "fintech_curious", title: "Fintech Curious", icon: "📈", tint: "#5e5ce6", hint: "Open the Fund Simulator" },
-  { key: "quest_starter", title: "Quest Starter", icon: "🎓", tint: "#5e5ce6", hint: "Finish a Fund Quest lesson" },
-  { key: "private_markets_pro", title: "Private Markets Pro", icon: "🏛️", tint: "#ffd60a", hint: "Complete all of Fund Quest" },
   { key: "pixel_pusher", title: "Pixel Pusher", icon: "❖", tint: "#a259ff", hint: "Open Figma" },
+  { key: "shipped_it", title: "Shipped It", icon: "🚀", tint: "#8250df", hint: "Review and merge Marta’s pull request in GitHub" },
   { key: "design_nerd", title: "Design Nerd", icon: "🎨", tint: "#ff9f0a", hint: "Open the Design System app" },
   { key: "lets_talk", title: "Let’s Talk", icon: "📞", tint: "#30d158", hint: "Call Marta on FaceTime" },
   { key: "wrapped", title: "Wrapped Up", icon: "🎁", tint: "#1ed760", hint: "Watch Marta’s Wrapped in Spotify" },
+  { key: "journey_complete", title: "Full Journey", icon: "🗺️", tint: "#e4572e", hint: "Finish Marta’s Journey in the Arcade" },
   { key: "secret_finder", title: "Secret Finder", icon: "🗝️", tint: "#8e8e93", hint: "There’s a hidden command somewhere…", secret: true },
 ];
 

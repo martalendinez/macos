@@ -14,6 +14,7 @@ export default function DesktopIcons({ loaded, items = [], selectedId, onSelect 
         return (
           <motion.button
             key={it.id}
+            data-tour={it.id}
             type="button"
             className="w-[96px] flex flex-col items-center gap-[3px] outline-none"
             onPointerDown={(e) => {

@@ -6,13 +6,28 @@ import { MENU_BAR_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
 import { ACCENTS } from "../../config/accents";
 import { PROFILE } from "../windows/About/aboutData";
-import { placeDetails } from "../windows/Map/data/placesData";
+import memStockholm from "../../imgs/map/sweden9.jpg";
+import memLakeLouise from "../../imgs/map/canada3.jpg";
+import memMadrid from "../../imgs/map/spain2.jpg";
+import memGroningen from "../../imgs/map/NL4.jpg";
+import memLake from "../../imgs/map/canada9.jpg";
+import memSkyline from "../../imgs/map/canada6.jpg";
 import { simulate } from "../windows/FundSim/fundModel";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 
 const SMALL = 150;
 const GAP = 12;
 const TZ = "Europe/Stockholm";
+
+// Memories widget: hand-picked photos with a blue mood so the widget matches the desktop
+const MEMORIES = [
+  { src: memStockholm, label: "Stockholm" },
+  { src: memLakeLouise, label: "Canada" },
+  { src: memMadrid, label: "Madrid" },
+  { src: memGroningen, label: "Groningen" },
+  { src: memLake, label: "Canada" },
+  { src: memSkyline, label: "North America" },
+];
 
 function describe(code, isDay) {
   if (code === 0) return isDay ? "☀️" : "🌙";
@@ -93,7 +108,7 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
   const sub = isDark ? "text-white/60" : "text-black/55";
   const weather = useStockholmWeather();
   const [now, setNow] = useState(() => new Date());
-  const places = useMemo(() => Object.values(placeDetails).flatMap((p) => p.photos.slice(0, 2).map((src) => ({ src, label: p.label.split(",")[0] }))), []);
+  const places = MEMORIES;
   const [photo, setPhoto] = useState(0);
   const fund = useMemo(() => simulate("pe", "base", 10), []);
 

@@ -1,0 +1,169 @@
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+export interface Member {
+  id: string;
+  name: string;
+  restrictions: string[];
+}
+
+export interface GroupState {
+  groupId: string;
+  name: string;
+  date: string;
+  time: string;
+  budget: string;
+  members: Member[];
+  selectedRestaurant: string | null;
+  availability: Record<string, string[]>; // memberId -> slot ids
+  organizerId: string | null;
+  currentUserId: string | null;
+}
+
+interface GroupContextType {
+  group: GroupState;
+  updateGroup: (updates: Partial<GroupState>) => void;
+  addMember: (name: string) => string;
+  addMemberFromLink: (name: string, restrictions: string[]) => string;
+  removeMember: (id: string) => void;
+  toggleRestriction: (memberId: string, restriction: string) => void;
+  toggleAvailability: (memberId: string, slotId: string) => void;
+  setCurrentUserId: (id: string | null) => void;
+  resetGroup: () => void;
+}
+
+const initialState: GroupState = {
+  groupId: crypto.randomUUID(),
+  name: '',
+  date: '',
+  time: '',
+  budget: '',
+  members: [],
+  selectedRestaurant: null,
+  availability: {},
+  organizerId: null,
+  currentUserId: null,
+};
+
+const GroupContext = createContext<GroupContextType | undefined>(undefined);
+
+export const GroupProvider = ({ children }: { children: ReactNode }) => {
+  const [group, setGroup] = useState<GroupState>(initialState);
+
+  const updateGroup = (updates: Partial<GroupState>) =>
+    setGroup(prev => ({ ...prev, ...updates }));
+
+  const addMember = (name: string): string => {
+    const id = crypto.randomUUID();
+    const member: Member = {
+      id,
+      name,
+      restrictions: [],
+    };
+
+    setGroup(prev => {
+      const isFirst = prev.members.length === 0;
+      return {
+        ...prev,
+        members: [...prev.members, member],
+        organizerId: isFirst ? id : prev.organizerId,
+      };
+    });
+
+    return id;
+  };
+
+  const addMemberFromLink = (name: string, restrictions: string[]): string => {
+    const id = crypto.randomUUID();
+    const member: Member = {
+      id,
+      name,
+      restrictions,
+    };
+
+    setGroup(prev => ({
+      ...prev,
+      members: [...prev.members, member],
+    }));
+
+    return id;
+  };
+
+  const removeMember = (id: string) => {
+    setGroup(prev => ({
+      ...prev,
+      members: prev.members.filter(m => m.id !== id),
+      availability: Object.fromEntries(
+        Object.entries(prev.availability).filter(([memberId]) => memberId !== id)
+      ),
+      organizerId: prev.organizerId === id ? null : prev.organizerId,
+      currentUserId: prev.currentUserId === id ? null : prev.currentUserId,
+    }));
+  };
+
+  const toggleRestriction = (memberId: string, restriction: string) => {
+    setGroup(prev => ({
+      ...prev,
+      members: prev.members.map(m => {
+        if (m.id !== memberId) return m;
+        const has = m.restrictions.includes(restriction);
+        return {
+          ...m,
+          restrictions: has
+            ? m.restrictions.filter(r => r !== restriction)
+            : [...m.restrictions, restriction],
+        };
+      }),
+    }));
+  };
+
+  const toggleAvailability = (memberId: string, slotId: string) => {
+    setGroup(prev => {
+      const current = prev.availability[memberId] || [];
+      const has = current.includes(slotId);
+
+      return {
+        ...prev,
+        availability: {
+          ...prev.availability,
+          [memberId]: has
+            ? current.filter(s => s !== slotId)
+            : [...current, slotId],
+        },
+      };
+    });
+  };
+
+  const setCurrentUserId = (id: string | null) => {
+    setGroup(prev => ({ ...prev, currentUserId: id }));
+  };
+
+  const resetGroup = () =>
+    setGroup({
+      ...initialState,
+      groupId: crypto.randomUUID(),
+    });
+
+  return (
+    <GroupContext.Provider
+      value={{
+        group,
+        updateGroup,
+        addMember,
+        addMemberFromLink,
+        removeMember,
+        toggleRestriction,
+        toggleAvailability,
+        setCurrentUserId,
+        resetGroup,
+      }}
+    >
+      {children}
+    </GroupContext.Provider>
+  );
+};
+
+export const useGroup = () => {
+  const ctx = useContext(GroupContext);
+  if (!ctx) throw new Error('useGroup must be used within GroupProvider');
+  return ctx;
+};

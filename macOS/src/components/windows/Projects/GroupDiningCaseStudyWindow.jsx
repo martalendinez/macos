@@ -25,6 +25,7 @@ import restaurantImg from "../../../imgs/case-study/sallskap/Dining_Restaurant.p
 import restrictionsImg from "../../../imgs/case-study/sallskap/Dining_Restrictions.png";
 import groupImg from "../../../imgs/case-study/sallskap/Dining_Group.png";
 import mockupImg from "../../../imgs/case-study/sallskap/Sallskap_Shot_web.jpg";
+import BehindTheScenes from "./caseStudy/BehindTheScenes";
 
 const TINT = "#34b27b";
 const LIVE = "https://sallskap-git-main-martalendinezs-projects.vercel.app";
@@ -73,6 +74,10 @@ export default function GroupDiningCaseStudyWindow({ onOpenWindow, uiTheme = "gl
       <button type="button" onClick={() => open(heroImg, "Sällskap screens")} className="mt-10 block w-full cursor-zoom-in">
         <img src={heroImg} alt="Sällskap screens: landing page, reservations, availability and restaurants" className="block w-full h-auto rounded-[20px]" />
       </button>
+
+      <div className="mt-6">
+        <BehindTheScenes project="sallskap" theme={theme} tint={TINT} onOpenWindow={onOpenWindow} />
+      </div>
 
       <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
         <AtAGlance

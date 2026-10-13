@@ -1,0 +1,82 @@
+import { Link, useLocation } from 'react-router-dom';
+import { CalendarCheck, Heart, History } from 'lucide-react';
+import ThemeToggle from "@/components/ThemeToggle";
+
+const Tooltip = ({ label }) => (
+  <span
+    className="
+      absolute left-1/2 -translate-x-1/2 top-full mt-2
+      px-2 py-1 rounded-md bg-foreground text-background text-xs
+      opacity-0 group-hover:opacity-100 transition-opacity
+      pointer-events-none whitespace-nowrap shadow-sm
+    "
+  >
+    {label}
+  </span>
+);
+
+const Header = () => {
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+
+  if (isLanding) return null;
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+        {/* Logo */}
+        <Link to="/" className="text-xs uppercase tracking-[0.2em] font-bold text-primary">
+          Sällskap
+        </Link>
+
+        {/* Navigation */}
+        <nav className="flex items-center gap-1">
+
+          {/* Theme Toggle */}
+          <div className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
+            <ThemeToggle />
+          </div>
+
+          {/* New Group */}
+          <Link
+            to="/create"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-muted"
+          >
+            New Group
+          </Link>
+
+          {/* Reservations */}
+          <Link
+            to="/reservations"
+            className="group relative text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted"
+          >
+            <CalendarCheck className="w-4 h-4" />
+            <Tooltip label="Reservations" />
+          </Link>
+
+          {/* Favorites */}
+          <Link
+            to="/favorites"
+            className="group relative text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted"
+          >
+            <Heart className="w-4 h-4" />
+            <Tooltip label="Favorites" />
+          </Link>
+
+          {/* Past Reservations */}
+          <Link
+            to="/past-reservations"
+            className="group relative text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-muted"
+          >
+            <History className="w-4 h-4" />
+            <Tooltip label="Past Reservations" />
+          </Link>
+
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+export default Header;

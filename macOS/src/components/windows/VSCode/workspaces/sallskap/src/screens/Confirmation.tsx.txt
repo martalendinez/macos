@@ -1,0 +1,156 @@
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import MemberCard from "@/components/MemberCard";
+import StickyBottomButton from "@/components/StickyBottomButton";
+import { MapPin, Phone } from "lucide-react";
+import restaurantsData from "@/data/restaurants.json";
+import BackButton from "@/components/BackButton";
+
+export default function Confirmation() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  const restaurantId = params.get("restaurant");
+  const groupId = params.get("groupId");
+
+  const [members, setMembers] = useState<any[]>([]);
+  const [availability, setAvailability] = useState<any[]>([]);
+  const [restrictions, setRestrictions] = useState<any[]>([]);
+  const [restaurant, setRestaurant] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (restaurantId) {
+      loadRestaurant();
+    }
+  }, [restaurantId]);
+
+  function loadRestaurant() {
+    const found = (restaurantsData as any[]).find(
+      (r) => String(r.id) === String(restaurantId)
+    );
+    setRestaurant(found || null);
+  }
+
+  async function loadData() {
+    if (!groupId) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    const { data: membersData, error } = await supabase
+      .from("members")
+      .select("*")
+      .eq("group_id", groupId);
+
+    if (error) {
+      console.error(error);
+      setLoading(false);
+      return;
+    }
+
+    const memberIds = membersData?.map((m) => m.id) || [];
+
+    if (memberIds.length === 0) {
+      setMembers([]);
+      setAvailability([]);
+      setRestrictions([]);
+      setLoading(false);
+      return;
+    }
+
+    const [availRes, restRes] = await Promise.all([
+      supabase.from("availability").select("*").in("member_id", memberIds),
+      supabase.from("restrictions").select("*").in("member_id", memberIds),
+    ]);
+
+    setMembers(membersData || []);
+    setAvailability(availRes.data || []);
+    setRestrictions(restRes.data || []);
+    setLoading(false);
+  }
+
+  function getMemberAvailability(id: string) {
+    return availability
+      .filter((a) => a.member_id === id)
+      .map((a) => a.time_slot);
+  }
+
+  function getMemberRestrictions(id: string) {
+    return restrictions
+      .filter((r) => r.member_id === id)
+      .map((r) => r.restriction);
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background pt-20 pb-24 px-4">
+      <div className="max-w-lg mx-auto">
+
+        <BackButton />
+
+        <h1 className="text-2xl font-bold text-foreground mb-2">Confirmation</h1>
+        <p className="text-sm text-muted-foreground mb-6">
+          Review your booking before confirming.
+        </p>
+
+        <div className="surface-card rounded-xl p-6 mb-6 border-2 border-primary/20 bg-primary/[0.03]">
+          <p className="text-[10px] uppercase tracking-widest text-primary font-bold mb-2">
+            Selected Restaurant
+          </p>
+
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2 mb-3">
+            <MapPin className="w-4 h-4 text-primary" />
+            {restaurant?.name || "Unknown Restaurant"}
+          </h2>
+
+          {restaurant?.address && (
+            <p className="text-sm text-muted-foreground mb-1">
+              📍 {restaurant.address}
+            </p>
+          )}
+
+          {restaurant?.phone && (
+            <p className="text-sm text-muted-foreground">
+              <Phone className="inline w-4 h-4 mr-1 text-primary" />
+              {restaurant.phone}
+            </p>
+          )}
+        </div>
+
+        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
+          Group Details
+        </h2>
+
+        <div className="space-y-3">
+          {members.map((m) => (
+            <MemberCard
+              key={m.id}
+              member={m}
+              availability={getMemberAvailability(m.id)}
+              restrictions={getMemberRestrictions(m.id)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <StickyBottomButton onClick={() => navigate("/thank-you")}>
+        Finish
+      </StickyBottomButton>
+    </div>
+  );
+}

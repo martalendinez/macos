@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "name": "Lykke",
+    "cuisine": "Nordic Modern",
+    "priceRange": "$$$",
+    "rating": 4.8,
+    "tags": ["Vegan Friendly", "Gluten-Free Options"],
+    "restrictionsAccommodated": ["vegan", "vegetarian", "gluten-free", "dairy-free"],
+    "description": "Seasonal ingredients focused on preservation and fire. A quiet room with long tables and candlelight.",
+    "address": "Birger Jarlsgatan 12, Stockholm",
+    "phone": "+46 8 555 123 10",
+    "hours": "17:00–23:00",
+    "capacity": 42,
+    "crowdLevel": "moderate",
+    "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+    "reviews": [
+      { "author": "Anna", "text": "Beautiful atmosphere and the beets were unforgettable." },
+      { "author": "Jonas", "text": "Nordic flavors done with real finesse. Quiet and intimate." },
+      { "author": "Mila", "text": "Loved the cloudberry sorbet — bright and refreshing." }
+    ],
+    "menu": [
+      { "name": "Salt-baked Beets", "price": 18, "dietary": ["vegan", "gluten-free"], "description": "Heritage beets, smoked salt, pickled mustard seeds" },
+      { "name": "Smoked Mackerel", "price": 24, "dietary": ["dairy-free", "gluten-free"], "description": "Cold-smoked, horseradish cream, rye crumble" },
+      { "name": "Wild Mushroom Toast", "price": 16, "dietary": ["vegetarian"], "description": "Chanterelles, thyme butter, sourdough" },
+      { "name": "Root Vegetable Gratin", "price": 22, "dietary": ["vegetarian", "gluten-free"], "description": "Celeriac, parsnip, aged gruyère" },
+      { "name": "Elk Tartare", "price": 28, "dietary": ["dairy-free", "gluten-free"], "description": "Hand-cut, juniper, egg yolk, capers" },
+      { "name": "Cloudberry Sorbet", "price": 12, "dietary": ["vegan", "gluten-free", "dairy-free"], "description": "Wild cloudberries, lemon verbena" }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Kall",
+    "cuisine": "Oyster Bar",
+    "priceRange": "$$$$",
+    "rating": 4.9,
+    "tags": ["Seafood", "Raw Bar"],
+    "restrictionsAccommodated": ["gluten-free", "nut-free", "dairy-free"],
+    "description": "The freshest catch from the North Sea, served cold. Marble countertops and quiet conversation.",
+    "address": "Strandvägen 7, Stockholm",
+    "phone": "+46 8 555 123 20",
+    "hours": "16:00–00:00",
+    "capacity": 28,
+    "crowdLevel": "busy",
+    "image": "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1200&q=80",
+    "reviews": [
+      { "author": "Elin", "text": "The oysters were the best I've had in Stockholm." },
+      { "author": "Marcus", "text": "Elegant, cold, precise. A perfect oyster bar." },
+      { "author": "Sara", "text": "The ceviche was bright and balanced — loved it." }
+    ],
+    "menu": [
+      { "name": "Half Dozen Oysters", "price": 32, "dietary": ["gluten-free", "dairy-free", "nut-free"], "description": "Daily selection, mignonette, lemon" },
+      { "name": "Lobster Roll", "price": 38, "dietary": ["nut-free"], "description": "Butter-poached, brioche, chive" },
+      { "name": "Ceviche", "price": 26, "dietary": ["gluten-free", "dairy-free", "nut-free"], "description": "Sea bass, lime, chili, cilantro" },
+      { "name": "Grilled Langoustine", "price": 44, "dietary": ["gluten-free", "dairy-free", "nut-free"], "description": "Whole, garlic butter, sea salt" },
+      { "name": "Seaweed Salad", "price": 14, "dietary": ["vegan", "gluten-free", "dairy-free", "nut-free"], "description": "Wakame, sesame, rice vinegar" }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Stilla",
+    "cuisine": "Plant-Based",
+    "priceRange": "$$",
+    "rating": 4.6,
+    "tags": ["Fully Vegan", "Organic"],
+    "restrictionsAccommodated": ["vegan", "vegetarian", "gluten-free", "dairy-free", "nut-free", "halal"],
+    "description": "Everything from the earth, nothing from the animal. Bright, airy, with reclaimed wood tables.",
+    "address": "Södermalm 34, Stockholm",
+    "phone": "+46 8 555 123 30",
+    "hours": "11:00–22:00",
+    "capacity": 56,
+    "crowdLevel": "quiet",
+    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80",
+    "reviews": [
+      { "author": "Nora", "text": "The cauliflower steak was smoky and tender." },
+      { "author": "David", "text": "A peaceful space with thoughtful plant-based dishes." },
+      { "author": "Lina", "text": "Loved the avocado bowl — fresh and filling." }
+    ],
+    "menu": [
+      { "name": "Avocado & Sprout Bowl", "price": 16, "dietary": ["vegan", "gluten-free", "dairy-free", "nut-free"], "description": "Quinoa, avocado, radish, tahini" },
+      { "name": "Cauliflower Steak", "price": 20, "dietary": ["vegan", "gluten-free", "dairy-free", "nut-free"], "description": "Roasted whole, chimichurri, almonds" },
+      { "name": "Forest Risotto", "price": 22, "dietary": ["vegan", "dairy-free"], "description": "Porcini, truffle oil, cashew cream" },
+      { "name": "Raw Chocolate Tart", "price": 12, "dietary": ["vegan", "gluten-free", "dairy-free"], "description": "Cacao, coconut, date crust" }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Eld",
+    "cuisine": "Open Fire",
+    "priceRange": "$$$",
+    "rating": 4.7,
+    "tags": ["Wood-Fired", "Seasonal"],
+    "restrictionsAccommodated": ["gluten-free", "dairy-free", "nut-free", "halal"],
+    "description": "Everything cooked over birchwood flame. The smoke is the seasoning. Communal seating only.",
+    "address": "Vasagatan 22, Stockholm",
+    "phone": "+46 8 555 123 40",
+    "hours": "18:00–23:30",
+    "capacity": 36,
+    "crowdLevel": "busy",
+    "image": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80",
+    "reviews": [
+      { "author": "Oskar", "text": "The lamb was incredibly tender with deep smoky flavor." },
+      { "author": "Freja", "text": "Loved the communal seating — warm and social." },
+      { "author": "Henrik", "text": "The trout was perfectly cooked over the fire." }
+    ],
+    "menu": [
+      { "name": "Flame-grilled Lamb", "price": 34, "dietary": ["gluten-free", "dairy-free", "halal"], "description": "Shoulder, slow-cooked 8 hours, herb ash" },
+      { "name": "Whole Roasted Trout", "price": 28, "dietary": ["gluten-free", "dairy-free", "nut-free"], "description": "Birchwood smoke, lemon, dill" },
+      { "name": "Charred Cabbage", "price": 14, "dietary": ["vegan", "gluten-free", "dairy-free", "nut-free"], "description": "Hispi cabbage, miso glaze, sesame" },
+      { "name": "Fire-roasted Potatoes", "price": 10, "dietary": ["vegan", "gluten-free", "dairy-free", "nut-free", "halal"], "description": "Ember-cooked, smoked butter alternative" },
+      { "name": "Burnt Honey Cake", "price": 14, "dietary": ["vegetarian", "nut-free"], "description": "Caramelized honey, crème fraîche" }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Hemma",
+    "cuisine": "Swedish Home Cooking",
+    "priceRange": "$$",
+    "rating": 4.5,
+    "tags": ["Traditional", "Comfort Food"],
+    "restrictionsAccommodated": ["vegetarian", "nut-free"],
+    "description": "Grandmother's recipes, made with care. Checkered tablecloths and the smell of fresh bread.",
+    "address": "Gamla Stan 8, Stockholm",
+    "phone": "+46 8 555 123 50",
+    "hours": "11:30–21:00",
+    "capacity": 48,
+    "crowdLevel": "moderate",
+    "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
+    "reviews": [
+      { "author": "Emma", "text": "The meatballs tasted exactly like my grandmother’s." },
+      { "author": "Karl", "text": "Warm, cozy, and nostalgic — perfect comfort food." },
+      { "author": "Julia", "text": "The apple cake was the highlight of the meal." }
+    ],
+    "menu": [
+      { "name": "Meatballs & Lingonberry", "price": 18, "dietary": ["nut-free"], "description": "Classic Swedish köttbullar, cream sauce, mash" },
+      { "name": "Gravlax", "price": 22, "dietary": ["gluten-free", "nut-free"], "description": "Dill-cured salmon, mustard sauce, crispbread" },
+      { "name": "Pea Soup", "price": 12, "dietary": ["vegetarian", "nut-free"], "description": "Thursday tradition, with pancakes" },
+      { "name": "Jansson's Temptation", "price": 16, "dietary": ["nut-free"], "description": "Potato, onion, anchovy gratin" },
+      { "name": "Apple Cake", "price": 10, "dietary": ["vegetarian", "nut-free"], "description": "Warm, with vanilla custard" }
+    ]
+  }
+]

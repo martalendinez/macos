@@ -49,3 +49,16 @@ export const HIGHLIGHTS = [
     windowId: "employerBrandingCaseStudy",
   },
 ];
+
+// "At a glance": the answers recruiters screen for. ✏️ Keep these short and true.
+export const GLANCE = [
+  { key: "role", label: "Role", value: "Design Engineer", sub: "at ROYC · since Aug 2026", tint: "#5e5ce6" },
+  { key: "edu", label: "Education", value: "MSc Interactive Media Tech", sub: "KTH Royal Institute of Technology", tint: "#bf5af2" },
+  { key: "loc", label: "Location", value: "Stockholm, Sweden", sub: "open to EU / remote", tint: "#ff9f0a" },
+  { key: "domain", label: "Domain", value: "Fintech & B2B SaaS", sub: "complex, regulated products", tint: "#30d158" },
+  { key: "tools", label: "Toolkit", value: "Figma · React · TypeScript", sub: "plus user research & testing", tint: "#0a84ff" },
+  // ✏️ Add your languages, e.g. { key: "lang", label: "Languages", value: "Spanish · English", sub: "native · fluent", tint: "#ff375f" },
+]
+
+// ✏️ Shown with a green dot. Change to e.g. "Open to new roles" if you're actively looking.
+export const STATUS = "Happy to chat";

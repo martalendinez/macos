@@ -8,6 +8,7 @@ import { downloadResume, sharePortfolio } from "./utils";
 import { ACCENTS } from "../../../config/accents";
 import { getApps, getIcons } from "../../../config/apps";
 import avatar from "../../../imgs/avatar/profile-photo.jpg";
+import { a11yStore, useA11y, A11Y_DEFAULTS } from "../../../config/a11yStore";
 
 const EASE = [0.22, 1, 0.36, 1];
 const DEFAULT_PAIR = GLASS_WALLPAPERS[1]; // matches App's default wallpaper (glass2)
@@ -15,6 +16,7 @@ const DEFAULT_PAIR = GLASS_WALLPAPERS[1]; // matches App's default wallpaper (gl
 const PANES = [
   { id: "appearance", label: "Appearance", tint: "#1c1c1e", d: "M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm0 0v12" },
   { id: "wallpaper", label: "Wallpaper", tint: "#32ade6", d: "M2.5 3.5h11v9h-11zM2.5 10.5l3-3 3 3 2-2 3 3" },
+  { id: "accessibility", label: "Accessibility", tint: "#0a84ff", d: "M8 2.6a1.3 1.3 0 1 0 0 .01M3 5.5l5 1 5-1M8 6.5v3.5M8 10l-2.2 3.6M8 10l2.2 3.6" },
   { id: "general", label: "General", tint: "#8e8e93", d: "M8 10.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4zM8 1.8v1.6M8 12.6v1.6M1.8 8h1.6M12.6 8h1.6M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M3.6 12.4l1.1-1.1M11.3 4.7l1.1-1.1" },
 ];
 
@@ -262,6 +264,89 @@ function WallpaperPane({ t, theme, wallpaperUrl, setWallpaperUrl, currentPair })
   );
 }
 
+function Switch({ on, onChange, label }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+      className="relative w-[38px] h-[22px] rounded-full transition-colors"
+      style={{ background: on ? "hsl(var(--accent, 211 100% 50%))" : "rgba(120,120,128,0.32)" }}
+    >
+      <motion.span className="absolute top-[2px] left-[2px] w-[18px] h-[18px] rounded-full bg-white shadow" animate={{ x: on ? 16 : 0 }} transition={{ type: "spring", stiffness: 600, damping: 36 }} />
+    </button>
+  );
+}
+
+function Segments({ t, value, onChange, options, label }) {
+  return (
+    <div role="radiogroup" aria-label={label} className={`inline-flex rounded-[7px] p-0.5 text-[12px] ${t.isDark ? "bg-white/10" : "bg-black/[0.06]"}`}>
+      {options.map(([k, l]) => (
+        <button key={k} type="button" role="radio" aria-checked={value === k} onClick={() => onChange(k)} className={`px-2.5 py-1 rounded-[6px] transition ${value === k ? (t.isDark ? "bg-white/20 text-white" : "bg-white shadow-sm text-black") : t.textSub}`}>
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function AccessibilityPane({ t }) {
+  const a = useA11y();
+  const set = a11yStore.set;
+  const changed = JSON.stringify(a) !== JSON.stringify(A11Y_DEFAULTS);
+  return (
+    <>
+      <p className={`mb-5 text-[12.5px] leading-relaxed ${t.textSub}`}>
+        These settings change the whole OS, every window and app, and stay saved in this browser. Accessibility is part of how I design, so this portfolio follows its own rules.
+      </p>
+      <Group t={t} title="Vision">
+        <Row t={t} label="Text size" sub="Scales the content of every window">
+          <Segments t={t} label="Text size" value={a.text} onChange={(v) => set({ text: v })} options={[["default", "Default"], ["large", "Large"], ["larger", "Larger"]]} />
+        </Row>
+        <Row t={t} label="Increase contrast" sub="Stronger contrast and window outlines">
+          <Switch label="Increase contrast" on={a.contrast} onChange={(v) => set({ contrast: v })} />
+        </Row>
+        <Row t={t} label="Reduce transparency" sub="Solid surfaces instead of frosted glass" last>
+          <Switch label="Reduce transparency" on={a.transparency} onChange={(v) => set({ transparency: v })} />
+        </Row>
+      </Group>
+      <Group t={t} title="Color filters">
+        <Row t={t} label="Filter" sub="Preview the OS as people with colour-vision deficiencies see it" last>
+          <select
+            value={a.filter}
+            onChange={(e) => set({ filter: e.target.value })}
+            aria-label="Color filter"
+            className={`text-[12.5px] rounded-[6px] px-2 py-1 outline-none ${t.isDark ? "bg-white/10 text-white" : "bg-black/[0.06] text-black"}`}
+          >
+            <option value="none">None</option>
+            <option value="grayscale">Grayscale</option>
+            <option value="protanopia">Protanopia (red-blind)</option>
+            <option value="deuteranopia">Deuteranopia (green-blind)</option>
+            <option value="tritanopia">Tritanopia (blue-blind)</option>
+          </select>
+        </Row>
+      </Group>
+      <Group t={t} title="Motion">
+        <Row t={t} label="Reduce motion" sub="Turns off window animations, springs and transitions. Also follows your device setting." last>
+          <Switch label="Reduce motion" on={a.motion} onChange={(v) => set({ motion: v })} />
+        </Row>
+      </Group>
+      <Group t={t} title="Keyboard">
+        <Row t={t} label="Always show focus" sub="A clear outline on whatever has keyboard focus. Tab through any app to try it." last>
+          <Switch label="Always show focus" on={a.focus} onChange={(v) => set({ focus: v })} />
+        </Row>
+      </Group>
+      {changed && (
+        <button type="button" onClick={a11yStore.reset} className={`mt-4 text-[12.5px] font-medium ${t.textSub} hover:underline`}>
+          Reset to defaults
+        </button>
+      )}
+    </>
+  );
+}
+
 function GeneralPane({ t, onOpenWindow, resetLayout }) {
   const [shareLabel, setShareLabel] = useState("Share");
   const busy = useRef(false);
@@ -337,6 +422,7 @@ function SideRow({ active, onClick, tint, icon, label, t, img }) {
 }
 
 export default function SettingsWindow({
+  initialPane = "appearance",
   uiTheme,
   setUiTheme,
   iconTheme,
@@ -352,7 +438,7 @@ export default function SettingsWindow({
   glassContrast = "light",
 }) {
   const t = useCaseStudyTheme({ uiTheme, glassContrast, appearance: theme });
-  const [pane, setPane] = useState("appearance");
+  const [pane, setPane] = useState(initialPane);
   const [query, setQuery] = useState("");
 
   const apps = useMemo(() => getApps(iconTheme).filter((a) => a.kind === "app" && !a.extra), [iconTheme]);
@@ -453,6 +539,7 @@ export default function SettingsWindow({
               {pane === "appearance" && <AppearancePane {...props} />}
               {pane === "wallpaper" && <WallpaperPane {...props} />}
               {pane === "general" && <GeneralPane {...props} />}
+              {pane === "accessibility" && <AccessibilityPane {...props} />}
             </motion.div>
           </AnimatePresence>
         </div>

@@ -5,7 +5,8 @@ import DockItem, { DOCK_BASE } from "./DockItem";
 
 /** macOS "Grid" stack: a frosted panel of apps that pops up above its Dock icon. */
 function StackPopover({ stack, anchorX, isDark, onClose }) {
-  const cols = stack.items.length <= 2 ? 2 : stack.items.length === 4 ? 2 : 3;
+  const n = stack.items.length;
+  const cols = n <= 2 ? 2 : n === 4 ? 2 : n > 9 ? 4 : 3;
   const width = Math.min(cols * 100 + 32, window.innerWidth - 16);
   const left = Math.max(8, Math.min(anchorX - width / 2, window.innerWidth - width - 8));
   const arrow = Math.max(22, Math.min(anchorX - left, width - 22));
@@ -160,6 +161,7 @@ export default function Dock({
         {apps.map((app) => (
           <DockItem
             key={app.id}
+            tourId={`dock-${app.id}`}
             mouseX={mouseX}
             label={app.label}
             isDark={isDark}

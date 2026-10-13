@@ -3,7 +3,7 @@
 
 // new Extras apps share one icon set (public/icons/apps)
 const APP_ICONS = Object.fromEntries(
-  ["instagram", "messages", "photobooth", "notes", "weather", "stickies", "calculator", "paint", "fundsim", "fundquest", "figma", "facetime", "activitymonitor", "designsystem", "achievements", "spotify"].map((k) => [k, `/icons/apps/${k}.svg`])
+  ["instagram", "messages", "photobooth", "notes", "weather", "stickies", "calculator", "paint", "fundsim", "figma", "facetime", "activitymonitor", "designsystem", "achievements", "spotify", "github", "claude", "notion", "excel", "journey", "vscode", "accessibility"].map((k) => [k, `/icons/apps/${k}.svg`])
 );
 
 const ICONS = {
@@ -19,6 +19,8 @@ const ICONS = {
     extras: "/icons/mac/extrasMac.svg",
     stackFinance: "/icons/mac/financeMac.svg",
     stackDesign: "/icons/mac/designMac.svg",
+    stackCode: "/icons/mac/codeMac.svg",
+    stackMac: "/icons/mac/thisMac.svg",
     stackWorld: "/icons/mac/worldMac.svg",
     stackPlay: "/icons/mac/playMac.svg",
     ...APP_ICONS,
@@ -28,13 +30,15 @@ const ICONS = {
     projects: "/icons/glass/FolderGlass.png",
     recruiter: "/icons/glass/ProfileGlass.png",
     fun: "/icons/glass/games-512.png",
-    terminal: "/icons/glass/terminalGlass.png",
+    terminal: "/icons/apps/terminal.svg",
     map: "/icons/glass/mapsGlass.png",
     music: "/icons/apps/spotify.svg",
     doc: "/icons/glass/MailGlass.png",
     extras: "/icons/glass/extras-512.png",
     stackFinance: "/icons/glass/finance-512.png",
     stackDesign: "/icons/glass/design-512.png",
+    stackCode: "/icons/glass/code-512.png",
+    stackMac: "/icons/glass/mac-512.png",
     stackWorld: "/icons/glass/world-512.png",
     stackPlay: "/icons/glass/games-512.png",
     ...APP_ICONS,
@@ -62,7 +66,13 @@ export function getApps(iconTheme = "glass") {
     { id: "terminal", label: "Terminal", windowId: "terminal", icon: i.terminal, kind: "app", inDock: false, keywords: "shell snake pong tetris commands" },
     { id: "map", label: "Maps", windowId: "map", icon: i.map, kind: "app", inDock: false, keywords: "places travel home world" },
     { id: "music", label: "Spotify", windowId: "music", icon: i.music, kind: "app", inDock: false, keywords: "music songs playlist spotify wrapped" },
-    { id: "fundquest", label: "Fund Quest", windowId: "fundquest", icon: i.fundquest, kind: "app", extra: true, keywords: "learn private markets course quiz game fintech kyc j-curve tvpi lesson" },
+    { id: "notion", label: "Notion", windowId: "notion", icon: i.notion, kind: "app", extra: true, keywords: "docs design notes brief decision log research insights process critique checklist" },
+    { id: "journey", label: "Marta’s Journey", windowId: "journey", icon: i.journey, kind: "app", extra: true, keywords: "game platformer pixel art arcade play madrid groningen stuttgart canada stockholm journey career" },
+    { id: "vscode", label: "VS Code", windowId: "vscode", icon: i.vscode, kind: "app", extra: true, keywords: "visual studio code editor source code react jsx files developer ide" },
+    { id: "accessibility", label: "Accessibility", windowId: "accessibility", icon: i.accessibility, kind: "app", extra: true, keywords: "a11y contrast text size reduce motion color blind filters focus keyboard vision" },
+    { id: "claude", label: "Claude", windowId: "claude", icon: i.claude, kind: "app", extra: true, keywords: "ai llm assistant prompt workflow chat claude anthropic pair programming" },
+    { id: "github", label: "GitHub", windowId: "github", icon: i.github, kind: "app", extra: true, keywords: "code repos pull request pr merge review ci developer engineering git" },
+    { id: "excel", label: "Excel", windowId: "excel", icon: i.excel, kind: "app", extra: true, keywords: "spreadsheet fund model irr dpi j-curve cash flows excel to product fintech b2b" },
     { id: "figma", label: "Figma", windowId: "figma", icon: i.figma, kind: "app", extra: true, keywords: "design canvas auto layout components prototype ui ux tool" },
     { id: "facetime", label: "FaceTime", windowId: "facetime", icon: i.facetime, kind: "app", extra: true, keywords: "call book meeting contact video talk hire" },
     { id: "designsystem", label: "Design System", windowId: "designsystem", icon: i.designsystem, kind: "app", extra: true, keywords: "tokens colors typography components motion ui" },

@@ -1,0 +1,172 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+import BackButton from "@/components/BackButton";
+import ProgressStep from "@/components/ProgressStep";
+
+export default function CreateGroup() {
+  const navigate = useNavigate();
+
+  const [groupName, setGroupName] = useState("");
+  const [creatorName, setCreatorName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [groupId, setGroupId] = useState<string | null>(null);
+
+  async function handleCreateGroup() {
+    setLoading(true);
+    setError("");
+
+    const { data, error } = await supabase
+      .from("groups")
+      .insert([{ name: groupName }])
+      .select()
+      .single();
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    setGroupId(data.id);
+  }
+
+  async function handleContinue() {
+    if (!groupId) return;
+
+    const { data, error } = await supabase
+      .from("members")
+      .insert([
+        {
+          group_id: groupId,
+          name: creatorName,
+          is_organizer: true,
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    // ⭐ FIX: Use React Router navigation instead of full reload
+    navigate(`/availability?groupId=${groupId}&memberId=${data.id}`);
+  }
+
+  async function handleShare() {
+    if (!groupId) return;
+
+    const url = `${window.location.origin}/join/${groupId}`;
+    const text = `Join my dinner group: ${groupName}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Join my group",
+          text,
+          url,
+        });
+      } catch (err) {
+        console.error("Share cancelled", err);
+      }
+      return;
+    }
+
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+      "_blank"
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <div className="w-full max-w-md bg-card shadow-lg rounded-xl p-6 border border-border">
+
+        <BackButton />
+
+        {!groupId && <ProgressStep step={1} total={4} />}
+
+        {!groupId && (
+          <>
+            <h1 className="text-2xl font-semibold mb-4 text-foreground">
+              Create a Group
+            </h1>
+
+            <label className="block mb-2 text-sm font-medium text-foreground">
+              Group name
+            </label>
+            <input
+              type="text"
+              className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 mb-4"
+              placeholder="e.g. Friday Dinner Crew"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+            />
+
+            <label className="block mb-2 text-sm font-medium text-foreground">
+              Your name
+            </label>
+            <input
+              type="text"
+              className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 mb-4"
+              placeholder="e.g. Marta"
+              value={creatorName}
+              onChange={(e) => setCreatorName(e.target.value)}
+            />
+
+            {error && (
+              <p className="text-red-500 text-sm mb-3">{error}</p>
+            )}
+
+            <button
+              onClick={handleCreateGroup}
+              disabled={loading || !groupName.trim() || !creatorName.trim()}
+              className="
+                w-full py-2 rounded-md text-sm font-medium tracking-tight disabled:opacity-50
+                bg-[hsl(var(--button-primary))]
+                text-[hsl(var(--button-primary-foreground))]
+              "
+            >
+              {loading ? "Creating..." : "Create Group"}
+            </button>
+          </>
+        )}
+
+        {groupId && (
+          <>
+            <h1 className="text-2xl font-semibold mb-4 text-foreground">
+              Group Created 🎉
+            </h1>
+
+            <p className="text-sm text-muted-foreground mb-6">
+              Share this group with your friends so they can join.
+            </p>
+
+            <button
+              onClick={handleShare}
+              className="w-full border border-border text-foreground py-2 rounded-md text-sm font-medium tracking-tight mb-3 hover:bg-muted transition"
+            >
+              Share Group
+            </button>
+
+            <button
+              onClick={handleContinue}
+              className="
+                w-full py-2 rounded-md text-sm font-medium tracking-tight
+                bg-[hsl(var(--button-primary))]
+                text-[hsl(var(--button-primary-foreground))]
+              "
+            >
+              Continue to Availability
+            </button>
+          </>
+        )}
+
+      </div>
+    </div>
+  );
+}

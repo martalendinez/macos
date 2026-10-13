@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marta Lendínez · Design Engineer · Simple version</title>
+    <meta name="description" content="Marta Lendínez, Design Engineer at ROYC in Stockholm. Plain-text version of the portfolio: summary, experience and case studies." />
+    <link rel="canonical" href="https://portfolio-martalendinez.netlify.app/simple.html" />
+    <meta property="og:title" content="Marta Lendínez · Design Engineer" />
+    <meta property="og:description" content="Summary, case studies and contact details in one plain page." />
+    <meta property="og:image" content="https://portfolio-martalendinez.netlify.app/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/icons/favicon.ico" />
+    <style>
+      :root { --text: #1d1d1f; --sub: #5f6368; --line: #e6e6ea; --accent: #0a6fe0; --bg: #ffffff; --card: #f6f6f8; }
+      @media (prefers-color-scheme: dark) { :root { --text: #f2f2f4; --sub: #a1a1aa; --line: #2c2c31; --accent: #4aa3ff; --bg: #141416; --card: #1c1c20; } }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
+      main { max-width: 720px; margin: 0 auto; padding: 56px 20px 80px; }
+      a { color: var(--accent); }
+      h1 { font-size: 40px; line-height: 1.05; letter-spacing: -0.03em; margin: 0; }
+      h2 { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); margin: 44px 0 12px; }
+      h3 { font-size: 18px; margin: 0; }
+      .role { font-size: 19px; margin-top: 8px; }
+      .sub { color: var(--sub); }
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+      .btn { display: inline-block; padding: 8px 14px; border-radius: 10px; background: var(--card); color: var(--text); text-decoration: none; font-weight: 600; font-size: 14px; border: 1px solid var(--line); }
+      .btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
+      dl { display: grid; grid-template-columns: 120px 1fr; gap: 6px 16px; margin: 0; }
+      dt { color: var(--sub); }
+      dd { margin: 0; }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+      .meta { font-size: 13px; color: var(--sub); margin: 2px 0 8px; }
+      ul { padding-left: 20px; margin: 8px 0 0; }
+      footer { margin-top: 56px; font-size: 14px; color: var(--sub); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="sub" style="margin:0 0 10px">Simple version · <a href="/">Open the interactive portfolio →</a></p>
+      <h1>Marta Lendínez</h1>
+      <div class="role">Design Engineer at <a href="https://www.roycgroup.com" rel="noopener">ROYC</a> · Stockholm, Sweden</div>
+      <p class="sub">I bridge UX thinking and front-end execution: research → flows → high-fidelity UI → clean components.</p>
+      <div class="actions">
+        <a class="btn primary" href="/resume.pdf">Download résumé</a>
+        <a class="btn" href="mailto:casandra.lendinez@outlook.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/martalendinez" rel="noopener">GitHub</a>
+      </div>
+
+      <h2>At a glance</h2>
+      <dl>
+        <dt>Role</dt><dd>Design Engineer at ROYC, since Aug 2026</dd>
+        <dt>Education</dt><dd>MSc Interactive Media Technology, KTH Royal Institute of Technology</dd>
+        <dt>Location</dt><dd>Stockholm, Sweden · open to EU / remote</dd>
+        <dt>Domain</dt><dd>Fintech &amp; B2B SaaS: complex, regulated products</dd>
+        <dt>Toolkit</dt><dd>Figma, React, TypeScript, user research &amp; testing</dd>
+      </dl>
+
+      <h2>Why me</h2>
+      <ul>
+        <li><strong>Fintech &amp; B2B SaaS.</strong> At ROYC I design a white-label platform that runs the full private markets lifecycle for banks, wealth and asset managers.</li>
+        <li><strong>Design and code, one person.</strong> I design the UI in Figma with a scalable component library, and implement it in TypeScript and React.</li>
+        <li><strong>Research-driven.</strong> User interviews and usability testing shape every flow.</li>
+      </ul>
+
+      <h2>Case studies</h2>
+      <div class="card">
+        <h3>Trace: an AI co-pilot for design decisions</h3>
+        <div class="meta">2026 · Master thesis, KTH · Research + build</div>
+        A task-aware AI co-pilot that helps designers think, not just generate. Expert interviews and a with/without-AI design experiment shaped a six-stage framework; I built a React + LLaMA prototype and iterated it through two usability studies with 12 participants.
+      </div>
+      <div class="card">
+        <h3>Kallos: AI platform for employer-branding analysis</h3>
+        <div class="meta">2024 · Bachelor thesis with PrideCom · UX + full-stack</div>
+        Turned a consultancy’s manual employer-branding audits into a self-serve product: research, UX, a Flask backend, encrypted data and a local LLM. In two testing rounds with 11 participants, everyone completed the core tasks and 90% found the AI recommendations actionable.
+      </div>
+      <div class="card">
+        <h3>Sällskap: group dining, coordinated</h3>
+        <div class="meta">2026 · Personal project · UX + full-stack</div>
+        A web app that collects a group’s availability and dietary needs privately, then recommends restaurants that fit everyone. Researched with 5 interviews and a 5-platform analysis, built with React and Supabase, iterated after 5 usability sessions.
+      </div>
+      <div class="card">
+        <h3>Trivia Master: quiz app</h3>
+        <div class="meta">KTH group project · Mobile app (React Native)</div>
+        In a four-person team I owned the experience, from information architecture and the Figma design system to the React Native screens. Every tester completed every core task in testing.
+      </div>
+
+      <footer>
+        This page is the plain-text version of <a href="/">portfolio-martalendinez.netlify.app</a>, which works like a Mac and includes the full case studies, interactive demos and the tools behind each project.
+      </footer>
+    </main>
+  </body>
+</html>

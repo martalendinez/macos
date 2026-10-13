@@ -12,6 +12,7 @@ import CaseStudyLightbox from "./caseStudy/CaseStudyLightbox";
 import { AtAGlance, Caption, Changes, Decision, Figure, H3, Insights, Intro, Lead, Learnings, MetricsPlan, PullQuote, Stats } from "./caseStudy/Editorial";
 import { ExperimentCompare, FrameworkExplorer, MixMatch, SynthesisBoard, TraceArchitecture, TraceLofi, TraceProblems, TraceStack, TryTrace } from "./caseStudy/TraceVisuals";
 import { CodeToggle } from "./caseStudy/KallosDeep";
+import BehindTheScenes from "./caseStudy/BehindTheScenes";
 import { TraceGallery, TraceHero, TraceIterations, TracePanel } from "./caseStudy/TracePanels";
 
 
@@ -116,6 +117,10 @@ export default function ThesisCaseStudyWindow({ onOpenWindow, uiTheme = "glass",
 
       <div className="mt-10">
         <TraceHero onOpen={open} />
+      </div>
+
+      <div className="mt-6">
+        <BehindTheScenes project="trace" theme={theme} tint={TINT} onOpenWindow={onOpenWindow} />
       </div>
 
       <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>

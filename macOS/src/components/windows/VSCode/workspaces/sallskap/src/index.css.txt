@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* LIGHT + DARK MODE TOKENS */
+@layer base {
+  :root {
+    --background: 40 12% 97%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 158 19% 29%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 40 6% 90%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 40 6% 90%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 32 80% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 0% / 0.08;
+    --input: 0 0% 0% / 0.08;
+    --ring: 158 19% 29%;
+
+    --radius: 12px;
+
+    --surface-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px -4px rgba(0,0,0,0.06);
+    --elevation-shadow: 0 8px 30px -8px rgba(0,0,0,0.1);
+    --surface-outline: 0 0 0 1px rgba(0,0,0,0.06);
+
+    --font-display: 'Public Sans', system-ui, sans-serif;
+    --font-body: 'Public Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* ⭐ NEW BUTTON TOKENS */
+    --button-primary: 158 19% 29%;
+    --button-primary-foreground: 0 0% 98%;
+  }
+
+  .dark {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 96%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 96%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 100% / 0.12;
+    --input: 0 0% 100% / 0.12;
+    --ring: 0 0% 100%;
+
+    --surface-shadow: 0 0px 0px rgba(0,0,0,0);
+    --elevation-shadow: 0 0px 0px rgba(0,0,0,0);
+    --surface-outline: 0 0 0 1px rgba(255,255,255,0.08);
+
+    /* ⭐ NEW BUTTON TOKENS FOR DARK MODE */
+    --button-primary: 158 19% 40%;
+    --button-primary-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  code, .font-mono {
+    font-family: var(--font-mono);
+    font-feature-settings: 'tnum';
+  }
+}
+
+/* Minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 10px;
+}
+
+@layer components {
+  .surface-card {
+    background: hsl(var(--card));
+    box-shadow: var(--surface-shadow);
+    outline: var(--surface-outline);
+    outline-offset: -1px;
+    border-radius: var(--radius);
+  }
+
+  .surface-elevated {
+    box-shadow: var(--elevation-shadow);
+  }
+}

@@ -1,14 +1,49 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lustria&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lustria&family=Press+Start+2P&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#000000">
-    <title>Marta Lendinez — Portfolio</title>
+    <title>Marta Lendínez · Design Engineer · Portfolio</title>
+    <meta name="description" content="Marta Lendínez, Design Engineer at ROYC in Stockholm. A portfolio that works like a Mac: case studies on AI, fintech and research, with the real tools and code behind them." />
+    <meta name="author" content="Marta Lendínez" />
+    <link rel="canonical" href="https://portfolio-martalendinez.netlify.app/" />
+    <link rel="alternate" type="text/html" href="/simple.html" title="Simple version of the portfolio" />
     <link rel="icon" href="/icons/favicon.ico" />
+    <link rel="apple-touch-icon" href="/icons/glass/me-512.png" />
+
+    <!-- link previews (LinkedIn, Slack, iMessage, X) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Marta Lendínez" />
+    <meta property="og:title" content="Marta Lendínez · Design Engineer" />
+    <meta property="og:description" content="A portfolio that works like a Mac: case studies, the real tools behind them, and how I design and build." />
+    <meta property="og:url" content="https://portfolio-martalendinez.netlify.app/" />
+    <meta property="og:image" content="https://portfolio-martalendinez.netlify.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Marta Lendínez, Design Engineer at ROYC, next to her macOS-style portfolio" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Marta Lendínez · Design Engineer" />
+    <meta name="twitter:description" content="A portfolio that works like a Mac: case studies, the real tools behind them, and how I design and build." />
+    <meta name="twitter:image" content="https://portfolio-martalendinez.netlify.app/og-image.jpg" />
+
+    <!-- structured data for search engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Marta Lendínez",
+        "jobTitle": "Design Engineer",
+        "worksFor": { "@type": "Organization", "name": "ROYC" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Stockholm", "addressCountry": "SE" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "KTH Royal Institute of Technology" },
+        "url": "https://portfolio-martalendinez.netlify.app/",
+        "sameAs": ["https://www.linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200", "https://github.com/martalendinez"]
+      }
+    </script>
 
   </head>
 
@@ -22,6 +57,18 @@
     </div>
 
     <div id="root"></div>
+    <noscript>
+      <div style="font-family:-apple-system,Inter,sans-serif;max-width:640px;margin:48px auto;padding:0 20px;line-height:1.6">
+        <h1>Marta Lendínez · Design Engineer</h1>
+        <p>This portfolio is an interactive app and needs JavaScript. Read the <a href="/simple.html">simple version</a> or download the <a href="/resume.pdf">résumé</a>.</p>
+      </div>
+    </noscript>
+    <!-- colour-vision filters for System Settings → Accessibility -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <filter id="a11y-protanopia"><feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0" /></filter>
+      <filter id="a11y-deuteranopia"><feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0" /></filter>
+      <filter id="a11y-tritanopia"><feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0" /></filter>
+    </svg>
     <script type="module" src="/src/main.jsx"></script>
 
     <style>

@@ -3,6 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { layout, parentOf, removeNode, sampleDoc, uid } from "./figmaDoc";
+import ProjectFigmaFile from "./ProjectFigmaFile";
+import { FIGMA_FILES } from "./figmaProjects";
+import { PROJECT_ORDER, WORKSPACE_PROJECTS } from "../../../config/projectWorkspaces";
+import { useWorkspace } from "../../../config/workspaceBus";
+import DemoBanner from "../DemoBanner";
 
 const BLUE = "#0d99ff";
 const PURPLE = "#9747ff";
@@ -85,7 +90,7 @@ function LayerRow({ id, depth, N, selected, setSelected, setHovered, patch, ui }
 }
 
 
-export default function FigmaWindow({ theme = "light" }) {
+function FigmaPlayground({ theme = "light" }) {
   const dark = theme === "dark";
   const ui = dark
     ? { panel: "bg-[#2c2c2c] border-[#444]", canvas: "#1e1e1e", text: "text-white/90", sub: "text-white/50", field: "bg-white/[0.06] hover:ring-1 ring-white/15", hover: "hover:bg-white/[0.06]", sel: "bg-[#0d99ff]/25", divide: "border-[#444]" }
@@ -692,6 +697,53 @@ export default function FigmaWindow({ theme = "light" }) {
           </AnimatePresence>
         </aside>
       </div>
+    </div>
+  );
+}
+
+/* Figma desktop-style file tabs: the playground and project design files */
+const FILES = [{ id: "playground", name: "Fund dashboard", sub: "Drafts" }, ...PROJECT_ORDER.map((id) => ({ id, name: FIGMA_FILES[id].name, sub: FIGMA_FILES[id].sub }))];
+const FigmaLogo = () => (
+  <svg viewBox="0 0 38 57" className="w-3 h-[18px]" aria-hidden="true">
+    <path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z" />
+    <path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z" />
+    <path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z" />
+    <path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z" />
+    <path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z" />
+  </svg>
+);
+
+export default function FigmaWindow(props) {
+  const { theme = "light", onOpenWindow } = props;
+  const [file, setFile] = useState("playground");
+  useWorkspace("figma", (p) => FIGMA_FILES[p] && setFile(p));
+  return (
+    <div className="no-darkwin h-full w-full flex flex-col">
+      <div className="h-9 shrink-0 flex items-end gap-1 px-2 bg-[#1e1e1e] text-white overflow-x-auto">
+        <span className="self-center px-2"><FigmaLogo /></span>
+        {FILES.map((f) => (
+          <button key={f.id} type="button" onClick={() => setFile(f.id)} className={`shrink-0 h-8 px-3 rounded-t-[8px] text-[12px] flex items-center gap-2 ${file === f.id ? "bg-[#2c2c2c] text-white" : "text-white/55 hover:text-white/85"}`}>
+            {f.name}
+            <span className="text-white/35 hidden @xl:inline">{f.sub}</span>
+          </button>
+        ))}
+      </div>
+      <div className={`flex-1 min-h-0 ${file === "playground" ? "flex flex-col" : "hidden"}`}>
+        <FigmaPlayground theme={theme} />
+      </div>
+      {FIGMA_FILES[file] && (
+        <div className="flex-1 min-h-0 flex flex-col">
+          <DemoBanner project={WORKSPACE_PROJECTS[file].name} dark={theme === "dark"} onBack={() => onOpenWindow?.(WORKSPACE_PROJECTS[file].caseStudy)} />
+          <div className="h-11 shrink-0 flex items-center gap-3 px-3 bg-[#2c2c2c] text-white text-[12px]">
+            <span className="text-white/50">{FIGMA_FILES[file].sub} /</span>
+            <span className="font-semibold">{FIGMA_FILES[file].name}</span>
+            <span className="ml-auto flex -space-x-1.5">
+              <span className="w-6 h-6 rounded-full bg-[#ff375f] ring-2 ring-[#2c2c2c] text-[10px] font-bold flex items-center justify-center">M</span>
+            </span>
+          </div>
+          <ProjectFigmaFile key={file} project={file} dark={theme === "dark"} onOpenWindow={onOpenWindow} />
+        </div>
+      )}
     </div>
   );
 }

@@ -2,14 +2,20 @@
 // Catalog for the Extras & Fun "App Store". ✏️ Edit titles, taglines and categories here.
 import { getIcons } from "../../../../config/apps";
 
-// category: "fintech" | "design" (design & build) | "me" (get to know Marta) | "play" (just for fun) | "tools" (utilities)
+// category: "fintech" | "design" | "code" | "mac" (This Mac: apps about the OS itself) | "tools" | "me" (get to know Marta) | "play" (just for fun) | "tools" (utilities)
 const APPS = [
-  { key: "fundquest", title: "Fund Quest", subtitle: "Learn private markets in 10 min", category: "fintech", tint: "#5e5ce6", blurb: "The crash course I wish I'd had: 7 bite-sized lessons with quizzes, XP and a certificate." },
+  { key: "accessibility", title: "Accessibility", subtitle: "Make the whole OS yours", category: "mac", tint: "#0a84ff", blurb: "Text size, contrast, reduced motion and transparency, colour-blindness filters and focus outlines, applied to every window." },
+  { key: "vscode", title: "VS Code", subtitle: "Read this portfolio’s source", category: "code", tint: "#0a6fd0", blurb: "The real source code of this OS, in an editor: explorer, tabs, search across every file and the git history." },
+  { key: "journey", title: "Marta’s Journey", subtitle: "A pixel-art platformer of my life", category: "play", tint: "#e4572e", blurb: "Jump from Madrid to Groningen, Stuttgart, Canada and Stockholm, collect skills, and beat The Deadline to reach ROYC." },
+  { key: "excel", title: "Excel", subtitle: "From spreadsheet to product", category: "fintech", tint: "#107c41", blurb: "Edit a real-style fund model, then flip it into a product screen. Private markets still run on spreadsheets; this is how I design what replaces them." },
+  { key: "notion", title: "Notion", subtitle: "My design docs & decision log", category: "design", tint: "#37352f", blurb: "My process, project briefs, every big decision with its trade-off, and the checklist I run before a review." },
+  { key: "claude", title: "Claude", subtitle: "How I work with AI", category: "code", tint: "#d97757", blurb: "Replay real-style sessions: I bring the context and make the call, Claude drafts, checks and challenges." },
+  { key: "github", title: "GitHub", subtitle: "Review and merge my pull request", category: "code", tint: "#1f2328", blurb: "See how I ship: a real-style PR with checks, a review and a Merge button you get to press." },
   { key: "figma", title: "Figma", subtitle: "Auto layout & components, for real", category: "design", tint: "#a259ff", blurb: "A working mini Figma: draw, use auto layout, and edit a component to update every instance." },
   { key: "facetime", title: "FaceTime", subtitle: "Book a call with me", category: "me", tint: "#30d158", blurb: "Give me a ring, then pick a time to chat. I'd love to meet you!" },
-  { key: "designsystem", title: "Design System", subtitle: "Tokens, components & motion", category: "design", tint: "#ff9f0a", blurb: "The design system behind this portfolio: live tokens, components and springs." },
-  { key: "achievements", title: "Achievements", subtitle: "Your trophy room", category: "play", tint: "#ffd60a" },
-  { key: "activitymonitor", title: "Activity Monitor", subtitle: "My skills, as processes", category: "design", tint: "#30d158" },
+  { key: "designsystem", title: "Design System", subtitle: "Tokens, components & motion", category: "mac", tint: "#ff9f0a", blurb: "The design system behind this portfolio: live tokens, components and springs." },
+  { key: "achievements", title: "Achievements", subtitle: "Your trophy room", category: "mac", tint: "#ffd60a" },
+  { key: "activitymonitor", title: "Activity Monitor", subtitle: "My skills, as processes", category: "mac", tint: "#30d158" },
   { key: "fundsim", title: "Fund Simulator", subtitle: "Private markets, explained", category: "fintech", tint: "#5e5ce6", blurb: "Play with a private markets fund: watch the J-curve, capital calls and returns unfold." },
   { key: "instagram", title: "Instagram", subtitle: "My life in photos & stories", category: "me", tint: "#e1306c", blurb: "Swipe through the places I've lived, one story at a time." },
   { key: "messages", title: "Messages", subtitle: "Ask me anything", category: "me", tint: "#34c759", blurb: "Chat with a pre-recorded me: projects, skills, fun facts." },
@@ -18,7 +24,7 @@ const APPS = [
   { key: "notes", title: "Notes", subtitle: "My philosophy & toolbox", category: "me", tint: "#ffcc00" },
   { key: "photobooth", title: "Photo Booth", subtitle: "Take a selfie with filters", category: "play", tint: "#ff3b30", blurb: "Strike a pose: 9 filters, a countdown and a Polaroid frame." },
   { key: "paint", title: "Paint", subtitle: "Draw me something!", category: "play", tint: "#af52de" },
-  { key: "terminal", title: "Terminal", subtitle: "Play games & commands", category: "design", tint: "#1c1c1e", iconKey: "terminal" },
+  { key: "terminal", title: "Terminal", subtitle: "Play games & commands", category: "mac", tint: "#1c1c1e", iconKey: "terminal" },
   { key: "weather", title: "Weather", subtitle: "Every city I've lived in", category: "tools", tint: "#32ade6" },
   { key: "calculator", title: "Calculator", subtitle: "Yes, it really works", category: "tools", tint: "#ff9f0a" },
   { key: "stickies", title: "Stickies", subtitle: "Leave yourself a note", category: "tools", tint: "#ffd60a" },
@@ -34,7 +40,7 @@ export const GAMES = [
   { key: "flappy", title: "Flappy", subtitle: "One button. Endless pipes.", emoji: "🐤", gradient: ["#0a84ff", "#003a8c"] },
 ];
 
-export const FEATURED = ["fundquest", "figma", "fundsim", "designsystem"];
+export const FEATURED = ["journey", "excel", "claude", "notion", "github", "figma", "fundsim", "designsystem"];
 
 /**
  * @param {(key: string) => void} onOpenWindow

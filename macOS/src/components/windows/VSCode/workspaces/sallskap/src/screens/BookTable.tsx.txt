@@ -1,0 +1,118 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import StepIndicator from '@/components/StepIndicator';
+import StickyBottomButton from '@/components/StickyBottomButton';
+import { Calendar } from '@/components/ui/calendar';
+import { Check } from 'lucide-react';
+
+const timeSlots = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00'];
+const peopleCounts = [1, 2, 3, 4, 5, 6, 7, 8];
+const steps = ['Date', 'Time', 'People', 'Confirm'];
+
+export default function BookTable() {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(0);
+  const [date, setDate] = useState<Date | undefined>();
+  const [time, setTime] = useState('');
+  const [people, setPeople] = useState(0);
+
+  function next() {
+    if (step < 3) setStep(step + 1);
+    else navigate('/reservations');
+  }
+
+  const canProceed =
+    (step === 0 && !!date) ||
+    (step === 1 && !!time) ||
+    (step === 2 && people > 0) ||
+    step === 3;
+
+  return (
+    <div className="min-h-screen bg-background pt-20 pb-24 px-4">
+      <div className="max-w-md mx-auto">
+        <h1 className="text-2xl font-bold text-foreground mb-6">Book a Table</h1>
+
+        <div className="mb-8">
+          <StepIndicator steps={steps} currentStep={step} />
+        </div>
+
+        {step === 0 && (
+          <div className="flex justify-center">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              disabled={{ before: new Date() }}
+              className="surface-card rounded-xl p-4"
+            />
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="grid grid-cols-3 gap-3">
+            {timeSlots.map((t) => (
+              <button
+                key={t}
+                onClick={() => setTime(t)}
+                className={`h-12 rounded-xl font-mono text-sm font-semibold transition-all ${
+                  time === t
+                    ? 'bg-primary text-primary-foreground'
+                    : 'surface-card text-foreground hover:surface-elevated'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="grid grid-cols-4 gap-3">
+            {peopleCounts.map((n) => (
+              <button
+                key={n}
+                onClick={() => setPeople(n)}
+                className={`h-14 rounded-xl text-lg font-semibold transition-all ${
+                  people === n
+                    ? 'bg-primary text-primary-foreground'
+                    : 'surface-card text-foreground hover:surface-elevated'
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="surface-card rounded-xl p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Check className="w-5 h-5 text-primary" />
+              </div>
+              <h2 className="text-lg font-semibold text-foreground">Review Booking</h2>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Date</span>
+                <span className="font-medium text-foreground">{date?.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Time</span>
+                <span className="font-mono font-medium text-foreground">{time}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">People</span>
+                <span className="font-medium text-foreground">{people}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <StickyBottomButton onClick={next} disabled={!canProceed}>
+        {step === 3 ? 'Confirm Reservation' : 'Continue'}
+      </StickyBottomButton>
+    </div>
+  );
+}

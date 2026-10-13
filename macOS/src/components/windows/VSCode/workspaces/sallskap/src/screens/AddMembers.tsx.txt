@@ -1,0 +1,104 @@
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useSearchParams } from "react-router-dom";
+
+export default function AddMembers() {
+  const [searchParams] = useSearchParams();
+  const groupId = searchParams.get("groupId");
+
+  const [name, setName] = useState("");
+  const [members, setMembers] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleAddMember() {
+    if (!name.trim()) return;
+    setMembers((prev) => [...prev, name.trim()]);
+    setName("");
+  }
+
+  async function handleContinue() {
+    if (!groupId) {
+      setError("Missing group ID");
+      return;
+    }
+
+    if (members.length === 0) {
+      setError("Please add at least one member");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    // Prepare rows for Supabase
+    const rows = members.map((m) => ({
+      group_id: groupId,
+      name: m,
+    }));
+
+    // Insert all members and return their IDs
+    const { data, error } = await supabase
+      .from("members")
+      .insert(rows)
+      .select();
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    // Redirect FIRST member to availability
+    const firstMember = data[0];
+
+    window.location.href = `/availability?groupId=${groupId}&memberId=${firstMember.id}`;
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+        <h1 className="text-2xl font-semibold mb-4">Add Members</h1>
+
+        <label className="block mb-2 text-sm font-medium">Member name</label>
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            className="flex-1 border rounded-lg px-3 py-2"
+            placeholder="e.g. Marta"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <button
+            onClick={handleAddMember}
+            className="bg-black text-white px-4 py-2 rounded-lg"
+          >
+            Add
+          </button>
+        </div>
+
+        {members.length > 0 && (
+          <div className="mb-4">
+            <h2 className="font-medium mb-2">Members added:</h2>
+            <ul className="list-disc pl-5 text-sm">
+              {members.map((m, i) => (
+                <li key={i}>{m}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+
+        <button
+          onClick={handleContinue}
+          disabled={loading || members.length === 0}
+          className="w-full bg-black text-white py-2 rounded-lg disabled:opacity-50"
+        >
+          {loading ? "Saving..." : "Continue"}
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,58 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { GroupProvider } from "@/context/GroupContext";
+
+import Header from "@/components/Header";
+import Landing from "@/screens/Landing";
+import CreateGroup from "@/screens/CreateGroup";
+import AddMembers from "@/screens/AddMembers";
+import DietaryRestrictions from "@/screens/DietaryRestrictions";
+import BrowseRestaurants from "@/screens/BrowseRestaurants";
+import Confirmation from "@/screens/Confirmation";
+import JoinGroup from "@/screens/JoinGroup";
+import Availability from "@/screens/Availability";
+import Overview from "@/screens/Overview";
+import ThankYou from "@/screens/ThankYou";
+import MyReservations from "@/screens/MyReservations";
+import BookTable from "@/screens/BookTable";
+import Favorites from "@/screens/Favorites";
+import PastReservations from "@/screens/PastReservations";
+import NotFound from "./pages/NotFound.tsx";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <GroupProvider>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/create" element={<CreateGroup />} />
+            <Route path="/add-members" element={<AddMembers />} />
+            <Route path="/availability" element={<Availability />} />
+            <Route path="/dietary" element={<DietaryRestrictions />} />
+            <Route path="/overview" element={<Overview />} />
+            <Route path="/browse" element={<BrowseRestaurants />} />
+            <Route path="/confirmation" element={<Confirmation />} />
+            <Route path="/join/:groupId" element={<JoinGroup />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/reservations" element={<MyReservations />} />
+            <Route path="/book" element={<BookTable />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/past-reservations" element={<PastReservations />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </GroupProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;

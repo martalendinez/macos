@@ -18,6 +18,7 @@ import iterationsImg from "../../../imgs/case-study/kallos/Survey_Iterations_cle
 import recommendationsImg from "../../../imgs/case-study/kallos/recommendations.png";
 import dashboardImg from "../../../imgs/case-study/kallos/Dashboard.png";
 import mockupImg from "../../../imgs/case-study/kallos/Kallos_Mockup_web.jpg";
+import BehindTheScenes from "./caseStudy/BehindTheScenes";
 
 const TINT = "#f28b4b";
 const URL = "localhost:5000";
@@ -64,6 +65,10 @@ export default function EmployerBrandingCaseStudyWindow({ onOpenWindow, uiTheme 
       <button type="button" onClick={() => open(mockupImg, "Kallos screens")} className="mt-10 block w-full cursor-zoom-in">
         <img src={mockupImg} alt="Kallos platform screens: landing page, dashboard and recommendations" className="block w-full h-auto rounded-[20px]" />
       </button>
+
+      <div className="mt-6">
+        <BehindTheScenes project="kallos" theme={theme} tint={TINT} onOpenWindow={onOpenWindow} />
+      </div>
 
       <CaseStudySection id="glance" title="At a glance" subtitle="The 30-second version" theme={theme}>
         <AtAGlance
