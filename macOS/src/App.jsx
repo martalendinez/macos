@@ -37,7 +37,6 @@ import Loader from "./ui/Loader";
 import { getApps, getIcons, iconForWindow, RESUME_URL } from "./config/apps";
 import { DOCK_STACKS } from "./config/dockStacks";
 import { requestFunCategory } from "./components/windows/Fun/funBus";
-import { FUN_SUBTITLES } from "./components/windows/Fun/data/funApps";
 import useIsMobile from "./hooks/useIsMobile";
 
 // ✅ import wallpaper pairs from Settings so every wallpaper swaps correctly
@@ -358,7 +357,6 @@ export default function App() {
       icon: icons[st.iconKey],
       stack: {
         label: st.label,
-        tagline: st.tagline,
         onSeeAll: () => {
           requestFunCategory(st.category);
           openWindow("fun");
@@ -366,7 +364,7 @@ export default function App() {
         items: st.items
           .map((it) => {
             const a = apps.find((x) => x.id === it.app);
-            return a && { key: a.id, label: a.label, subtitle: FUN_SUBTITLES[a.id], icon: a.icon, windowId: a.windowId, onOpen: () => openWindow(a.windowId) };
+            return a && { key: a.id, label: a.label, icon: a.icon, windowId: a.windowId, onOpen: () => openWindow(a.windowId) };
           })
           .filter(Boolean),
       },

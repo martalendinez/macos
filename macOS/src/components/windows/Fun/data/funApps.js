@@ -22,9 +22,6 @@ const APPS = [
 ];
 
 
-/** One-line "what you'll find" per app, also used by the Dock stacks. */
-export const FUN_SUBTITLES = Object.fromEntries(APPS.map((a) => [a.key, a.subtitle]));
-
 export const FEATURED = ["excel", "claude", "notion", "github", "figma", "fundsim", "designsystem"];
 
 /**
