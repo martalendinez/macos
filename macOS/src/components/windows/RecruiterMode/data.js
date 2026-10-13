@@ -57,7 +57,7 @@ export const GLANCE = [
   { key: "loc", label: "Location", value: "Stockholm, Sweden", sub: "open to EU / remote", tint: "#ff9f0a" },
   { key: "domain", label: "Domain", value: "Fintech & B2B SaaS", sub: "complex, regulated products", tint: "#30d158" },
   { key: "tools", label: "Toolkit", value: "Figma · React · TypeScript", sub: "plus user research & testing", tint: "#0a84ff" },
-  // ✏️ Add your languages, e.g. { key: "lang", label: "Languages", value: "Spanish · English", sub: "native · fluent", tint: "#ff375f" },
+  { key: "lang", label: "Languages", value: "Spanish · English · German", sub: "three languages", tint: "#ff375f" },
 ]
 
 // ✏️ Shown with a green dot. Change to e.g. "Open to new roles" if you're actively looking.

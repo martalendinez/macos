@@ -255,12 +255,8 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: EASE }}
           >
-            <img src={heroImg} alt="Marta in Valencia" className="absolute inset-0 w-full h-full object-cover" />
+            <img src={heroImg} alt="Marta Lendínez" className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-
-            <span className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-black/35 backdrop-blur-md text-white text-[12px] font-medium">
-              📍 Valencia, ES
-            </span>
 
             <motion.div
               className="absolute left-4 right-4 bottom-4 rounded-2xl p-4 bg-white/75 backdrop-blur-xl backdrop-saturate-150 ring-1 ring-white/50 shadow-xl"
