@@ -74,23 +74,34 @@ export default function DockItem({
             ].join(" ")}
             style={{
               x: "-50%",
+              transformOrigin: "50% 100%",
               boxShadow: isDark
                 ? "0 0 0 0.5px rgba(0,0,0,0.8), inset 0 0 0 0.5px rgba(255,255,255,0.14), 0 6px 18px rgba(0,0,0,0.35)"
                 : "0 0 0 0.5px rgba(0,0,0,0.14), 0 6px 18px rgba(0,0,0,0.18)",
             }}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, transition: { duration: 0.1 } }}
-            transition={{ duration: 0.14 }}
+            initial={peek.length ? { opacity: 0, y: 10, scale: 0.7 } : { opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: peek.length ? 0.9 : 1, transition: { duration: 0.1 } }}
+            transition={peek.length ? { type: "spring", stiffness: 460, damping: 24 } : { duration: 0.14 }}
           >
             {here ? (
               "I’m already here! 👋"
             ) : peek.length ? (
               <span className="flex items-center gap-2">
                 {label}
-                <span className="flex items-center gap-[3px]">
-                  {peek.map((src) => (
-                    <img key={src} src={src} alt="" draggable={false} className="shrink-0 w-[18px] h-[18px] object-contain" />
+                <span className="flex items-center gap-1">
+                  {peek.map((src, i) => (
+                    <motion.img
+                      key={src}
+                      src={src}
+                      alt=""
+                      draggable={false}
+                      className="shrink-0 w-[26px] h-[26px] object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.25)]"
+                      // the apps pop out one after another, like they're peeking out of the folder
+                      initial={{ opacity: 0, scale: 0.3, y: 10, rotate: -14 }}
+                      animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+                      transition={{ type: "spring", stiffness: 520, damping: 17, delay: 0.06 + i * 0.055 }}
+                    />
                   ))}
                 </span>
               </span>
