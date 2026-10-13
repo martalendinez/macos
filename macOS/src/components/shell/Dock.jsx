@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import DockItem, { DOCK_BASE } from "./DockItem";
 
-/** macOS "Grid" stack: a frosted panel of apps that pops up above its Dock icon. */
+/** A Dock stack: a frosted panel above its icon, listing each app with what you'll find inside. */
 function StackPopover({ stack, anchorX, isDark, onClose }) {
-  const n = stack.items.length;
-  const cols = n <= 2 ? 2 : n === 4 ? 2 : n > 9 ? 4 : 3;
-  const width = Math.min(cols * 100 + 32, window.innerWidth - 16);
+  const width = Math.min(320, window.innerWidth - 16);
   const left = Math.max(8, Math.min(anchorX - width / 2, window.innerWidth - width - 8));
   const arrow = Math.max(22, Math.min(anchorX - left, width - 22));
 
@@ -18,8 +16,9 @@ function StackPopover({ stack, anchorX, isDark, onClose }) {
   }, [onClose]);
 
   const panel = isDark
-    ? { background: "rgba(36,36,40,0.78)", boxShadow: "0 0 0 0.5px rgba(0,0,0,0.7), inset 0 0 0 0.5px rgba(255,255,255,0.14), 0 22px 50px rgba(0,0,0,0.45)" }
-    : { background: "rgba(246,246,248,0.8)", boxShadow: "0 0 0 0.5px rgba(0,0,0,0.12), inset 0 0 0 0.5px rgba(255,255,255,0.6), 0 22px 50px rgba(0,0,0,0.25)" };
+    ? { background: "rgba(36,36,40,0.82)", boxShadow: "0 0 0 0.5px rgba(0,0,0,0.7), inset 0 0 0 0.5px rgba(255,255,255,0.14), 0 22px 50px rgba(0,0,0,0.45)" }
+    : { background: "rgba(246,246,248,0.86)", boxShadow: "0 0 0 0.5px rgba(0,0,0,0.12), inset 0 0 0 0.5px rgba(255,255,255,0.6), 0 22px 50px rgba(0,0,0,0.25)" };
+  const sub = isDark ? "text-white/55" : "text-black/50";
 
   return (
     <>
@@ -27,53 +26,61 @@ function StackPopover({ stack, anchorX, isDark, onClose }) {
       <motion.div
         role="dialog"
         aria-label={`${stack.label} stack`}
-        className={`fixed z-[5010] rounded-[20px] backdrop-blur-2xl backdrop-saturate-[1.8] ${isDark ? "text-white" : "text-black"}`}
+        className={`fixed z-[5010] rounded-[18px] p-1.5 backdrop-blur-2xl backdrop-saturate-[1.8] ${isDark ? "text-white" : "text-black"}`}
         style={{ ...panel, left, width, bottom: DOCK_BASE + 32, transformOrigin: `${arrow}px 100%` }}
         initial={{ opacity: 0, scale: 0.85, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 10, transition: { duration: 0.14 } }}
         transition={{ type: "spring", stiffness: 420, damping: 30 }}
       >
-        <div className="px-4 pt-3.5 pb-1 text-[15px] font-semibold tracking-[-0.01em]">{stack.label}</div>
-        <div className="px-3 pb-2 grid gap-y-1" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+        <div className="px-2.5 pt-2 pb-2">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-[15px] font-semibold tracking-[-0.01em]">{stack.label}</span>
+            <span className={`text-[11.5px] tabular-nums ${sub}`}>
+              {stack.items.length} {stack.items.length === 1 ? "app" : "apps"}
+            </span>
+          </div>
+          {stack.tagline && <div className={`mt-0.5 text-[12px] ${sub}`}>{stack.tagline}</div>}
+        </div>
+
+        <ul>
           {stack.items.map((it, i) => (
-            <motion.button
-              key={it.key}
+            <motion.li key={it.key} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03 * i }}>
+              <button
+                type="button"
+                onClick={() => {
+                  it.onOpen();
+                  onClose();
+                }}
+                className={`group w-full flex items-center gap-3 rounded-[11px] px-2 py-1.5 text-left ${isDark ? "hover:bg-white/10" : "hover:bg-black/[0.05]"}`}
+              >
+                <img src={it.icon} alt="" draggable={false} className="shrink-0 w-10 h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] transition-transform group-hover:scale-[1.06]" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13.5px] font-semibold leading-tight truncate">{it.label}</span>
+                  {it.subtitle && <span className={`block mt-0.5 text-[12px] leading-snug truncate ${sub}`}>{it.subtitle}</span>}
+                </span>
+                <svg viewBox="0 0 16 16" className={`shrink-0 w-3 h-3 opacity-0 -translate-x-1 transition group-hover:opacity-100 group-hover:translate-x-0 ${sub}`} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M6 3l5 5-5 5" />
+                </svg>
+              </button>
+            </motion.li>
+          ))}
+        </ul>
+
+        {stack.onSeeAll && (
+          <div className={`mt-1 mx-2 pt-1 border-t ${isDark ? "border-white/10" : "border-black/[0.07]"}`}>
+            <button
               type="button"
               onClick={() => {
-                it.onOpen();
+                stack.onSeeAll();
                 onClose();
               }}
-              className={`group flex flex-col items-center gap-1.5 rounded-[12px] px-1 pt-2.5 pb-2 ${isDark ? "hover:bg-white/10" : "hover:bg-black/[0.06]"}`}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.03 * i }}
+              className={`-mx-2 w-[calc(100%+1rem)] flex items-center justify-between rounded-[11px] px-2.5 py-2 text-[12.5px] font-medium ${isDark ? "text-[#4aa3ff] hover:bg-white/[0.06]" : "text-[#0a6fe0] hover:bg-black/[0.04]"}`}
             >
-              {it.icon ? (
-                <img src={it.icon} alt="" draggable={false} className="w-[54px] h-[54px] object-contain drop-shadow-[0_3px_5px_rgba(0,0,0,0.22)] transition-transform group-hover:scale-[1.06]" />
-              ) : (
-                <span
-                  className="w-[54px] h-[54px] rounded-[13px] flex items-center justify-center text-[26px] shadow-[0_3px_6px_rgba(0,0,0,0.22)] transition-transform group-hover:scale-[1.06]"
-                  style={{ background: `linear-gradient(160deg, ${it.gradient[0]}, ${it.gradient[1]})` }}
-                >
-                  {it.emoji}
-                </span>
-              )}
-              <span className={`text-[11.5px] leading-tight text-center line-clamp-2 ${isDark ? "text-white/85" : "text-black/80"}`}>{it.label}</span>
-            </motion.button>
-          ))}
-        </div>
-        {stack.onSeeAll && (
-          <button
-            type="button"
-            onClick={() => {
-              stack.onSeeAll();
-              onClose();
-            }}
-            className={`w-full h-10 border-t text-[12.5px] font-medium rounded-b-[20px] ${isDark ? "border-white/10 text-white/70 hover:bg-white/[0.06]" : "border-black/[0.08] text-black/60 hover:bg-black/[0.04]"}`}
-          >
-            Open in Extras &amp; Fun ›
-          </button>
+              See all in Extras &amp; Fun
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
         )}
         {/* little pointer down to the Dock icon */}
         <span
