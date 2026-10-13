@@ -14,20 +14,6 @@ export const BOOT_LINES = [
   "Brewing coffee. Lots of it…",
 ];
 
-/** Toast shown the first time someone closes a case study in a session. */
-export const CLOSE_CASE_STUDY = [
-  "Leaving already? That case study took me 3 months 🥲 No pressure though.",
-  "Closed. It’s fine. I’m fine. Everything is fine 🙂",
-  "Bye case study 👋 It’ll be right here when you miss it.",
-];
-
-/** Desktop right-click → "Make the logo bigger". */
-export const LOGO_BIGGER = [
-  "Logo is now 20% bigger. Client approved ✅",
-  "Bigger. Bolder. Still not big enough, probably.",
-  "Done! Should we also make it pop? ✨",
-];
-
 /** Daily fika reminder (15:00 Stockholm time). */
 export const FIKA = "It’s 15:00 in Stockholm, which means fika time ☕ Go get a kanelbulle, the portfolio will wait.";
 

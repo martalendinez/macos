@@ -14,7 +14,7 @@ import useAccentVar from "./hooks/useAccentVar";
 import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
 import { useA11y } from "./config/a11yStore";
-import { CLOSE_CASE_STUDY, FIKA, LOGO_BIGGER, pick } from "./config/humor";
+import { FIKA } from "./config/humor";
 import useClock from "./hooks/useClock";
 import useGlassContrast from "./hooks/useGlassContrast";
 import useNotifications from "./hooks/useNotifications";
@@ -128,7 +128,6 @@ export default function App() {
   });
 
   const timeZone = "Europe/Stockholm";
-  const closedCaseStudy = useRef(false);
   const currentTime = useClock({ timeZone, intervalMs: 30_000 });
 
   const {
@@ -138,7 +137,7 @@ export default function App() {
     maxMap,
     minMap,
     openWindow,
-    closeWindow: closeWindowRaw,
+    closeWindow,
     focusWindow,
     toggleMaximize,
     minimizeWindow,
@@ -146,30 +145,6 @@ export default function App() {
     resetLayout,
   } = useWindowManager();
 
-  // a little guilt trip the first time someone closes a case study 🥲
-  const closeWindow = useCallback(
-    (id) => {
-      closeWindowRaw(id);
-      if (/CaseStudy$/.test(id) && !closedCaseStudy.current) {
-        closedCaseStudy.current = true;
-        setTimeout(() => notif.notify?.({ title: "Marta", message: pick(CLOSE_CASE_STUDY), toast: true }), 350);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [closeWindowRaw]
-  );
-
-  // "Make the logo bigger": the whole desktop briefly zooms in, like every client review ever
-  const makeLogoBigger = useCallback(() => {
-    const root = document.getElementById("root");
-    if (root) {
-      root.style.transition = "transform 450ms cubic-bezier(.22,1,.36,1)";
-      root.style.transform = "scale(1.06)";
-      setTimeout(() => (root.style.transform = ""), 900);
-    }
-    setTimeout(() => notif.notify?.({ title: "Marta", message: pick(LOGO_BIGGER), toast: true }), 500);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const notif = useNotifications();
 
@@ -352,7 +327,6 @@ export default function App() {
     () => [
       { label: "New Folder", disabled: true },
       { separator: true },
-      { label: "Make the Logo Bigger", onSelect: makeLogoBigger },
       { label: "Get Info", onSelect: () => openWindow("about") },
       { label: "Change Wallpaper…", onSelect: () => openWindow("settings") },
       { label: theme === "dark" ? "Use Light Appearance" : "Use Dark Appearance", onSelect: toggleTheme },
