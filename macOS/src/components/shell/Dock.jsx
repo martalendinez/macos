@@ -167,6 +167,7 @@ export default function Dock({
             isDark={isDark}
             running={app.stack ? app.stack.items.some((it) => it.windowId && runningIds.includes(it.windowId)) : runningIds.includes(app.windowId)}
             bounceOnClick={!app.stack}
+            peek={app.stack ? app.stack.items.map((it) => it.icon).filter(Boolean) : []}
             active={openStack?.id === app.id}
             onClick={(e) => {
               if (!app.stack) return onLaunch?.(app);

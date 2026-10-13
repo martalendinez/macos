@@ -22,6 +22,7 @@ export default function DockItem({
   onClick,
   children,
   tourId,
+  peek = [], // folder stacks: icons of the apps inside, shown in the hover label
 }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(false);
@@ -66,7 +67,7 @@ export default function DockItem({
         {(hover || here) && !active && (
           <motion.div
             className={[
-              "absolute bottom-full mb-3 left-1/2 px-[10px] py-[3px] rounded-[7px] text-[13px] whitespace-nowrap pointer-events-none",
+              "absolute bottom-full mb-3 left-1/2 w-max px-[10px] py-[3px] rounded-[7px] text-[13px] whitespace-nowrap pointer-events-none",
               "backdrop-blur-xl",
               isDark ? "bg-[#2c2c2e]/85 text-white/90" : "bg-[#ececec]/90 text-black/85",
             ].join(" ")}
@@ -81,7 +82,20 @@ export default function DockItem({
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
             transition={{ duration: 0.14 }}
           >
-            {here ? "I’m already here! 👋" : label}
+            {here ? (
+              "I’m already here! 👋"
+            ) : peek.length ? (
+              <span className="flex items-center gap-2">
+                {label}
+                <span className="flex items-center gap-[3px]">
+                  {peek.map((src) => (
+                    <img key={src} src={src} alt="" draggable={false} className="shrink-0 w-[18px] h-[18px] object-contain" />
+                  ))}
+                </span>
+              </span>
+            ) : (
+              label
+            )}
           </motion.div>
         )}
       </AnimatePresence>
