@@ -3,7 +3,7 @@
 
 // new Extras apps share one icon set (public/icons/apps)
 const APP_ICONS = Object.fromEntries(
-  ["instagram", "messages", "fundsim", "figma", "designsystem", "achievements", "spotify", "github", "claude", "notion", "excel", "journey", "vscode", "accessibility"].map((k) => [k, `/icons/apps/${k}.svg`])
+  ["instagram", "messages", "fundsim", "figma", "designsystem", "achievements", "spotify", "github", "claude", "notion", "excel", "vscode", "accessibility"].map((k) => [k, `/icons/apps/${k}.svg`])
 );
 
 const ICONS = {
@@ -67,7 +67,6 @@ export function getApps(iconTheme = "glass") {
     { id: "map", label: "Maps", windowId: "map", icon: i.map, kind: "app", inDock: false, keywords: "places travel home world" },
     { id: "music", label: "Spotify", windowId: "music", icon: i.music, kind: "app", inDock: false, keywords: "music songs playlist spotify wrapped" },
     { id: "notion", label: "Notion", windowId: "notion", icon: i.notion, kind: "app", extra: true, keywords: "docs design notes brief decision log research insights process critique checklist" },
-    { id: "journey", label: "Marta’s Journey", windowId: "journey", icon: i.journey, kind: "app", extra: true, keywords: "game platformer pixel art arcade play madrid groningen stuttgart canada stockholm journey career" },
     { id: "vscode", label: "VS Code", windowId: "vscode", icon: i.vscode, kind: "app", extra: true, keywords: "visual studio code editor source code react jsx files developer ide" },
     { id: "accessibility", label: "Accessibility", windowId: "accessibility", icon: i.accessibility, kind: "app", extra: true, keywords: "a11y contrast text size reduce motion color blind filters focus keyboard vision" },
     { id: "claude", label: "Claude", windowId: "claude", icon: i.claude, kind: "app", extra: true, keywords: "ai llm assistant prompt workflow chat claude anthropic pair programming" },

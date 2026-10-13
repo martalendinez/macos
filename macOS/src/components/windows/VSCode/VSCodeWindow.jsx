@@ -23,7 +23,6 @@ const TOUR = [
   ["/src/config/windowDefs.js", "Every app is a lazy-loaded window registered here, with its default size and position."],
   ["/src/config/dockStacks.js", "The Dock stacks: Design, Code, Finance and Play & Me."],
   ["/src/components/windows/MacWindow.jsx", "The window chrome: dragging, resizing, traffic lights and the container that makes apps responsive."],
-  ["/src/components/windows/Journey/JourneyWindow.jsx", "Marta’s Journey: a canvas platformer with fixed-step physics and sprites drawn from strings."],
   ["/src/components/windows/GitHub/GitHubWindow.jsx", "The pull request you can review and merge, with checks that run one by one."],
   ["/src/components/windows/Excel/ExcelWindow.jsx", "A fund model spreadsheet with live IRR, and the same numbers redesigned as a product."],
   ["/.claude/skills/design-critique/SKILL.md", "My Claude Skills: reusable instructions Claude loads for critique, PRs, accessibility and research."],

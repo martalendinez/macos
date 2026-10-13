@@ -40,7 +40,6 @@ export const DOCK_STACKS = [
     iconKey: "stackPlay",
     category: "me",
     items: [
-      { app: "journey" },
       { app: "instagram" },
       { app: "messages" },
       { app: "music" },

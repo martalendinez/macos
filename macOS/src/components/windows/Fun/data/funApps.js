@@ -6,7 +6,6 @@ import { getIcons } from "../../../../config/apps";
 const APPS = [
   { key: "accessibility", title: "Accessibility", subtitle: "Make the whole OS yours", category: "mac", tint: "#0a84ff", blurb: "Text size, contrast, reduced motion and transparency, colour-blindness filters and focus outlines, applied to every window." },
   { key: "vscode", title: "VS Code", subtitle: "Read this portfolio’s source", category: "code", tint: "#0a6fd0", blurb: "The real source code of this OS, in an editor: explorer, tabs, search across every file and the git history." },
-  { key: "journey", title: "Marta’s Journey", subtitle: "A pixel-art platformer of my life", category: "play", tint: "#e4572e", blurb: "Jump from Madrid to Groningen, Stuttgart, Canada and Stockholm, collect skills, and beat The Deadline to reach ROYC." },
   { key: "excel", title: "Excel", subtitle: "From spreadsheet to product", category: "fintech", tint: "#107c41", blurb: "Edit a real-style fund model, then flip it into a product screen. Private markets still run on spreadsheets; this is how I design what replaces them." },
   { key: "notion", title: "Notion", subtitle: "My design docs & decision log", category: "design", tint: "#37352f", blurb: "My process, project briefs, every big decision with its trade-off, and the checklist I run before a review." },
   { key: "claude", title: "Claude", subtitle: "How I work with AI", category: "code", tint: "#d97757", blurb: "Replay real-style sessions: I bring the context and make the call, Claude drafts, checks and challenges." },
@@ -23,7 +22,7 @@ const APPS = [
 ];
 
 
-export const FEATURED = ["journey", "excel", "claude", "notion", "github", "figma", "fundsim", "designsystem"];
+export const FEATURED = ["excel", "claude", "notion", "github", "figma", "fundsim", "designsystem"];
 
 /**
  * @param {(key: string) => void} onOpenWindow

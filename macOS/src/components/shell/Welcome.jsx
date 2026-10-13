@@ -31,7 +31,7 @@ const STACKS = [
   ["Code", "VS Code, Claude, GitHub", "/icons/mac/codeMac.svg"],
   ["Finance", "Excel, Fund Simulator", "/icons/mac/financeMac.svg"],
   ["This Mac", "Accessibility, Design System…", "/icons/mac/thisMac.svg"],
-  ["Play & Me", "A platformer, photos, music…", "/icons/mac/playMac.svg"],
+  ["Play & Me", "Photos, music, maps…", "/icons/mac/playMac.svg"],
 ];
 
 export default function Welcome({ open, onClose, onOpenWindow, onOpenResume, onStartTour, isDark }) {

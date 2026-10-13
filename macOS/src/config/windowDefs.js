@@ -53,7 +53,6 @@ const GitHubWindow = lazy(() => import("../components/windows/GitHub/GitHubWindo
 const ClaudeWindow = lazy(() => import("../components/windows/Claude/ClaudeWindow"));
 const NotionWindow = lazy(() => import("../components/windows/Notion/NotionWindow"));
 const ExcelWindow = lazy(() => import("../components/windows/Excel/ExcelWindow"));
-const JourneyWindow = lazy(() => import("../components/windows/Journey/JourneyWindow"));
 const VSCodeWindow = lazy(() => import("../components/windows/VSCode/VSCodeWindow"));
 const AchievementsWindow = lazy(() => import("../components/windows/Achievements/AchievementsWindow"));
 
@@ -219,6 +218,5 @@ export const WINDOW_DEFS = {
   claude: { title: "Claude", Component: ClaudeWindow, width: 1000, height: 720, initialPos: { x: 200, y: 44 } },
   notion: { title: "Notion", Component: NotionWindow, width: 1080, height: 740, initialPos: { x: 170, y: 40 } },
   excel: { title: "Excel", Component: ExcelWindow, width: 860, height: 700, initialPos: { x: 240, y: 50 } },
-  journey: { title: "Marta’s Journey", Component: JourneyWindow, width: 980, height: 600, initialPos: { x: 200, y: 60 } },
   vscode: { title: "Visual Studio Code", Component: VSCodeWindow, width: 1120, height: 720, initialPos: { x: 150, y: 40 } },
 };

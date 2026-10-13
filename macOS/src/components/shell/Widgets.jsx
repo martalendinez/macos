@@ -256,7 +256,7 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
       </Widget>
 
       {/* Clock + weather */}
-      <Widget i={1} isDark={isDark} onClick={() => onOpenWindow?.("map")} label="Stockholm time and weather" className="cursor-coffee">
+      <Widget i={1} isDark={isDark} onClick={() => onOpenWindow?.("map")} label="Stockholm time and weather">
         <div className="h-full p-4 flex flex-col">
           <div className={`text-[11px] font-semibold ${sub}`}>Stockholm</div>
           <div className={`text-[38px] font-light leading-none tracking-[-0.02em] tabular-nums mt-1 ${text}`}>{time}</div>

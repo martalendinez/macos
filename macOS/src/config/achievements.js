@@ -19,7 +19,6 @@ export const ACHIEVEMENTS = [
   { key: "shipped_it", title: "Shipped It", icon: "🚀", tint: "#8250df", hint: "Review and merge Marta’s pull request in GitHub" },
   { key: "design_nerd", title: "Design Nerd", icon: "🎨", tint: "#ff9f0a", hint: "Open the Design System app" },
   { key: "wrapped", title: "Wrapped Up", icon: "🎁", tint: "#1ed760", hint: "Watch Marta’s Wrapped in Spotify" },
-  { key: "journey_complete", title: "Full Journey", icon: "🗺️", tint: "#e4572e", hint: "Finish Marta’s Journey in the Arcade" },
   { key: "secret_finder", title: "Secret Finder", icon: "🗝️", tint: "#8e8e93", hint: "There’s a hidden command somewhere…", secret: true },
 ];
 

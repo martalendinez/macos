@@ -30,7 +30,7 @@ export const DESKTOP_STEPS = [
     targets: ["dock-stack-mac", "dock-stack-play", "dock-fun"],
     eyebrow: "Then, have fun 🎮",
     title: "Extras & play",
-    text: "A pixel-art platformer about my life, photos and music, plus the apps that run this OS, like Accessibility.",
+    text: "Photos, music and the places I’ve lived, plus the apps that run this OS, like Accessibility.",
   },
   {
     targets: ["search"],
