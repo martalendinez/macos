@@ -1,6 +1,6 @@
 // src/components/shell/Widgets.jsx
 // macOS Sonoma-style desktop widgets. Each one is a shortcut into an app.
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MENU_BAR_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
@@ -14,6 +14,7 @@ import memLake from "../../imgs/map/canada9.jpg";
 import memSkyline from "../../imgs/map/canada6.jpg";
 import { simulate } from "../windows/FundSim/fundModel";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
+import { myPicks } from "../windows/Music/data/myPicks";
 
 const SMALL = 150;
 const GAP = 12;
@@ -68,54 +69,77 @@ function Widget({ children, onClick, wide = false, i = 0, isDark, className = ""
   );
 }
 
-/* ---------- cute details: fika timer + mood ring ---------- */
-const MOODS = [
-  ["☕", "2nd coffee of the day"],
-  ["🎧", "The Weeknd on repeat"],
-  ["📐", "Nudging a button 1px left"],
-  ["🧠", "Thinking about kerning"],
-  ["🥐", "Planning the next fika"],
-  ["🐛", "Negotiating with a bug"],
-  ["🇪🇸", "Missing Spanish sunshine"],
-  ["✨", "Renaming layers in Figma"],
-  ["🌨️", "Pretending it isn’t cold"],
-];
+/* ---------- now playing ---------- */
 
-function StatusWidget({ isDark, text, sub }) {
-  const [i, setI] = useState(() => Math.floor(Math.random() * MOODS.length));
-  useEffect(() => {
-    const id = setInterval(() => setI((x) => (x + 1) % MOODS.length), 5000);
-    return () => clearInterval(id);
-  }, []);
-  const [emoji, label] = MOODS[i];
+const NOW_PLAYING = myPicks.flatMap((pl) => pl.tracks.map((t) => ({ ...t, playlist: pl.title })));
+
+function NowPlayingWidget({ text, sub }) {
+  const [i, setI] = useState(() => Math.floor(Math.random() * NOW_PLAYING.length));
+  const [playing, setPlaying] = useState(false);
+  const audio = useRef(null);
+  const t = NOW_PLAYING[i];
+  useEffect(() => () => audio.current?.pause(), []);
+  const toggle = (e) => {
+    e.stopPropagation();
+    if (!t.previewUrl) return;
+    if (!audio.current) {
+      audio.current = new Audio();
+      audio.current.volume = 0.5;
+      audio.current.onended = () => setPlaying(false);
+    }
+    if (playing) {
+      audio.current.pause();
+      setPlaying(false);
+    } else {
+      audio.current.src = t.previewUrl;
+      audio.current.play().then(() => setPlaying(true), () => setPlaying(false));
+    }
+  };
+  const next = (e) => {
+    e.stopPropagation();
+    audio.current?.pause();
+    setPlaying(false);
+    setI((x) => (x + 1) % NOW_PLAYING.length);
+  };
   return (
-    <div className="relative h-full px-4 py-3.5 flex items-center gap-3.5">
-      <div className="relative shrink-0">
-        <img src={avatar} alt="" className="w-[58px] h-[58px] rounded-full object-cover" />
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={i}
-            className={`absolute -right-1 -bottom-1 w-7 h-7 rounded-full flex items-center justify-center text-[15px] shadow-md ${isDark ? "bg-[#2c2c2e]" : "bg-white"}`}
-            initial={{ scale: 0, rotate: -30 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0 }}
-            transition={{ type: "spring", stiffness: 500, damping: 22 }}
-          >
-            {emoji}
-          </motion.span>
-        </AnimatePresence>
+    <div className="relative h-full px-4 py-3.5 flex items-center gap-4">
+      <div className="relative shrink-0 w-[96px] h-[96px]">
+        <motion.div
+          className="absolute inset-0 rounded-full bg-[#111] shadow-lg"
+          style={{ backgroundImage: "repeating-radial-gradient(circle, #1a1a1a 0 2px, #0c0c0c 2px 4px)" }}
+          animate={{ rotate: playing ? 360 : 0 }}
+          transition={playing ? { repeat: Infinity, duration: 4, ease: "linear" } : { duration: 0.6 }}
+        >
+          <img src={t.cover} alt="" className="absolute inset-[26%] w-[48%] h-[48%] rounded-full object-cover" />
+        </motion.div>
       </div>
       <div className="min-w-0 flex-1">
-        <div className={`flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.08em] ${sub}`}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34c759]" />
-          Status
+        <div className="flex items-center gap-1.5">
+          <img src="/icons/apps/spotify.svg" alt="" className="w-4 h-4" />
+          <span className={`text-[10.5px] font-semibold uppercase tracking-[0.08em] ${sub}`}>{playing ? "Now playing" : "On repeat"}</span>
+          {playing && (
+            <span className="ml-auto flex items-end gap-[2px] h-3">
+              {[0, 1, 2].map((k) => (
+                <motion.span key={k} className="w-[3px] rounded-full bg-[#1ed760]" animate={{ height: ["30%", "100%", "50%", "90%", "30%"] }} transition={{ repeat: Infinity, duration: 0.9, delay: k * 0.15 }} />
+              ))}
+            </span>
+          )}
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div key={i} className={`mt-1 text-[14px] font-semibold leading-snug ${text}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3 }}>
-            {label}
-          </motion.div>
-        </AnimatePresence>
-        <div className={`mt-1 text-[10.5px] ${sub}`}>Available for a chat · Stockholm</div>
+        <div className={`mt-1.5 text-[14px] font-semibold leading-tight truncate ${text}`}>{t.title}</div>
+        <div className={`text-[12px] truncate ${sub}`}>{t.artist}</div>
+        <div className="mt-2.5 flex items-center gap-2">
+          <button type="button" onClick={toggle} aria-label={playing ? "Pause preview" : "Play a 30-second preview"} className="w-8 h-8 rounded-full bg-[#1ed760] text-black flex items-center justify-center hover:scale-105 transition">
+            {playing ? (
+              <svg viewBox="0 0 12 12" className="w-3 h-3" fill="currentColor"><rect x="2.5" y="2" width="2.5" height="8" rx="0.6" /><rect x="7" y="2" width="2.5" height="8" rx="0.6" /></svg>
+            ) : (
+              <svg viewBox="0 0 12 12" className="w-3 h-3 ml-0.5" fill="currentColor"><path d="M3 1.8v8.4L10 6z" /></svg>
+            )}
+          </button>
+          <button type="button" onClick={next} aria-label="Next song" className={`w-7 h-7 rounded-full flex items-center justify-center ${sub} hover:opacity-70`}>
+            <svg viewBox="0 0 12 12" className="w-3 h-3" fill="currentColor"><path d="M2 2v8l5.5-4zM8 2h1.8v8H8z" /></svg>
+          </button>
+          <span className={`ml-auto text-[10.5px] truncate ${sub}`}>{t.playlist}</span>
+        </div>
       </div>
     </div>
   );
@@ -232,7 +256,7 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
       </Widget>
 
       {/* Clock + weather */}
-      <Widget i={1} isDark={isDark} onClick={() => onOpenWindow?.("map")} label="Stockholm time and weather">
+      <Widget i={1} isDark={isDark} onClick={() => onOpenWindow?.("map")} label="Stockholm time and weather" className="cursor-coffee">
         <div className="h-full p-4 flex flex-col">
           <div className={`text-[11px] font-semibold ${sub}`}>Stockholm</div>
           <div className={`text-[38px] font-light leading-none tracking-[-0.02em] tabular-nums mt-1 ${text}`}>{time}</div>
@@ -360,9 +384,9 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
         </div>
       </Widget>
 
-      {/* Status */}
-      <Widget wide i={8} isDark={isDark} label="What Marta is up to right now">
-        <StatusWidget isDark={isDark} text={text} sub={sub} />
+      {/* Now playing */}
+      <Widget wide i={8} isDark={isDark} onClick={() => onOpenWindow?.("music")} label="Marta's music on Spotify">
+        <NowPlayingWidget text={text} sub={sub} />
       </Widget>
     </div>
   );

@@ -3,6 +3,7 @@
 // virtual file system, history, Tab completion, Ctrl shortcuts and the matrix easter egg.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import GameHost from "./GameHost";
+import { keyClick } from "./keySound";
 import { HOME, buildFS, prettyPath } from "./fs";
 import { complete, runCommand } from "./terminalCommands";
 import { consumePendingGame, onTerminalGameRequest } from "./terminalBus";
@@ -77,7 +78,7 @@ function welcome() {
   const stamp = d.toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).replace(",", "");
   return [
     `Last login: ${stamp} on ttys000`,
-    { segs: [{ t: "Welcome to MartaOS 2.0 ✨ ", b: true }, { t: "type ", c: "dim" }, { t: "help", c: "green" }, { t: " for commands, ", c: "dim" }, { t: "neofetch", c: "green" }, { t: " to show off, or ", c: "dim" }, { t: "matrix", c: "green" }, { t: " if you dare.", c: "dim" }] },
+    { segs: [{ t: "Welcome to MartaOS 2.0 ✨ ", b: true }, { t: "type ", c: "dim" }, { t: "help", c: "green" }, { t: " for commands, ", c: "dim" }, { t: "neofetch", c: "green" }, { t: " to show off, ", c: "dim" }, { t: "sound on", c: "green" }, { t: " for clicky keys, or ", c: "dim" }, { t: "matrix", c: "green" }, { t: " if you dare.", c: "dim" }] },
     "",
   ];
 }
@@ -177,6 +178,7 @@ function TerminalSession({ theme = "light", onOpenWindow, trackTerminalCommand, 
   }
 
   function onKeyDown(e) {
+    if (e.key.length === 1 || e.key === "Enter" || e.key === "Backspace") keyClick(e.key);
     if (ended) {
       e.preventDefault();
       setEnded(false);

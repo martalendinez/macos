@@ -139,3 +139,23 @@ html[data-a11y-filter="protanopia"] #root { filter: url(#a11y-protanopia); }
 html[data-a11y-filter="deuteranopia"] #root { filter: url(#a11y-deuteranopia); }
 html[data-a11y-filter="tritanopia"] #root { filter: url(#a11y-tritanopia); }
 html[data-a11y-contrast="more"][data-a11y-filter="grayscale"] #root { filter: grayscale(1) contrast(1.18); }
+
+
+/* ---------- playful cursors per app (only for mouse users) ---------- */
+@media (pointer: fine) {
+  [data-cursor="figma"] { cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20transform%3D%22rotate%28-45%2016%2016%29%22%3E%3Crect%20x%3D%2213.5%22%20y%3D%222%22%20width%3D%225%22%20height%3D%2216%22%20rx%3D%222.5%22%20fill%3D%22%23a259ff%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.5%22/%3E%3Crect%20x%3D%2213%22%20y%3D%2217%22%20width%3D%226%22%20height%3D%224%22%20fill%3D%22%23c9ced6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M13%2021h6l-1%206c-.3%202-3.7%202-4%200z%22%20fill%3D%22%231d1d1f%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.2%22/%3E%3C/g%3E%3C/svg%3E") 4 28, auto; }
+  [data-cursor="vscode"], [data-cursor="github"] { cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20x%3D%222%22%20y%3D%226%22%20width%3D%2228%22%20height%3D%2220%22%20rx%3D%226%22%20fill%3D%22%230a6fd0%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M12%2011l-5%205%205%205M20%2011l5%205-5%205M18%2010l-4%2012%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E") 16 16, auto; }
+  [data-cursor="notion"] { cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20transform%3D%22rotate%28-45%2016%2016%29%22%3E%3Crect%20x%3D%2213%22%20y%3D%223%22%20width%3D%226%22%20height%3D%2218%22%20fill%3D%22%23ffcc00%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.5%22/%3E%3Crect%20x%3D%2213%22%20y%3D%223%22%20width%3D%226%22%20height%3D%224%22%20fill%3D%22%23ff8fa3%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.2%22/%3E%3Cpath%20d%3D%22M13%2021h6l-3%207z%22%20fill%3D%22%23f3e1c7%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.2%22/%3E%3Cpath%20d%3D%22M15%2025.5h2l-1%202.5z%22%20fill%3D%22%231d1d1f%22/%3E%3C/g%3E%3C/svg%3E") 4 28, auto; }
+  [data-cursor="claude"] { cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16%203c1%206%203%209%2013%2013-10%204-12%207-13%2013-1-6-3-9-13-13%2010-4%2012-7%2013-13z%22%20fill%3D%22%23d97757%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.8%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E") 16 16, auto; }
+  .cursor-coffee { cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M6%2012h16v8a6%206%200%200%201-6%206h-4a6%206%200%200%201-6-6z%22%20fill%3D%22%23fff%22%20stroke%3D%22%236b3e26%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M22%2014h2a3%203%200%200%201%200%206h-2%22%20fill%3D%22none%22%20stroke%3D%22%236b3e26%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M11%204c-1%202%201%203%200%205M16%204c-1%202%201%203%200%205%22%20fill%3D%22none%22%20stroke%3D%22%239a9a9a%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E") 14 16, pointer; }
+  [data-cursor] input, [data-cursor] textarea, [data-cursor] [contenteditable] { cursor: text; }
+  [data-cursor] button, [data-cursor] a, [data-cursor] [role="button"] { cursor: pointer; }
+}
+
+/* ---------- seasonal snow (December) ---------- */
+@keyframes snowfall {
+  from { transform: translate3d(0, -10px, 0); }
+  to { transform: translate3d(var(--drift, 0px), 105vh, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .seasonal-snow { display: none; } }
+html[data-a11y-motion="reduce"] .seasonal-snow { display: none; }

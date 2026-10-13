@@ -5,6 +5,7 @@ import { GAME_LIST, HOME, getNode, prettyPath, resolvePath } from "./fs";
 import { getApps } from "../../../config/apps";
 import { PROFILE } from "../About/aboutData";
 import { DAD_JOKES, pick } from "../../../config/humor";
+import { keyClick, setSound, soundOn } from "./keySound";
 
 export const PROFILES = ["pro", "basic", "homebrew", "ocean"];
 
@@ -56,6 +57,7 @@ export const COMMANDS = {
   date: "Show date & time",
   cowsay: "A cow says your message",
   matrix: "Enter the Matrix",
+  sound: "Mechanical keyboard sounds (sound on | off)",
   joke: "A dad joke, nerd edition",
   fika: "Take a break, Swedish style",
   siesta: "Take a break, Spanish style",
@@ -258,6 +260,15 @@ export function runCommand(raw, ctx) {
       }
       return print(...out, "");
     }
+
+    case "sound":
+      if (args[0] === "on" || (!args[0] && !soundOn())) {
+        setSound(true);
+        keyClick("Enter");
+        return print(color("🔊 Clicky keyboard on. ASMR for nerds.", "green"), color("(`sound off` to stop)", "dim"));
+      }
+      setSound(false);
+      return print(color("🔇 Keyboard sounds off. Silence, like a library.", "dim"));
 
     case "theme":
       if (PROFILES.includes(args[0])) {

@@ -159,7 +159,12 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
             </motion.button>
 
             <motion.h1 data-tour="rm-name" {...rise(1)} className={`mt-4 text-[36px] @lg:text-[44px] @2xl:text-[52px] font-bold tracking-[-0.035em] leading-[1.02] ${t.textMain}`}>
-              {PROFILE.name}
+              <span className="group relative inline-block cursor-help" tabIndex={0}>
+                {PROFILE.name}
+                <span className="pointer-events-none absolute left-0 bottom-full mb-1 z-10 whitespace-nowrap rounded-full px-3 py-1 text-[13px] font-medium tracking-normal opacity-0 -translate-y-1 transition group-hover:opacity-100 group-hover:translate-y-0 group-focus:opacity-100 bg-[#1d1d1f] text-white shadow-lg">
+                  🗣️ MAR-ta len-DEE-neth · it’s Spanish 🇪🇸
+                </span>
+              </span>
             </motion.h1>
             <motion.div {...rise(2)} className={`mt-2 text-[17px] ${t.textBody}`}>
               {PROFILE.role} at{" "}

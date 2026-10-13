@@ -313,7 +313,7 @@ export default function MacWindow({
 
         {/* Scrollable Content */}
         {/* @container: apps adapt to the window's width (narrow windows + phones get compact layouts) */}
-        <div className="a11y-win-body @container flex-1 overflow-y-auto min-h-0">{children}</div>
+        <div data-cursor={id} className="a11y-win-body @container flex-1 overflow-y-auto min-h-0">{children}</div>
         </div>
       </motion.div>
 

@@ -1,5 +1,6 @@
 // src/components/shell/TopBar.jsx
 // macOS menu bar:  Apple menu · bold app name · app menus … status items · clock
+import { useSeason } from "./Seasonal";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import MenuPanel from "./menu/MenuPanel";
@@ -47,6 +48,7 @@ export default function TopBar({
   goItems = [], // [{ label, onSelect }]
   actions = {},
 }) {
+  const season = useSeason();
   const isDark = theme === "dark";
   const [openMenu, setOpenMenu] = useState(null);
   const [anchorX, setAnchorX] = useState(0);
@@ -252,6 +254,12 @@ export default function TopBar({
           <button onClick={onOpenSettings} className={`${statusBtn} hidden sm:flex`} aria-label="Open settings" title="System Settings">
             <img src={gearIcon} alt="" className="h-[14px] w-[14px] opacity-95" />
           </button>
+
+          {season && (
+            <span className="px-1.5 text-[14px] cursor-default" title={season.label} aria-label={season.label}>
+              {season.emoji}
+            </span>
+          )}
 
           {/* a little hello, based on the visitor's own time */}
           <span className="hidden xl:inline px-2 text-[13px] font-medium opacity-90" title="Hello from Marta">

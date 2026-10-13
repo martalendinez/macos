@@ -25,6 +25,7 @@ export default function DockItem({
 }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(false);
+  const [here, setHere] = useState(false);
   const bounce = useAnimationControls();
 
   // classic macOS fisheye: icon size follows distance to cursor
@@ -37,6 +38,12 @@ export default function DockItem({
   const size = useSpring(target, { mass: 0.1, stiffness: 170, damping: 14 });
 
   function handleClick(e) {
+    if (bounceOnClick && running) {
+      // already open: a little "I'm right here!" wiggle
+      bounce.start({ rotate: [0, -12, 10, -8, 6, -3, 0], transition: { duration: 0.6 } });
+      setHere(true);
+      setTimeout(() => setHere(false), 1300);
+    }
     if (bounceOnClick && !running) {
       bounce.start({
         y: [0, -26, 0, -14, 0, -5, 0],
@@ -56,7 +63,7 @@ export default function DockItem({
       onMouseLeave={() => setHover(false)}
     >
       <AnimatePresence>
-        {hover && !active && (
+        {(hover || here) && !active && (
           <motion.div
             className={[
               "absolute bottom-full mb-3 left-1/2 px-[10px] py-[3px] rounded-[7px] text-[13px] whitespace-nowrap pointer-events-none",
@@ -74,7 +81,7 @@ export default function DockItem({
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
             transition={{ duration: 0.14 }}
           >
-            {label}
+            {here ? "I’m already here! 👋" : label}
           </motion.div>
         )}
       </AnimatePresence>

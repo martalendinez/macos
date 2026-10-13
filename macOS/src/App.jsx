@@ -14,6 +14,7 @@ import useAccentVar from "./hooks/useAccentVar";
 import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
+import { Snow, useSeason } from "./components/shell/Seasonal";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
 import useClock from "./hooks/useClock";
@@ -91,6 +92,7 @@ export default function App() {
 
   const [fontScale, setFontScale] = useState(1);
   const a11y = useA11y();
+  const season = useSeason();
 
   // Boot screen: keep it up briefly so the progress bar can finish, then reveal the desktop
   const [loaded, setLoaded] = useState(false);
@@ -540,6 +542,7 @@ export default function App() {
       />
 
       <Confetti />
+      {season?.snow && <Snow />}
       <Welcome
         open={welcomeOpen}
         onClose={() => setWelcomeOpen(false)}
