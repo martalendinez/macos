@@ -8,6 +8,7 @@ import { PosterThumb } from "../Projects/ui/ProjectCover";
 import { CONTACT, PROFILE } from "../About/aboutData";
 import { GLANCE, HIGHLIGHTS, PITCH, STATUS, STRENGTHS } from "./data";
 import Tour from "../../shell/Tour";
+import EasterEgg from "../../ui/EasterEgg";
 import heroImg from "../../../imgs/avatar/model1.jpeg";
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -159,12 +160,9 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
             </motion.button>
 
             <motion.h1 data-tour="rm-name" {...rise(1)} className={`mt-4 text-[36px] @lg:text-[44px] @2xl:text-[52px] font-bold tracking-[-0.035em] leading-[1.02] ${t.textMain}`}>
-              <span className="group relative inline-block cursor-help" tabIndex={0}>
+              <EasterEgg say={<>Say it like a local: <b>MAR-ta len-DEE-neth</b> 🇪🇸<br /><span className="opacity-80 text-[12px]">The “z” is a soft “th”, like in “think”.</span></>}>
                 {PROFILE.name}
-                <span className="pointer-events-none absolute left-full top-1/2 ml-3 -translate-y-1/2 z-10 whitespace-nowrap rounded-full px-3 py-1 text-[13px] font-medium tracking-normal opacity-0 -translate-x-1 transition group-hover:opacity-100 group-hover:translate-x-0 group-focus:opacity-100 bg-[#1d1d1f] text-white shadow-lg">
-                  🗣️ MAR-ta len-DEE-neth · it’s Spanish 🇪🇸
-                </span>
-              </span>
+              </EasterEgg>
             </motion.h1>
             <motion.div {...rise(2)} className={`mt-2 text-[17px] ${t.textBody}`}>
               {PROFILE.role} at{" "}
