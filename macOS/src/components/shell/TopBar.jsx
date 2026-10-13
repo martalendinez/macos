@@ -78,7 +78,7 @@ export default function TopBar({
     {
       key: "apple",
       title: (
-        <EasterEgg say="Not Apple. Just a very dedicated fan 🍎" side="bottom" focusable={false} bubbleClass="max-w-[260px] text-[12.5px] font-normal">
+        <EasterEgg say="Not Apple. Just a very dedicated fan 🍎" side="bottom" focusable={false} bubbleClass="max-w-[300px] text-[12.5px] font-normal">
           <AppleLogo className="w-[14px] h-[14px] -mt-px" />
         </EasterEgg>
       ),
