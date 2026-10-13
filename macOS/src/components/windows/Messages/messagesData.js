@@ -2,6 +2,7 @@
 // Pre-written answers from "Marta". All facts come from the About / Recruiter / Map content.
 // ✏️ Edit freely — each reply is a list of bubbles plus optional action buttons.
 import { placeDetails } from "../Map/data/placesData";
+import { DAD_JOKES, pick } from "../../../config/humor";
 
 export const EMAIL = "casandra.lendinez@outlook.com";
 export const LINKEDIN = "https://www.linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200";
@@ -107,9 +108,17 @@ export const INTENTS = [
   {
     id: "fun",
     question: "Tell me something fun 🎲",
-    keywords: ["fun", "fact", "random", "secret", "surprise", "joke"],
+    keywords: ["fun", "fact", "random", "secret", "surprise"],
     reply: () => ({
       bubbles: [FUN_FACTS[Math.floor(Math.random() * FUN_FACTS.length)], "Ask again for another one 😉"],
+    }),
+  },
+  {
+    id: "joke",
+    question: "Tell me a joke 😂",
+    keywords: ["joke", "funny", "laugh", "humor", "humour", "chiste"],
+    reply: () => ({
+      bubbles: [pick(DAD_JOKES), "I’ll be here all week 🎤 Ask again for another one."],
     }),
   },
   {

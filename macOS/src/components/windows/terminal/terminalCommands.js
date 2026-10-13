@@ -4,6 +4,7 @@
 import { GAME_LIST, HOME, getNode, prettyPath, resolvePath } from "./fs";
 import { getApps } from "../../../config/apps";
 import { PROFILE } from "../About/aboutData";
+import { DAD_JOKES, pick } from "../../../config/humor";
 
 export const PROFILES = ["pro", "basic", "homebrew", "ocean"];
 
@@ -55,6 +56,9 @@ export const COMMANDS = {
   date: "Show date & time",
   cowsay: "A cow says your message",
   matrix: "Enter the Matrix",
+  joke: "A dad joke, nerd edition",
+  fika: "Take a break, Swedish style",
+  siesta: "Take a break, Spanish style",
   hacker: "Enter hacker mode (opens secret projects)",
   clear: "Clear the screen (or Ctrl+L)",
   exit: "Close the session",
@@ -290,7 +294,32 @@ export function runCommand(raw, ctx) {
     }
 
     case "sudo":
+      if (/^hire\s+marta/i.test(args.join(" ")))
+        return print(color("[sudo] password for recruiter: ••••••••", "dim"), color("Permission granted ✅ Excellent decision.", "green"), color("→ type `open recruiter` to start the paperwork 😌", "dim"), "");
       return print(color("Password:", "dim"), color("marta is not in the sudoers file. This incident will be reported. 🚨", "red"));
+
+    case "hire":
+      return print(color("hire: permission denied. Did you mean `sudo hire marta`? 👀", "yellow"));
+
+    case "joke":
+      return print(color(pick(DAD_JOKES), undefined, true), color("ba dum tss 🥁", "dim"), "");
+
+    case "fika":
+      return print(color("☕  Brewing coffee…", "yellow"), color("🥐  Warming a kanelbulle…", "yellow"), color("Fika started. Productivity paused, morale +100.", "green"), "");
+
+    case "siesta":
+      return print(color("😴  Zzz… zzz…", "dim"), color("Siesta complete. Back with 20% more ideas. ¡Vamos! 💃", "green"), "");
+
+    case "git":
+      if (args[0] === "blame") return print(color("It was the stakeholder.", "yellow"), color("(It’s always the stakeholder.)", "dim"), "");
+      if (args[0] === "push") return print(color("Everything up-to-date. Unlike my sleep schedule.", "dim"));
+      if (args[0] === "status") return print(color("On branch main. Your branch is ahead of 'origin/main' by 1 coffee.", "dim"));
+      return print(color(`git: '${args[0] ?? ""}' is not a git command. Try git blame 😏`, "yellow"));
+
+    case "npm":
+      if (args[0] === "install" && args[1] === "confidence")
+        return print(color("added 1 package: confidence@∞", "green"), color("found 0 vulnerabilities (impostor syndrome patched 🩹)", "dim"), "");
+      return print(color("npm: try `npm install confidence`", "dim"));
 
     case "rm":
       if (raw.includes("-rf")) return print(color("rm: nice try 😏 this portfolio took too long to build.", "yellow"));

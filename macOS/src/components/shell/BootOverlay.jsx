@@ -1,12 +1,20 @@
 // src/components/shell/BootOverlay.jsx
 // Shown on "Restart…": black screen, logo and a filling progress bar.
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { BOOT_LINES } from "../../config/humor";
 import { AnimatePresence, motion } from "framer-motion";
 import AppleLogo from "../../ui/AppleLogo";
 
 const BOOT_MS = 1900;
 
 export default function BootOverlay({ open, onDone }) {
+  const [line, setLine] = useState(0);
+  useEffect(() => {
+    if (!open) return undefined;
+    setLine(Math.floor(Math.random() * BOOT_LINES.length));
+    const id = setInterval(() => setLine((l) => (l + 1) % BOOT_LINES.length), 900);
+    return () => clearInterval(id);
+  }, [open]);
   useEffect(() => {
     if (!open) return;
     const t = setTimeout(() => onDone?.(), BOOT_MS + 250);
@@ -41,6 +49,11 @@ export default function BootOverlay({ open, onDone }) {
               transition={{ delay: 0.45, duration: BOOT_MS / 1000 - 0.45, ease: [0.45, 0, 0.2, 1] }}
             />
           </div>
+          <AnimatePresence mode="wait">
+            <motion.div key={line} className="-mt-10 text-[12px] text-white/55 tracking-wide" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.2 }}>
+              {BOOT_LINES[line]}
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

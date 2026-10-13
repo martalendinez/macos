@@ -127,7 +127,11 @@ export default function Spotlight({ open, onClose, items = [], isDark, onPick })
               {!q.trim() && <div className="px-3 pt-1 pb-1 text-[11px] font-semibold opacity-45">Suggestions</div>}
 
               {results.length === 0 ? (
-                <div className="px-3 py-6 text-center text-[13px] opacity-55">No results for “{q}”</div>
+                <div className="px-3 py-6 text-center text-[13px] opacity-55">
+                  No results for “{q}”.
+                  <br />
+                  {/comic ?sans/i.test(q) ? "We don’t do that here 🙅‍♀️" : "Even Google would struggle with that one 🤷‍♀️ Try “projects” or “hire”."}
+                </div>
               ) : (
                 results.map((item, idx) => (
                   <button
