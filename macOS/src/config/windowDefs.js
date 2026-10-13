@@ -55,7 +55,6 @@ const NotionWindow = lazy(() => import("../components/windows/Notion/NotionWindo
 const ExcelWindow = lazy(() => import("../components/windows/Excel/ExcelWindow"));
 const JourneyWindow = lazy(() => import("../components/windows/Journey/JourneyWindow"));
 const VSCodeWindow = lazy(() => import("../components/windows/VSCode/VSCodeWindow"));
-const TrashWindow = lazy(() => import("../components/windows/Trash/TrashWindow"));
 const AchievementsWindow = lazy(() => import("../components/windows/Achievements/AchievementsWindow"));
 
 // ⭐ NEW AI ASSISTANT
@@ -214,7 +213,6 @@ export const WINDOW_DEFS = {
   messages: { title: "Messages", Component: MessagesWindow, width: 820, height: 600, initialPos: { x: 260, y: 90 } },
   figma: { title: "Figma", Component: FigmaWindow, width: 1180, height: 740, initialPos: { x: 140, y: 40 } },
   designsystem: { title: "Design System", Component: DesignSystemWindow, width: 1040, height: 720, initialPos: { x: 200, y: 44 } },
-  trash: { title: "Trash", Component: TrashWindow, width: 720, height: 480, initialPos: { x: 360, y: 120 } },
   achievements: { title: "Achievements", Component: AchievementsWindow, width: 900, height: 700, initialPos: { x: 240, y: 50 } },
   fundsim: { title: "Fund Simulator", Component: FundSimWindow, width: 1060, height: 760, initialPos: { x: 190, y: 36 } },
   github: { title: "GitHub", Component: GitHubWindow, width: 1080, height: 760, initialPos: { x: 170, y: 36 } },

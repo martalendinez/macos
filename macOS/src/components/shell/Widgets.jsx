@@ -81,84 +81,42 @@ const MOODS = [
   ["🌨️", "Pretending it isn’t cold"],
 ];
 
-function useStockholmNow() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 20_000);
-    return () => clearInterval(id);
-  }, []);
-  return new Date(now.toLocaleString("en-US", { timeZone: TZ }));
-}
-
-function FikaWidget({ isDark, text, sub }) {
-  const sth = useStockholmNow();
-  const mins = sth.getHours() * 60 + sth.getMinutes();
-  const FIKA = 15 * 60;
-  const now = mins >= FIKA && mins < FIKA + 30;
-  const left = mins < FIKA ? FIKA - mins : 24 * 60 - mins + FIKA;
-  const h = Math.floor(left / 60);
-  const m = left % 60;
-  const pct = now ? 1 : 1 - left / (24 * 60);
-  return (
-    <div className="relative h-full p-4 flex flex-col">
-      <div className="flex items-center gap-1.5">
-        <span className="text-[14px]">☕</span>
-        <span className={`text-[11px] font-semibold ${sub}`}>Fika timer</span>
-      </div>
-      <div className="flex-1 flex items-center justify-center">
-        <div className="relative">
-          <span className="text-[44px] leading-none">{now ? "🥐" : "☕"}</span>
-          {[0, 1, 2].map((i) => (
-            <motion.span
-              key={i}
-              className={`absolute -top-3 w-1 h-3 rounded-full ${isDark ? "bg-white/50" : "bg-black/25"}`}
-              style={{ left: 14 + i * 7 }}
-              animate={{ y: [-2, -12], opacity: [0, 0.8, 0] }}
-              transition={{ duration: now ? 1.2 : 2.4, repeat: Infinity, delay: i * 0.4 }}
-            />
-          ))}
-        </div>
-      </div>
-      {now ? (
-        <div className={`text-[13px] font-bold ${text}`}>Fika is NOW.<div className={`text-[10.5px] font-normal ${sub}`}>Drop everything 🏃‍♀️</div></div>
-      ) : (
-        <>
-          <div className={`text-[13px] font-semibold tabular-nums ${text}`}>
-            in {h > 0 ? `${h}h ` : ""}{m}m
-          </div>
-          <div className={`text-[10.5px] ${sub}`}>{mins >= FIKA + 30 ? "Today’s fika: done ✓" : h < 1 ? "Almost there… 🥐" : "Until 15:00 in Stockholm"}</div>
-          <div className={`mt-1 h-1 rounded-full overflow-hidden ${isDark ? "bg-white/15" : "bg-black/10"}`}>
-            <div className="h-full rounded-full bg-[#c8925a]" style={{ width: `${Math.round(pct * 100)}%` }} />
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function MoodWidget({ isDark, text, sub }) {
+function StatusWidget({ isDark, text, sub }) {
   const [i, setI] = useState(() => Math.floor(Math.random() * MOODS.length));
   useEffect(() => {
-    const id = setInterval(() => setI((x) => (x + 1) % MOODS.length), 4500);
+    const id = setInterval(() => setI((x) => (x + 1) % MOODS.length), 5000);
     return () => clearInterval(id);
   }, []);
   const [emoji, label] = MOODS[i];
   return (
-    <div className="relative h-full p-4 flex flex-col">
-      <div className="absolute -right-6 -bottom-6 w-28 h-28 rounded-full blur-2xl opacity-60" style={{ background: "conic-gradient(from 0deg, #ff6b9a, #ffd166, #5ee6b0, #6aa7ff, #b78bff, #ff6b9a)" }} />
-      <div className="relative flex items-center gap-1.5">
-        <span className="relative flex w-2 h-2">
-          <span className="absolute inset-0 rounded-full bg-[#34c759] animate-ping opacity-60" />
-          <span className="relative w-2 h-2 rounded-full bg-[#34c759]" />
-        </span>
-        <span className={`text-[11px] font-semibold ${sub}`}>Currently</span>
+    <div className="relative h-full px-4 py-3.5 flex items-center gap-3.5">
+      <div className="relative shrink-0">
+        <img src={avatar} alt="" className="w-[58px] h-[58px] rounded-full object-cover" />
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={i}
+            className={`absolute -right-1 -bottom-1 w-7 h-7 rounded-full flex items-center justify-center text-[15px] shadow-md ${isDark ? "bg-[#2c2c2e]" : "bg-white"}`}
+            initial={{ scale: 0, rotate: -30 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 22 }}
+          >
+            {emoji}
+          </motion.span>
+        </AnimatePresence>
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div key={i} className="relative flex-1 flex flex-col justify-end" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35 }}>
-          <div className="text-[34px] leading-none">{emoji}</div>
-          <div className={`mt-2 text-[13px] font-semibold leading-snug ${text}`}>{label}</div>
-        </motion.div>
-      </AnimatePresence>
+      <div className="min-w-0 flex-1">
+        <div className={`flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.08em] ${sub}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34c759]" />
+          Status
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div key={i} className={`mt-1 text-[14px] font-semibold leading-snug ${text}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3 }}>
+            {label}
+          </motion.div>
+        </AnimatePresence>
+        <div className={`mt-1 text-[10.5px] ${sub}`}>Available for a chat · Stockholm</div>
+      </div>
     </div>
   );
 }
@@ -385,16 +343,6 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
         </div>
       </Widget>
 
-      {/* Fika timer */}
-      <Widget i={7} isDark={isDark} label="Fika timer: minutes until 15:00 in Stockholm">
-        <FikaWidget isDark={isDark} text={text} sub={sub} />
-      </Widget>
-
-      {/* Mood ring */}
-      <Widget i={8} isDark={isDark} label="What Marta is up to">
-        <MoodWidget isDark={isDark} text={text} sub={sub} />
-      </Widget>
-
       {/* Achievements */}
       <Widget i={6} isDark={isDark} onClick={() => onOpenWindow?.("achievements")} label="Achievements progress">
         <div className="h-full p-3.5 flex flex-col items-center justify-center text-center">
@@ -410,6 +358,11 @@ export default function Widgets({ loaded, theme = "light", onOpenWindow, unlocke
           </div>
           <div className={`text-[10px] leading-tight line-clamp-2 ${sub}`}>{next ? `Next: ${next.hint}` : "All unlocked 👑"}</div>
         </div>
+      </Widget>
+
+      {/* Status */}
+      <Widget wide i={8} isDark={isDark} label="What Marta is up to right now">
+        <StatusWidget isDark={isDark} text={text} sub={sub} />
       </Widget>
     </div>
   );

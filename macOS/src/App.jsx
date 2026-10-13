@@ -13,7 +13,6 @@ import { WINDOW_DEFS } from "./config/windowDefs";
 import useAccentVar from "./hooks/useAccentVar";
 import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
-import DesktopPet from "./components/shell/DesktopPet";
 import Confetti from "./components/shell/Confetti";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
@@ -369,8 +368,7 @@ export default function App() {
       },
     }));
     const inDock = apps.filter((a) => a.inDock);
-    const trash = apps.find((a) => a.id === "trash");
-    return [...inDock.filter((a) => a.id !== "fun"), ...stacks, ...inDock.filter((a) => a.id === "fun"), ...(trash ? [trash] : [])];
+    return [...inDock.filter((a) => a.id !== "fun"), ...stacks, ...inDock.filter((a) => a.id === "fun")];
   }, [apps, iconTheme, openWindow]);
   const dockMinimized = useMemo(
     () =>
@@ -541,7 +539,6 @@ export default function App() {
         onPick={launch}
       />
 
-      <DesktopPet loaded={loaded} />
       <Confetti />
       <Welcome
         open={welcomeOpen}
