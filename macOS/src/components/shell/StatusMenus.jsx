@@ -1,5 +1,5 @@
 // src/components/shell/StatusMenus.jsx
-// Menu bar extras with personality: Wi-Fi, Bluetooth and a coffee-powered battery.
+// Menu bar extras with personality: Wi-Fi, Bluetooth and the battery.
 // ✏️ The networks, devices and jokes live in the lists right below.
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -160,9 +160,12 @@ export default function StatusMenus({ isDark, itemClass, openClass, onOpenSettin
 
   return (
     <div ref={ref} className="flex items-center gap-[2px]">
-      {/* the battery is just coffee */}
-      <span className="hidden md:flex h-[22px] px-[6px] items-center text-[14px] cursor-default [text-shadow:none]" title="Battery: 100% · Fuelled by coffee" aria-label="Battery: 100%, fuelled by coffee">
-        ☕
+      <span className="hidden md:flex h-[22px] px-[7px] items-center cursor-default" title="Battery: 100%" aria-label="Battery: 100%">
+        <svg viewBox="0 0 26 13" className="w-[25px] h-[12px]" fill="none" aria-hidden="true">
+          <rect x="0.75" y="0.75" width="21.5" height="11.5" rx="3.2" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1.2" />
+          <rect x="2.6" y="2.6" width="17.8" height="7.8" rx="1.8" fill="currentColor" />
+          <path d="M23.8 4.4v4.2c.8-.3 1.3-1.1 1.3-2.1s-.5-1.8-1.3-2.1z" fill="currentColor" fillOpacity="0.55" />
+        </svg>
       </span>
       {btn("bluetooth", "Bluetooth", <BluetoothGlyph />, "hidden md:flex")}
       {btn("wifi", "Wi-Fi", <WifiGlyph on={wifi} />, "hidden md:flex")}

@@ -1,26 +1,23 @@
 // src/components/shell/AirDrop.jsx
 // macOS-style AirDrop request: "Marta's iPhone would like to share resume.pdf".
-// Fired with the "portfolio:airdrop" window event: About me sends it once per visit.
+// Fired with the "portfolio:airdrop" window event: About me sends it, and it shows once per page load.
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { menuSurface } from "./menu/MenuPanel";
 import { MENU_BAR_H } from "../../config/shell";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 
-const SEEN = "portfolio.airdrop.seen";
+// once per page load: a refresh brings it back
+let shown = false;
 
 export default function AirDrop({ isDark, onAccept }) {
   const [open, setOpen] = useState(false);
   const [declined, setDeclined] = useState(false);
 
   useEffect(() => {
-    const show = (e) => {
-      try {
-        if (!e.detail?.force && sessionStorage.getItem(SEEN)) return;
-        sessionStorage.setItem(SEEN, "1");
-      } catch {
-        /* storage blocked: just show it */
-      }
+    const show = () => {
+      if (shown) return;
+      shown = true;
       setDeclined(false);
       setOpen(true);
     };
