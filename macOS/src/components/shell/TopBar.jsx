@@ -244,9 +244,7 @@ export default function TopBar({
             isDark={isDark}
             itemClass={statusBtn}
             openClass={itemOpen}
-            onToggleTheme={onToggleTheme}
             onOpenSettings={onOpenSettings}
-            notify={actions.notify}
           />
           <button onClick={actions.openSpotlight} className={statusBtn} aria-label="Spotlight Search" title={`Spotlight (${MOD}K)`}>
             <SearchGlyph />
