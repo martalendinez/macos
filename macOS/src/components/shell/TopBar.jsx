@@ -7,6 +7,7 @@ import MenuPanel from "./menu/MenuPanel";
 import AppleLogo from "../../ui/AppleLogo";
 import { MENU_BAR_H } from "../../config/shell";
 import EasterEgg from "../ui/EasterEgg";
+import StatusMenus from "./StatusMenus";
 
 const isMacPlatform =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
@@ -239,6 +240,14 @@ export default function TopBar({
 
         {/* RIGHT: status items */}
         <div className="flex items-center gap-[2px]">
+          <StatusMenus
+            isDark={isDark}
+            itemClass={statusBtn}
+            openClass={itemOpen}
+            onToggleTheme={onToggleTheme}
+            onOpenSettings={onOpenSettings}
+            notify={actions.notify}
+          />
           <button onClick={actions.openSpotlight} className={statusBtn} aria-label="Spotlight Search" title={`Spotlight (${MOD}K)`}>
             <SearchGlyph />
           </button>

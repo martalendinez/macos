@@ -14,6 +14,7 @@ import useAccentVar from "./hooks/useAccentVar";
 import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
+import AirDrop from "./components/shell/AirDrop";
 import { Snow, useSeason } from "./components/shell/Seasonal";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
@@ -292,6 +293,7 @@ export default function App() {
       minimizeActive: () => activeWindow && minimizeWindow(activeWindow),
       zoomActive: () => activeWindow && toggleMaximize(activeWindow),
       focusOrRestore: (id) => restoreWindow(id),
+      notify: notif.notify,
       showShortcuts: () =>
         notif.notify?.({
           title: "Keyboard shortcuts",
@@ -542,6 +544,7 @@ export default function App() {
       />
 
       <Confetti />
+      <AirDrop isDark={theme === "dark"} onAccept={openResume} />
       {season?.snow && <Snow />}
       <Welcome
         open={welcomeOpen}

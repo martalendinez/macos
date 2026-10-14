@@ -1,6 +1,6 @@
 // src/components/windows/RecruiterMode/RecruiterModeWindow.jsx
 // 30-second overview for recruiters: pitch, quick facts, strengths, best work and one-click actions.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
 import { PROJECTS } from "../Projects/data/projectData";
@@ -122,6 +122,12 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
     }
   }
 
+
+  // a moment after opening, "Marta's iPhone" offers the résumé over AirDrop (once per visit)
+  useEffect(() => {
+    const id = setTimeout(() => window.dispatchEvent(new Event("portfolio:airdrop")), 3200);
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <div className={`no-darkwin h-full w-full flex flex-col ${t.windowBg}`}>
