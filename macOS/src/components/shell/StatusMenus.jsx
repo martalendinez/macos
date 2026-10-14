@@ -39,18 +39,6 @@ function BluetoothGlyph({ className = "w-[14px] h-[14px]" }) {
     </svg>
   );
 }
-function BatteryGlyph() {
-  return (
-    <span className="relative inline-flex items-center" aria-hidden="true">
-      <svg viewBox="0 0 26 13" className="w-[27px] h-[13px]" fill="none">
-        <rect x="0.75" y="0.75" width="21.5" height="11.5" rx="3.2" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1.2" />
-        <path d="M23.8 4.4v4.2c.8-.3 1.3-1.1 1.3-2.1s-.5-1.8-1.3-2.1z" fill="currentColor" fillOpacity="0.6" />
-      </svg>
-      {/* the "charge" is coffee */}
-      <span className="absolute left-0 w-[23px] text-center text-[9px] leading-none [text-shadow:none]">☕☕</span>
-    </span>
-  );
-}
 function Bars({ n }) {
   return (
     <svg viewBox="0 0 16 16" className="w-[14px] h-[14px]" fill="none" aria-hidden="true">
@@ -172,9 +160,9 @@ export default function StatusMenus({ isDark, itemClass, openClass, onOpenSettin
 
   return (
     <div ref={ref} className="flex items-center gap-[2px]">
-      {/* battery: fuelled by coffee, no panel */}
-      <span className="hidden md:flex h-[22px] px-[7px] items-center cursor-default" title="100% · Fuelled by coffee ☕" aria-label="Battery: 100%, fuelled by coffee">
-        <BatteryGlyph />
+      {/* the battery is just coffee */}
+      <span className="hidden md:flex h-[22px] px-[6px] items-center text-[14px] cursor-default [text-shadow:none]" title="Battery: 100% · Fuelled by coffee" aria-label="Battery: 100%, fuelled by coffee">
+        ☕
       </span>
       {btn("bluetooth", "Bluetooth", <BluetoothGlyph />, "hidden md:flex")}
       {btn("wifi", "Wi-Fi", <WifiGlyph on={wifi} />, "hidden md:flex")}

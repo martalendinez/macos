@@ -1,6 +1,6 @@
 // src/components/shell/AirDrop.jsx
 // macOS-style AirDrop request: "Marta's iPhone would like to share resume.pdf".
-// Fired with the "portfolio:airdrop" window event: Recruiter Mode sends it once per visit.
+// Fired with the "portfolio:airdrop" window event: About me sends it once per visit.
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { menuSurface } from "./menu/MenuPanel";

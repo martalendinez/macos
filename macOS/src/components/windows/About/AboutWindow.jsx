@@ -1,6 +1,6 @@
 // src/components/windows/About/AboutWindow.jsx
 // System Settings-style "About me": profile sidebar + Overview / Experience / Skills / Contact.
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useCaseStudyTheme from "../Projects/caseStudy/useCaseStudyTheme";
 import { placeDetails } from "../Map/data/placesData";
@@ -461,6 +461,12 @@ function NavItem({ s, active, onSelect, t }) {
 export default function AboutWindow({ uiTheme = "glass", glassContrast = "light", theme: appearance = "light", onOpenWindow }) {
   const t = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
   const [section, setSection] = useState("overview");
+
+  // a moment after opening, "Marta's iPhone" offers the résumé over AirDrop (once per visit)
+  useEffect(() => {
+    const id = setTimeout(() => window.dispatchEvent(new Event("portfolio:airdrop")), 3200);
+    return () => clearTimeout(id);
+  }, []);
 
   const views = {
     overview: <Overview t={t} onOpenWindow={onOpenWindow} go={setSection} />,
