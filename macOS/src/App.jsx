@@ -521,6 +521,7 @@ export default function App() {
           unread={notif.unreadCount}
           onNotifications={() => notif.setNotifOpen(!notif.notifOpen)}
           onSearch={() => setSpotlightOpen(true)}
+          dockStacks={dockApps.filter((a) => a.stack)}
         />
       ) : (
       <>
@@ -600,6 +601,7 @@ export default function App() {
         onOpenResume={openResume}
         onStartTour={mobile ? undefined : () => { setWelcomeOpen(false); setTimeout(() => setTourOpen(true), 350); }}
         isDark={theme === "dark"}
+        iconTheme={iconTheme}
       />
       <Tour open={tourOpen} onClose={() => setTourOpen(false)} onOpenWindow={openWindow} isDark={theme === "dark"} />
       <LockScreen open={locked} onUnlock={unlock} wallpaperUrl={activeWallpaper} timeZone={timeZone} />

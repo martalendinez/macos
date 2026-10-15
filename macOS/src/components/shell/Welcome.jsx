@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { PROJECTS } from "../windows/Projects/data/projectData";
 import { PosterThumb } from "../windows/Projects/ui/ProjectCover";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
+import { getIcons } from "../../config/apps";
 
 const KEY = "portfolio.welcome.v1";
 const CASE = { thesis: "thesisCaseStudy", employerBranding: "employerBrandingCaseStudy", kthTriviaApp: "triviaCaseStudy", restaurantCoordination: "groupDiningCaseStudy" };
@@ -27,14 +28,15 @@ function markSeen() {
 }
 
 const STACKS = [
-  ["Design", "Figma, Notion", "/icons/mac/designMac.svg"],
-  ["Code", "VS Code, Claude, GitHub", "/icons/mac/codeMac.svg"],
-  ["Finance", "Excel, Fund Simulator", "/icons/mac/financeMac.svg"],
-  ["This Mac", "Accessibility, Design System…", "/icons/mac/thisMac.svg"],
-  ["Play & Me", "Photos, music, maps…", "/icons/mac/playMac.svg"],
+  ["Design", "Figma, Notion", "stackDesign"],
+  ["Code", "VS Code, Claude, GitHub", "stackCode"],
+  ["Finance", "Excel, Fund Simulator", "stackFinance"],
+  ["This Mac", "Accessibility, Design System…", "stackMac"],
+  ["Play & Me", "Photos, music, maps…", "stackPlay"],
 ];
 
-export default function Welcome({ open, onClose, onOpenWindow, onOpenResume, onStartTour, isDark }) {
+export default function Welcome({ open, onClose, onOpenWindow, onOpenResume, onStartTour, isDark, iconTheme = "glass" }) {
+  const icons = getIcons(iconTheme);
   const [step, setStep] = useState(0);
   useEffect(() => {
     if (open) setStep(0);
@@ -141,9 +143,9 @@ export default function Welcome({ open, onClose, onOpenWindow, onOpenResume, onS
           <h2 className={`mt-1 text-[24px] font-bold tracking-[-0.02em] ${c.text}`}>The Dock is full of real apps</h2>
           <p className={`mt-1 text-[14px] ${c.sub}`}>Each folder in the Dock opens a set of apps. They show how I work, and some are just for fun.</p>
           <div className="mt-4 grid grid-cols-1 @md:grid-cols-2 gap-2">
-            {STACKS.map(([name, desc, icon]) => (
+            {STACKS.map(([name, desc, iconKey]) => (
               <div key={name} className={`flex items-center gap-3 rounded-[12px] p-2.5 ${isDark ? "bg-white/[0.04]" : "bg-black/[0.025]"}`}>
-                <img src={icon} alt="" className="w-9 h-9" />
+                <img src={icons[iconKey]} alt="" className="w-9 h-9 object-contain" />
                 <span className="min-w-0">
                   <span className={`block text-[13.5px] font-semibold ${c.text}`}>{name}</span>
                   <span className={`block text-[12px] truncate ${c.sub}`}>{desc}</span>

@@ -2,14 +2,18 @@
 // ✏️ The phone home screen (screens under 768px wide look like an iPhone instead of a Mac).
 // Each page is a list of app ids from config/apps.js, or a folder: { folder: "Name", items: [ids] }.
 // Any app you forget to place is added to the last page automatically, so nothing goes missing.
-
-export const PHONE_DOCK = ["projects", "about", "recruiter", "messages"];
+// The Dock uses the same glass stack icons as the Mac Dock (config/dockStacks.js); tapping one opens it as a folder.
 
 export const PHONE_PAGES = [
-  // page 1: the profile widget sits on top, then these
-  ["resume", "fun", "music", "map", "instagram", "terminal", "figma", "notion"],
-  // page 2: the work apps, plus the case studies in a folder
+  // page 1: the profile widget sits on top, then the most important apps first
+  ["projects", "recruiter", "about", "resume", "messages", "fun", "music", "map"],
+  // page 2: everything else, plus the case studies in a folder
   [
+    { folder: "Case Studies", items: ["thesisCaseStudy", "employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy"] },
+    "instagram",
+    "terminal",
+    "figma",
+    "notion",
     "vscode",
     "claude",
     "github",
@@ -19,7 +23,6 @@ export const PHONE_PAGES = [
     "accessibility",
     "achievements",
     "settings",
-    { folder: "Case Studies", items: ["thesisCaseStudy", "employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy"] },
   ],
 ];
 
