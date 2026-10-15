@@ -16,6 +16,7 @@ import { simulate } from "../windows/FundSim/fundModel";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 import { myPicks } from "../windows/Music/data/myPicks";
 import EasterEgg from "../ui/EasterEgg";
+import { nowPlaying } from "../../config/island";
 
 const SMALL = 150;
 const GAP = 12;
@@ -80,6 +81,10 @@ export function NowPlayingWidget({ text, sub }) {
   const audio = useRef(null);
   const t = NOW_PLAYING[i];
   useEffect(() => () => audio.current?.pause(), []);
+  // tell the phone's Dynamic Island what's playing
+  useEffect(() => {
+    nowPlaying(playing ? { playing: true, title: t.title, artist: t.artist, cover: t.cover } : { playing: false });
+  }, [playing, t]);
   const toggle = (e) => {
     e.stopPropagation();
     if (!t.previewUrl) return;

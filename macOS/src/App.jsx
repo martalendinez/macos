@@ -16,6 +16,8 @@ import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
 import AirDrop from "./components/shell/AirDrop";
 import PhoneHome from "./components/phone/PhoneHome";
+import AppSwitcher from "./components/shell/AppSwitcher";
+import QuickLook from "./components/shell/QuickLook";
 import { Snow, useSeason } from "./components/shell/Seasonal";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
@@ -356,6 +358,31 @@ export default function App() {
     [appById, launch]
   );
 
+  // Finder Quick Look: Space previews the selected desktop icon
+  const [quickLook, setQuickLook] = useState(null);
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== " " || quickLook || !selectedIcon || e.metaKey || e.ctrlKey || e.altKey) return;
+      const tag = e.target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable) return;
+      const item = desktopItems.find((d) => d.id === selectedIcon);
+      if (!item) return;
+      e.preventDefault();
+      setQuickLook(item);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [quickLook, selectedIcon, desktopItems]);
+
+  // ⌥Tab app switcher: open windows, most recent first
+  const switcherWindows = useMemo(
+    () =>
+      [...openWindows]
+        .sort((a, b) => (zMap[b] ?? 0) - (zMap[a] ?? 0))
+        .map((id) => ({ id, title: WINDOW_DEFS[id]?.title?.split(" — ")[0] ?? id, icon: iconForWindow(id, iconTheme) })),
+    [openWindows, zMap, iconTheme]
+  );
+
   const desktopMenu = useMemo(
     () => [
       { label: "New Folder", disabled: true },
@@ -594,6 +621,8 @@ export default function App() {
         onPick={launch}
       />
 
+      {!mobile && <AppSwitcher windows={switcherWindows} onPick={restoreWindow} isDark={theme === "dark"} />}
+      <QuickLook item={quickLook} onClose={() => setQuickLook(null)} onOpen={(it) => it.onOpen?.()} isDark={theme === "dark"} />
       <Confetti />
       <AirDrop isDark={theme === "dark"} onAccept={openResume} />
       {season?.snow && <Snow />}

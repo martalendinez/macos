@@ -9,6 +9,8 @@ import avatar from "../../imgs/avatar/profile-photo.jpg";
 import { PHONE_STATUS_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
 import { APP_ICONS, CASE_STUDY_ICONS } from "./PhoneIcons";
+import DynamicIsland from "./DynamicIsland";
+import QuickActions, { actionsFor } from "./QuickActions";
 import { getApps } from "../../config/apps";
 import { MEMORIES, MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
 import { ACCENTS } from "../../config/accents";
@@ -66,9 +68,47 @@ function StatusBar({ time, appOpen, isDark, unread, onNotifications }) {
 }
 
 /* ---------- app icon ---------- */
-function AppIcon({ app, label, onOpen, size = 60, showLabel = true, iconTheme }) {
+/** Long press (450ms without moving) opens the quick actions; a normal tap opens the app. */
+function useLongPress(onLongPress) {
+  const t = useRef(null);
+  const start = useRef(null);
+  const fired = useRef(false);
+  const cancel = () => clearTimeout(t.current);
+  return {
+    fired,
+    handlers: {
+      onPointerDown: (e) => {
+        fired.current = false;
+        start.current = { x: e.clientX, y: e.clientY };
+        const el = e.currentTarget;
+        t.current = setTimeout(() => {
+          fired.current = true;
+          navigator.vibrate?.(8);
+          onLongPress(el.getBoundingClientRect());
+        }, 450);
+      },
+      onPointerMove: (e) => {
+        if (start.current && Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) > 8) cancel();
+      },
+      onPointerUp: cancel,
+      onPointerLeave: cancel,
+      onPointerCancel: cancel,
+      onContextMenu: (e) => e.preventDefault(),
+    },
+  };
+}
+
+function AppIcon({ app, label, onOpen, onLongPress, size = 60, showLabel = true }) {
+  const lp = useLongPress((rect) => onLongPress?.(app, rect));
   return (
-    <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.88 }} className="flex flex-col items-center gap-1.5 min-w-0" aria-label={app.label}>
+    <motion.button
+      type="button"
+      onClick={() => !lp.fired.current && onOpen()}
+      {...(onLongPress ? lp.handlers : {})}
+      whileTap={{ scale: 0.88 }}
+      className="flex flex-col items-center gap-1.5 min-w-0 select-none [-webkit-touch-callout:none]"
+      aria-label={app.label}
+    >
       <IconArt app={app} size={size} />
       {showLabel && <span className="max-w-full truncate text-[11.5px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.45)]">{label}</span>}
     </motion.button>
@@ -307,6 +347,8 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
   const apps = useMemo(() => Object.fromEntries(appList.map((a) => [a.id, a])), [appList]);
   const [page, setPage] = useState(0);
   const [folder, setFolder] = useState(null);
+  const [menu, setMenu] = useState(null);
+  const openMenu = (app, rect) => setMenu({ app, rect, actions: actionsFor(app, { launch, openWindow, apps }) });
   const pager = useRef(null);
 
   // every app gets a home: anything not placed in the config lands on the last page
@@ -335,6 +377,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
   return (
     <>
       <StatusBar time={time} appOpen={appOpen} isDark={isDark} unread={unread} onNotifications={onNotifications} />
+      <DynamicIsland />
 
       <motion.div
         className="fixed inset-0 z-[20] flex flex-col"
@@ -349,7 +392,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
             <div key={p} className="snap-start shrink-0 w-full h-full px-5 overflow-y-auto [scrollbar-width:none]">
               <div className="grid grid-cols-4 grid-flow-row-dense auto-rows-[80px] gap-x-3 gap-y-3 pt-2 pb-4">
                 {items.map((it) => {
-                  if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} />;
+                  if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} onLongPress={openMenu} />;
                   if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} />;
                   const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget, memories: MemoriesWidget, designsystem: DesignSystemWidget, figma: FigmaWidget }[it.widget];
                   const opens = WIDGET_OPENS[it.widget];
@@ -393,6 +436,19 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
         </div>
       </motion.div>
 
+      <AnimatePresence>
+        {menu && (
+          <QuickActions
+            menu={menu}
+            onClose={() => setMenu(null)}
+            renderIcon={(a) => (
+              <span className="flex flex-col items-center gap-1.5">
+                <IconArt app={a} size={60} />
+              </span>
+            )}
+          />
+        )}
+      </AnimatePresence>
       <AnimatePresence>{folder && <FolderSheet folder={folder} apps={apps} launch={launch} iconTheme={iconTheme} onClose={() => setFolder(null)} />}</AnimatePresence>
     </>
   );

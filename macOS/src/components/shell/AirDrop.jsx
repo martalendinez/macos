@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { menuSurface } from "./menu/MenuPanel";
 import { MENU_BAR_H } from "../../config/shell";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
+import { island } from "../../config/island";
 
 // once per page load: a refresh brings it back
 let shown = false;
@@ -20,6 +21,7 @@ export default function AirDrop({ isDark, onAccept }) {
       shown = true;
       setDeclined(false);
       setOpen(true);
+      island({ kind: "airdrop", avatar, title: "AirDrop", sub: "Marta’s iPhone · resume.pdf" });
     };
     window.addEventListener("portfolio:airdrop", show);
     return () => window.removeEventListener("portfolio:airdrop", show);

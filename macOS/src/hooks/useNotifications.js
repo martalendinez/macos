@@ -1,6 +1,7 @@
 // src/hooks/useNotifications.js
 import { useMemo, useState } from "react";
 import { readUnlocked } from "../config/achievements";
+import { island } from "../config/island";
 
 function makeTimeLabel(d = new Date()) {
   return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -53,6 +54,7 @@ export default function useNotifications() {
     if (unlocked[key]) return;
 
     window.dispatchEvent(new Event("portfolio:confetti"));
+    island({ kind: "achievement", icon: "/icons/apps/achievements.svg", title: (title || "Achievement unlocked").replace(/^.*?:\s*/, "").replace(/^🏆\s*/, ""), sub: message });
     notify({
       title: title || "Achievement unlocked",
       message,

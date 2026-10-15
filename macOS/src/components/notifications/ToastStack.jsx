@@ -8,7 +8,9 @@ import useIsMobile from "../../hooks/useIsMobile";
 export default function ToastStack({ uiTheme = "glass", theme = "light", toasts = [], onDismiss }) {
   const isDark = theme === "dark" || uiTheme !== "macos";
   // phones: one banner at a time, so they never stack over the app
-  const shown = useIsMobile() ? toasts.slice(-1) : toasts;
+  // (achievements show in the Dynamic Island instead)
+  const mobile = useIsMobile();
+  const shown = mobile ? toasts.filter((t) => !ACH_RE.test(t.title)).slice(-1) : toasts;
 
   const surface = isDark
     ? {
