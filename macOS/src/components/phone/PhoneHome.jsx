@@ -8,38 +8,23 @@ import { PROFILE } from "../windows/About/aboutData";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 import { PHONE_STATUS_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
-import GlassIcon, { GLYPHS } from "./GlassIcon";
+import { GLYPHS } from "./GlassIcon";
+import { getApps } from "../../config/apps";
 import { MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
 import { simulate } from "../windows/FundSim/fundModel";
 
-const FALLBACK_ICON = "/icons/glass/mac-512.png";
+// the home screen always uses the normal (iPhone-style) icons; only the Dock follows the icon setting
+const NORMAL_ICONS = Object.fromEntries(getApps("macos").map((a) => [a.id, a.icon]));
+const FALLBACK_ICON = "/icons/mac/thisMac.svg";
 
-// brand colour glows for the glass icons (and the tile colour for case studies)
-const TINT = {
-  messages: "#34c759",
-  music: "#1ed760",
-  instagram: "#e1306c",
-  figma: "#a259ff",
-  vscode: "#0a84ff",
-  claude: "#d97757",
-  excel: "#21a366",
-  fundsim: "#5e5ce6",
-  designsystem: "#ff9f0a",
-  accessibility: "#0a84ff",
-  achievements: "#ffd60a",
-  thesisCaseStudy: "#5b5bd6",
-  employerBrandingCaseStudy: "#f28b4b",
-  triviaCaseStudy: "#7b6cf6",
-  groupDiningCaseStudy: "#34b27b",
-};
+// tile colours for the case study app icons
+const TINT = { thesisCaseStudy: "#5b5bd6", employerBrandingCaseStudy: "#f28b4b", triviaCaseStudy: "#7b6cf6", groupDiningCaseStudy: "#34b27b" };
 const CASE_STUDIES = new Set(["thesisCaseStudy", "employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy"]);
 
-/** The picture of an app: glass glyph in glass mode, the app's own icon otherwise. Case studies always get a proper app icon. */
-function IconArt({ app, size, iconTheme }) {
+/** The picture of an app: its normal icon, or a colourful app tile for the case studies. */
+function IconArt({ app, size }) {
   const glyph = GLYPHS[app.id];
-  if (glyph && (iconTheme === "glass" || CASE_STUDIES.has(app.id))) {
-    if (iconTheme === "glass") return <GlassIcon glyph={glyph} tint={TINT[app.id]} size={size} />;
-    // normal icon theme: a colourful app tile for the case studies
+  if (glyph && CASE_STUDIES.has(app.id)) {
     return (
       <span className="flex items-center justify-center rounded-[24%] shadow-[0_4px_10px_rgba(0,0,0,0.25)]" style={{ width: size, height: size, background: `linear-gradient(160deg, ${TINT[app.id]}, ${TINT[app.id]}bb)` }}>
         <svg viewBox="0 0 24 24" className="w-[62%] h-[62%]" aria-hidden="true">
@@ -48,7 +33,7 @@ function IconArt({ app, size, iconTheme }) {
       </span>
     );
   }
-  return <img src={app.icon || FALLBACK_ICON} alt="" draggable={false} className="object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]" style={{ width: size, height: size }} />;
+  return <img src={NORMAL_ICONS[app.id] || app.icon || FALLBACK_ICON} alt="" draggable={false} className="object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]" style={{ width: size, height: size }} />;
 }
 
 /* ---------- status bar ---------- */
@@ -89,7 +74,7 @@ function StatusBar({ time, appOpen, isDark, unread, onNotifications }) {
 function AppIcon({ app, label, onOpen, size = 60, showLabel = true, iconTheme }) {
   return (
     <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.88 }} className="flex flex-col items-center gap-1.5 min-w-0" aria-label={app.label}>
-      <IconArt app={app} size={size} iconTheme={iconTheme} />
+      <IconArt app={app} size={size} />
       {showLabel && <span className="max-w-full truncate text-[11.5px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.45)]">{label}</span>}
     </motion.button>
   );
@@ -102,7 +87,7 @@ function FolderIcon({ folder, apps, onOpen, iconTheme }) {
     <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.88 }} className="flex flex-col items-center gap-1.5 min-w-0" aria-label={`${folder.folder} folder`}>
       <span className="w-[60px] h-[60px] rounded-[15px] p-[7px] grid grid-cols-3 gap-[3px] bg-white/30 backdrop-blur-xl shadow-[0_4px_10px_rgba(0,0,0,0.2)]">
         {shown.map((a) => (
-          <IconArt key={a.id} app={a} size={13} iconTheme={iconTheme} />
+          <IconArt key={a.id} app={a} size={13} />
         ))}
       </span>
       <span className="max-w-full truncate text-[11.5px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.45)]">{folder.folder}</span>
@@ -292,8 +277,8 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
             <div key={p} className="snap-start shrink-0 w-full h-full px-5 overflow-y-auto [scrollbar-width:none]">
               <div className="grid grid-cols-4 grid-flow-row-dense auto-rows-[80px] gap-x-3 gap-y-3 pt-2 pb-4">
                 {items.map((it) => {
-                  if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} iconTheme={iconTheme} />;
-                  if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} iconTheme={iconTheme} />;
+                  if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} />;
+                  if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} />;
                   const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget }[it.widget];
                   const opens = { profile: "about", clock: "map", fund: "fundsim", achievements: "achievements", music: "music" }[it.widget];
                   return W ? <W key={`w-${it.widget}`} onOpen={() => openWindow(opens)} unlocked={unlocked} /> : null;

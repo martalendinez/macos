@@ -1,8 +1,6 @@
 // src/components/phone/GlassIcon.jsx
-// Glass-style app icons drawn in code, matching the glass icon set in public/icons/glass:
-// a frosted lilac rim around a dark navy tile with a white symbol. Used on the phone home screen
-// (glass icon theme) so brand apps don't clash with the glass icons.
-// ✏️ Add a glyph to GLYPHS to give another app a glass icon.
+// White line glyphs for app icons drawn in code. The phone home screen uses the case-study ones
+// as app icons; the rest are kept for a possible glass icon set later.
 
 const S = { fill: "none", stroke: "#fff", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
 
@@ -129,31 +127,3 @@ export const GLYPHS = {
     </g>
   ),
 };
-
-/** A glass tile with a white glyph. `tint` adds a soft brand-coloured glow behind the glyph. */
-export default function GlassIcon({ glyph, tint, size = 60 }) {
-  return (
-    <span
-      className="relative block rounded-[26%] p-[15%]"
-      style={{
-        width: size,
-        height: size,
-        background: "linear-gradient(135deg, rgba(255,255,255,0.82), rgba(205,196,255,0.55) 45%, rgba(236,210,255,0.7))",
-        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.7), inset 0 -2px 6px rgba(150,120,230,0.45), 0 4px 10px rgba(30,20,80,0.28)",
-      }}
-    >
-      <span
-        className="relative flex w-full h-full items-center justify-center rounded-[24%] overflow-hidden"
-        style={{
-          background: "linear-gradient(160deg, #303a5e, #141a33 70%)",
-          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -3px 6px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.3)",
-        }}
-      >
-        {tint && <span className="absolute inset-0" style={{ background: `radial-gradient(circle at 50% 60%, ${tint}66, transparent 70%)` }} />}
-        <svg viewBox="0 0 24 24" className="relative w-[70%] h-[70%] drop-shadow-[0_0_3px_rgba(255,255,255,0.35)]" aria-hidden="true">
-          {glyph}
-        </svg>
-      </span>
-    </span>
-  );
-}
