@@ -28,6 +28,7 @@ const ThesisCaseStudyWindow = lazy(() =>
   import("../components/windows/Projects/ThesisCaseStudyWindow")
 );
 
+const PortfolioCaseStudyWindow = lazy(() => import("../components/windows/Projects/PortfolioCaseStudyWindow"));
 const TriviaCaseStudyWindow = lazy(() =>
   import("../components/windows/Projects/TriviaCaseStudyWindow")
 );
@@ -178,6 +179,14 @@ export const WINDOW_DEFS = {
    triviaCaseStudy: {
     title: "Trivia — Case Study",
     Component: TriviaCaseStudyWindow,
+    width: 1180,
+    height: 760,
+    initialPos: { x: 140, y: 80 },
+  },
+
+  portfolioCaseStudy: {
+    title: "This Portfolio — Case Study",
+    Component: PortfolioCaseStudyWindow,
     width: 1180,
     height: 760,
     initialPos: { x: 140, y: 80 },

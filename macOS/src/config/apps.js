@@ -82,6 +82,7 @@ export function getApps(iconTheme = "glass") {
     { id: "employerBrandingCaseStudy", label: "Employer Branding — Case Study", windowId: "employerBrandingCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "bachelor thesis pridecom ai" },
     { id: "thesisCaseStudy", label: "Trace — Master Thesis Case Study", windowId: "thesisCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "master thesis kth ai co-pilot human ai collaboration llm plugin trace research" },
     { id: "triviaCaseStudy", label: "Trivia App — Case Study", windowId: "triviaCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "react native kth quiz" },
+    { id: "portfolioCaseStudy", label: "This Portfolio — Case Study", windowId: "portfolioCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "portfolio macos os how built design engineer react vite accessibility meta" },
     { id: "groupDiningCaseStudy", label: "Sällskap — Group Dining Case Study", windowId: "groupDiningCaseStudy", icon: i.projects, kind: "caseStudy", keywords: "restaurant booking sallskap" },
 
     { id: "resume", label: "resume.pdf", href: RESUME_URL, icon: i.doc, kind: "document", keywords: "cv resume pdf" },

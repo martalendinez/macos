@@ -13,6 +13,7 @@ const ACTION_TO_WINDOW = {
   openGroupDiningCaseStudy: "groupDiningCaseStudy",
   openThesisCaseStudy: "thesisCaseStudy",
   openTriviaCaseStudy: "triviaCaseStudy",
+  openPortfolioCaseStudy: "portfolioCaseStudy",
 };
 
 // Finder-like tag colors

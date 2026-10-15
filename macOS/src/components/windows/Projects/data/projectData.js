@@ -4,6 +4,7 @@ import restaurantThumb from "../../../../imgs/case-study/sallskap/Sallskap_Shot.
 import loyaltyThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
 import stardewThumb from "../../../../imgs/case-study/kallos/Thumbnail_Kallos.avif";
 import triviaThumb from "../../../../imgs/case-study/trivia/Trivia_Shot.png";
+import portfolioThumb from "../../../../imgs/case-study/portfolio/desktop.jpg";
 
 export const PROJECTS = [
   {
@@ -74,7 +75,24 @@ export const PROJECTS = [
 
     // ⭐ NEW: Sällskap case study link
     links: [{ label: "Case Study", action: "openGroupDiningCaseStudy" }],
-  }, 
+  },
+
+  {
+    id: "portfolio",
+    shortTitle: "This Portfolio",
+    meta: ["2026", "Personal project", "Design + Build"],
+    tint: "#0a84ff",
+    title: "This Portfolio: a macOS-style OS",
+    subtitle: "A portfolio that is the work sample itself, with fast paths for people short on time",
+    thumbnail: portfolioThumb,
+    tags: ["UX", "Frontend", "Product"],
+    bullets: [
+      "Designed and built a macOS-style OS where every app is a way into my work",
+      "Recruiter Mode and a plain HTML page give people short on time a fast way out",
+      "OS-wide accessibility settings, full-screen apps on phones and around 30 lazy-loaded apps",
+    ],
+    links: [{ label: "Case Study", action: "openPortfolioCaseStudy" }],
+  },
   
 
 ];
