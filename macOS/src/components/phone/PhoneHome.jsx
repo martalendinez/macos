@@ -299,6 +299,9 @@ function MusicWidget({ onOpen }) {
   );
 }
 
+// which app each widget opens
+const WIDGET_OPENS = { profile: "about", clock: "map", fund: "fundsim", achievements: "achievements", music: "music", memories: "instagram", designsystem: "designsystem", figma: "figma" };
+
 /* ---------- home screen ---------- */
 export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, isDark, time, unread, onNotifications, onSearch, loaded, dockStacks = [], iconTheme = "glass", unlocked, accent }) {
   const apps = useMemo(() => Object.fromEntries(appList.map((a) => [a.id, a])), [appList]);
@@ -308,7 +311,8 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
 
   // every app gets a home: anything not placed in the config lands on the last page
   const pages = useMemo(() => {
-    const placed = new Set([...PHONE_PAGES.flat().flatMap((x) => (typeof x === "string" ? [x] : x.items ?? []))]);
+    // an app counts as placed if it has an icon, sits in a folder, or a widget on the home screen opens it
+    const placed = new Set(PHONE_PAGES.flat().flatMap((x) => (typeof x === "string" ? [x] : x.items ?? [WIDGET_OPENS[x.widget]])));
     const extra = appList.filter((a) => !placed.has(a.id) && a.kind !== "caseStudy" && a.id !== "portfolioInfo").map((a) => a.id);
     const out = PHONE_PAGES.map((p) => [...p]);
     out[out.length - 1].push(...extra);
@@ -348,7 +352,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
                   if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} />;
                   if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} />;
                   const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget, memories: MemoriesWidget, designsystem: DesignSystemWidget, figma: FigmaWidget }[it.widget];
-                  const opens = { profile: "about", clock: "map", fund: "fundsim", achievements: "achievements", music: "music", memories: "instagram", designsystem: "designsystem", figma: "figma" }[it.widget];
+                  const opens = WIDGET_OPENS[it.widget];
                   return W ? <W key={`w-${it.widget}`} onOpen={() => openWindow(opens)} unlocked={unlocked} accent={accent} /> : null;
                 })}
               </div>

@@ -5,10 +5,13 @@
 // Any app you forget to place is added to the last page automatically, so nothing goes missing.
 // The Dock uses the same glass stack icons as the Mac Dock (config/dockStacks.js); tapping one opens it as a folder.
 
+// Each page fits 5 rows: a big widget is 2 rows, a small widget is 2×2 icons, an app row is 4 icons.
+// Apps that already have a widget (Fund Sim, Design System, Trophies) don't need a separate icon.
 export const PHONE_PAGES = [
-  // page 1: who I am, then the most important apps
+  // page 1: who I am, my trophies, and the most important apps
   [
     { widget: "profile" },
+    { widget: "achievements" },
     "projects",
     "recruiter",
     "about",
@@ -18,9 +21,10 @@ export const PHONE_PAGES = [
     "music",
     "map",
   ],
-  // page 2: music, the case studies and the work tools
+  // page 2: music, Stockholm, the case studies and the work tools
   [
     { widget: "music" },
+    { widget: "clock" },
     { folder: "Case Studies", items: ["thesisCaseStudy", "employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy"] },
     "figma",
     "notion",
@@ -28,12 +32,10 @@ export const PHONE_PAGES = [
     "claude",
     "github",
     "excel",
-    "fundsim",
+    "instagram",
   ],
-  // page 3: the rest of the OS, plus Stockholm time and the fund snapshot
-  [{ widget: "achievements" }, "designsystem", "accessibility", "instagram", "terminal", { widget: "clock" }, { widget: "fund" }, "achievements", "settings"],
-  // page 4: the rest of the desktop widgets
-  [{ widget: "memories" }, { widget: "figma" }, { widget: "designsystem" }],
+  // page 3: memories, the fund, Figma and the design system, plus the rest of the OS
+  [{ widget: "memories" }, { widget: "fund" }, { widget: "figma" }, { widget: "designsystem" }, "terminal", "accessibility", "settings"],
 ];
 
 // short names under the icons (the full names are too long for a phone grid)
