@@ -269,12 +269,24 @@ export default function CozyCorner({ loaded, theme = "light", notify }) {
   const isDark = theme === "dark";
   const text = isDark ? "text-white" : "text-[#1d1d1f]";
   const sub = isDark ? "text-white/60" : "text-black/55";
-  if (!loaded) return null;
+
+  // fit between the desktop icons (top ~380px) and the Dock: scale down on shorter screens instead of hiding
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const NATURAL_H = 280; // Currently card + plant row
+    const fit = () => setScale(Math.min(1, (window.innerHeight - 96 - 380) / NATURAL_H));
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
+
+  if (!loaded || scale < 0.55) return null;
 
   return (
     <div
-      // large screens with enough height only, so it never collides with the desktop icons or the Dock
-      className="fixed left-4 bottom-[96px] z-30 hidden xl:flex [@media(max-height:780px)]:hidden flex-col gap-3"
+      // large screens only, like the widgets
+      className="fixed left-4 bottom-[96px] z-30 hidden lg:flex flex-col gap-3 origin-bottom-left"
+      style={{ transform: scale < 1 ? `scale(${scale})` : undefined }}
       aria-label="Marta’s desk"
     >
       <Currently isDark={isDark} text={text} sub={sub} />
