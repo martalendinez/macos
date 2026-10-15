@@ -1,7 +1,6 @@
 // src/components/phone/PhoneIcons.jsx
 // Drawn iOS-style app icons for the phone home screen: Marta's own apps (Recruiter, Extras, Résumé…)
 // and the case studies, each a tiny picture of what's inside. Drawn on a 60×60 grid so they stay sharp.
-import avatar from "../../imgs/avatar/profile-photo.jpg";
 
 function Tile({ size, bg, children }) {
   return (
@@ -190,33 +189,62 @@ function Resume({ size }) {
   );
 }
 
-/** About me: my photo, like a contact. */
+/** About me: a contact card, like the iOS Contacts icon. */
 function About({ size }) {
   return (
-    <span className="block overflow-hidden rounded-[22.5%] shadow-[0_4px_8px_rgba(0,0,0,0.25)] ring-1 ring-white/30" style={{ width: size, height: size }}>
-      <img src={avatar} alt="" draggable={false} className="w-full h-full object-cover" />
-    </span>
+    <Tile size={size} bg="url(#ph-about)">
+      <defs>
+        <linearGradient id="ph-about" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f2f2f7" />
+          <stop offset="1" stopColor="#d1d1d6" />
+        </linearGradient>
+        <linearGradient id="ph-about-head" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#a7a7b0" />
+          <stop offset="1" stopColor="#7c7c86" />
+        </linearGradient>
+      </defs>
+      {/* tabs on the right edge, like an address book */}
+      <rect x="49" y="13" width="5" height="9" rx="1.5" fill="#ff9f0a" />
+      <rect x="49" y="25" width="5" height="9" rx="1.5" fill="#34c759" />
+      <rect x="49" y="37" width="5" height="9" rx="1.5" fill="#0a84ff" />
+      <rect x="8" y="9" width="43" height="42" rx="6" fill="#fff" />
+      <circle cx="29.5" cy="25" r="8" fill="url(#ph-about-head)" />
+      <path d="M15.5 45c1.6-7.2 7.2-11 14-11s12.4 3.8 14 11z" fill="url(#ph-about-head)" />
+    </Tile>
   );
 }
 
-/** Settings: a grey gear, iOS-style. */
+/** Settings: the iOS gear, a fine-toothed outer ring around a spoked inner wheel. */
 function Settings({ size }) {
-  const teeth = Array.from({ length: 12 }, (_, i) => i * 30);
+  const outer = Array.from({ length: 36 }, (_, i) => i * 10);
+  const spokes = Array.from({ length: 6 }, (_, i) => i * 60);
   return (
     <Tile size={size} bg="url(#ph-set)">
       <defs>
         <linearGradient id="ph-set" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#c7c7cc" />
-          <stop offset="1" stopColor="#8e8e93" />
+          <stop offset="0" stopColor="#e5e5ea" />
+          <stop offset="1" stopColor="#a1a1a8" />
+        </linearGradient>
+        <linearGradient id="ph-gear" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#5a5a60" />
+          <stop offset="1" stopColor="#2c2c30" />
         </linearGradient>
       </defs>
       <g transform="translate(30 30)">
-        {teeth.map((d) => (
-          <rect key={d} x="-2.6" y="-21" width="5.2" height="8" rx="1.4" fill="#3a3a3c" transform={`rotate(${d})`} />
+        {/* outer ring with fine teeth */}
+        {outer.map((d) => (
+          <rect key={d} x="-1.3" y="-24" width="2.6" height="4" rx="0.6" fill="url(#ph-gear)" transform={`rotate(${d})`} />
         ))}
-        <circle r="15" fill="#3a3a3c" />
-        <circle r="10.5" fill="#8e8e93" />
-        <circle r="5" fill="#3a3a3c" />
+        <circle r="20.5" fill="url(#ph-gear)" />
+        <circle r="17.5" fill="#c7c7cc" />
+        {/* inner wheel */}
+        <circle r="15.5" fill="url(#ph-gear)" />
+        <circle r="12.5" fill="#d8d8dc" />
+        {spokes.map((d) => (
+          <rect key={d} x="-1.6" y="-12.5" width="3.2" height="12.5" fill="url(#ph-gear)" transform={`rotate(${d})`} />
+        ))}
+        <circle r="5" fill="url(#ph-gear)" />
+        <circle r="2.2" fill="#d8d8dc" />
       </g>
     </Tile>
   );
