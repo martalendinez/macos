@@ -8,7 +8,7 @@ import { PROFILE } from "../windows/About/aboutData";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 import { PHONE_STATUS_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
-import { GLYPHS } from "./GlassIcon";
+import { CASE_STUDY_ICONS } from "./CaseStudyIcons";
 import { getApps } from "../../config/apps";
 import { MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
 import { simulate } from "../windows/FundSim/fundModel";
@@ -17,22 +17,10 @@ import { simulate } from "../windows/FundSim/fundModel";
 const NORMAL_ICONS = Object.fromEntries(getApps("macos").map((a) => [a.id, a.icon]));
 const FALLBACK_ICON = "/icons/mac/thisMac.svg";
 
-// tile colours for the case study app icons
-const TINT = { thesisCaseStudy: "#5b5bd6", employerBrandingCaseStudy: "#f28b4b", triviaCaseStudy: "#7b6cf6", groupDiningCaseStudy: "#34b27b" };
-const CASE_STUDIES = new Set(["thesisCaseStudy", "employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy"]);
-
-/** The picture of an app: its normal icon, or a colourful app tile for the case studies. */
+/** The picture of an app: its normal icon, or a drawn app icon for the case studies. */
 function IconArt({ app, size }) {
-  const glyph = GLYPHS[app.id];
-  if (glyph && CASE_STUDIES.has(app.id)) {
-    return (
-      <span className="flex items-center justify-center rounded-[24%] shadow-[0_4px_10px_rgba(0,0,0,0.25)]" style={{ width: size, height: size, background: `linear-gradient(160deg, ${TINT[app.id]}, ${TINT[app.id]}bb)` }}>
-        <svg viewBox="0 0 24 24" className="w-[62%] h-[62%]" aria-hidden="true">
-          {glyph}
-        </svg>
-      </span>
-    );
-  }
+  const CaseIcon = CASE_STUDY_ICONS[app.id];
+  if (CaseIcon) return <CaseIcon size={size} />;
   return <img src={NORMAL_ICONS[app.id] || app.icon || FALLBACK_ICON} alt="" draggable={false} className="object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]" style={{ width: size, height: size }} />;
 }
 
