@@ -5,13 +5,6 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useTransform } from "framer-motion";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 
-// ✏️ The lock screen notifications, newest first. `app` icons come from public/icons/apps.
-const NOTES = [
-  { icon: avatar, round: true, app: "Messages", title: "Marta Lendínez", body: "Hej! 👋 Thanks for stopping by. Swipe up, my work is waiting.", time: "now" },
-  { icon: "/icons/apps/github.svg", app: "GitHub", title: "Pull request ready for review", body: "macos #42 · Phone home screen, Dynamic Island & lock screen", time: "4m ago" },
-  { icon: "/icons/apps/achievements.svg", app: "Achievements", title: "3 trophies waiting", body: "Open a case study to unlock Deep Diver 🏆", time: "12m ago" },
-  { icon: "/icons/apps/claude.svg", app: "Claude", title: "Session summary", body: "We shipped 4 Apple details today. Fika earned ☕", time: "1h ago" },
-];
 
 const SEEN = "portfolio.phoneLock.seen";
 
@@ -23,79 +16,29 @@ function seenThisVisit() {
   }
 }
 
-function Note({ n, compact }) {
+/** One iMessage notification, like a real iPhone lock screen: Messages icon with the sender's photo, name, preview, time. */
+function MessageNotification() {
   return (
-    <div className="rounded-[22px] p-3 flex items-start gap-3 bg-white/25 backdrop-blur-2xl shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.4)] text-left">
-      <img src={n.icon} alt="" className={`shrink-0 w-[38px] h-[38px] object-cover ${n.round ? "rounded-full" : "rounded-[9px]"}`} />
+    <motion.div
+      className="mt-auto mb-5 mx-3 self-stretch rounded-[22px] px-3.5 py-3 flex items-center gap-3 bg-white/30 backdrop-blur-2xl shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.45)]"
+      initial={{ opacity: 0, y: 24, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: 0.9, type: "spring", stiffness: 280, damping: 24 }}
+      aria-label="Message from Marta Lendínez"
+    >
+      {/* sender photo with the Messages app badge in the corner, like iOS communication notifications */}
+      <span className="relative shrink-0 w-[42px] h-[42px]">
+        <img src={avatar} alt="" className="w-[42px] h-[42px] rounded-full object-cover" />
+        <img src="/icons/apps/messages.svg" alt="" className="absolute -right-1 -bottom-1 w-[18px] h-[18px] rounded-[5px] ring-2 ring-white/30" />
+      </span>
       <span className="min-w-0 flex-1">
         <span className="flex items-baseline justify-between gap-2">
-          <span className="text-[14px] font-semibold truncate">{n.title}</span>
-          <span className="shrink-0 text-[12px] opacity-70">{n.time}</span>
+          <span className="text-[15px] font-semibold truncate">Marta Lendínez</span>
+          <span className="shrink-0 text-[13px] opacity-70">now</span>
         </span>
-        <span className={`block text-[13.5px] leading-snug opacity-95 ${compact ? "truncate" : ""}`}>{n.body}</span>
+        <span className="block text-[15px] leading-snug opacity-95">Hej! 👋 Thanks for stopping by. Swipe up, my work is waiting ✨</span>
       </span>
-    </div>
-  );
-}
-
-/** iOS-style notification stack: the newest on top, the rest peeking behind it; tap to fan them out. */
-function LockNotifications() {
-  const [count, setCount] = useState(1);
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    // older notifications are already there; the newer ones arrive on top, the newest last
-    const ids = NOTES.slice(1).map((_, i) => setTimeout(() => setCount((c) => Math.max(c, i + 2)), 900 + i * 900));
-    return () => ids.forEach(clearTimeout);
-  }, []);
-  const shown = NOTES.slice(NOTES.length - count); // newest first
-
-  return (
-    <div className="mt-auto mb-5 mx-3 self-stretch" onPointerDown={(e) => e.stopPropagation()}>
-      <div className="flex items-center justify-between px-1 mb-1.5">
-        <span className="text-[17px] font-semibold [text-shadow:0_1px_4px_rgba(0,0,0,0.25)]">Notification Centre</span>
-        {count > 1 && (
-          <button type="button" onClick={() => setOpen((o) => !o)} className="px-2.5 py-0.5 rounded-full bg-white/25 backdrop-blur-xl text-[12.5px] font-semibold">
-            {open ? "Show less" : `${count} notifications`}
-          </button>
-        )}
-      </div>
-
-      {open ? (
-        <div className="max-h-[42vh] overflow-y-auto flex flex-col gap-2 [scrollbar-width:none]">
-          {shown.map((n, i) => (
-            <motion.div key={n.title} initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04, type: "spring", stiffness: 380, damping: 30 }}>
-              <Note n={n} />
-            </motion.div>
-          ))}
-        </div>
-      ) : (
-        <button type="button" onClick={() => count > 1 && setOpen(true)} className="relative block w-full" aria-label={`${count} notifications, tap to expand`}>
-          {/* cards peeking behind the newest one */}
-          {shown.slice(1, 3).map((n, i) => (
-            <motion.span
-              key={n.title}
-              className="absolute inset-x-0 bottom-0 h-full rounded-[22px] bg-white/20 backdrop-blur-2xl"
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1 - i * 0.3, y: 8 * (i + 1), scaleX: 1 - 0.05 * (i + 1) }}
-              transition={{ type: "spring", stiffness: 300, damping: 26 }}
-              style={{ zIndex: 2 - i }}
-            />
-          ))}
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.div
-              key={shown[0].title}
-              className="relative z-10"
-              initial={{ opacity: 0, y: -24, scale: 0.94 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.96 }}
-              transition={{ type: "spring", stiffness: 300, damping: 24, delay: count === 1 ? 0.6 : 0 }}
-            >
-              <Note n={shown[0]} compact />
-            </motion.div>
-          </AnimatePresence>
-        </button>
-      )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -150,8 +93,8 @@ export default function PhoneLock({ wallpaperUrl, loaded }) {
               {time}
             </div>
 
-            {/* notifications waiting on the lock screen: they arrive one by one, older ones stack up */}
-            <LockNotifications />
+            {/* a message from me, waiting on the lock screen */}
+            <MessageNotification />
 
             {/* bottom: flashlight + camera, the hint and the home bar */}
             <div className="mb-3 w-full px-12 flex items-center justify-between">
