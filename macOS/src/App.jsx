@@ -522,6 +522,8 @@ export default function App() {
           onNotifications={() => notif.setNotifOpen(!notif.notifOpen)}
           onSearch={() => setSpotlightOpen(true)}
           dockStacks={dockApps.filter((a) => a.stack)}
+          iconTheme={iconTheme}
+          unlocked={notif.unlocked}
         />
       ) : (
       <>

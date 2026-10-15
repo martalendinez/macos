@@ -1,17 +1,27 @@
 // src/config/phoneHome.js
 // ✏️ The phone home screen (screens under 768px wide look like an iPhone instead of a Mac).
-// Each page is a list of app ids from config/apps.js, or a folder: { folder: "Name", items: [ids] }.
+// Each page is a list of app ids from config/apps.js, a folder: { folder: "Name", items: [ids] },
+// or a widget: { widget: "profile" | "clock" | "fund" | "achievements" | "music" }.
 // Any app you forget to place is added to the last page automatically, so nothing goes missing.
 // The Dock uses the same glass stack icons as the Mac Dock (config/dockStacks.js); tapping one opens it as a folder.
 
 export const PHONE_PAGES = [
-  // page 1: the profile widget sits on top, then the most important apps first
-  ["projects", "recruiter", "about", "resume", "messages", "fun", "music", "map"],
-  // page 2: everything else, plus the case studies in a folder
+  // page 1: who I am, then the most important apps
   [
+    { widget: "profile" },
+    "projects",
+    "recruiter",
+    "about",
+    "resume",
+    "messages",
+    "fun",
+    "music",
+    "map",
+  ],
+  // page 2: music, the case studies and the work tools
+  [
+    { widget: "music" },
     { folder: "Case Studies", items: ["thesisCaseStudy", "employerBrandingCaseStudy", "triviaCaseStudy", "groupDiningCaseStudy"] },
-    "instagram",
-    "terminal",
     "figma",
     "notion",
     "vscode",
@@ -19,11 +29,9 @@ export const PHONE_PAGES = [
     "github",
     "excel",
     "fundsim",
-    "designsystem",
-    "accessibility",
-    "achievements",
-    "settings",
   ],
+  // page 3: the rest of the OS, plus Stockholm time and the fund snapshot
+  [{ widget: "achievements" }, "designsystem", "accessibility", "instagram", "terminal", { widget: "clock" }, { widget: "fund" }, "achievements", "settings"],
 ];
 
 // short names under the icons (the full names are too long for a phone grid)

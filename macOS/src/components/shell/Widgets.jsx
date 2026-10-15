@@ -31,7 +31,7 @@ const MEMORIES = [
   { src: memSkyline, label: "New York" },
 ];
 
-function describe(code, isDay) {
+export function describe(code, isDay) {
   if (code === 0) return isDay ? "☀️" : "🌙";
   if (code <= 2) return isDay ? "🌤️" : "☁️";
   if (code === 3 || code === 45 || code === 48) return "☁️";
@@ -74,7 +74,7 @@ function Widget({ children, onClick, wide = false, i = 0, isDark, className = ""
 
 const NOW_PLAYING = myPicks.flatMap((pl) => pl.tracks.map((t) => ({ ...t, playlist: pl.title })));
 
-function NowPlayingWidget({ text, sub }) {
+export function NowPlayingWidget({ text, sub }) {
   const [i, setI] = useState(() => Math.floor(Math.random() * NOW_PLAYING.length));
   const [playing, setPlaying] = useState(false);
   const audio = useRef(null);
@@ -146,7 +146,7 @@ function NowPlayingWidget({ text, sub }) {
   );
 }
 
-function useStockholmWeather() {
+export function useStockholmWeather() {
   const [w, setW] = useState(null);
   useEffect(() => {
     let off = false;
@@ -161,7 +161,7 @@ function useStockholmWeather() {
   return w;
 }
 
-function MiniJCurve({ isDark }) {
+export function MiniJCurve({ isDark }) {
   const r = useMemo(() => simulate("pe", "base", 10), []);
   const ys = r.years.map((y) => y.cumulative);
   const min = Math.min(...ys);
