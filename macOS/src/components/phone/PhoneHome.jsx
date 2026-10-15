@@ -8,7 +8,7 @@ import { PROFILE } from "../windows/About/aboutData";
 import avatar from "../../imgs/avatar/profile-photo.jpg";
 import { PHONE_STATUS_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
-import { CASE_STUDY_ICONS } from "./CaseStudyIcons";
+import { APP_ICONS, CASE_STUDY_ICONS } from "./PhoneIcons";
 import { getApps } from "../../config/apps";
 import { MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
 import { simulate } from "../windows/FundSim/fundModel";
@@ -17,10 +17,16 @@ import { simulate } from "../windows/FundSim/fundModel";
 const NORMAL_ICONS = Object.fromEntries(getApps("macos").map((a) => [a.id, a.icon]));
 const FALLBACK_ICON = "/icons/mac/thisMac.svg";
 
-/** The picture of an app: its normal icon, or a drawn app icon for the case studies. */
+/** The picture of an app: a drawn iOS-style icon for Marta's own apps and case studies, the real icon for brand apps. */
 function IconArt({ app, size }) {
-  const CaseIcon = CASE_STUDY_ICONS[app.id];
-  if (CaseIcon) return <CaseIcon size={size} />;
+  const CaseIcon = CASE_STUDY_ICONS[app.id] || APP_ICONS[app.id];
+  // drawn icons fill their box edge to edge; image icons have built-in padding, so match that
+  if (CaseIcon)
+    return (
+      <span className="flex items-center justify-center" style={{ width: size, height: size }}>
+        <CaseIcon size={Math.round(size * 0.86)} />
+      </span>
+    );
   return <img src={NORMAL_ICONS[app.id] || app.icon || FALLBACK_ICON} alt="" draggable={false} className="object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]" style={{ width: size, height: size }} />;
 }
 

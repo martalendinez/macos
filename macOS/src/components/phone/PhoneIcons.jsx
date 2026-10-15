@@ -1,16 +1,17 @@
-// src/components/phone/CaseStudyIcons.jsx
-// App icons for the case studies on the phone home screen: each one is a tiny picture of the project,
-// in its brand colour. Drawn on a 60×60 grid so they stay sharp at any size.
+// src/components/phone/PhoneIcons.jsx
+// Drawn iOS-style app icons for the phone home screen: Marta's own apps (Recruiter, Extras, Résumé…)
+// and the case studies, each a tiny picture of what's inside. Drawn on a 60×60 grid so they stay sharp.
+import avatar from "../../imgs/avatar/profile-photo.jpg";
 
 function Tile({ size, bg, children }) {
   return (
     <svg viewBox="0 0 60 60" width={size} height={size} className="drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]" aria-hidden="true">
       <defs>
-        <clipPath id="cs-tile">
+        <clipPath id="ph-tile">
           <rect width="60" height="60" rx="13.5" />
         </clipPath>
       </defs>
-      <g clipPath="url(#cs-tile)">
+      <g clipPath="url(#ph-tile)">
         <rect width="60" height="60" fill={bg} />
         {/* soft top light, like iOS icons */}
         <rect width="60" height="30" fill="#fff" opacity="0.08" />
@@ -120,6 +121,109 @@ function Sallskap({ size }) {
     </Tile>
   );
 }
+
+/** Recruiter Mode: a profile card with a lightning bolt (the 30-second version). */
+function Recruiter({ size }) {
+  return (
+    <Tile size={size} bg="url(#ph-rec)">
+      <defs>
+        <linearGradient id="ph-rec" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#5ac8fa" />
+          <stop offset="1" stopColor="#0a7aff" />
+        </linearGradient>
+      </defs>
+      <rect x="11" y="15" width="38" height="30" rx="5" fill="#fff" />
+      <circle cx="21" cy="26.5" r="4.2" fill="#0a7aff" opacity="0.85" />
+      <path d="M14.5 39c.8-4 3.4-6 6.5-6s5.7 2 6.5 6z" fill="#0a7aff" opacity="0.85" />
+      <rect x="30" y="23" width="14" height="3" rx="1.5" fill="#0a7aff" opacity="0.35" />
+      <rect x="30" y="29" width="10" height="3" rx="1.5" fill="#0a7aff" opacity="0.35" />
+      <circle cx="46" cy="14" r="8" fill="#ffcc00" />
+      <path d="M47.3 9l-4.6 6h3.2l-1.2 4.8 4.6-6h-3.2z" fill="#fff" />
+    </Tile>
+  );
+}
+
+/** Extras & Fun: a little app library, four tiles with a sparkle. */
+function Extras({ size }) {
+  const tiles = [
+    [15, 15, "#ff6b6b"],
+    [32, 15, "#ffd84d"],
+    [15, 32, "#4fd18b"],
+  ];
+  return (
+    <Tile size={size} bg="url(#ph-ext)">
+      <defs>
+        <linearGradient id="ph-ext" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#2f3a5f" />
+          <stop offset="1" stopColor="#151a2e" />
+        </linearGradient>
+      </defs>
+      {tiles.map(([x, y, c]) => (
+        <rect key={c} x={x} y={y} width="13" height="13" rx="3.6" fill={c} />
+      ))}
+      <rect x="32" y="32" width="13" height="13" rx="3.6" fill="#fff" />
+      <path d="M38.5 34.5l1.3 3.2 3.2 1.3-3.2 1.3-1.3 3.2-1.3-3.2-3.2-1.3 3.2-1.3z" fill="#151a2e" />
+    </Tile>
+  );
+}
+
+/** Résumé: a one-page PDF. */
+function Resume({ size }) {
+  return (
+    <Tile size={size} bg="url(#ph-res)">
+      <defs>
+        <linearGradient id="ph-res" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#e9e9ee" />
+        </linearGradient>
+      </defs>
+      <path d="M17 9h18l9 9v31a2 2 0 0 1-2 2H17a2 2 0 0 1-2-2V11a2 2 0 0 1 2-2z" fill="#fff" stroke="#d1d1d6" strokeWidth="1" />
+      <path d="M35 9v7a2 2 0 0 0 2 2h7" fill="#e5e5ea" />
+      <rect x="20" y="22" width="14" height="2.6" rx="1.3" fill="#c7c7cc" />
+      <rect x="20" y="27" width="19" height="2.6" rx="1.3" fill="#c7c7cc" />
+      <rect x="20" y="32" width="16" height="2.6" rx="1.3" fill="#c7c7cc" />
+      <rect x="18" y="39" width="18" height="8" rx="2" fill="#ff3b30" />
+      <text x="27" y="45.3" textAnchor="middle" fontSize="6.2" fontWeight="800" fill="#fff" fontFamily="system-ui, sans-serif">
+        PDF
+      </text>
+    </Tile>
+  );
+}
+
+/** About me: my photo, like a contact. */
+function About({ size }) {
+  return (
+    <span className="block overflow-hidden rounded-[22.5%] shadow-[0_4px_8px_rgba(0,0,0,0.25)] ring-1 ring-white/30" style={{ width: size, height: size }}>
+      <img src={avatar} alt="" draggable={false} className="w-full h-full object-cover" />
+    </span>
+  );
+}
+
+/** Settings: a grey gear, iOS-style. */
+function Settings({ size }) {
+  const teeth = Array.from({ length: 12 }, (_, i) => i * 30);
+  return (
+    <Tile size={size} bg="url(#ph-set)">
+      <defs>
+        <linearGradient id="ph-set" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#c7c7cc" />
+          <stop offset="1" stopColor="#8e8e93" />
+        </linearGradient>
+      </defs>
+      <g transform="translate(30 30)">
+        {teeth.map((d) => (
+          <rect key={d} x="-2.6" y="-21" width="5.2" height="8" rx="1.4" fill="#3a3a3c" transform={`rotate(${d})`} />
+        ))}
+        <circle r="15" fill="#3a3a3c" />
+        <circle r="10.5" fill="#8e8e93" />
+        <circle r="5" fill="#3a3a3c" />
+      </g>
+    </Tile>
+  );
+}
+
+/** Drawn icons for Marta's own apps (brand apps keep their real icons). */
+export const APP_ICONS = { recruiter: Recruiter, fun: Extras, resume: Resume, about: About, settings: Settings };
 
 export const CASE_STUDY_ICONS = {
   thesisCaseStudy: Trace,
