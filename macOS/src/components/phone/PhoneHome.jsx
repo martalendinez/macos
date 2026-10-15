@@ -169,8 +169,9 @@ function FolderSheet({ folder, apps, onClose, launch, iconTheme, badges = {} }) 
 }
 
 /* ---------- widgets ---------- */
-const WIDGET_SURFACE = "rounded-[24px] text-left text-white bg-white/20 backdrop-blur-2xl shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.5),0_10px_30px_-12px_rgba(0,0,0,0.4)] overflow-hidden";
-const SHADOW = "[text-shadow:0_1px_3px_rgba(0,0,0,0.3)]";
+// same frosted cards as the desktop widgets (colours come from .pw-surface in index.css, light or dark)
+const WIDGET_SURFACE = "pw-surface rounded-[22px] text-left backdrop-blur-2xl backdrop-saturate-150 overflow-hidden";
+const SHADOW = "";
 
 function ProfileWidget({ onOpen }) {
   return (
@@ -179,7 +180,7 @@ function ProfileWidget({ onOpen }) {
         <img src={avatar} alt="" className="w-12 h-12 rounded-full object-cover ring-2 ring-white/60" />
         <div className="min-w-0">
           <div className={`text-[16px] font-bold leading-tight ${SHADOW}`}>{PROFILE.name}</div>
-          <div className="text-[12.5px] text-white/85 leading-tight">
+          <div className="text-[12.5px] pw-sub leading-tight">
             {PROFILE.role} @ {PROFILE.company.name}
           </div>
         </div>
@@ -188,7 +189,7 @@ function ProfileWidget({ onOpen }) {
         Designing the operating system for <b>private markets</b> 💳
       </div>
       <div className="flex-1" />
-      <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.08em] text-white/75">
+      <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.08em] pw-sub">
         <span>📍 Stockholm</span>
         <span>Tap to say hej 👋</span>
       </div>
@@ -207,43 +208,43 @@ function ClockWidget({ onOpen }) {
   const day = now.toLocaleDateString("en-GB", { weekday: "long", timeZone: "Europe/Stockholm" });
   return (
     <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} col-span-2 row-span-2 p-3.5 flex flex-col`} aria-label="Stockholm time and weather">
-      <span className="text-[11px] font-semibold text-white/80">Stockholm</span>
+      <span className="text-[11px] font-semibold pw-sub">Stockholm</span>
       <span className={`mt-0.5 text-[34px] font-light leading-none tabular-nums tracking-[-0.02em] ${SHADOW}`}>{time}</span>
-      <span className="text-[11px] text-white/75">{day}</span>
+      <span className="text-[11px] pw-sub">{day}</span>
       <span className="flex-1" />
       <span className="flex items-center gap-1.5 text-[14px] font-semibold">
         {weather && weather !== "error" ? (
           <>
             <span className="text-[20px]">{describe(weather.current.weather_code, weather.current.is_day)}</span>
             {Math.round(weather.current.temperature_2m)}°
-            <span className="text-[11px] font-normal text-white/75">
+            <span className="text-[11px] font-normal pw-sub">
               H:{Math.round(weather.daily.temperature_2m_max[0])}° L:{Math.round(weather.daily.temperature_2m_min[0])}°
             </span>
           </>
         ) : (
-          <span className="text-[11px] font-normal text-white/75">{weather === "error" ? "Weather unavailable" : "…"}</span>
+          <span className="text-[11px] font-normal pw-sub">{weather === "error" ? "Weather unavailable" : "…"}</span>
         )}
       </span>
     </motion.button>
   );
 }
 
-function FundWidget({ onOpen }) {
+function FundWidget({ onOpen, isDark }) {
   const fund = useMemo(() => simulate("pe", "base", 10), []);
   return (
     <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} col-span-2 row-span-2 p-3.5 flex flex-col`} aria-label="Fund Simulator snapshot">
       <span className="flex items-center gap-1.5">
         <img src="/icons/apps/fundsim.svg" alt="" className="w-5 h-5" />
-        <span className="text-[11px] font-semibold text-white/80">Fund snapshot</span>
+        <span className="text-[11px] font-semibold pw-sub">Fund snapshot</span>
       </span>
       <span className="mt-3 block">
-        <MiniJCurve isDark />
+        <MiniJCurve isDark={isDark} />
       </span>
       <span className="flex-1" />
       <span className={`text-[14px] font-semibold tabular-nums ${SHADOW}`}>
         {(fund.irr * 100).toFixed(0)}% IRR · {fund.tvpi.toFixed(2)}x
       </span>
-      <span className="text-[10.5px] text-white/75">PE buyout · the J-curve</span>
+      <span className="text-[10.5px] pw-sub">PE buyout · the J-curve</span>
     </motion.button>
   );
 }
@@ -256,7 +257,7 @@ function AchievementsWidget({ onOpen, unlocked = {} }) {
     <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} col-span-2 row-span-2 p-3.5 flex flex-col items-center justify-center text-center`} aria-label="Achievements progress">
       <span className="relative w-[72px] h-[72px]">
         <svg viewBox="0 0 76 76" className="w-full h-full -rotate-90" aria-hidden="true">
-          <circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="8" />
+          <circle cx="38" cy="38" r="30" fill="none" stroke="currentColor" strokeOpacity="0.12" strokeWidth="8" />
           <circle cx="38" cy="38" r="30" fill="none" stroke="#ffd60a" strokeWidth="8" strokeLinecap="round" strokeDasharray={C} strokeDashoffset={C * (1 - got / ACHIEVEMENTS.length)} />
         </svg>
         <span className="absolute inset-0 flex items-center justify-center text-[24px]">🏆</span>
@@ -264,7 +265,7 @@ function AchievementsWidget({ onOpen, unlocked = {} }) {
       <span className={`mt-2 text-[14px] font-semibold tabular-nums ${SHADOW}`}>
         {got}/{ACHIEVEMENTS.length} trophies
       </span>
-      <span className="text-[10.5px] leading-tight text-white/75 line-clamp-2">{next ? `Next: ${next.hint}` : "All unlocked 👑"}</span>
+      <span className="text-[10.5px] leading-tight pw-sub line-clamp-2">{next ? `Next: ${next.hint}` : "All unlocked 👑"}</span>
     </motion.button>
   );
 }
@@ -276,7 +277,7 @@ function MemoriesWidget({ onOpen }) {
     return () => clearInterval(id);
   }, []);
   return (
-    <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} relative col-span-2 row-span-2`} aria-label="Photos from places Marta has lived">
+    <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className="relative col-span-2 row-span-2 rounded-[22px] overflow-hidden text-left shadow-[0_12px_30px_-12px_rgba(0,0,0,0.4)]" aria-label="Photos from places Marta has lived">
       {MEMORIES.map((p, k) => (
         <motion.img
           key={p.src}
@@ -291,7 +292,7 @@ function MemoriesWidget({ onOpen }) {
       <span className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
       <span className="absolute left-3 bottom-2.5 text-left">
         <span className="block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/75">Memories</span>
-        <span className="block text-[13px] font-semibold">📍 {MEMORIES[i]?.label}</span>
+        <span className="block text-[13px] font-semibold text-white">📍 {MEMORIES[i]?.label}</span>
       </span>
     </motion.button>
   );
@@ -302,7 +303,7 @@ function DesignSystemWidget({ onOpen, accent }) {
     <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} col-span-2 row-span-2 p-3.5 flex flex-col`} aria-label="Design System">
       <span className="flex items-center gap-1.5">
         <img src="/icons/apps/designsystem.svg" alt="" className="w-5 h-5" />
-        <span className="text-[11px] font-semibold text-white/80">Design System</span>
+        <span className="text-[11px] font-semibold pw-sub">Design System</span>
       </span>
       <span className="mt-3 grid grid-cols-5 gap-1.5">
         {Object.entries(ACCENTS).map(([k, v]) => (
@@ -311,7 +312,7 @@ function DesignSystemWidget({ onOpen, accent }) {
       </span>
       <span className="flex-1" />
       <span className={`text-[26px] font-bold leading-none tracking-[-0.02em] ${SHADOW}`}>Aa</span>
-      <span className="mt-1 text-[10.5px] text-white/75">Tokens · components · motion</span>
+      <span className="mt-1 text-[10.5px] pw-sub">Tokens · components · motion</span>
     </motion.button>
   );
 }
@@ -345,7 +346,7 @@ function FigmaWidget({ onOpen }) {
 function MusicWidget({ onOpen }) {
   return (
     <div role="button" tabIndex={0} onClick={onOpen} onKeyDown={(e) => e.key === "Enter" && onOpen()} className={`${WIDGET_SURFACE} col-span-4 row-span-2`} aria-label="Marta's music on Spotify">
-      <NowPlayingWidget text={`text-white ${SHADOW}`} sub="text-white/75" />
+      <NowPlayingWidget text="" sub="pw-sub" />
     </div>
   );
 }
@@ -398,7 +399,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
         aria-hidden={appOpen}
       >
         {/* pages */}
-        <div ref={pager} className="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Home screen">
+        <div ref={pager} className="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Home screen" data-wtheme={isDark ? "dark" : "light"}>
           {pages.map((items, p) => (
             <div key={p} className="snap-start shrink-0 w-full h-full px-5 overflow-y-auto [scrollbar-width:none]">
               <div className="grid grid-cols-4 grid-flow-row-dense auto-rows-[80px] gap-x-3 gap-y-3 pt-2 pb-4">
@@ -407,7 +408,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
                   if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} />;
                   const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget, memories: MemoriesWidget, designsystem: DesignSystemWidget, figma: FigmaWidget }[it.widget];
                   const opens = WIDGET_OPENS[it.widget];
-                  return W ? <W key={`w-${it.widget}`} onOpen={() => openWindow(opens)} unlocked={unlocked} accent={accent} /> : null;
+                  return W ? <W key={`w-${it.widget}`} onOpen={() => openWindow(opens)} unlocked={unlocked} accent={accent} isDark={isDark} /> : null;
                 })}
               </div>
             </div>

@@ -151,3 +151,9 @@ html[data-a11y-motion="reduce"] .seasonal-snow { display: none; }
 
 /* text selection follows the accent colour, like macOS */
 ::selection { background: hsl(var(--accent, 211 100% 50%) / 0.32); }
+
+/* phone home screen widgets: the same frosted cards as the desktop widgets */
+[data-wtheme="light"] .pw-surface { background: rgba(255,255,255,0.55); color: #1d1d1f; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.6) inset, 0 12px 30px -12px rgba(0,0,0,0.25); }
+[data-wtheme="dark"] .pw-surface { background: rgba(30,30,32,0.55); color: #fff; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12) inset, 0 12px 30px -12px rgba(0,0,0,0.6); }
+[data-wtheme="light"] .pw-surface .pw-sub { color: rgba(0,0,0,0.55); }
+[data-wtheme="dark"] .pw-surface .pw-sub { color: rgba(255,255,255,0.6); }
