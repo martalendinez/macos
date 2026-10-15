@@ -22,7 +22,7 @@ const GAP = 12;
 const TZ = "Europe/Stockholm";
 
 // Memories widget: hand-picked photos with a blue mood so the widget matches the desktop
-const MEMORIES = [
+export const MEMORIES = [
   { src: memStockholm, label: "Stockholm" },
   { src: memLakeLouise, label: "Canada" },
   { src: memMadrid, label: "Madrid" },

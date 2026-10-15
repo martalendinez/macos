@@ -505,6 +505,7 @@ export default function App() {
           onMarkAllRead={notif.markAllRead}
           onRemoveOne={notif.removeOneNotification}
           unlocked={notif.unlocked}
+          accent={accent}
           onOpenAchievements={() => openWindow("achievements")}
         />
       </Suspense>

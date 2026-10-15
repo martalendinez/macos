@@ -10,7 +10,8 @@ import { PHONE_STATUS_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
 import { APP_ICONS, CASE_STUDY_ICONS } from "./PhoneIcons";
 import { getApps } from "../../config/apps";
-import { MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
+import { MEMORIES, MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
+import { ACCENTS } from "../../config/accents";
 import { simulate } from "../windows/FundSim/fundModel";
 
 // the home screen always uses the normal (iPhone-style) icons; only the Dock follows the icon setting
@@ -217,6 +218,79 @@ function AchievementsWidget({ onOpen, unlocked = {} }) {
   );
 }
 
+function MemoriesWidget({ onOpen }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((n) => (n + 1) % MEMORIES.length), 6000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} relative col-span-2 row-span-2`} aria-label="Photos from places Marta has lived">
+      {MEMORIES.map((p, k) => (
+        <motion.img
+          key={p.src}
+          src={p.src}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={false}
+          animate={{ opacity: k === i ? 1 : 0, scale: k === i ? 1.06 : 1 }}
+          transition={{ opacity: { duration: 0.8 }, scale: { duration: 6, ease: "linear" } }}
+        />
+      ))}
+      <span className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
+      <span className="absolute left-3 bottom-2.5 text-left">
+        <span className="block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/75">Memories</span>
+        <span className="block text-[13px] font-semibold">📍 {MEMORIES[i]?.label}</span>
+      </span>
+    </motion.button>
+  );
+}
+
+function DesignSystemWidget({ onOpen, accent }) {
+  return (
+    <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className={`${WIDGET_SURFACE} col-span-2 row-span-2 p-3.5 flex flex-col`} aria-label="Design System">
+      <span className="flex items-center gap-1.5">
+        <img src="/icons/apps/designsystem.svg" alt="" className="w-5 h-5" />
+        <span className="text-[11px] font-semibold text-white/80">Design System</span>
+      </span>
+      <span className="mt-3 grid grid-cols-5 gap-1.5">
+        {Object.entries(ACCENTS).map(([k, v]) => (
+          <span key={k} className={`aspect-square rounded-full ${accent === k ? "ring-2 ring-white ring-offset-1 ring-offset-transparent" : ""}`} style={{ background: `hsl(${v})` }} />
+        ))}
+      </span>
+      <span className="flex-1" />
+      <span className={`text-[26px] font-bold leading-none tracking-[-0.02em] ${SHADOW}`}>Aa</span>
+      <span className="mt-1 text-[10.5px] text-white/75">Tokens · components · motion</span>
+    </motion.button>
+  );
+}
+
+function FigmaWidget({ onOpen }) {
+  return (
+    <motion.button type="button" onClick={onOpen} whileTap={{ scale: 0.96 }} className="col-span-2 row-span-2 rounded-[24px] overflow-hidden p-3.5 flex flex-col text-left text-white bg-[#1e1e1e] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.5)]" aria-label="Open Figma">
+      <span className="flex items-center gap-1.5">
+        <img src="/icons/apps/figma.svg" alt="" className="w-5 h-5" />
+        <span className="text-[11px] font-semibold text-white/70">Figma</span>
+      </span>
+      <span className="relative mt-2 flex-1 rounded-lg bg-[#2c2c2c] overflow-hidden">
+        <span className="absolute left-2 top-2 text-[8px] text-[#c7a6ff]">❖ Button</span>
+        {[16, 34, 52].map((top, k) => (
+          <span key={top} className={`absolute left-2 px-1.5 py-0.5 rounded-[5px] text-[8px] leading-[11px] font-semibold ${k ? "ring-1 ring-[#c7a6ff]/60" : ""}`} style={{ top, background: "#9747ff" }}>
+            {k ? "◈ " : ""}Invest now
+          </span>
+        ))}
+        <span className="absolute right-2 top-3 w-9 h-12 rounded-md bg-white/90" />
+        <motion.span className="absolute" animate={{ left: ["62%", "30%", "70%", "62%"], top: ["60%", "30%", "20%", "60%"] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}>
+          <svg viewBox="0 0 16 16" className="w-3 h-3" aria-hidden="true">
+            <path d="M2 1.5l11 6.2-4.7 1.2-2 4.6z" fill="#ff375f" stroke="#fff" strokeWidth="1" />
+          </svg>
+        </motion.span>
+      </span>
+      <span className="mt-1.5 text-[10px] text-white/60">Live components ❖</span>
+    </motion.button>
+  );
+}
+
 function MusicWidget({ onOpen }) {
   return (
     <div role="button" tabIndex={0} onClick={onOpen} onKeyDown={(e) => e.key === "Enter" && onOpen()} className={`${WIDGET_SURFACE} col-span-4 row-span-2`} aria-label="Marta's music on Spotify">
@@ -226,7 +300,7 @@ function MusicWidget({ onOpen }) {
 }
 
 /* ---------- home screen ---------- */
-export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, isDark, time, unread, onNotifications, onSearch, loaded, dockStacks = [], iconTheme = "glass", unlocked }) {
+export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, isDark, time, unread, onNotifications, onSearch, loaded, dockStacks = [], iconTheme = "glass", unlocked, accent }) {
   const apps = useMemo(() => Object.fromEntries(appList.map((a) => [a.id, a])), [appList]);
   const [page, setPage] = useState(0);
   const [folder, setFolder] = useState(null);
@@ -273,9 +347,9 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
                 {items.map((it) => {
                   if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} />;
                   if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} />;
-                  const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget }[it.widget];
-                  const opens = { profile: "about", clock: "map", fund: "fundsim", achievements: "achievements", music: "music" }[it.widget];
-                  return W ? <W key={`w-${it.widget}`} onOpen={() => openWindow(opens)} unlocked={unlocked} /> : null;
+                  const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget, memories: MemoriesWidget, designsystem: DesignSystemWidget, figma: FigmaWidget }[it.widget];
+                  const opens = { profile: "about", clock: "map", fund: "fundsim", achievements: "achievements", music: "music", memories: "instagram", designsystem: "designsystem", figma: "figma" }[it.widget];
+                  return W ? <W key={`w-${it.widget}`} onOpen={() => openWindow(opens)} unlocked={unlocked} accent={accent} /> : null;
                 })}
               </div>
             </div>
