@@ -16,6 +16,7 @@ import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
 import AirDrop from "./components/shell/AirDrop";
 import PhoneHome from "./components/phone/PhoneHome";
+import PhoneLock from "./components/phone/PhoneLock";
 import AppSwitcher from "./components/shell/AppSwitcher";
 import QuickLook from "./components/shell/QuickLook";
 import { Snow, useSeason } from "./components/shell/Seasonal";
@@ -358,6 +359,25 @@ export default function App() {
     [appById, launch]
   );
 
+  // Messages badge: "Marta sent you a message" until Messages is opened once
+  const [messagesUnread, setMessagesUnread] = useState(() => {
+    try {
+      return localStorage.getItem("portfolio.messages.read") !== "1";
+    } catch {
+      return true;
+    }
+  });
+  useEffect(() => {
+    if (!messagesUnread || !openWindows.includes("messages")) return;
+    setMessagesUnread(false);
+    try {
+      localStorage.setItem("portfolio.messages.read", "1");
+    } catch {
+      /* ignore */
+    }
+  }, [openWindows, messagesUnread]);
+  const badges = useMemo(() => (messagesUnread ? { messages: 1 } : {}), [messagesUnread]);
+
   // Finder Quick Look: Space previews the selected desktop icon
   const [quickLook, setQuickLook] = useState(null);
   useEffect(() => {
@@ -421,14 +441,14 @@ export default function App() {
         items: st.items
           .map((it) => {
             const a = apps.find((x) => x.id === it.app);
-            return a && { key: a.id, label: a.label, icon: a.icon, windowId: a.windowId, onOpen: () => openWindow(a.windowId) };
+            return a && { key: a.id, label: a.label, icon: a.icon, windowId: a.windowId, badge: badges[a.id], onOpen: () => openWindow(a.windowId) };
           })
           .filter(Boolean),
       },
     }));
     const inDock = apps.filter((a) => a.inDock);
     return [...inDock.filter((a) => a.id !== "fun"), ...stacks, ...inDock.filter((a) => a.id === "fun")];
-  }, [apps, iconTheme, openWindow]);
+  }, [apps, iconTheme, openWindow, badges]);
   const dockMinimized = useMemo(
     () =>
       openWindows
@@ -551,6 +571,7 @@ export default function App() {
           onSearch={() => setSpotlightOpen(true)}
           dockStacks={dockApps.filter((a) => a.stack)}
           iconTheme={iconTheme}
+          badges={badges}
           unlocked={notif.unlocked}
         />
       ) : (
@@ -623,6 +644,7 @@ export default function App() {
 
       {!mobile && <AppSwitcher windows={switcherWindows} onPick={restoreWindow} isDark={theme === "dark"} />}
       <QuickLook item={quickLook} onClose={() => setQuickLook(null)} onOpen={(it) => it.onOpen?.()} isDark={theme === "dark"} />
+      {mobile && <PhoneLock wallpaperUrl={activeWallpaper} loaded={loaded} />}
       <Confetti />
       <AirDrop isDark={theme === "dark"} onAccept={openResume} />
       {season?.snow && <Snow />}

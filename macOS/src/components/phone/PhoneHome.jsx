@@ -10,6 +10,8 @@ import { PHONE_STATUS_H } from "../../config/shell";
 import { ACHIEVEMENTS } from "../../config/achievements";
 import { APP_ICONS, CASE_STUDY_ICONS } from "./PhoneIcons";
 import DynamicIsland from "./DynamicIsland";
+import Badge from "../ui/Badge";
+import { setLaunchOrigin } from "../../config/launchOrigin";
 import QuickActions, { actionsFor } from "./QuickActions";
 import { getApps } from "../../config/apps";
 import { MEMORIES, MiniJCurve, NowPlayingWidget, describe, useStockholmWeather } from "../shell/Widgets";
@@ -98,18 +100,26 @@ function useLongPress(onLongPress) {
   };
 }
 
-function AppIcon({ app, label, onOpen, onLongPress, size = 60, showLabel = true }) {
+function AppIcon({ app, label, onOpen, onLongPress, size = 60, showLabel = true, badge = 0 }) {
   const lp = useLongPress((rect) => onLongPress?.(app, rect));
   return (
     <motion.button
       type="button"
-      onClick={() => !lp.fired.current && onOpen()}
+      onClick={(e) => {
+        if (lp.fired.current) return;
+        // remember where the icon is, so the app zooms out of it
+        setLaunchOrigin(app.windowId, e.currentTarget.firstElementChild?.getBoundingClientRect());
+        onOpen();
+      }}
       {...(onLongPress ? lp.handlers : {})}
       whileTap={{ scale: 0.88 }}
       className="flex flex-col items-center gap-1.5 min-w-0 select-none [-webkit-touch-callout:none]"
       aria-label={app.label}
     >
-      <IconArt app={app} size={size} />
+      <span className="relative">
+        <IconArt app={app} size={size} />
+        <Badge count={badge} />
+      </span>
       {showLabel && <span className="max-w-full truncate text-[11.5px] font-medium text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.45)]">{label}</span>}
     </motion.button>
   );
@@ -130,7 +140,7 @@ function FolderIcon({ folder, apps, onOpen, iconTheme }) {
   );
 }
 
-function FolderSheet({ folder, apps, onClose, launch, iconTheme }) {
+function FolderSheet({ folder, apps, onClose, launch, iconTheme, badges = {} }) {
   return (
     <motion.div className="fixed inset-0 z-[7000] flex flex-col items-center justify-center px-8 backdrop-blur-2xl bg-black/25" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
       <motion.div className="w-full max-w-[320px]" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.7, opacity: 0 }} transition={{ type: "spring", stiffness: 380, damping: 30 }} onClick={(e) => e.stopPropagation()}>
@@ -144,6 +154,7 @@ function FolderSheet({ folder, apps, onClose, launch, iconTheme }) {
                 key={a.id}
                 app={a}
                 label={PHONE_LABELS[a.id] ?? a.label}
+                badge={badges[a.id]}
                 iconTheme={iconTheme}
                 onOpen={() => {
                   onClose();
@@ -343,7 +354,7 @@ function MusicWidget({ onOpen }) {
 const WIDGET_OPENS = { profile: "about", clock: "map", fund: "fundsim", achievements: "achievements", music: "music", memories: "instagram", designsystem: "designsystem", figma: "figma" };
 
 /* ---------- home screen ---------- */
-export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, isDark, time, unread, onNotifications, onSearch, loaded, dockStacks = [], iconTheme = "glass", unlocked, accent }) {
+export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, isDark, time, unread, onNotifications, onSearch, loaded, dockStacks = [], iconTheme = "glass", unlocked, accent, badges = {} }) {
   const apps = useMemo(() => Object.fromEntries(appList.map((a) => [a.id, a])), [appList]);
   const [page, setPage] = useState(0);
   const [folder, setFolder] = useState(null);
@@ -392,7 +403,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
             <div key={p} className="snap-start shrink-0 w-full h-full px-5 overflow-y-auto [scrollbar-width:none]">
               <div className="grid grid-cols-4 grid-flow-row-dense auto-rows-[80px] gap-x-3 gap-y-3 pt-2 pb-4">
                 {items.map((it) => {
-                  if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} onLongPress={openMenu} />;
+                  if (typeof it === "string") return apps[it] && <AppIcon key={it} app={apps[it]} label={label(apps[it])} onOpen={() => launch(apps[it])} onLongPress={openMenu} badge={badges[it]} />;
                   if (it.folder) return <FolderIcon key={it.folder} folder={it} apps={apps} onOpen={() => setFolder(it)} />;
                   const W = { profile: ProfileWidget, clock: ClockWidget, fund: FundWidget, achievements: AchievementsWidget, music: MusicWidget, memories: MemoriesWidget, designsystem: DesignSystemWidget, figma: FigmaWidget }[it.widget];
                   const opens = WIDGET_OPENS[it.widget];
@@ -429,8 +440,10 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
               whileTap={{ scale: 0.88 }}
               onClick={() => setFolder({ folder: d.label, items: d.stack.items.map((it) => it.key) })}
               aria-label={`${d.label} folder`}
+              className="relative"
             >
               <img src={d.icon} alt="" draggable={false} className="w-[54px] h-[54px] object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]" />
+              <Badge count={d.stack.items.reduce((n, it) => n + (badges[it.key] || 0), 0)} />
             </motion.button>
           ))}
         </div>
@@ -449,7 +462,7 @@ export default function PhoneHome({ apps: appList, launch, openWindow, appOpen, 
           />
         )}
       </AnimatePresence>
-      <AnimatePresence>{folder && <FolderSheet folder={folder} apps={apps} launch={launch} iconTheme={iconTheme} onClose={() => setFolder(null)} />}</AnimatePresence>
+      <AnimatePresence>{folder && <FolderSheet folder={folder} apps={apps} launch={launch} iconTheme={iconTheme} badges={badges} onClose={() => setFolder(null)} />}</AnimatePresence>
     </>
   );
 }

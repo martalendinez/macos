@@ -50,6 +50,8 @@ export default function DynamicIsland() {
       role="status"
       aria-live="polite"
       className="fixed left-1/2 top-[8px] z-[8600] -translate-x-1/2 bg-black text-white overflow-hidden shadow-[0_6px_20px_-6px_rgba(0,0,0,0.6)]"
+      // a soft ring in the accent colour while an alert is showing
+      style={{ boxShadow: alert ? "0 0 0 1px hsl(var(--accent) / 0.55), 0 8px 26px -6px hsl(var(--accent) / 0.55)" : undefined }}
       initial={false}
       animate={size}
       transition={SPRING}
@@ -64,12 +66,12 @@ export default function DynamicIsland() {
               <img src={alert.icon} alt="" className="w-10 h-10 rounded-[11px]" />
             )}
             <span className="min-w-0 flex-1">
-              <span className="block text-[11px] font-medium text-white/55">{alert.kind === "achievement" ? "Achievement unlocked" : alert.title}</span>
+              <span className="block text-[11px] font-semibold text-[hsl(var(--accent))]">{alert.kind === "achievement" ? "Achievement unlocked" : alert.title}</span>
               <span className="block text-[15px] font-semibold leading-tight truncate">{alert.kind === "achievement" ? alert.title : alert.sub}</span>
             </span>
             {alert.kind === "achievement" && <span className="text-[22px]">🏆</span>}
             {alert.kind === "airdrop" && (
-              <svg viewBox="0 0 16 16" className="w-6 h-6 text-[#0a84ff]" fill="none" aria-hidden="true">
+              <svg viewBox="0 0 16 16" className="w-6 h-6 text-[hsl(var(--accent))]" fill="none" aria-hidden="true">
                 <path d="M3.2 11.8a6.3 6.3 0 1 1 9.6 0M5.4 10.1a3.5 3.5 0 1 1 5.2 0M8 8.2v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             )}

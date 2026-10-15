@@ -1,5 +1,6 @@
 // src/components/shell/DockItem.jsx
 import { useRef, useState } from "react";
+import Badge from "../ui/Badge";
 import {
   AnimatePresence,
   motion,
@@ -22,6 +23,7 @@ export default function DockItem({
   onClick,
   children,
   tourId,
+  badge = 0,
   base = DOCK_BASE, // icon size at rest (smaller on phones so the Dock fits)
   peek = [], // folder stacks: icons of the apps inside, shown in the hover label
 }) {
@@ -117,9 +119,10 @@ export default function DockItem({
         aria-label={label}
         onClick={handleClick}
         animate={bounce}
-        className="w-full h-full flex items-center justify-center active:brightness-[0.65] transition-[filter] duration-100"
+        className="relative w-full h-full flex items-center justify-center active:brightness-[0.65] transition-[filter] duration-100"
       >
         {children}
+        <Badge count={badge} className="!-top-0.5 !-right-0.5 !min-w-[18px] !h-[18px] !text-[11px]" />
       </motion.button>
 
       {/* running indicator */}

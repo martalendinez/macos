@@ -28,7 +28,7 @@ export default function DesktopIcons({ loaded, items = [], selectedId, onSelect 
           >
             <span
               className={`p-[5px] rounded-[7px] transition-colors duration-100 ${
-                selected ? "bg-black/25 ring-1 ring-white/15" : ""
+                selected ? "bg-[hsl(var(--accent)/0.28)] ring-1 ring-[hsl(var(--accent)/0.45)]" : ""
               }`}
             >
               <img

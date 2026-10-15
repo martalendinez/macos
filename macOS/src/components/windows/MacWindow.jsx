@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion, useDragControls, useMotionValue } from "framer-motion";
 import TrafficLights from "./TrafficLights";
 import useIsMobile from "../../hooks/useIsMobile";
+import { getLaunchOrigin } from "../../config/launchOrigin";
 import {
   DOCK_RESERVE,
   MENU_BAR_H,
@@ -255,6 +256,14 @@ export default function MacWindow({
 
   const edge = "absolute z-20";
 
+  // phones: the app grows out of the icon that launched it, and shrinks back into it on close
+  const origin = mobile ? getLaunchOrigin(id) : null;
+  const vw = typeof window !== "undefined" ? window.innerWidth : 390;
+  const vh = typeof window !== "undefined" ? window.innerHeight : 844;
+  const fromIcon = origin
+    ? { opacity: 0, scale: origin.w / vw, x: origin.x - vw / 2, y: origin.y - (PHONE_STATUS_H + (vh - PHONE_STATUS_H) / 2), borderRadius: 60 }
+    : { opacity: 0, scale: 0.86 };
+
   return (
     <motion.div
       ref={outerRef}
@@ -264,12 +273,12 @@ export default function MacWindow({
       className="fixed"
       style={
         mobile
-          ? { zIndex, left: 0, top: PHONE_STATUS_H, width: "100vw", height: `calc(100dvh - ${PHONE_STATUS_H}px)`, pointerEvents: isMinimized ? "none" : "auto" }
+          ? { zIndex, left: 0, top: PHONE_STATUS_H, width: "100vw", height: `calc(100dvh - ${PHONE_STATUS_H}px)`, overflow: "hidden", pointerEvents: isMinimized ? "none" : "auto" }
           : { zIndex, left, top, width: w, height: h, x, y, pointerEvents: isMinimized ? "none" : "auto" }
       }
-      initial={mobile ? { opacity: 0, scale: 0.86 } : { opacity: 0, scale: 0.9 }}
-      animate={mobile ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }}
-      exit={mobile ? { opacity: 0, scale: 0.86, transition: { duration: 0.2, ease: "easeIn" } } : { opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
+      initial={mobile ? fromIcon : { opacity: 0, scale: 0.9 }}
+      animate={mobile ? { opacity: 1, scale: 1, x: 0, y: 0, borderRadius: 0 } : { opacity: 1, scale: 1 }}
+      exit={mobile ? { ...fromIcon, transition: { type: "spring", stiffness: 380, damping: 36, opacity: { duration: 0.25, delay: 0.1 } } } : { opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
       transition={{ ...SPRING_WINDOW, opacity: { duration: 0.18 } }}
       drag={!mobile && !isMaximized && !resizing}
       dragListener={false}

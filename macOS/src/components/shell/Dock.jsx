@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import DockItem, { DOCK_BASE } from "./DockItem";
+import Badge from "../ui/Badge";
 import useIsMobile from "../../hooks/useIsMobile";
 
 /** A Dock stack: a frosted grid of apps that pops up above its Dock icon. */
@@ -65,7 +66,10 @@ function StackPopover({ stack, anchorX, isDark, onClose }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.03 * i }}
             >
-              <img src={it.icon} alt="" draggable={false} className="w-12 h-12 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.18)] transition-transform group-hover:scale-[1.06]" />
+              <span className="relative">
+                <img src={it.icon} alt="" draggable={false} className="w-12 h-12 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.18)] transition-transform group-hover:scale-[1.06]" />
+                <Badge count={it.badge} />
+              </span>
               <span className={`text-[11.5px] leading-tight text-center truncate max-w-full ${isDark ? "text-white/80" : "text-black/75"}`}>{it.label}</span>
             </motion.button>
           ))}
@@ -168,6 +172,7 @@ export default function Dock({
             isDark={isDark}
             running={app.stack ? app.stack.items.some((it) => it.windowId && runningIds.includes(it.windowId)) : runningIds.includes(app.windowId)}
             bounceOnClick={!app.stack}
+            badge={app.stack ? app.stack.items.reduce((n, it) => n + (it.badge || 0), 0) : 0}
             peek={app.stack ? app.stack.items.map((it) => it.icon).filter(Boolean) : []}
             active={openStack?.id === app.id}
             onClick={(e) => {

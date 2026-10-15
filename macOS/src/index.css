@@ -148,3 +148,6 @@ html[data-a11y-contrast="more"][data-a11y-filter="grayscale"] #root { filter: gr
 }
 @media (prefers-reduced-motion: reduce) { .seasonal-snow { display: none; } }
 html[data-a11y-motion="reduce"] .seasonal-snow { display: none; }
+
+/* text selection follows the accent colour, like macOS */
+::selection { background: hsl(var(--accent, 211 100% 50%) / 0.32); }
