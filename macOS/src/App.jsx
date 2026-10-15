@@ -15,7 +15,6 @@ import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
 import AirDrop from "./components/shell/AirDrop";
-import CozyCorner from "./components/shell/CozyCorner";
 import { Snow, useSeason } from "./components/shell/Seasonal";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
@@ -535,7 +534,6 @@ export default function App() {
       />
 
       <Widgets loaded={loaded} theme={theme} onOpenWindow={openWindow} unlocked={notif.unlocked} accent={accent} />
-      <CozyCorner loaded={loaded} theme={theme} notify={notif.notify} />
 
       <WindowsLayer
         openWindows={openWindows}
