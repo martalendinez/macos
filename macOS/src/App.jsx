@@ -15,6 +15,7 @@ import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
 import AirDrop from "./components/shell/AirDrop";
+import PhoneHome from "./components/phone/PhoneHome";
 import { Snow, useSeason } from "./components/shell/Seasonal";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
@@ -508,6 +509,21 @@ export default function App() {
         />
       </Suspense>
 
+      {mobile ? (
+        <PhoneHome
+          loaded={loaded}
+          apps={apps}
+          launch={launch}
+          openWindow={openWindow}
+          appOpen={dockHidden}
+          isDark={theme === "dark"}
+          time={String(currentTime).split(", ").pop().split(" ").pop()}
+          unread={notif.unreadCount}
+          onNotifications={() => notif.setNotifOpen(!notif.notifOpen)}
+          onSearch={() => setSpotlightOpen(true)}
+        />
+      ) : (
+      <>
       <TopBar
         loaded={loaded}
         theme={theme}
@@ -534,6 +550,8 @@ export default function App() {
       />
 
       <Widgets loaded={loaded} theme={theme} onOpenWindow={openWindow} unlocked={notif.unlocked} accent={accent} />
+      </>
+      )}
 
       <WindowsLayer
         openWindows={openWindows}
@@ -551,6 +569,7 @@ export default function App() {
         appApi={appApi}
       />
 
+      {!mobile && (
       <Dock
         loaded={loaded}
         theme={theme}
@@ -561,6 +580,7 @@ export default function App() {
         onLaunch={launch}
         onRestore={restoreWindow}
       />
+      )}
 
       <Spotlight
         open={spotlightOpen}

@@ -6,6 +6,7 @@ import useIsMobile from "../../hooks/useIsMobile";
 import {
   DOCK_RESERVE,
   MENU_BAR_H,
+  PHONE_STATUS_H,
   SPRING_WINDOW,
   WINDOW_MARGIN,
 } from "../../config/shell";
@@ -36,6 +37,22 @@ function initialFrame(initialPos, width, height) {
   const left = clamp(initialPos.x, WINDOW_MARGIN, vw - WINDOW_MARGIN - w);
   const top = clamp(initialPos.y, MENU_BAR_H + WINDOW_MARGIN, Math.max(MENU_BAR_H + WINDOW_MARGIN, vh - DOCK_RESERVE - h));
   return { left, top, width: w, height: h };
+}
+
+function HomeIndicator({ isDark, onHome }) {
+  const start = { y: 0 };
+  return (
+    <button
+      type="button"
+      aria-label="Go to home screen"
+      onClick={onHome}
+      onPointerDown={(e) => (start.y = e.clientY)}
+      onPointerUp={(e) => start.y - e.clientY > 24 && onHome()}
+      className="shrink-0 h-[22px] flex items-center justify-center touch-none"
+    >
+      <span className={`w-[134px] h-[5px] rounded-full ${isDark ? "bg-white/70" : "bg-black/80"}`} />
+    </button>
+  );
 }
 
 export default function MacWindow({
@@ -247,12 +264,12 @@ export default function MacWindow({
       className="fixed"
       style={
         mobile
-          ? { zIndex, left: 0, top: MENU_BAR_H, width: "100vw", height: `calc(100dvh - ${MENU_BAR_H}px)`, pointerEvents: isMinimized ? "none" : "auto" }
+          ? { zIndex, left: 0, top: PHONE_STATUS_H, width: "100vw", height: `calc(100dvh - ${PHONE_STATUS_H}px)`, pointerEvents: isMinimized ? "none" : "auto" }
           : { zIndex, left, top, width: w, height: h, x, y, pointerEvents: isMinimized ? "none" : "auto" }
       }
-      initial={mobile ? { opacity: 0, y: 80 } : { opacity: 0, scale: 0.9 }}
-      animate={mobile ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1 }}
-      exit={mobile ? { opacity: 0, y: 80, transition: { duration: 0.2, ease: "easeIn" } } : { opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
+      initial={mobile ? { opacity: 0, scale: 0.86 } : { opacity: 0, scale: 0.9 }}
+      animate={mobile ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }}
+      exit={mobile ? { opacity: 0, scale: 0.86, transition: { duration: 0.2, ease: "easeIn" } } : { opacity: 0, scale: 0.94, transition: { duration: 0.16, ease: "easeIn" } }}
       transition={{ ...SPRING_WINDOW, opacity: { duration: 0.18 } }}
       drag={!mobile && !isMaximized && !resizing}
       dragListener={false}
@@ -263,7 +280,7 @@ export default function MacWindow({
     >
       <motion.div
         className={[
-          `a11y-win relative w-full h-full overflow-hidden flex flex-col ${mobile ? "rounded-t-xl" : "rounded-xl"}`,
+          `a11y-win relative w-full h-full overflow-hidden flex flex-col ${mobile ? "" : "rounded-xl"}`,
           surfaceClass,
           isDark ? "darkwin" : "",
           isMac ? (isDark ? "text-white" : "text-black") : "text-white",
@@ -274,7 +291,7 @@ export default function MacWindow({
       >
         {/* clip-path guarantees rounded corners clip animated/composited children
             (Chrome can miss them with overflow:hidden alone); kept off the shadowed frame */}
-        <div className="flex-1 min-h-0 flex flex-col" style={{ clipPath: mobile ? "inset(0 round 12px 12px 0 0)" : "inset(0 round 12px)" }}>
+        <div className="flex-1 min-h-0 flex flex-col" style={{ clipPath: mobile ? undefined : "inset(0 round 12px)" }}>
         {/* Title bar */}
         <div
           className={`relative px-4 flex items-center shrink-0 cursor-default select-none ${titleBarClass}`}
@@ -284,6 +301,20 @@ export default function MacWindow({
           }}
           onDoubleClick={mobile ? undefined : zoom}
         >
+          {mobile ? (
+            // iOS navigation bar: back to the home screen
+            <button
+              onClick={() => onClose(id)}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="-ml-2 flex items-center gap-0.5 px-1 py-1.5 text-[16px] text-[hsl(var(--accent))] active:opacity-50"
+              aria-label="Back to home screen"
+            >
+              <svg viewBox="0 0 12 20" className="w-[11px] h-[19px]" fill="none" aria-hidden="true">
+                <path d="M10 2L2 10l8 8" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Home
+            </button>
+          ) : (
           <TrafficLights
             isActive={isActive}
             isDark={isDark || !isMac}
@@ -293,6 +324,7 @@ export default function MacWindow({
             onZoom={zoom}
             canZoom={resizable}
           />
+          )}
 
           <div
             className={`absolute left-1/2 -translate-x-1/2 ${mobile ? "max-w-[45%]" : "max-w-[60%]"} truncate text-[13px] font-semibold tracking-[-0.01em] transition-colors duration-200 ${titleTextClass}`}
@@ -300,20 +332,13 @@ export default function MacWindow({
             {title}
           </div>
 
-          {mobile && (
-            <button
-              onClick={() => onClose(id)}
-              onPointerDown={(e) => e.stopPropagation()}
-              className="ml-auto -mr-1 px-3 py-1.5 rounded-full text-[15px] font-semibold text-[hsl(var(--accent))] active:opacity-60"
-            >
-              Done
-            </button>
-          )}
         </div>
 
         {/* Scrollable Content */}
         {/* @container: apps adapt to the window's width (narrow windows + phones get compact layouts) */}
         <div className="a11y-win-body @container flex-1 overflow-y-auto min-h-0">{children}</div>
+        {/* iOS home indicator: tap or swipe up to go home */}
+        {mobile && <HomeIndicator isDark={isDark || !isMac} onHome={() => onClose(id)} />}
         </div>
       </motion.div>
 

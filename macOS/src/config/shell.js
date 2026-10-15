@@ -2,6 +2,7 @@
 // Shared desktop metrics so windows, menus and the Dock agree on layout.
 
 export const MENU_BAR_H = 28;
+export const PHONE_STATUS_H = 44; // phones: iPhone-style status bar instead of the menu bar
 export const DOCK_RESERVE = 92; // space a zoomed window leaves for the Dock
 export const WINDOW_MARGIN = 8;
 
