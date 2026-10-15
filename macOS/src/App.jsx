@@ -15,6 +15,7 @@ import Welcome, { shouldShowWelcome } from "./components/shell/Welcome";
 import Tour from "./components/shell/Tour";
 import Confetti from "./components/shell/Confetti";
 import AirDrop from "./components/shell/AirDrop";
+import CozyCorner from "./components/shell/CozyCorner";
 import { Snow, useSeason } from "./components/shell/Seasonal";
 import { useA11y } from "./config/a11yStore";
 import { FIKA } from "./config/humor";
@@ -80,6 +81,15 @@ function getHourInTimeZone(timeZone) {
   const hourStr = parts.find((p) => p.type === "hour")?.value ?? "12";
   return Number(hourStr);
 }
+
+// read once per page load (before this visit overwrites it)
+const LAST_VISIT = (() => {
+  try {
+    return Number(localStorage.getItem("portfolio.lastVisit")) || null;
+  } catch {
+    return null;
+  }
+})();
 
 export default function App() {
   const [accent, setAccent] = useState("sky");
@@ -175,6 +185,24 @@ export default function App() {
   // first visit: a short welcome guide (work first, then the extras); reopen it from Help
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
+  // returning visitors: "Welcome back! You were last here 3 days ago 👋"
+  useEffect(() => {
+    if (!loaded) return;
+    const last = LAST_VISIT;
+    try {
+      localStorage.setItem("portfolio.lastVisit", String(Date.now()));
+    } catch {
+      return;
+    }
+    const gap = last ? Date.now() - last : 0;
+    if (!last || gap < 30 * 60 * 1000) return; // first visit, or just a refresh
+    const days = Math.floor(gap / 86_400_000);
+    const when = days === 0 ? "earlier today" : days === 1 ? "yesterday" : days < 14 ? `${days} days ago` : days < 60 ? `${Math.floor(days / 7)} weeks ago` : "a while ago";
+    const id = window.setTimeout(() => notif.notify?.({ title: "Welcome back", message: `You were last here ${when} 👋`, toast: true }), 1800);
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
+
   useEffect(() => {
     if (!loaded || !shouldShowWelcome()) return;
     const t = window.setTimeout(() => setWelcomeOpen(true), 900);
@@ -507,6 +535,7 @@ export default function App() {
       />
 
       <Widgets loaded={loaded} theme={theme} onOpenWindow={openWindow} unlocked={notif.unlocked} accent={accent} />
+      <CozyCorner loaded={loaded} theme={theme} notify={notif.notify} />
 
       <WindowsLayer
         openWindows={openWindows}
