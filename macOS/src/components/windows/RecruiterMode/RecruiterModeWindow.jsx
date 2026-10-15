@@ -17,7 +17,7 @@ const RM_STEPS = [
   { targets: ["rm-facts"], eyebrow: "At a glance 📌", title: "The quick answers", text: "Role, background, location, toolkit and domain, in one place." },
   { targets: ["rm-why"], eyebrow: "Why me ✨", title: "Three things I bring", text: "Fintech domain experience, design and code in one person, and research behind every flow." },
   { targets: ["rm-work"], eyebrow: "Best work 🏆", title: "Two theses, end to end", text: "Each case study shows the research, the decisions and the code. Open one when you have five minutes." },
-  { targets: ["rm-actions"], eyebrow: "Next step 📬", title: "Let’s talk", text: "Download my résumé, copy a summary for your notes or the hiring manager, or book a call. Thanks for reading!" },
+  { targets: ["rm-actions"], eyebrow: "Next step 📬", title: "Let’s talk", text: "Download my résumé, copy my email or find me on LinkedIn. Thanks for reading!" },
 ];
 const linkedIn = CONTACT.links.find((l) => l.label === "LinkedIn")?.href;
 
@@ -91,27 +91,6 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
   const t = useCaseStudyTheme({ uiTheme, glassContrast, appearance });
   const [copied, setCopied] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
-  const [summaryCopied, setSummaryCopied] = useState(false);
-  async function copySummary() {
-    const url = typeof window !== "undefined" ? window.location.origin : "";
-    const text = [
-      `${PROFILE.name} · ${PROFILE.role} at ${PROFILE.company.name} · ${PROFILE.location}`,
-      ...GLANCE.map((g) => `${g.label}: ${g.value} (${g.sub})`),
-      `Portfolio: ${url}`,
-      `Résumé: ${url}/resume.pdf`,
-      linkedIn ? `LinkedIn: ${linkedIn}` : null,
-      `Email: ${CONTACT.email}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      setSummaryCopied(true);
-      setTimeout(() => setSummaryCopied(false), 1800);
-    } catch {
-      /* clipboard blocked */
-    }
-  }
   async function copyEmail() {
     try {
       await navigator.clipboard.writeText(CONTACT.email);
@@ -267,13 +246,6 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
             Download résumé
           </a>
         </EasterEgg>
-        <button onClick={copySummary} title="Copy a short summary to paste into your ATS or send to a hiring manager" className={`min-w-[132px] px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span key={summaryCopied ? "c" : "n"} className="inline-block" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
-              {summaryCopied ? "Summary copied ✓" : "📋 Copy summary"}
-            </motion.span>
-          </AnimatePresence>
-        </button>
         <button onClick={copyEmail} className={`min-w-[104px] px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.span key={copied ? "c" : "n"} className="inline-block" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
@@ -286,12 +258,6 @@ export default function RecruiterModeWindow({ uiTheme = "glass", glassContrast =
             LinkedIn
           </a>
         )}
-        <button onClick={() => (window.location.href = CONTACT.bookingHref)} className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
-          📞 Book a call
-        </button>
-        <button onClick={() => onOpenWindow?.("about")} className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium ${t.buttonClass}`}>
-          Full profile
-        </button>
       </div>
       <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={RM_STEPS} label="Recruiter highlights" finishLabel="Done" isDark={t.isDark} />
     </div>

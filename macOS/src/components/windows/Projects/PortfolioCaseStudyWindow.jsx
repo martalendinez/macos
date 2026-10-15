@@ -1,5 +1,7 @@
 // src/components/windows/Projects/PortfolioCaseStudyWindow.jsx
 // Case study: this portfolio itself, a macOS-style OS built to show how I design and build.
+// ⏸️ Draft, not linked anywhere yet: needs better pictures and will change. To bring it back, register it in
+// config/windowDefs.js, config/apps.js, ProjectsWindow ACTION_TO_WINDOW and data/projectData.js.
 // ✏️ Copy is a first draft in my voice: numbers come from the repo (git history, windowDefs, a11yStore).
 import { useMemo, useState } from "react";
 

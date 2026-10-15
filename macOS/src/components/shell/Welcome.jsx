@@ -90,7 +90,7 @@ export default function Welcome({ open, onClose, onOpenWindow, onOpenResume, onS
           <h2 className={`mt-1 text-[24px] font-bold tracking-[-0.02em] ${c.text}`}>My projects</h2>
           <p className={`mt-1 text-[14px] ${c.sub}`}>Four case studies, each with the research, the decisions and the code behind them.</p>
           <div className="mt-4 grid grid-cols-2 gap-2.5">
-            {PROJECTS.filter((p) => p.id !== "portfolio").map((p) => (
+            {PROJECTS.map((p) => (
               <button key={p.id} type="button" onClick={() => finish(CASE[p.id])} className={`group text-left rounded-[14px] overflow-hidden ring-1 ${c.ring} ${c.card} transition`}>
                 <span className="relative block w-full aspect-[520/240] overflow-hidden">
                   <PosterThumb project={p} />
