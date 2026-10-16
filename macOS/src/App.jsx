@@ -359,24 +359,7 @@ export default function App() {
     [appById, launch]
   );
 
-  // Messages badge: "Marta sent you a message" until Messages is opened once
-  const [messagesUnread, setMessagesUnread] = useState(() => {
-    try {
-      return localStorage.getItem("portfolio.messages.read") !== "1";
-    } catch {
-      return true;
-    }
-  });
-  useEffect(() => {
-    if (!messagesUnread || !openWindows.includes("messages")) return;
-    setMessagesUnread(false);
-    try {
-      localStorage.setItem("portfolio.messages.read", "1");
-    } catch {
-      /* ignore */
-    }
-  }, [openWindows, messagesUnread]);
-  const badges = useMemo(() => (messagesUnread ? { messages: 1 } : {}), [messagesUnread]);
+  const badges = useMemo(() => ({}), []); // app badges (none for now)
 
   // Finder Quick Look: Space previews the selected desktop icon
   const [quickLook, setQuickLook] = useState(null);
