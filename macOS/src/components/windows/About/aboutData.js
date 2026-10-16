@@ -33,20 +33,25 @@ export const EXPERIENCE = [
     tint: "#0a84ff",
     bullets: [
       "ROYC is a fintech building the AI-native operating system for private markets: a white-label B2B SaaS platform that lets banks, wealth and asset managers launch and run funds",
-      "Design the ROYC platform's UI in Figma, building and maintaining a scalable component library",
-      "Use auto layout and responsive design principles to create flexible interfaces that adapt across screen sizes",
-      "Implement designs as production-ready UI in JavaScript, TypeScript and React (JSX)",
-      "Streamline the design-to-code workflow with GitHub Copilot and MCP",
+      "Design and build product features for the platform, from problem framing and Figma to production frontend code",
+      "Maintain and extend the Figma design system and its coded components, keeping design and code in sync",
+      "Implement designs as production-ready UI in TypeScript and React, shipped through GitHub (pull requests, code review)",
+      "Work closely with product and engineering to shape new features, balancing user needs with technical constraints",
+      "Streamline the design-to-code workflow with AI tools: Claude, GitHub Copilot and MCP",
     ],
   },
   {
     role: "Master’s Interactive Media Technology",
     org: "KTH",
     url: "https://www.kth.se/en/studies/master/interactive-media-technology",
-    dates: "Sep 2024 →",
+    dates: "Sep 2024 – Jun 2026",
     type: "education",
     tint: "#1954a6",
-    bullets: ["Interaction Design & Prototyping", "Frontend Development", "Usability Testing & Evaluation"],
+    bullets: [
+      "Thesis: Trace, an AI plug-in for designers that supports design decision-making rather than automating it",
+      "Coursework: Interaction Design & Prototyping, Frontend Development, Usability Testing & Evaluation",
+      "Exchange semester at McMaster University (Canada)",
+    ],
   },
   {
     role: "Vice Project Manager",
@@ -64,7 +69,7 @@ export const EXPERIENCE = [
     ],
   },
   {
-    role: "Full Stack Intern",
+    role: "Graduation Intern (Full Stack & UX)",
     org: "PrideCom",
     url: "https://www.pridecom.es",
     dates: "Feb – Jun 2024",
@@ -80,7 +85,7 @@ export const EXPERIENCE = [
     ],
   },
   {
-    role: "Programmer Intern",
+    role: "UX Intern",
     org: "Extra Nice",
     url: "https://www.extra-nice.net",
     dates: "Feb – Jun 2023",
@@ -111,7 +116,7 @@ export const EXPERIENCE = [
   },
 ];
 
-export const CORE_TOOLBOX = ["Figma", "React", "TypeScript", "GitHub Copilot", "MCP", "User Interviews"];
+export const CORE_TOOLBOX = ["Figma", "React", "TypeScript", "GitHub", "Claude", "User Interviews"];
 
 // industries I design for
 export const DOMAINS = ["Fintech", "Private markets", "B2B SaaS", "Regulated platforms", "White-label products"];

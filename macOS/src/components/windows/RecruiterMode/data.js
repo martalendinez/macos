@@ -20,7 +20,7 @@ export const STRENGTHS = [
   },
   {
     title: "Design + code, one person",
-    text: "I design the platform's UI in Figma, building a scalable, responsive component library with auto layout, and implement it in TypeScript & React.",
+    text: "At ROYC I take features from problem framing and Figma to production React code, and keep the design system and its coded components in sync.",
     tint: "#0a84ff",
     icon: "⌘",
   },
@@ -53,10 +53,10 @@ export const HIGHLIGHTS = [
 // "At a glance": the answers recruiters screen for. ✏️ Keep these short and true.
 export const GLANCE = [
   { key: "role", label: "Role", value: "Design Engineer", sub: "at ROYC · since Aug 2026", tint: "#5e5ce6" },
-  { key: "edu", label: "Education", value: "MSc Interactive Media Tech", sub: "KTH Royal Institute of Technology", tint: "#bf5af2" },
-  { key: "loc", label: "Location", value: "Stockholm, Sweden", sub: "open to EU / remote", tint: "#ff9f0a" },
+  { key: "edu", label: "Education", value: "MSc Interactive Media Tech", sub: "KTH · graduated Jun 2026", tint: "#bf5af2" },
+  { key: "loc", label: "Location", value: "Open to relocation", sub: "EU or remote · now in Stockholm", tint: "#ff9f0a" },
   { key: "domain", label: "Domain", value: "Fintech & B2B SaaS", sub: "complex, regulated products", tint: "#30d158" },
-  { key: "tools", label: "Toolkit", value: "Figma · React · TypeScript", sub: "plus user research & testing", tint: "#0a84ff" },
+  { key: "tools", label: "Toolkit", value: "Figma · React · TypeScript", sub: "plus GitHub, Claude & user research", tint: "#0a84ff" },
   { key: "lang", label: "Languages", value: "Spanish · English · German", sub: "three languages", tint: "#ff375f" },
 ]
 
