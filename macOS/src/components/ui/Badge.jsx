@@ -1,6 +1,6 @@
 // src/components/ui/Badge.jsx
 // The red iOS/macOS app badge ("1"), pinned to the top-right corner of an icon.
-export default function Badge({ count = 1, className = "" }) {
+export default function Badge({ count = 0, className = "" }) {
   if (!count) return null;
   return (
     <span
