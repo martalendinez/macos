@@ -184,7 +184,7 @@ export const CONTACT = {
     { label: "LinkedIn", value: "linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200", href: "https://www.linkedin.com/in/marta-casandra-lendínez-ibáñez-959259200", icon: "in", tint: "#0a66c2" },
     { label: "GitHub", value: "github.com/martalendinez", href: "https://github.com/martalendinez", icon: "⌘", tint: "#24292f" },
     { label: "Résumé", value: "resume.pdf", href: "/resume.pdf", icon: "📄", tint: "#ff3b30" },
-    { label: "Portfolio", value: "portfolio-martalendinez.netlify.app", href: "https://portfolio-martalendinez.netlify.app", icon: "🖼️", tint: "#ff9f0a" },
+    { label: "Portfolio", value: "martalendi-portfolio.netlify.app", href: "https://martalendi-portfolio.netlify.app", icon: "🖼️", tint: "#ff9f0a" },
     { label: "Source code", value: "github.com/martalendinez/macOS", href: "https://github.com/martalendinez/macOS", icon: "</>", tint: "#5856d6" },
   ],
 };

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio-martalendinez.netlify.app/sitemap.xml
+Sitemap: https://martalendi-portfolio.netlify.app/sitemap.xml
